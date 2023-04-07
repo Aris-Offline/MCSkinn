@@ -1,5 +1,4 @@
-# ![](https://github.com/NotYoojun/MCSkinn/blob/main/logos/MCSkinn_48.png?raw=true)  MCSkinn - A brand new Minecraft Skin Editor!
-
+# ![](https://github.com/NotYoojun/MCSkinn/blob/main/logos/MCSkinn_48.png?raw=true)  MCSkinn
 
 **A brand new Minecraft Skin Editor for Windows.**
 
