@@ -1,4 +1,4 @@
-# MCSkinn
+# MCSkinn Editor
 
 **A brand new Minecraft Skin Editor for Windows.**
 
