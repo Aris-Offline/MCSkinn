@@ -8,6 +8,8 @@
 
 ## Features
 
+### Available Functions
+
 - Skin editing
 - Skin library
 - Undo/Redo
@@ -15,9 +17,22 @@
 - 3D/2D View
 - More models
 
+### We're still working on
+
+- Undo/Redo list
+- Options menu
+- Keyboard Shortcuts
+- ...
+
 ## Downloads
 
-Click [this link](https://github.com/NotYoojun/MCSkinn/releases) to see and get the latest releases.
+Click the links below to see and get the latest releases.
+
+| Site  | Link  | Password  |
+| ------------ | ------------ | ------------ |
+| Github  | [github.com/NotYoojun/MCSkinn/releases](https://github.com/NotYoojun/MCSkinn/releases)  | *(None)*  |
+| Lanzou  | [wwyo.lanzouy.com/b04dw34tg](https://wwyo.lanzouy.com/b04dw34tg)  | bynotyoojun  |
+| OneDrive  | [notyoojun-my.sharepoint.com/...](https://notyoojun-my.sharepoint.com/:f:/g/personal/yoojun_notyoojun_onmicrosoft_com/EobEi9yUEKxDubabCdNLE8UBLfj-8cIdvN4FKBU4DAs3Xg?e=CTs2TP)  | bynotyoojun  |
 
 ## How to Contribute
 
@@ -36,9 +51,13 @@ For those who want to request new features or submit bug reports, click [this li
 - @Hehonge051
 
 
-## Functions planning to be added:
+## Communities
 
-- Undo/Redo list
-- Options menu
-- Keyboard Shortcuts
-- ...
+### animasterStudios
+
+| Site  | Link  | Type  |
+| ------------ | ------------ | ------------ |
+| Github  | [github.com/NotYoojun/MCSkinn](https://github.com/NotYoojun/MCSkinn/)  | Public  |
+| QQ Channel  | [pd.qq.com/s/g3o1pmidm](https://pd.qq.com/s/g3o1pmidm)  | Public  |
+| Discord  | [discord.gg/9cbxzv4E4t](https://discord.gg/9cbxzv4E4t)  | Public  |
+| Telegram  | [t.me/+TpIvuJEkpgZlYTJl](https://t.me/+TpIvuJEkpgZlYTJl)  | Public  |
