@@ -18,9 +18,12 @@
 ## Downloads
 
 Click the links below to see and get the latest releases.
-Github:[NotYoojun/MCSkinn](https://github.com/NotYoojun/MCSkinn/releases)
-Lanzouy: [wwyo.lanzouy.com/b04dw334f | Password: bynotyoojun](https://wwyo.lanzouy.com/b04dw334f)
-OneDrive: [notyoojun-my.sharepoint.com | Password: bynotyoojun](https://notyoojun-my.sharepoint.com/:f:/g/personal/yoojun_notyoojun_onmicrosoft_com/EobEi9yUEKxDubabCdNLE8UBLfj-8cIdvN4FKBU4DAs3Xg?e=CTs2TP)
+
+| Site  | Link  | Password  |
+| ------------ | ------------ | ------------ |
+| Github  | [NotYoojun/MCSkinn](https://github.com/NotYoojun/MCSkinn/releases)  | *(None)*  |
+| Lanzou  | [wwyo.lanzouy.com/b04dw334f](https://wwyo.lanzouy.com/b04dw334f)  | bynotyoojun  |
+| OneDrive  | [notyoojun-my.sharepoint.com](https://notyoojun-my.sharepoint.com/:f:/g/personal/yoojun_notyoojun_onmicrosoft_com/EobEi9yUEKxDubabCdNLE8UBLfj-8cIdvN4FKBU4DAs3Xg?e=CTs2TP)  | bynotyoojun  |
 
 ## How to Contribute
 
