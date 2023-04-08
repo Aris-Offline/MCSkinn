@@ -8,12 +8,21 @@
 
 ## Features
 
+### Available Functions
+
 - Skin editing
 - Skin library
 - Undo/Redo
 - All paint tools
 - 3D/2D View
 - More models
+
+### We're still working on
+
+- Undo/Redo list
+- Options menu
+- Keyboard Shortcuts
+- ...
 
 ## Downloads
 
@@ -42,16 +51,9 @@ For those who want to request new features or submit bug reports, click [this li
 - @Hehonge051
 
 
-## Functions planning to be added:
+## Communities
 
-- Undo/Redo list
-- Options menu
-- Keyboard Shortcuts
-- ...
-
-## Social Communities
-
-animasterStudios
+### animasterStudios
 
 | Site  | Link  | Type  |
 | ------------ | ------------ | ------------ |
