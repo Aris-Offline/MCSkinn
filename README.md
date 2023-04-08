@@ -36,7 +36,16 @@ Click the links below to see and get the latest releases.
 
 ## How to Contribute
 
-For those who want to request new features or submit bug reports, click [this link](https://github.com/NotYoojun/MCSkinn/issues/new/choose) to open a new issue.
+**Languages**
+
+- Help us translate new languages by editing or adding files to [`languages`](https://github.com/NotYoojun/MCSkinn/tree/main/languages) folder.
+  
+**Report Bugs**
+- For those who want to request new features or submit bug reports, click [this link](https://github.com/NotYoojun/MCSkinn/issues/new/choose) to open a new issue.
+
+**Create More Skins**
+
+- Create more beautiful skins with MCSkinn Editor and upload them into [`skins`](https://github.com/NotYoojun/MCSkinn/tree/main/skins) folder.
 
 ## Requirements
 
