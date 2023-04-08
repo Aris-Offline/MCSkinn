@@ -48,3 +48,14 @@ For those who want to request new features or submit bug reports, click [this li
 - Options menu
 - Keyboard Shortcuts
 - ...
+
+## Social Communities
+
+animasterStudios
+
+| Site  | Link  | Type  |
+| ------------ | ------------ | ------------ |
+| Github  | [github.com/NotYoojun/MCSkinn](https://github.com/NotYoojun/MCSkinn/)  | Public  |
+| QQ Channel  | [pd.qq.com/s/g3o1pmidm](https://pd.qq.com/s/g3o1pmidm)  | Public  |
+| Discord  | [discord.gg/9cbxzv4E4t](https://discord.gg/9cbxzv4E4t)  | Public  |
+| Telegram  | [t.me/+TpIvuJEkpgZlYTJl](https://t.me/+TpIvuJEkpgZlYTJl)  | Public  |
