@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "39mzD1//uBfH4yGY8S+ZJUDGQlvlP0hR67MM802LbYAgHe7QO7mnZ/f7Jul8PM7yChddEruKmwG8fDbgDD0LZw==",
+  "dgSpecHash": "uud4kR/GDvCPIAcOEGeyt+1sQItMV3t/mL7/pTbj0h0gMm6ntid1SYLJcx+rcznoO68QZu3ATYVKXEsqtTqCuQ==",
   "success": true,
   "projectFilePath": "E:\\Yujun Products\\MCSkinn\\source\\MCSkinn\\MCSkinn.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Yujun\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.18362.28\\microsoft.windows.sdk.net.ref.10.0.18362.28.nupkg.sha512"
+  ],
   "logs": []
 }

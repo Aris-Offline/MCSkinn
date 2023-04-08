@@ -1,6 +1,9 @@
-﻿namespace MultiPainter
+﻿using MCSkinn.Forms.Controls;
+using MCSkinn.Scripts.Paril.Controls.Color;
+
+namespace MultiPainter
 {
-	partial class ColorPicker
+    partial class ColorPicker
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -45,8 +48,8 @@
 			this.label7 = new System.Windows.Forms.Label();
 			this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
 			this.label8 = new System.Windows.Forms.Label();
-			this.saturationSlider1 = new Paril.Controls.Color.SaturationSlider();
-			this.colorSquare1 = new Paril.Controls.Color.ColorSquare();
+			this.saturationSlider1 = new MCSkinn.Forms.Controls.SaturationSlider();
+			this.colorSquare1 = new MCSkinn.Scripts.Paril.Controls.Color.ColorSquare();
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -346,14 +349,14 @@
 
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Panel panel1;
-		private Paril.Controls.Color.SaturationSlider saturationSlider1;
+		private SaturationSlider saturationSlider1;
 		private System.Windows.Forms.NumericUpDown numericUpDown3;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.NumericUpDown numericUpDown2;
 		private System.Windows.Forms.NumericUpDown numericUpDown1;
-		private Paril.Controls.Color.ColorSquare colorSquare1;
+		private ColorSquare colorSquare1;
 		private System.Windows.Forms.NumericUpDown numericUpDown4;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.NumericUpDown numericUpDown5;

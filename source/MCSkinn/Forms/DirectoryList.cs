@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 using DaveChambers.FolderBrowserDialogEx;
-using Paril.Controls;
+using MCSkinn.Scripts.Paril.Controls;
 
 namespace MCSkinn.Forms
 {

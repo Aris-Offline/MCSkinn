@@ -1,819 +1,275 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B8AAE3D4-4ADD-4BE6-B116-087ECDD6D8B3}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MCSkinn</RootNamespace>
-    <AssemblyName>MCSkinn</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>.\publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <SupportUrl>http://www.minecraftforum.net/topic/746941-mcskinn-new-skinning-program</SupportUrl>
-    <ErrorReportUrl>http://www.minecraftforum.net/topic/746941-mcskinn-new-skinning-program</ErrorReportUrl>
-    <TargetCulture>en-CA</TargetCulture>
-    <ProductName>MCSkinn</ProductName>
-    <PublisherName>Altered Softworks</PublisherName>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.3.0.0</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+
+	<AssemblyVersion>0.1.0</AssemblyVersion>
+	<OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows10.0.18362.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+    <StartupObject>MCSkinn.Program</StartupObject>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ApplicationIcon>Resources\Icons\MCSkinn_Logo.ico</ApplicationIcon>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CONVERT_MODELS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <Deterministic>False</Deterministic>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>
-    </DocumentationFile>
-    <DebugSymbols>true</DebugSymbols>
-    <Prefer32Bit>false</Prefer32Bit>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <Deterministic>False</Deterministic>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Icon_new.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release Beta|x86'">
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;BETA</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\MCSkinn.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Microsoft.VisualBasic" />
+    <Compile Remove="setup_files\**" />
+    <EmbeddedResource Remove="setup_files\**" />
+    <None Remove="setup_files\**" />
+    <Page Remove="setup_files\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Remove="MCSkinn.exe.manifest" />
+    <AdditionalFiles Remove="Properties\app.manifest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Scripts\Splash\Splash.cs" />
+    <Compile Remove="Scripts\Splash\Splash.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Scripts\Splash\Splash.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="MCSkinn.exe.manifest" />
+    <None Remove="Properties\App.manifest" />
+    <None Remove="Resources\109_AllAnnotations_Error_16x16_72.png" />
+    <None Remove="Resources\112_ArrowCurve_Blue_Left_16x16_72.png" />
+    <None Remove="Resources\112_Minus_Orange_16x16_72.png" />
+    <None Remove="Resources\112_Minus_Orange_24x24_72.png" />
+    <None Remove="Resources\112_Minus_Orange_24x24_721.png" />
+    <None Remove="Resources\112_Plus_Green_16x16_72.png" />
+    <None Remove="Resources\112_Plus_Green_24x24_72.png" />
+    <None Remove="Resources\112_Plus_Green_32x32_72.png" />
+    <None Remove="Resources\arrow_Down_16xLG.png" />
+    <None Remove="Resources\arrow_state_blue_expanded.png" />
+    <None Remove="Resources\arrow_state_blue_right.png" />
+    <None Remove="Resources\arrow_state_grey_expanded.png" />
+    <None Remove="Resources\arrow_state_grey_right.png" />
+    <None Remove="Resources\arrow_Up_16xLG.png" />
+    <None Remove="Resources\browseto.png" />
+    <None Remove="Resources\burn.png" />
+    <None Remove="Resources\camera.png" />
+    <None Remove="Resources\clear-filter.png" />
+    <None Remove="Resources\clone.png" />
+    <None Remove="Resources\convertswatch.png" />
+    <None Remove="Resources\copy.cur" />
+    <None Remove="Resources\cube_sides.png" />
+    <None Remove="Resources\darkenlighten.png" />
+    <None Remove="Resources\decres.png" />
+    <None Remove="Resources\delete.png" />
+    <None Remove="Resources\deleteswatch.png" />
+    <None Remove="Resources\dodge.png" />
+    <None Remove="Resources\Edit_RedoHS.png" />
+    <None Remove="Resources\Edit_UndoHS.png" />
+    <None Remove="Resources\empty_box_update.png" />
+    <None Remove="Resources\erase.png" />
+    <None Remove="Resources\eye %281%29.png" />
+    <None Remove="Resources\fill-bucket.png" />
+    <None Remove="Resources\filter-icons3.png" />
+    <None Remove="Resources\filter.png" />
+    <None Remove="Resources\FolderOpen_32x32_72.png" />
+    <None Remove="Resources\FolderOpen_32x32_72_image.png" />
+    <None Remove="Resources\Folder_32x32.png" />
+    <None Remove="Resources\Folder_32x32_image.png" />
+    <None Remove="Resources\Generic_Application.png" />
+    <None Remove="Resources\hybrid.png" />
+    <None Remove="Resources\Icon_new.ico" />
+    <None Remove="Resources\image.png" />
+    <None Remove="Resources\Images\AppIcon\MCSkinn_Logo_256.png" />
+    <None Remove="Resources\Images\AppIcon\MCSkinn_Logo_48.png" />
+    <None Remove="Resources\import_from_mc.png" />
+    <None Remove="Resources\incres.png" />
+    <None Remove="Resources\language_update.png" />
+    <None Remove="Resources\mcskinn.png" />
+    <None Remove="Resources\model_pack_update.png" />
+    <None Remove="Resources\move.cur" />
+    <None Remove="Resources\NewFolderHS.png" />
+    <None Remove="Resources\newskin.png" />
+    <None Remove="Resources\newswatch.png" />
+    <None Remove="Resources\no.cur" />
+    <None Remove="Resources\noise.png" />
+    <None Remove="Resources\other_update.png" />
+    <None Remove="Resources\pen.png" />
+    <None Remove="Resources\pipette.png" />
+    <None Remove="Resources\program_update.png" />
+    <None Remove="Resources\radio_checked.png" />
+    <None Remove="Resources\radio_unchecked.png" />
+    <None Remove="Resources\Rename.png" />
+    <None Remove="Resources\renameswatch.png" />
+    <None Remove="Resources\right_arrow_next.png" />
+    <None Remove="Resources\samesize.png" />
+    <None Remove="Resources\Save.png" />
+    <None Remove="Resources\SaveAllHS.png" />
+    <None Remove="Resources\saveHS.png" />
+    <None Remove="Resources\show_chest.png" />
+    <None Remove="Resources\show_chest_armor.png" />
+    <None Remove="Resources\show_head.png" />
+    <None Remove="Resources\show_helmet.png" />
+    <None Remove="Resources\show_left_arm.png" />
+    <None Remove="Resources\show_left_arm_armor.png" />
+    <None Remove="Resources\show_left_leg.png" />
+    <None Remove="Resources\show_left_leg_armor.png" />
+    <None Remove="Resources\show_right_arm.png" />
+    <None Remove="Resources\show_right_arm_armor.png" />
+    <None Remove="Resources\show_right_leg.png" />
+    <None Remove="Resources\show_right_leg_armor.png" />
+    <None Remove="Resources\skin_pack_update.png" />
+    <None Remove="Resources\slkscr.ttf" />
+    <None Remove="Resources\sort-ascending.png" />
+    <None Remove="Resources\sort-descending.png" />
+    <None Remove="Resources\stamp_pattern.png" />
+    <None Remove="Resources\tinyfont.png" />
+    <None Remove="Resources\upload.png" />
+    <None Remove="Resources\Video.png" />
+    <None Remove="Resources\WindowsHS.png" />
+    <None Remove="Resources\ZoomInHS.png" />
+    <None Remove="Resources\ZoomOutHS.png" />
+    <None Remove="Video.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Icons\MCSkinn_Logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ThirdParty\ThirdParty.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.DwayneNeed">
+      <HintPath>Libraries\Microsoft.DwayneNeed.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.DwayneNeed.Win32">
+      <HintPath>Libraries\Microsoft.DwayneNeed.Win32.dll</HintPath>
+    </Reference>
+    <Reference Include="ModernWpf">
+      <HintPath>Libraries\ModernWpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ModernWpf.Controls">
+      <HintPath>Libraries\ModernWpf.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="OpenTK">
       <HintPath>Libraries\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.GLControl">
       <HintPath>Libraries\OpenTK.GLControl.dll</HintPath>
     </Reference>
-    <Reference Include="System">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Core">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Design" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Windows.Forms">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.XML" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="BackgroundImage.cs" />
-    <Compile Include="Controls\AlphaSliderRenderer.cs" />
-    <Compile Include="Controls\ColorPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ColorPanel.Designer.cs">
-      <DependentUpon>ColorPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ColorToolStripMenuItem.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ListViewExpanded.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ModelToolStripMenuItem.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\SkinTreeViewToolBar.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ExceptionHandler\ClientForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ExceptionHandler\ClientForm.Designer.cs">
-      <DependentUpon>ClientForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ExceptionHandler\ErrorReport.cs" />
-    <Compile Include="ExceptionHandler\SimpleReportViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ExceptionHandler\SimpleReportViewer.Designer.cs">
-      <DependentUpon>SimpleReportViewer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\SkinSizeMismatch.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SkinSizeMismatch.Designer.cs">
-      <DependentUpon>SkinSizeMismatch.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\GUIDPicker.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\GUIDPicker.Designer.cs">
-      <DependentUpon>GUIDPicker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Languages\LanguageHandler.cs" />
-    <Compile Include="LZString.cs" />
-    <Compile Include="Macros\Macros.cs" />
-    <Compile Include="MCSkinnAppContext.cs" />
-    <Compile Include="Models\Convert\AbstractClientPlayer.cs" />
-    <Compile Include="Models\Convert\Compat.cs" />
-    <Compile Include="Models\Convert\ConversionInterface.cs" />
-    <Compile Include="Models\Convert\EntityArmorStand.cs" />
-    <Compile Include="Models\Convert\EntityBat.cs" />
-    <Compile Include="Models\Convert\EntityDragon.cs" />
-    <Compile Include="Models\Convert\EntityGuardian.cs" />
-    <Compile Include="Models\Convert\EntityHorse.cs" />
-    <Compile Include="Models\Convert\EntityMagmaCube.cs" />
-    <Compile Include="Models\Convert\EntityRabbit.cs" />
-    <Compile Include="Models\Convert\EntityShulker.cs" />
-    <Compile Include="Models\Convert\EntityWolf.cs" />
-    <Compile Include="Models\Convert\EntityZombie.cs" />
-    <Compile Include="Models\Convert\EnumHandSide.cs" />
-    <Compile Include="Models\Convert\ModelDragon.cs" />
-    <Compile Include="Models\Convert\ModelHorse.cs" />
-    <Compile Include="Models\Convert\IMultipassModel.cs" />
-    <Compile Include="Models\Convert\Math.cs" />
-    <Compile Include="Models\Convert\MathHelper.cs" />
-    <Compile Include="Models\Convert\ModelArmorStand.cs" />
-    <Compile Include="Models\Convert\ModelArmorStandArmor.cs" />
-    <Compile Include="Models\Convert\ModelBanner.cs" />
-    <Compile Include="Models\Convert\ModelBat.cs" />
-    <Compile Include="Models\Convert\ModelBiped.cs" />
-    <Compile Include="Models\Convert\ModelBlaze.cs" />
-    <Compile Include="Models\Convert\ModelBoat.cs" />
-    <Compile Include="Models\Convert\ModelBook.cs" />
-    <Compile Include="Models\Convert\ModelChest.cs" />
-    <Compile Include="Models\Convert\ModelChicken.cs" />
-    <Compile Include="Models\Convert\ModelCow.cs" />
-    <Compile Include="Models\Convert\ModelCreeper.cs" />
-    <Compile Include="Models\Convert\ModelElytra.cs" />
-    <Compile Include="Models\Convert\ModelEnderCrystal.cs" />
-    <Compile Include="Models\Convert\ModelEnderman.cs" />
-    <Compile Include="Models\Convert\ModelEnterMite.cs" />
-    <Compile Include="Models\Convert\ModelGhast.cs" />
-    <Compile Include="Models\Convert\ModelGuardian.cs" />
-    <Compile Include="Models\Convert\ModelIronGolem.cs" />
-    <Compile Include="Models\Convert\ModelLargeChest.cs" />
-    <Compile Include="Models\Convert\ModelLeashKnot.cs" />
-    <Compile Include="Models\Convert\ModelMagmaCube.cs" />
-    <Compile Include="Models\Convert\ModelMinecart.cs" />
-    <Compile Include="Models\Convert\ModelOcelot.cs" />
-    <Compile Include="Models\Convert\ModelPig.cs" />
-    <Compile Include="Models\Convert\ModelPlayer.cs" />
-    <Compile Include="Models\Convert\ModelQuadruped.cs" />
-    <Compile Include="Models\Convert\ModelRabbit.cs" />
-    <Compile Include="Models\Convert\ModelSheep1.cs" />
-    <Compile Include="Models\Convert\ModelSheep2.cs" />
-    <Compile Include="Models\Convert\ModelShield.cs" />
-    <Compile Include="Models\Convert\ModelShulker.cs" />
-    <Compile Include="Models\Convert\ModelSign.cs" />
-    <Compile Include="Models\Convert\ModelSilverfish.cs" />
-    <Compile Include="Models\Convert\ModelSkeleton.cs" />
-    <Compile Include="Models\Convert\ModelSlime.cs" />
-    <Compile Include="Models\Convert\ModelSnowMan.cs" />
-    <Compile Include="Models\Convert\ModelSpider.cs" />
-    <Compile Include="Models\Convert\ModelSquid.cs" />
-    <Compile Include="Models\Convert\ModelVillager.cs" />
-    <Compile Include="Models\Convert\ModelWitch.cs" />
-    <Compile Include="Models\Convert\ModelWither.cs" />
-    <Compile Include="Models\Convert\ModelWolf.cs" />
-    <Compile Include="Models\Convert\ShulkerBullet.cs" />
-    <Compile Include="Models\Convert\ZombieVillager.cs" />
-    <Compile Include="Paril\Controls\TextBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Paril\OpenGL\ImmediateRenderer.cs" />
-    <Compile Include="Splash\Splash.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Splash\Splash.Designer.cs">
-      <DependentUpon>Splash.cs</DependentUpon>
-    </Compile>
-    <Compile Include="lemon42\Color\ColorManager.cs" />
-    <Compile Include="lemon42\Color\ColorPick.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="lemon42\Color\ColorPick.designer.cs">
-      <DependentUpon>ColorPick.cs</DependentUpon>
-    </Compile>
-    <Compile Include="lemon42\Color\ColorPickUtil.cs" />
-    <Compile Include="Models\IModelFormat.cs" />
-    <Compile Include="Models\ModelFormatTCN.cs" />
-    <Compile Include="Paril\Imaging\SafeSave.cs" />
-    <Compile Include="Paril\OpenGL\ClientArrayMeshUserData.cs" />
-    <Compile Include="Paril\OpenGL\ColorGrabber.cs" />
-    <Compile Include="Controls\Brushes.cs" />
-    <Compile Include="Controls\Tools\StampOptions.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Tools\StampOptions.Designer.cs">
-      <DependentUpon>StampOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Tools\NoiseOptions.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Tools\NoiseOptions.Designer.cs">
-      <DependentUpon>NoiseOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Tools\FloodFillOptions.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Tools\FloodFillOptions.Designer.cs">
-      <DependentUpon>FloodFillOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Tools\EraserOptions.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Tools\EraserOptions.Designer.cs">
-      <DependentUpon>EraserOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\DirectoryList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\DirectoryList.Designer.cs">
-      <DependentUpon>DirectoryList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\DontAskAgain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\DontAskAgain.Designer.cs">
-      <DependentUpon>DontAskAgain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Paril\Components\Update\Version.cs" />
-    <Compile Include="Paril\Controls\NaturalSortedListBox.cs" />
-    <Compile Include="Paril\Controls\NumericUpDownMenuItem.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Paril\Controls\UndoRedoPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Paril\Controls\UndoRedoPanel.Designer.cs">
-      <DependentUpon>UndoRedoPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Paril\Cryptography\Crc32.cs" />
-    <Compile Include="Paril\Drawing\Bounds.cs" />
-    <Compile Include="Paril\Imaging\PNGMetadata.cs" />
-    <Compile Include="Paril\Net\WebHelpers.cs" />
-    <Compile Include="Paril\OpenGL\Face.cs" />
-    <Compile Include="Paril\OpenGL\IMeshUserData.cs" />
-    <Compile Include="Paril\OpenGL\Mesh.cs" />
-    <Compile Include="Paril\OpenGL\Bounds.cs" />
-    <Compile Include="Paril\OpenGL\Model.cs" />
-    <Compile Include="Paril\OpenGL\Texture.cs" />
-    <Compile Include="Paril\OpenGL\TextureGL.cs" />
-    <Compile Include="SkinLoader.cs" />
-    <Compile Include="Revision.cs" />
-    <Compile Include="Swatches\ACOSwatch.cs" />
-    <Compile Include="Swatches\ACTSwatch.cs" />
-    <Compile Include="Swatches\GIMPSwatch.cs" />
-    <Compile Include="Swatches\ISwatch.cs" />
-    <Compile Include="Swatches\MCSwatch.cs" />
-    <Compile Include="Swatches\NamedColor.cs" />
-    <Compile Include="Swatches\SwatchBase.cs" />
-    <Compile Include="Swatches\SwatchConverterDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Swatches\SwatchConverterDialog.Designer.cs">
-      <DependentUpon>SwatchConverterDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Swatches\SwatchLoader.cs" />
-    <Compile Include="Tools\BrushToolBase.cs" />
-    <Compile Include="Tools\CameraTool.cs" />
-    <Compile Include="Paril\Drawing\ColorBlending.cs" />
-    <Compile Include="Controls\Tools\DarkenLightenOptions.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Tools\DarkenLightenOptions.Designer.cs">
-      <DependentUpon>DarkenLightenOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tools\NoiseTool.cs" />
-    <Compile Include="Tools\DarkenLightenTool.cs" />
-    <Compile Include="Controls\Tools\DodgeBurnOptions.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Tools\DodgeBurnOptions.Designer.cs">
-      <DependentUpon>DodgeBurnOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tools\DodgeBurnTool.cs" />
-    <Compile Include="Tools\DropperTool.cs" />
-    <Compile Include="Tools\EraserTool.cs" />
-    <Compile Include="Tools\FloodFillTool.cs" />
-    <Compile Include="FolderNode.cs" />
-    <Compile Include="Forms\ColorPicker.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ColorPicker.designer.cs">
-      <DependentUpon>ColorPicker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Languages\Language.cs" />
-    <Compile Include="Languages\LanguageLoader.cs" />
-    <Compile Include="Languages\LanguageProvider.cs" />
-    <Compile Include="Controls\LuminanceSliderRenderer.cs" />
-    <Compile Include="Paril\Compatibility\Tuple.cs" />
-    <Compile Include="Paril\Components\Shortcuts\ControlShortcut.cs" />
-    <Compile Include="Paril\Controls\Color\ColorPreview.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Paril\Controls\NativeToolStrip.cs" />
-    <Compile Include="Paril\Controls\VisibleSplitContainer.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Paril\Drawing\Color.cs" />
-    <Compile Include="Paril\Extensions\Extensions.cs" />
-    <Compile Include="Paril\OpenGL\ClientArrayRenderer.cs" />
-    <Compile Include="Paril\OpenGL\Renderer.cs" />
-    <Compile Include="Tools\PencilTool.cs" />
-    <Compile Include="Models\ModelLoader.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SaturationSliderRenderer.cs" />
-    <Compile Include="Controls\HueSliderRenderer.cs" />
-    <Compile Include="GlobalDirtiness.cs" />
-    <Compile Include="MenuStripShortcut.cs" />
-    <Compile Include="Paril\Components\Shortcuts\IShortcutImplementor.cs" />
-    <Compile Include="Paril\Components\Shortcuts\ShortcutBase.cs" />
-    <Compile Include="Paril\Controls\Color\ColorPicker.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Paril\Controls\Color\ColorPicker.designer.cs">
-      <DependentUpon>ColorPicker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ColorSlider.cs" />
-    <Compile Include="Controls\ColorSlider.designer.cs">
-      <DependentUpon>ColorSlider.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ColorSliderRenderer.cs" />
-    <Compile Include="Paril\Controls\Color\ColorSquare.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Forms\ExceptionDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ExceptionDialog.designer.cs">
-      <DependentUpon>ExceptionDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Paril\Drawing\FastPixel.cs" />
-    <Compile Include="Forms\Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Editor.Designer.cs">
-      <DependentUpon>Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ImageUtilities.cs" />
-    <Compile Include="Forms\Login.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Login.Designer.cs">
-      <DependentUpon>Login.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\NativeToolStrip.cs" />
-    <Compile Include="Paril\Components\Undo\Undoable.cs" />
-    <Compile Include="Paril\Components\Undo\UndoBuffer.cs" />
-    <Compile Include="Paril\Settings\Serializers\ColorSerializer.cs" />
-    <Compile Include="Paril\Settings\Serializers\EnumSerializer.cs" />
-    <Compile Include="PixelsChangedUndoable.cs" />
-    <Compile Include="Forms\PleaseWait.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PleaseWait.Designer.cs">
-      <DependentUpon>PleaseWait.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controls\SaturationSlider.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Paril\Settings\Serializers\HexSerializer.cs" />
-    <Compile Include="Paril\Settings\Serializers\PasswordSerializer.cs" />
-    <Compile Include="Paril\Settings\Settings.cs" />
-    <Compile Include="Settings\GlobalSettings.cs" />
-    <Compile Include="Paril\Components\Shortcuts\ShortcutEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Paril\Components\Shortcuts\ShortcutEditor.Designer.cs">
-      <DependentUpon>ShortcutEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Skin.cs" />
-    <Compile Include="Controls\SkinTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Swatches\SwatchContainer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Swatches\SwatchContainer.Designer.cs">
-      <DependentUpon>SwatchContainer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tools\ITool.cs" />
-    <Compile Include="Tools\Stamp.cs" />
-    <Compile Include="Tools\ToolIndex.cs" />
-    <Compile Include="Controls\Tools\ToolOptionBase.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tools\Tools.cs" />
-    <Compile Include="TransparencyMode.cs" />
-    <Compile Include="Controls\Tools\PencilOptions.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Tools\PencilOptions.Designer.cs">
-      <DependentUpon>PencilOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Updater\Updater.cs" />
-    <Compile Include="ViewMode.cs" />
-    <Compile Include="VisiblePartFlags.cs" />
-    <None Include="Resources\arrow_Up_16xLG.png" />
-    <None Include="Resources\arrow_Down_16xLG.png" />
-    <EmbeddedResource Include="Resources\ThirdParty.dll" />
-    <None Include="Resources\show_right_leg_armor.png" />
-    <None Include="Resources\show_right_arm_armor.png" />
-    <None Include="Resources\show_left_leg_armor.png" />
-    <None Include="Resources\show_left_arm_armor.png" />
-    <None Include="Resources\show_chest_armor.png" />
-    <None Include="Resources\cube_sides.png" />
-    <None Include="Resources\mcskinn.png" />
-    <None Include="Resources\radio_checked.png" />
-    <None Include="Resources\radio_unchecked.png" />
-    <None Include="Resources\renameswatch.png" />
-    <None Include="Resources\convertswatch.png" />
-    <None Include="Resources\deleteswatch.png" />
-    <None Include="Resources\newswatch.png" />
-    <None Include="icons\smaller3D.png" />
-    <Content Include="Icon_new.ico" />
-    <None Include="Resources\Generic_Application.png" />
-    <None Include="Resources\sort-descending.png" />
-    <None Include="Resources\sort-ascending.png" />
-    <None Include="Resources\filter-icons3.png" />
-    <None Include="Resources\filter.png" />
-    <None Include="Resources\clear-filter.png" />
-    <None Include="Resources\language_update.png" />
-    <None Include="Resources\program_update.png" />
-    <None Include="Resources\model_pack_update.png" />
-    <None Include="Resources\skin_pack_update.png" />
-    <None Include="Resources\other_update.png" />
-    <None Include="Resources\empty_box_update.png" />
-    <EmbeddedResource Include="Controls\ColorPanel.resx">
-      <DependentUpon>ColorPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ExceptionHandler\ClientForm.resx">
-      <DependentUpon>ClientForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ExceptionHandler\SimpleReportViewer.resx">
-      <DependentUpon>SimpleReportViewer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SkinSizeMismatch.resx">
-      <DependentUpon>SkinSizeMismatch.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\GUIDPicker.resx">
-      <DependentUpon>GUIDPicker.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Splash\Splash.resx">
-      <DependentUpon>Splash.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Swatches\SwatchConverterDialog.resx">
-      <DependentUpon>SwatchConverterDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="Resources\WindowsHS.png" />
-    <None Include="Resources\browseto.png" />
-    <None Include="Resources\stamp_pattern.png" />
-    <None Include="Resources\tinyfont.png" />
-    <None Include="Resources\samesize.png" />
-    <None Include="Resources\right_arrow_next.png" />
-    <None Include="Resources\112_Minus_Orange_16x16_72.png" />
-    <None Include="Resources\112_Minus_Orange_24x24_721.png" />
-    <None Include="Resources\112_Plus_Green_16x16_72.png" />
-    <None Include="Resources\112_Minus_Orange_24x24_72.png" />
-    <None Include="Resources\112_Plus_Green_24x24_72.png" />
-    <None Include="Resources\112_Plus_Green_32x32_72.png" />
-    <None Include="Resources\slkscr.ttf" />
-    <None Include="Resources\ZoomOutHS.png" />
-    <None Include="Resources\ZoomInHS.png" />
-    <None Include="Resources\Rename.png" />
-    <None Include="Resources\delete.png" />
-    <None Include="Resources\camera.png" />
-    <None Include="app.manifest">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Resources\import_from_mc.png" />
-    <None Include="Resources\newskin.png" />
-    <None Include="Resources\incres.png" />
-    <None Include="Resources\decres.png" />
-    <None Include="Resources\noise.png" />
-    <EmbeddedResource Include="Controls\Tools\StampOptions.resx">
-      <DependentUpon>StampOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Tools\NoiseOptions.resx">
-      <DependentUpon>NoiseOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Tools\FloodFillOptions.resx">
-      <DependentUpon>FloodFillOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Tools\EraserOptions.resx">
-      <DependentUpon>EraserOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Tools\DarkenLightenOptions.resx">
-      <DependentUpon>DarkenLightenOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Tools\DodgeBurnOptions.resx">
-      <DependentUpon>DodgeBurnOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ColorPicker.resx">
-      <DependentUpon>ColorPicker.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DirectoryList.resx">
-      <DependentUpon>DirectoryList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DontAskAgain.resx">
-      <DependentUpon>DontAskAgain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="lemon42\Color\ColorPick.resx">
-      <DependentUpon>ColorPick.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Paril\Controls\Color\ColorPicker.resx">
-      <DependentUpon>ColorPicker.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ColorSlider.resx">
-      <DependentUpon>ColorSlider.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ExceptionDialog.resx">
-      <DependentUpon>ExceptionDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Editor.resx">
-      <DependentUpon>Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Login.resx">
-      <DependentUpon>Login.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PleaseWait.resx">
-      <DependentUpon>PleaseWait.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Paril\Components\Shortcuts\ShortcutEditor.resx">
-      <DependentUpon>ShortcutEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Paril\Controls\UndoRedoPanel.resx">
-      <DependentUpon>UndoRedoPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Swatches\SwatchContainer.resx">
-      <DependentUpon>SwatchContainer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Tools\PencilOptions.resx">
-      <DependentUpon>PencilOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="app.config" />
-    <Content Include="bin\Languages\English.lang" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
+    <Resource Include="Resources\Images\AppIcon\MCSkinn_Logo_256.png" />
+    <Resource Include="Resources\Images\AppIcon\MCSkinn_Logo_48.png" />
+    <Resource Include="Resources\Images\ToolboxImage\109_AllAnnotations_Error_16x16_72.png" />
+    <Resource Include="Resources\Images\ToolboxImage\112_ArrowCurve_Blue_Left_16x16_72.png" />
+    <Resource Include="Resources\Images\ToolboxImage\112_Minus_Orange_16x16_72.png" />
+    <Resource Include="Resources\Images\ToolboxImage\112_Minus_Orange_24x24_72.png" />
+    <Resource Include="Resources\Images\ToolboxImage\112_Minus_Orange_24x24_721.png" />
+    <Resource Include="Resources\Images\ToolboxImage\112_Plus_Green_16x16_72.png" />
+    <Resource Include="Resources\Images\ToolboxImage\112_Plus_Green_24x24_72.png" />
+    <Resource Include="Resources\Images\ToolboxImage\112_Plus_Green_32x32_72.png" />
+    <Resource Include="Resources\Images\ToolboxImage\arrow_Down_16xLG.png" />
+    <Resource Include="Resources\Images\ToolboxImage\arrow_state_blue_expanded.png" />
+    <Resource Include="Resources\Images\ToolboxImage\arrow_state_blue_right.png" />
+    <Resource Include="Resources\Images\ToolboxImage\arrow_state_grey_expanded.png" />
+    <Resource Include="Resources\Images\ToolboxImage\arrow_state_grey_right.png" />
+    <Resource Include="Resources\Images\ToolboxImage\arrow_Up_16xLG.png" />
+    <Resource Include="Resources\Images\ToolboxImage\browseto.png" />
+    <Resource Include="Resources\Images\ToolboxImage\burn.png" />
+    <Resource Include="Resources\Images\ToolboxImage\camera.png" />
+    <Resource Include="Resources\Images\ToolboxImage\clear-filter.png" />
+    <Resource Include="Resources\Images\ToolboxImage\clone.png" />
+    <Resource Include="Resources\Images\ToolboxImage\convertswatch.png" />
+    <Resource Include="Resources\Cursors\copy.cur" />
+    <Resource Include="Resources\Images\ToolboxImage\cube_sides.png" />
+    <Resource Include="Resources\Images\ToolboxImage\darkenlighten.png" />
+    <Resource Include="Resources\Images\ToolboxImage\decres.png" />
+    <Resource Include="Resources\Images\ToolboxImage\delete.png" />
+    <Resource Include="Resources\Images\ToolboxImage\deleteswatch.png" />
+    <Resource Include="Resources\Images\ToolboxImage\dodge.png" />
+    <Resource Include="Resources\Images\ToolboxImage\Edit_RedoHS.png" />
+    <Resource Include="Resources\Images\ToolboxImage\Edit_UndoHS.png" />
+    <Resource Include="Resources\Images\ToolboxImage\empty_box_update.png" />
+    <Resource Include="Resources\Images\ToolboxImage\erase.png" />
+    <Resource Include="Resources\Images\ToolboxImage\eye %281%29.png" />
+    <Resource Include="Resources\Images\ToolboxImage\fill-bucket.png" />
+    <Resource Include="Resources\Images\ToolboxImage\filter-icons3.png" />
+    <Resource Include="Resources\Images\ToolboxImage\filter.png" />
+    <Resource Include="Resources\Images\ToolboxImage\FolderOpen_32x32_72.png" />
+    <Resource Include="Resources\Images\ToolboxImage\FolderOpen_32x32_72_image.png" />
+    <Resource Include="Resources\Images\ToolboxImage\Folder_32x32.png" />
+    <Resource Include="Resources\Images\ToolboxImage\Folder_32x32_image.png" />
+    <Resource Include="Resources\Images\ToolboxImage\Generic_Application.png" />
+    <Resource Include="Resources\Images\ToolboxImage\hybrid.png" />
+    <Resource Include="Resources\Images\ToolboxImage\Icon_new.ico" />
+    <Resource Include="Resources\Images\ToolboxImage\image.png" />
+    <Resource Include="Resources\Images\ToolboxImage\import_from_mc.png" />
+    <Resource Include="Resources\Images\ToolboxImage\incres.png" />
+    <Resource Include="Resources\Images\ToolboxImage\language_update.png" />
+    <Resource Include="Resources\Images\ToolboxImage\mcskinn.png" />
+    <Resource Include="Resources\Images\ToolboxImage\model_pack_update.png" />
+    <Resource Include="Resources\Cursors\move.cur" />
+    <Resource Include="Resources\Images\ToolboxImage\NewFolderHS.png" />
+    <Resource Include="Resources\Images\ToolboxImage\newskin.png" />
+    <Resource Include="Resources\Images\ToolboxImage\newswatch.png" />
+    <Resource Include="Resources\Cursors\no.cur" />
+    <Resource Include="Resources\Images\ToolboxImage\noise.png" />
+    <Resource Include="Resources\Images\ToolboxImage\other_update.png" />
+    <Resource Include="Resources\Images\ToolboxImage\pen.png" />
+    <Resource Include="Resources\Images\ToolboxImage\pipette.png" />
+    <Resource Include="Resources\Images\ToolboxImage\program_update.png" />
+    <Resource Include="Resources\Images\ToolboxImage\radio_checked.png" />
+    <Resource Include="Resources\Images\ToolboxImage\radio_unchecked.png" />
+    <Resource Include="Resources\Images\ToolboxImage\Rename.png" />
+    <Resource Include="Resources\Images\ToolboxImage\renameswatch.png" />
+    <Resource Include="Resources\Images\ToolboxImage\right_arrow_next.png" />
+    <Resource Include="Resources\Images\ToolboxImage\samesize.png" />
+    <Resource Include="Resources\Images\ToolboxImage\Save.png" />
+    <Resource Include="Resources\Images\ToolboxImage\SaveAllHS.png" />
+    <Resource Include="Resources\Images\ToolboxImage\saveHS.png" />
+    <Resource Include="Resources\Images\ToolboxImage\show_chest.png" />
+    <Resource Include="Resources\Images\ToolboxImage\show_chest_armor.png" />
+    <Resource Include="Resources\Images\ToolboxImage\show_head.png" />
+    <Resource Include="Resources\Images\ToolboxImage\show_helmet.png" />
+    <Resource Include="Resources\Images\ToolboxImage\show_left_arm.png" />
+    <Resource Include="Resources\Images\ToolboxImage\show_left_arm_armor.png" />
+    <Resource Include="Resources\Images\ToolboxImage\show_left_leg.png" />
+    <Resource Include="Resources\Images\ToolboxImage\show_left_leg_armor.png" />
+    <Resource Include="Resources\Images\ToolboxImage\show_right_arm.png" />
+    <Resource Include="Resources\Images\ToolboxImage\show_right_arm_armor.png" />
+    <Resource Include="Resources\Images\ToolboxImage\show_right_leg.png" />
+    <Resource Include="Resources\Images\ToolboxImage\show_right_leg_armor.png" />
+    <Resource Include="Resources\Images\ToolboxImage\skin_pack_update.png" />
+    <Resource Include="Resources\Fonts\slkscr.ttf" />
+    <Resource Include="Resources\Images\ToolboxImage\sort-ascending.png" />
+    <Resource Include="Resources\Images\ToolboxImage\sort-descending.png" />
+    <Resource Include="Resources\Images\ToolboxImage\stamp_pattern.png" />
+    <Resource Include="Resources\Images\ToolboxImage\tinyfont.png" />
+    <Resource Include="Resources\Images\ToolboxImage\upload.png" />
+    <Resource Include="Resources\Images\ToolboxImage\Video.png" />
+    <Resource Include="Resources\Images\ToolboxImage\WindowsHS.png" />
+    <Resource Include="Resources\Images\ToolboxImage\ZoomInHS.png" />
+    <Resource Include="Resources\Images\ToolboxImage\ZoomOutHS.png" />
+    <Resource Include="Video.png" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="Resources\eye %281%29.png" />
+    <Folder Include="Scripts\Splash\" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pen.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pipette.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Edit_UndoHS.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Edit_RedoHS.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Video.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\erase.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\burn.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\dodge.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SaveAllHS.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\saveHS.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\109_AllAnnotations_Error_16x16_72.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\image.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Folder_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\FolderOpen_32x32_72.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\arrow_state_blue_expanded.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\arrow_state_blue_right.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\arrow_state_grey_expanded.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\arrow_state_grey_right.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\show_chest.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\show_head.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\show_helmet.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\show_left_arm.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\show_left_leg.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\show_right_arm.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\show_right_leg.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\copy.cur" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\move.cur" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\no.cur" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\112_ArrowCurve_Blue_Left_16x16_72.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\NewFolderHS.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\clone.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\FolderOpen_32x32_72_image.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Folder_32x32_image.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\darkenlighten.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\hybrid.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Icon_new.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\upload.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <PublishFile Include="MCSkinn.pdb">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="OpenTK">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="OpenTK.GLControl">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ThirdParty\ThirdParty.csproj">
-      <Project>{08d4d1ab-359a-42d9-8b5b-27cd18f76f4a}</Project>
-      <Name>ThirdParty</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

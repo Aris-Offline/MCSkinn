@@ -1,6 +1,8 @@
-﻿namespace MCSkinn.Forms
+﻿using MCSkinn.Scripts.Paril.Controls;
+
+namespace MCSkinn.Forms
 {
-	partial class DirectoryList
+    partial class DirectoryList
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +30,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.listBox1 = new Paril.Controls.SortedListBox();
+			this.listBox1 = new MCSkinn.Scripts.Paril.Controls.SortedListBox();
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -135,7 +137,7 @@
 
 		#endregion
 
-		private Paril.Controls.SortedListBox listBox1;
+		private SortedListBox listBox1;
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;

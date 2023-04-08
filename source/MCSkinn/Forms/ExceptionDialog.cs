@@ -22,7 +22,7 @@ using System.Media;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace Paril.Windows.Dialogs
+namespace MCSkinn.Scripts.Paril.Windows.Dialogs
 {
 	public partial class ExceptionDialog : Form
 	{

@@ -23,19 +23,26 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
+using WinForms = System.Windows.Forms;
 using MCSkinn.ExceptionHandler;
-using MCSkinn.Languages;
-using SVN;
-using Version = Paril.Components.Update.Version;
+using WPF = System.Windows;
+using MCSkinn.Scripts.Languages;
+using System.Windows.Forms;
 
 namespace MCSkinn
 {
-	internal static class Program
+    internal static class Program
 	{
-		public const string Name = "MCSkinn LE";
+		public const string Name = "MCSkinn";
 		public static Version Version;
-		public static MCSkinnAppContext Context;
+		public static MCSkinnAppContext Context = new MCSkinnAppContext();
+
+		public static Dialogs.SplashWindow Window_Splash;
+        public static Editor? Form_Editor;
+		public static App App_Main;
+		public static MainWindow Window_Main;
+
+		public const string VersionFull = "0.6.2";
 
 		public static Stream GetResourceStream(string name)
 		{
@@ -61,19 +68,19 @@ namespace MCSkinn
 		[STAThread]
 		private static void Main()
 		{
-			AppDomain.CurrentDomain.AssemblyResolve +=
-			(sender, args) =>
-			{
-				using (Stream stream = GetResourceStream(new AssemblyName(args.Name).Name + ".dll"))
-				{
-					if (stream == null)
-						return null;
+			//AppDomain.CurrentDomain.AssemblyResolve +=
+			//(sender, args) =>
+			//{
+			//	using (Stream stream = GetResourceStream(new AssemblyName(args.Name).Name + ".dll"))
+			//	{
+			//		if (stream == null)
+			//			return null;
 
-					var assemblyData = new Byte[stream.Length];
-					stream.Read(assemblyData, 0, assemblyData.Length);
-					return Assembly.Load(assemblyData);
-				}
-			};
+			//		var assemblyData = new Byte[stream.Length];
+			//		stream.Read(assemblyData, 0, assemblyData.Length);
+			//		return Assembly.Load(assemblyData);
+			//	}
+			//};
 
 			MainCore();
 		}
@@ -89,10 +96,9 @@ namespace MCSkinn
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 #endif
 
-			Version = new Version(Application.ProductVersion);
 
 #if !DEBUG
-			Version.Revision = Repository.Revision;
+			//Version.Revision = Repository.Revision;
 #endif
 
 #if !DEBUG
@@ -103,10 +109,15 @@ namespace MCSkinn
 #if CONVERT_MODELS
 				Models.Convert.ConversionInterface.Convert();
 #endif
+			WinForms.Control.CheckForIllegalCrossThreadCalls = false;
+			WinForms.Application.EnableVisualStyles();
+			WinForms.Application.SetCompatibleTextRenderingDefault(true);
+			//WinForms.Application.Run(new MCSkinnAppContext());
 
-				Application.EnableVisualStyles();
-				Application.SetCompatibleTextRenderingDefault(false);
-				Application.Run(new MCSkinnAppContext());
+			App_Main = new App();
+			App_Main.InitializeComponent();
+			App_Main.Run();
+
 #if !DEBUG
 			}
 			catch (Exception ex)
@@ -128,13 +139,27 @@ namespace MCSkinn
 
 		public static void RaiseException(Exception ex)
 		{
-			var raiseForm = Editor.MainForm.IsHandleCreated ? (Form)Editor.MainForm : (Form)Program.Context.SplashForm;
-
-			if (raiseForm.InvokeRequired)
+			if (Editor.MainForm.IsHandleCreated)
 			{
-				raiseForm.Invoke((Action)delegate () { RaiseException(ex); });
-				return;
+				var raiseForm = (WinForms.Form)Editor.MainForm;
+                if (raiseForm.InvokeRequired)
+                {
+                    raiseForm.Invoke((Action)delegate () { RaiseException(ex); });
+                    return;
+                }
+
+            }
+			else
+			{
+				Program.Context.SplashForm.Dispatcher.Invoke((Action)delegate () { RaiseException(ex); });
 			}
+   //         var raiseForm = Editor.MainForm.IsHandleCreated ? (WinForms.Form)Editor.MainForm : (WinForms.Form)Program.Context.SplashForm;
+
+			//if (raiseForm.InvokeRequired)
+			//{
+			//	raiseForm.Invoke((Action)delegate () { RaiseException(ex); });
+			//	return;
+			//}
 
 			var form = new ExceptionForm();
 			form.Exception = ex;

@@ -1,4 +1,4 @@
-﻿namespace Paril.Windows.Dialogs
+﻿namespace MCSkinn.Scripts.Paril.Windows.Dialogs
 {
 	partial class ExceptionDialog
 	{

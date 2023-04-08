@@ -1,6 +1,8 @@
-﻿namespace MCSkinn
+﻿using MCSkinn.Scripts.Languages;
+
+namespace MCSkinn
 {
-	partial class PleaseWait
+    partial class PleaseWait
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -31,7 +33,7 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.progressBar1 = new System.Windows.Forms.ProgressBar();
 			this.button1 = new System.Windows.Forms.Button();
-			this.languageProvider1 = new MCSkinn.Languages.LanguageProvider();
+			this.languageProvider1 = new MCSkinn.Scripts.Languages.LanguageProvider();
 			((System.ComponentModel.ISupportInitialize)(this.languageProvider1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -93,6 +95,6 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ProgressBar progressBar1;
 		private System.Windows.Forms.Button button1;
-		public MCSkinn.Languages.LanguageProvider languageProvider1;
+		public LanguageProvider languageProvider1;
 	}
 }

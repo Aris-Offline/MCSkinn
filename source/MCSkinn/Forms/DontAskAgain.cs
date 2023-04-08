@@ -18,11 +18,11 @@
 
 using System;
 using System.Windows.Forms;
-using MCSkinn.Languages;
+using MCSkinn.Scripts.Languages;
 
 namespace MCSkinn.Forms
 {
-	public partial class DontAskAgain : Form
+    public partial class DontAskAgain : Form
 	{
 		public DontAskAgain()
 		{

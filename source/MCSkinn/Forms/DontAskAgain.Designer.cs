@@ -1,6 +1,8 @@
-﻿namespace MCSkinn.Forms
+﻿using MCSkinn.Scripts.Languages;
+
+namespace MCSkinn.Forms
 {
-	partial class DontAskAgain
+    partial class DontAskAgain
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -31,7 +33,7 @@
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
-			this.languageProvider1 = new MCSkinn.Languages.LanguageProvider();
+			this.languageProvider1 = new MCSkinn.Scripts.Languages.LanguageProvider();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.languageProvider1)).BeginInit();
 			this.SuspendLayout();
@@ -111,7 +113,7 @@
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.Label label1;
-		private MCSkinn.Languages.LanguageProvider languageProvider1;
+		private LanguageProvider languageProvider1;
 		private System.Windows.Forms.CheckBox checkBox1;
 	}
 }
