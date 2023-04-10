@@ -26,14 +26,14 @@ header {
 	border-bottom: 1px solid #2C9AB7;
 }
 .logo {
-	color: #fff;
-	font-weight: bold;
-	text-align: undefined;
-	width: 10%;
-	float: left;
-	margin-top: 15px;
-	margin-left: 25px;
-	letter-spacing: 4px;
+    color: #fff;
+    font-weight: bold;
+    text-align: undefined;
+    width: 10%;
+    float: left;
+    margin-top: 15px;
+    margin-left: 25px;
+    font-family: gg sans;
 }
 nav {
 	float: right;

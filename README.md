@@ -66,7 +66,9 @@ Click the links below to see and get the latest releases.
 
 | Site  | Link  | Type  |
 | ------------ | ------------ | ------------ |
-| Github  | [github.com/NotYoojun/MCSkinn](https://github.com/NotYoojun/MCSkinn/)  | Public  |
-| QQ Channel  | [pd.qq.com/s/g3o1pmidm](https://pd.qq.com/s/g3o1pmidm)  | Public  |
-| Discord  | [discord.gg/9cbxzv4E4t](https://discord.gg/9cbxzv4E4t)  | Public  |
+| Github  | [NotYoojun/MCSkinn](https://github.com/NotYoojun/MCSkinn/)  | Public  |
+| QQ Channel  | [PD g3o1pmidm](https://pd.qq.com/s/g3o1pmidm)  | Public  |
+| QQ Group |[QUN 686027177](https://jq.qq.com/?_wv=1027&k=KefGAM42)  | Public  |
+| Discord  | [SERVER 9cbxzv4E4t](https://discord.gg/9cbxzv4E4t)  | Public  |
+| Reddit Community|[r/animasterStudios](https://www.reddit.com/r/animasterStudios/)| Public  |
 | Telegram  | [t.me/+TpIvuJEkpgZlYTJl](https://t.me/+TpIvuJEkpgZlYTJl)  | Public  |
