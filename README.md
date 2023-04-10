@@ -16,12 +16,12 @@
 - All paint tools
 - 3D/2D View
 - More models
-
-### We're still working on
-
 - Undo/Redo list
 - Options menu
 - Keyboard Shortcuts
+
+### We're still working on
+
 - ...
 
 ## Downloads
