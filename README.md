@@ -32,7 +32,7 @@ Click the links below to see and get the latest releases.
 | ------------ | ------------ | ------------ |
 | Github  | [github.com/NotYoojun/MCSkinn/releases](https://github.com/NotYoojun/MCSkinn/releases)  | *(None)*  |
 | Lanzou  | [wwyo.lanzouy.com/b04dw34tg](https://wwyo.lanzouy.com/b04dw34tg)  | bynotyoojun  |
-| OneDrive  | [notyoojun-my.sharepoint.com/...](https://notyoojun-my.sharepoint.com/:f:/g/personal/yoojun_notyoojun_onmicrosoft_com/EobEi9yUEKxDubabCdNLE8UBLfj-8cIdvN4FKBU4DAs3Xg?e=CTs2TP)  | bynotyoojun  |
+| OneDrive  | [notyoojun-my.sharepoint.com/...](https://animasterstudios-my.sharepoint.com/:f:/g/personal/yoojun_animasterstudios_onmicrosoft_com/EobEi9yUEKxDubabCdNLE8UBLfj-8cIdvN4FKBU4DAs3Xg?e=CTs2TP)  | bynotyoojun  |
 
 ## How to Contribute
 
