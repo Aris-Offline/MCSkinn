@@ -1,6 +1,6 @@
 # MCSkinn Editor
 
-**A brand new Minecraft Skin Editor for Windows** from @animasterStudios
+**A brand new Minecraft Skin Editor for Windows.**
 
 ## Screenshot
 
