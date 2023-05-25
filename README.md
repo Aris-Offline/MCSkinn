@@ -2,10 +2,10 @@
 
 **A brand new Minecraft Skin Editor for Windows.**
 
-Offical Website: [http://blog.animasterstudios.com/en-us/products/software/mcskinn/](http://blog.animasterstudios.com/en-us/products/software/mcskinn/)
+Offical Website: [http://www.animasterstudios.com/en-us/products/apps/mcskinn/](http://www.animasterstudios.com/en-us/products/apps/mcskinn/)
 ## Screenshot
 
-![](https://github.com/InkoreStudios/MCSkinn/blob/main/docs/images/screenshot.png?raw=true)
+![](https://github.com/InkoreStudios/MCSkinn/blob/main/docs/images/image_product_mcskinn_screenshot.png?raw=true)
 
 ## Features
 
