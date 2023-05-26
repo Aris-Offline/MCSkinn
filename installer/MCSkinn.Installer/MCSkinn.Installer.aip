@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="20.4" version="20.4" Modules="enterprise" RootPath="." Language="zh" Id="{BDFE34CB-5A51-4BDA-A361-19755D99E98B}">
+  <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
+    <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;SccmComponent;ActSyncAppComponent;CPLAppletComponent;AutorunComponent;GameUxComponent;SilverlightSlnComponent;SharePointSlnComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
+    <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
+    <ROW Property="AI_FINDEXE_TITLE" Value="Select the installation package for [|ProductName]" ValueLocId="AI.Property.FindExeTitle"/>
+    <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_INTERNET_CONNECTION;AI_DETECTED_ADMIN_USER"/>
+    <ROW Property="AI_ThemeStyle" Value="aero" MultiBuildValue="DefaultBuild:purple" MsiKey="AI_ThemeStyle"/>
+    <ROW Property="ALLUSERS" Value="1"/>
+    <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
+    <ROW Property="ARPNOREPAIR" MultiBuildValue="DefaultBuild:1"/>
+    <ROW Property="ARPURLINFOABOUT" Value="animasterstudios.com"/>
+    <ROW Property="AiWinUI" MultiBuildValue="DefaultBuild:1"/>
+    <ROW Property="AppIcon256" Value="MCSkinn_Logo_256.png" Type="1"/>
+    <ROW Property="AppIcon48" Value="MCSkinn_Logo_48.png" Type="1"/>
+    <ROW Property="BannerBitmap" Value="banner.jpg" MultiBuildValue="DefaultBuild:Background.jpg" Type="1" MsiKey="BannerBitmap"/>
+    <ROW Property="CTRLS" Value="2"/>
+    <ROW Property="Manufacturer" Value="animasterStudios"/>
+    <ROW Property="ProductCode" Value="2052:{098C69A9-D604-4427-944D-F41D4C3E71E1} " Type="16"/>
+    <ROW Property="ProductLanguage" Value="2052"/>
+    <ROW Property="ProductName" Value="MCSkinn Editor"/>
+    <ROW Property="ProductVersion" Value="1.0.3"/>
+    <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
+    <ROW Property="UpgradeCode" Value="{D4DAEBD7-9C02-4BC5-B152-145BC9072608}"/>
+    <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
+    <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
+    <ROW Directory="Blocks_Dir" Directory_Parent="Models_Dir" DefaultDir="Blocks"/>
+    <ROW Directory="Entities_Dir" Directory_Parent="Models_Dir" DefaultDir="Entities"/>
+    <ROW Directory="Items_Dir" Directory_Parent="Models_Dir" DefaultDir="Items"/>
+    <ROW Directory="Languages_Dir" Directory_Parent="APPDIR" DefaultDir="LANGUA~1|Languages"/>
+    <ROW Directory="Mobs_Dir" Directory_Parent="Models_Dir" DefaultDir="Mobs"/>
+    <ROW Directory="Models_Dir" Directory_Parent="APPDIR" DefaultDir="Models"/>
+    <ROW Directory="Overlays_Dir" Directory_Parent="APPDIR" DefaultDir="Overlays"/>
+    <ROW Directory="Players_Dir" Directory_Parent="Models_Dir" DefaultDir="Players"/>
+    <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
+    <ROW Directory="Samples_Dir" Directory_Parent="Skins_Dir" DefaultDir="Samples"/>
+    <ROW Directory="Skins_Dir" Directory_Parent="APPDIR" DefaultDir="Skins"/>
+    <ROW Directory="Slim_Dir" Directory_Parent="Samples_Dir" DefaultDir="Slim"/>
+    <ROW Directory="Swatches_Dir" Directory_Parent="APPDIR" DefaultDir="Swatches"/>
+    <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="Templates_Dir" Directory_Parent="Samples_Dir" DefaultDir="TEMPLA~1|Templates"/>
+    <ROW Directory="Wide_Dir" Directory_Parent="Samples_Dir" DefaultDir="Wide"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
+    <ROW Component="AI_ExePath" ComponentId="{094F26BF-A3B0-4162-813E-4B3AADC7DE8D}" Directory_="APPDIR" Attributes="4" KeyPath="AI_ExePath"/>
+    <ROW Component="AI_INSTALLPERUSER" ComponentId="{294B5727-1E7F-475D-A794-E7CB9B847F2C}" Directory_="APPDIR" Attributes="4" KeyPath="AI_INSTALLPERUSER" Options="1"/>
+    <ROW Component="APPDIR" ComponentId="{18A44D87-2B7C-458A-BB5B-2DDEF69B549F}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="Alex.png" ComponentId="{0E2541A9-1F3D-48B6-BDA0-FECEA23CCB3F}" Directory_="Slim_Dir" Attributes="0" KeyPath="Alex.png" Type="0"/>
+    <ROW Component="AlexMinimal.xml" ComponentId="{8D1C875B-5342-464A-8CF7-9454E9519378}" Directory_="Players_Dir" Attributes="0" KeyPath="AlexMinimal.xml" Type="0"/>
+    <ROW Component="ArmorStand.xml" ComponentId="{942D15AD-BEC1-4B16-8219-92545B24A312}" Directory_="Entities_Dir" Attributes="0" KeyPath="ArmorStand.xml" Type="0"/>
+    <ROW Component="B37BEDE240349B0F3A200E11BEFB" ComponentId="{D89C7A29-14D3-44FA-B45D-0294B8E287CD}" Directory_="APPDIR" Attributes="4" KeyPath="B37BEDE240349B0F3A200E11BEFB" Options="2"/>
+    <ROW Component="Banner.xml" ComponentId="{E83ABC93-96D9-4872-AA3F-8D2184EF5EE8}" Directory_="Blocks_Dir" Attributes="0" KeyPath="Banner.xml" Type="0"/>
+    <ROW Component="Base.gpl" ComponentId="{6D36AA1E-AFDC-4324-BCB7-F8627A9203B0}" Directory_="Swatches_Dir" Attributes="0" KeyPath="Base.gpl" Type="0"/>
+    <ROW Component="Bat.xml" ComponentId="{3C30D2A8-448F-4DA8-98AF-97F2130BE38B}" Directory_="Mobs_Dir" Attributes="0" KeyPath="Bat.xml" Type="0"/>
+    <ROW Component="Defaultwhite.png" ComponentId="{8AC3A52A-DF6B-4601-8A00-A57D31054172}" Directory_="Overlays_Dir" Attributes="0" KeyPath="Defaultwhite.png" Type="0"/>
+    <ROW Component="Elytra.xml" ComponentId="{7F22E05F-5024-45EB-B0B7-DE2A4C2F190A}" Directory_="Items_Dir" Attributes="0" KeyPath="Elytra.xml" Type="0"/>
+    <ROW Component="MCSkinn.ThirdParty.dll" ComponentId="{8CCFC518-9D6D-46F9-824A-32C8C7E55813}" Directory_="APPDIR" Attributes="0" KeyPath="MCSkinn.ThirdParty.dll"/>
+    <ROW Component="MCSkinn.dll" ComponentId="{D3C8FC57-52FD-413D-925B-4DFEEE2D02E8}" Directory_="APPDIR" Attributes="0" KeyPath="MCSkinn.dll"/>
+    <ROW Component="MCSkinn.exe" ComponentId="{38453D1D-56B5-401D-B2BE-5EBABF87B345}" Directory_="APPDIR" Attributes="256" KeyPath="MCSkinn.exe"/>
+    <ROW Component="Microsoft.DwayneNeed.Win32.dll" ComponentId="{61FB4445-6CFE-4E0A-93B2-082A094CF459}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.DwayneNeed.Win32.dll"/>
+    <ROW Component="Microsoft.DwayneNeed.dll" ComponentId="{8A67C82F-D8A4-4A0C-8A6F-72DDB77E0142}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.DwayneNeed.dll"/>
+    <ROW Component="Microsoft.Windows.SDK.NET.dll" ComponentId="{747D738B-4682-443A-A66D-EA649C4760EB}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Windows.SDK.NET.dll"/>
+    <ROW Component="ModernWpf.Controls.dll" ComponentId="{B9B1B174-D95B-4AD9-BC9F-4A34B885116E}" Directory_="APPDIR" Attributes="0" KeyPath="ModernWpf.Controls.dll"/>
+    <ROW Component="ModernWpf.dll" ComponentId="{AE659807-9584-46FB-A823-58C3483F7201}" Directory_="APPDIR" Attributes="0" KeyPath="ModernWpf.dll"/>
+    <ROW Component="OpenTK.GLControl.dll" ComponentId="{C610C935-ED3B-4368-9090-DF02E62776CC}" Directory_="APPDIR" Attributes="0" KeyPath="OpenTK.GLControl.dll"/>
+    <ROW Component="OpenTK.dll" ComponentId="{3431820E-1F35-417C-9EBD-67871D005B15}" Directory_="APPDIR" Attributes="0" KeyPath="OpenTK.dll"/>
+    <ROW Component="ProductInformation" ComponentId="{589EE6C4-FF69-4066-88C9-5DC2BAEF3737}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
+    <ROW Component="SHORTCUTDIR" ComponentId="{0ECE5069-07B1-4231-8695-1FF9C0CCA1B6}" Directory_="SHORTCUTDIR" Attributes="0"/>
+    <ROW Component="Styler.dll" ComponentId="{AF1AEC5D-C85D-451B-AA7C-1100CD11940E}" Directory_="APPDIR" Attributes="0" KeyPath="Styler.dll"/>
+    <ROW Component="Template.png" ComponentId="{1C0F8AE0-EBE4-4D92-B8D2-31B4C12B7688}" Directory_="Templates_Dir" Attributes="0" KeyPath="Template.png" Type="0"/>
+    <ROW Component="WinRT.Runtime.dll" ComponentId="{3148A05C-6ABD-4598-B1AF-3392A5188B36}" Directory_="APPDIR" Attributes="0" KeyPath="WinRT.Runtime.dll"/>
+    <ROW Component="alex.png" ComponentId="{A475390E-3E24-49D1-ABC2-F6FC496C6A3A}" Directory_="Wide_Dir" Attributes="0" KeyPath="alex.png_1" Type="0"/>
+    <ROW Component="enus.lang" ComponentId="{92C541B7-91F0-404F-8A23-0157113B3176}" Directory_="Languages_Dir" Attributes="0" KeyPath="enus.lang" Type="0"/>
+    <ROW Component="grass.png_1" ComponentId="{D696E065-297C-46B3-8A2A-25F6CB70D0F7}" Directory_="APPDIR" Attributes="0" KeyPath="grass.png" Type="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
+    <ROW Feature="B37BEDE240349B0F3A200E11BEFB" Title=".NET Desktop Runtime 6.0.14 x86" Description=".NET Desktop Runtime 6.0.14 x86" Display="3" Level="1" Attributes="0"/>
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="grass.png" Component_="grass.png_1" FileName="grass.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\grass.png" SelfReg="false"/>
+    <ROW File="enus.lang" Component_="enus.lang" FileName="EN-US~1.LAN|en-us.lang" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Languages\en-us.lang" SelfReg="false"/>
+    <ROW File="zhcn.lang" Component_="enus.lang" FileName="ZH-CN~1.LAN|zh-cn.lang" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Languages\zh-cn.lang" SelfReg="false"/>
+    <ROW File="MCSkinn.deps.json" Component_="grass.png_1" FileName="MCSKIN~1.JSO|MCSkinn.deps.json" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\MCSkinn.deps.json" SelfReg="false"/>
+    <ROW File="MCSkinn.dll" Component_="MCSkinn.dll" FileName="MCSkinn.dll" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\MCSkinn.dll" SelfReg="false"/>
+    <ROW File="MCSkinn.exe" Component_="MCSkinn.exe" FileName="MCSkinn.exe" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\MCSkinn.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="MCSkinn.runtimeconfig.json" Component_="grass.png_1" FileName="MCSKIN~2.JSO|MCSkinn.runtimeconfig.json" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\MCSkinn.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="Microsoft.DwayneNeed.dll" Component_="Microsoft.DwayneNeed.dll" FileName="MICROS~1.DLL|Microsoft.DwayneNeed.dll" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Microsoft.DwayneNeed.dll" SelfReg="false"/>
+    <ROW File="Microsoft.DwayneNeed.Win32.dll" Component_="Microsoft.DwayneNeed.Win32.dll" FileName="MICROS~2.DLL|Microsoft.DwayneNeed.Win32.dll" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Microsoft.DwayneNeed.Win32.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Windows.SDK.NET.dll" Component_="Microsoft.Windows.SDK.NET.dll" FileName="MICROS~3.DLL|Microsoft.Windows.SDK.NET.dll" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Microsoft.Windows.SDK.NET.dll" SelfReg="false"/>
+    <ROW File="Banner.xml" Component_="Banner.xml" FileName="Banner.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Blocks\Banner.xml" SelfReg="false"/>
+    <ROW File="Book.xml" Component_="Banner.xml" FileName="Book.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Blocks\Book.xml" SelfReg="false"/>
+    <ROW File="Chest.xml" Component_="Banner.xml" FileName="Chest.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Blocks\Chest.xml" SelfReg="false"/>
+    <ROW File="LargeChest.xml" Component_="Banner.xml" FileName="LARGEC~1.XML|Large Chest.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Blocks\Large Chest.xml" SelfReg="false"/>
+    <ROW File="Sign.xml" Component_="Banner.xml" FileName="Sign.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Blocks\Sign.xml" SelfReg="false"/>
+    <ROW File="ArmorStand.xml" Component_="ArmorStand.xml" FileName="ARMORS~1.XML|Armor Stand.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Entities\Armor Stand.xml" SelfReg="false"/>
+    <ROW File="Boat.xml" Component_="ArmorStand.xml" FileName="Boat.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Entities\Boat.xml" SelfReg="false"/>
+    <ROW File="EnderCrystal.xml" Component_="ArmorStand.xml" FileName="ENDERC~1.XML|Ender Crystal.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Entities\Ender Crystal.xml" SelfReg="false"/>
+    <ROW File="LeashKnot.xml" Component_="ArmorStand.xml" FileName="LEASHK~1.XML|Leash Knot.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Entities\Leash Knot.xml" SelfReg="false"/>
+    <ROW File="Minecart.xml" Component_="ArmorStand.xml" FileName="Minecart.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Entities\Minecart.xml" SelfReg="false"/>
+    <ROW File="Elytra.xml" Component_="Elytra.xml" FileName="Elytra.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Items\Elytra.xml" SelfReg="false"/>
+    <ROW File="Shield.xml" Component_="Elytra.xml" FileName="Shield.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Items\Shield.xml" SelfReg="false"/>
+    <ROW File="Bat.xml" Component_="Bat.xml" FileName="Bat.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Bat.xml" SelfReg="false"/>
+    <ROW File="Blaze.xml" Component_="Bat.xml" FileName="Blaze.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Blaze.xml" SelfReg="false"/>
+    <ROW File="Chicken.xml" Component_="Bat.xml" FileName="Chicken.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Chicken.xml" SelfReg="false"/>
+    <ROW File="Cow.xml" Component_="Bat.xml" FileName="Cow.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Cow.xml" SelfReg="false"/>
+    <ROW File="Creeper.xml" Component_="Bat.xml" FileName="Creeper.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Creeper.xml" SelfReg="false"/>
+    <ROW File="Dragon.xml" Component_="Bat.xml" FileName="Dragon.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Dragon.xml" SelfReg="false"/>
+    <ROW File="Enderman.xml" Component_="Bat.xml" FileName="Enderman.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Enderman.xml" SelfReg="false"/>
+    <ROW File="EnderMite.xml" Component_="Bat.xml" FileName="ENDERM~1.XML|EnderMite.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\EnderMite.xml" SelfReg="false"/>
+    <ROW File="Ghast.xml" Component_="Bat.xml" FileName="Ghast.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Ghast.xml" SelfReg="false"/>
+    <ROW File="Guardian.xml" Component_="Bat.xml" FileName="Guardian.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Guardian.xml" SelfReg="false"/>
+    <ROW File="Horse.xml" Component_="Bat.xml" FileName="Horse.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Horse.xml" SelfReg="false"/>
+    <ROW File="IronGolem.xml" Component_="Bat.xml" FileName="IRONGO~1.XML|Iron Golem.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Iron Golem.xml" SelfReg="false"/>
+    <ROW File="MagmaCube.xml" Component_="Bat.xml" FileName="MAGMAC~1.XML|Magma Cube.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Magma Cube.xml" SelfReg="false"/>
+    <ROW File="Ocelot.xml" Component_="Bat.xml" FileName="Ocelot.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Ocelot.xml" SelfReg="false"/>
+    <ROW File="Pig.xml" Component_="Bat.xml" FileName="Pig.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Pig.xml" SelfReg="false"/>
+    <ROW File="Rabbit.xml" Component_="Bat.xml" FileName="Rabbit.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Rabbit.xml" SelfReg="false"/>
+    <ROW File="SheepWool.xml" Component_="Bat.xml" FileName="SHEEP(~1.XML|Sheep (Wool).xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Sheep (Wool).xml" SelfReg="false"/>
+    <ROW File="Sheep.xml" Component_="Bat.xml" FileName="Sheep.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Sheep.xml" SelfReg="false"/>
+    <ROW File="ShulkerBullet.xml" Component_="Bat.xml" FileName="SHULKE~1.XML|Shulker Bullet.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Shulker Bullet.xml" SelfReg="false"/>
+    <ROW File="Shulker.xml" Component_="Bat.xml" FileName="Shulker.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Shulker.xml" SelfReg="false"/>
+    <ROW File="Silverfish.xml" Component_="Bat.xml" FileName="SILVER~1.XML|Silverfish.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Silverfish.xml" SelfReg="false"/>
+    <ROW File="Skeleton.xml" Component_="Bat.xml" FileName="Skeleton.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Skeleton.xml" SelfReg="false"/>
+    <ROW File="Slime.xml" Component_="Bat.xml" FileName="Slime.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Slime.xml" SelfReg="false"/>
+    <ROW File="SnowMan.xml" Component_="Bat.xml" FileName="SnowMan.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\SnowMan.xml" SelfReg="false"/>
+    <ROW File="Spider.xml" Component_="Bat.xml" FileName="Spider.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Spider.xml" SelfReg="false"/>
+    <ROW File="Squid.xml" Component_="Bat.xml" FileName="Squid.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Squid.xml" SelfReg="false"/>
+    <ROW File="Villager.xml" Component_="Bat.xml" FileName="Villager.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Villager.xml" SelfReg="false"/>
+    <ROW File="Witch.xml" Component_="Bat.xml" FileName="Witch.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Witch.xml" SelfReg="false"/>
+    <ROW File="Wither.xml" Component_="Bat.xml" FileName="Wither.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Wither.xml" SelfReg="false"/>
+    <ROW File="Wolf.xml" Component_="Bat.xml" FileName="Wolf.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Wolf.xml" SelfReg="false"/>
+    <ROW File="ZombieVillager.xml" Component_="Bat.xml" FileName="ZOMBIE~1.XML|Zombie Villager.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Mobs\Zombie Villager.xml" SelfReg="false"/>
+    <ROW File="AlexMinimal.xml" Component_="AlexMinimal.xml" FileName="ALEX(M~1.XML|Alex (Minimal).xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Players\Alex (Minimal).xml" SelfReg="false"/>
+    <ROW File="Alex.xml" Component_="AlexMinimal.xml" FileName="Alex.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Players\Alex.xml" SelfReg="false"/>
+    <ROW File="Cape.xml" Component_="AlexMinimal.xml" FileName="Cape.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Players\Cape.xml" SelfReg="false"/>
+    <ROW File="SteveMinimal.xml" Component_="AlexMinimal.xml" FileName="STEVE(~1.XML|Steve (Minimal).xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Players\Steve (Minimal).xml" SelfReg="false"/>
+    <ROW File="Steve.xml" Component_="AlexMinimal.xml" FileName="Steve.xml" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Models\Players\Steve.xml" SelfReg="false"/>
+    <ROW File="ModernWpf.Controls.dll" Component_="ModernWpf.Controls.dll" FileName="MODERN~1.DLL|ModernWpf.Controls.dll" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\ModernWpf.Controls.dll" SelfReg="false"/>
+    <ROW File="ModernWpf.dll" Component_="ModernWpf.dll" FileName="MODERN~2.DLL|ModernWpf.dll" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\ModernWpf.dll" SelfReg="false"/>
+    <ROW File="OpenTK.dll" Component_="OpenTK.dll" FileName="OpenTK.dll" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\OpenTK.dll" SelfReg="false"/>
+    <ROW File="OpenTK.GLControl.dll" Component_="OpenTK.GLControl.dll" FileName="OPENTK~1.DLL|OpenTK.GLControl.dll" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\OpenTK.GLControl.dll" SelfReg="false"/>
+    <ROW File="Defaultwhite.png" Component_="Defaultwhite.png" FileName="DEFAUL~1.PNG|Default white.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Overlays\Default white.png" SelfReg="false"/>
+    <ROW File="Default.png" Component_="Defaultwhite.png" FileName="Default.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Overlays\Default.png" SelfReg="false"/>
+    <ROW File="Notextwhite.png" Component_="Defaultwhite.png" FileName="NOTEXT~1.PNG|No text white.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Overlays\No text white.png" SelfReg="false"/>
+    <ROW File="Notext.png" Component_="Defaultwhite.png" FileName="NOTEXT~2.PNG|No text.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Overlays\No text.png" SelfReg="false"/>
+    <ROW File="Ponyblacktransparent.png" Component_="Defaultwhite.png" FileName="PONYBL~1.PNG|Ponyblacktransparent.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Overlays\Ponyblacktransparent.png" SelfReg="false"/>
+    <ROW File="Ponyoverlay.png" Component_="Defaultwhite.png" FileName="PONYOV~1.PNG|Ponyoverlay.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Overlays\Ponyoverlay.png" SelfReg="false"/>
+    <ROW File="ponysolidblack.png" Component_="Defaultwhite.png" FileName="PONYSO~1.PNG|ponysolidblack.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Overlays\ponysolidblack.png" SelfReg="false"/>
+    <ROW File="ponysolidwhite.png" Component_="Defaultwhite.png" FileName="PONYSO~2.PNG|ponysolidwhite.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Overlays\ponysolidwhite.png" SelfReg="false"/>
+    <ROW File="Ponywhitetransparent.png" Component_="Defaultwhite.png" FileName="PONYWH~1.PNG|Ponywhitetransparent.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Overlays\Ponywhitetransparent.png" SelfReg="false"/>
+    <ROW File="settings.ini" Component_="grass.png_1" FileName="settings.ini" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\settings.ini" SelfReg="false"/>
+    <ROW File="Alex.png" Component_="Alex.png" FileName="Alex.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Slim\Alex.png" SelfReg="false"/>
+    <ROW File="Ari.png" Component_="Alex.png" FileName="Ari.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Slim\Ari.png" SelfReg="false"/>
+    <ROW File="Efe.png" Component_="Alex.png" FileName="Efe.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Slim\Efe.png" SelfReg="false"/>
+    <ROW File="Kai.png" Component_="Alex.png" FileName="Kai.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Slim\Kai.png" SelfReg="false"/>
+    <ROW File="Makena.png" Component_="Alex.png" FileName="Makena.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Slim\Makena.png" SelfReg="false"/>
+    <ROW File="Noor.png" Component_="Alex.png" FileName="Noor.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Slim\Noor.png" SelfReg="false"/>
+    <ROW File="Steve.png" Component_="Alex.png" FileName="Steve.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Slim\Steve.png" SelfReg="false"/>
+    <ROW File="Sunny.png" Component_="Alex.png" FileName="Sunny.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Slim\Sunny.png" SelfReg="false"/>
+    <ROW File="Zuri.png" Component_="Alex.png" FileName="Zuri.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Slim\Zuri.png" SelfReg="false"/>
+    <ROW File="Template.png" Component_="Template.png" FileName="18TEMP~1.PNG|1.8 Template.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Templates\1.8 Template.png" SelfReg="false"/>
+    <ROW File="TemplateMan.png" Component_="Template.png" FileName="TEMPLA~1.PNG|Template Man.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Templates\Template Man.png" SelfReg="false"/>
+    <ROW File="alex.png_1" Component_="alex.png" FileName="alex.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Wide\alex.png" SelfReg="false"/>
+    <ROW File="ari.png_1" Component_="alex.png" FileName="ari.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Wide\ari.png" SelfReg="false"/>
+    <ROW File="efe.png_1" Component_="alex.png" FileName="efe.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Wide\efe.png" SelfReg="false"/>
+    <ROW File="kai.png_1" Component_="alex.png" FileName="kai.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Wide\kai.png" SelfReg="false"/>
+    <ROW File="makena.png_1" Component_="alex.png" FileName="makena.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Wide\makena.png" SelfReg="false"/>
+    <ROW File="noor.png_1" Component_="alex.png" FileName="noor.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Wide\noor.png" SelfReg="false"/>
+    <ROW File="steve.png_1" Component_="alex.png" FileName="steve.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Wide\steve.png" SelfReg="false"/>
+    <ROW File="sunny.png_1" Component_="alex.png" FileName="sunny.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Wide\sunny.png" SelfReg="false"/>
+    <ROW File="zuri.png_1" Component_="alex.png" FileName="zuri.png" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Skins\Samples\Wide\zuri.png" SelfReg="false"/>
+    <ROW File="Styler.dll" Component_="Styler.dll" FileName="Styler.dll" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Styler.dll" SelfReg="false"/>
+    <ROW File="Base.gpl" Component_="Base.gpl" FileName="Base.gpl" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\Base.gpl" SelfReg="false"/>
+    <ROW File="CadenceSheet.swtch" Component_="Base.gpl" FileName="CADENC~1.SWT|Cadence Sheet.swtch" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\Cadence Sheet.swtch" SelfReg="false"/>
+    <ROW File="CoolColors.swtch" Component_="Base.gpl" FileName="COOLCO~1.SWT|Cool Colors.swtch" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\Cool Colors.swtch" SelfReg="false"/>
+    <ROW File="DefaultSwatches.aco" Component_="Base.gpl" FileName="DEFAUL~1.ACO|Default Swatches.aco" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\Default Swatches.aco" SelfReg="false"/>
+    <ROW File="DICColorGuide.aco" Component_="Base.gpl" FileName="DICCOL~1.ACO|DIC Color Guide.aco" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\DIC Color Guide.aco" SelfReg="false"/>
+    <ROW File="FOCOLTONEColors.aco" Component_="Base.gpl" FileName="FOCOLT~1.ACO|FOCOLTONE Colors.aco" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\FOCOLTONE Colors.aco" SelfReg="false"/>
+    <ROW File="GeneralColors.swtch" Component_="Base.gpl" FileName="GENERA~1.SWT|General Colors.swtch" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\General Colors.swtch" SelfReg="false"/>
+    <ROW File="MineLittlePony.aco" Component_="Base.gpl" FileName="MINELI~1.ACO|Mine Little Pony.aco" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\Mine Little Pony.aco" SelfReg="false"/>
+    <ROW File="Named_Colors.gpl" Component_="Base.gpl" FileName="NAMED_~1.GPL|Named_Colors.gpl" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\Named_Colors.gpl" SelfReg="false"/>
+    <ROW File="NetColors.swtch" Component_="Base.gpl" FileName="NETCOL~1.SWT|Net Colors.swtch" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\Net Colors.swtch" SelfReg="false"/>
+    <ROW File="PANTONEprocessuncoated.aco" Component_="Base.gpl" FileName="PANTON~1.ACO|PANTONE process uncoated.aco" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\PANTONE process uncoated.aco" SelfReg="false"/>
+    <ROW File="QuickPicks.swtch" Component_="Base.gpl" FileName="QUICKP~1.SWT|Quick Picks.swtch" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\Quick Picks.swtch" SelfReg="false"/>
+    <ROW File="SkinColors.swtch" Component_="Base.gpl" FileName="SKINCO~1.SWT|Skin Colors.swtch" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\Skin Colors.swtch" SelfReg="false"/>
+    <ROW File="swatches.txt" Component_="Base.gpl" FileName="swatches.txt" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\swatches.txt" SelfReg="false"/>
+    <ROW File="SystemColors.swtch" Component_="Base.gpl" FileName="SYSTEM~1.SWT|System Colors.swtch" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\System Colors.swtch" SelfReg="false"/>
+    <ROW File="VisiBone2.aco" Component_="Base.gpl" FileName="VISIBO~1.ACO|VisiBone2.aco" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\VisiBone2.aco" SelfReg="false"/>
+    <ROW File="WarmColors.swtch" Component_="Base.gpl" FileName="WARMCO~1.SWT|Warm Colors.swtch" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\Warm Colors.swtch" SelfReg="false"/>
+    <ROW File="WindowsColors.aco" Component_="Base.gpl" FileName="WINDOW~1.ACO|Windows Colors.aco" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\Windows Colors.aco" SelfReg="false"/>
+    <ROW File="Windows.act" Component_="Base.gpl" FileName="Windows.act" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\Swatches\Windows.act" SelfReg="false"/>
+    <ROW File="WinRT.Runtime.dll" Component_="WinRT.Runtime.dll" FileName="WINRTR~1.DLL|WinRT.Runtime.dll" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\WinRT.Runtime.dll" SelfReg="false"/>
+    <ROW File="MCSkinn.ThirdParty.dll" Component_="MCSkinn.ThirdParty.dll" FileName="MCSKIN~1.DLL|MCSkinn.ThirdParty.dll" Attributes="0" SourcePath="..\MCSkinn\bin\Release\net6.0-windows10.0.18362.0\MCSkinn.ThirdParty.dll" SelfReg="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentPropComponent">
+    <ROW Property="AI_INSTALLPERUSER" Registry="AI_INSTALLPERUSER" HklmSearch="AI_INSTALLPERUSER" HkcuSearch="AI_INSTALLPERUSER_1"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
+    <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrapperUISequenceComponent">
+    <ROW Action="AI_DetectSoftware" Sequence="151"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" Languages="zh" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="F:\Source Materials\Icons\DesktopAppInstall.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" UseLargeSchema="true" ExeName="mcskinn-[|ProductVersion]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
+    <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
+    <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
+    <ROW Fragment="InstallDlg.aip" Path="&lt;AI_THEMES&gt;light\fragments\InstallDlg.aip"/>
+    <ROW Fragment="InstallTypeDlg.aip" Path="&lt;AI_THEMES&gt;light\fragments\InstallTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;light\fragments\MaintenanceTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;light\fragments\MaintenanceWelcomeDlg.aip"/>
+    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;light\fragments\SequenceDialogs.aip"/>
+    <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
+    <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
+    <ROW Fragment="Themes.aip" Path="&lt;AI_FRAGS&gt;Themes.aip"/>
+    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;light\fragments\UI.aip"/>
+    <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
+    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;light\fragments\VerifyRemoveDlg.aip"/>
+    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;light\fragments\VerifyRepairDlg.aip"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiActionTextComponent">
+    <ROW Action="AI_ConfigureChainer" Description="Configuring prerequisites launcher" DescriptionLocId="ActionText.Description.AI_ConfigureChainer" Template="Configure Launcher" TemplateLocId="ActionText.Template.AI_ConfigureChainer"/>
+    <ROW Action="AI_DeleteLzma" DescriptionLocId="ActionText.Description.AI_DeleteLzma" TemplateLocId="-"/>
+    <ROW Action="AI_DeleteRLzma" DescriptionLocId="ActionText.Description.AI_DeleteLzma" TemplateLocId="-"/>
+    <ROW Action="AI_DownloadPrereq" Description="Downloading prerequisite software" DescriptionLocId="ActionText.Description.AI_DownloadPrereq" Template="[1]" TemplateLocId="ActionText.Template.AI_DownloadPrereq"/>
+    <ROW Action="AI_ExtractFiles" DescriptionLocId="ActionText.Description.AI_ExtractLzma" TemplateLocId="-"/>
+    <ROW Action="AI_ExtractLzma" DescriptionLocId="ActionText.Description.AI_ExtractLzma" TemplateLocId="-"/>
+    <ROW Action="AI_ExtractPrereq" Description="Extracting prerequisite software" DescriptionLocId="ActionText.Description.AI_ExtractPrereq" Template="[1]" TemplateLocId="ActionText.Template.AI_ExtractPrereq"/>
+    <ROW Action="AI_InstallPostPrerequisite" Description="Installing prerequisite software" DescriptionLocId="ActionText.Description.AI_InstallPrerequisite" Template="[1]" TemplateLocId="ActionText.Template.AI_InstallPrerequisite"/>
+    <ROW Action="AI_InstallPrerequisite" Description="Installing prerequisite software" DescriptionLocId="ActionText.Description.AI_InstallPrerequisite" Template="[1]" TemplateLocId="ActionText.Template.AI_InstallPrerequisite"/>
+    <ROW Action="AI_VerifyPrereq" Description="Verifying prerequisites" DescriptionLocId="ActionText.Description.AI_VerifyPrereq" Template="[1] was not installed correctly." TemplateLocId="ActionText.Template.AI_VerifyPrereq"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiAppSearchComponent">
+    <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER"/>
+    <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER_1"/>
+    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_LM" Builds="DefaultBuild"/>
+    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_CU" Builds="DefaultBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
+    <ROW Name="Background.jpg" SourcePath="Background.jpg"/>
+    <ROW Name="MCSkinn_Logo_256.png" SourcePath="..\MCSkinn\Resources\Images\AppIcon\MCSkinn_Logo_256.png"/>
+    <ROW Name="MCSkinn_Logo_48.png" SourcePath="..\MCSkinn\Resources\Images\AppIcon\MCSkinn_Logo_48.png"/>
+    <ROW Name="Prereq.dll" SourcePath="&lt;AI_CUSTACTS&gt;Prereq.dll"/>
+    <ROW Name="SoftwareDetector.dll" SourcePath="&lt;AI_CUSTACTS&gt;SoftwareDetector.dll"/>
+    <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
+    <ROW Name="aipackagechainer.exe" SourcePath="&lt;AI_CUSTACTS&gt;aipackagechainer.exe" DigSign="true"/>
+    <ROW Name="file_deleter.ps1" SourcePath="&lt;AI_SCRIPTS&gt;file_deleter.ps1"/>
+    <ROW Name="lzmaextractor.dll" SourcePath="&lt;AI_CUSTACTS&gt;lzmaextractor.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlComponent">
+    <ROW Dialog_="AdminBrowseDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="AdminBrowseDlg#Bitmap"/>
+    <ROW Dialog_="AdminBrowseDlg" Control="Description" Type="Text" X="15" Y="27" Width="280" Height="20" Attributes="196611" Text="Browse to the destination folder" Order="1200" TextLocId="Control.Text.AdminBrowseDlg#Description" MsiKey="AdminBrowseDlg#Description"/>
+    <ROW Dialog_="AdminInstallPointDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="200" MsiKey="AdminInstallPointDlg#Bitmap"/>
+    <ROW Dialog_="AdminInstallPointDlg" Control="Next" Type="PushButton" X="290" Y="237" Width="90" Height="24" Attributes="3" Text="[ButtonText_Next]" Order="700" TextLocId="-" MsiKey="AdminInstallPointDlg#Next" Options="1"/>
+    <ROW Dialog_="AdminWelcomeDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="200" MsiKey="AdminWelcomeDlg#Bitmap"/>
+    <ROW Dialog_="AdminWelcomeDlg" Control="Next" Type="PushButton" X="290" Y="237" Width="90" Height="24" Attributes="3" Text="[ButtonText_Next]" Order="300" TextLocId="-" MsiKey="AdminWelcomeDlg#Next" Options="1"/>
+    <ROW Dialog_="BrowseDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="BrowseDlg#Bitmap"/>
+    <ROW Dialog_="BrowseDlg" Control="Description" Type="Text" X="15" Y="27" Width="280" Height="20" Attributes="196611" Text="Browse to the destination folder" Order="1200" TextLocId="Control.Text.BrowseDlg#Description" MsiKey="BrowseDlg#Description"/>
+    <ROW Dialog_="CustomizeDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="CustomizeDlg#Bitmap"/>
+    <ROW Dialog_="CustomizeDlg" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="3" Text="[ButtonText_Back]" Order="600" TextLocId="-" MsiKey="CustomizeDlg#Back" Options="1"/>
+    <ROW Dialog_="CustomizeDlg" Control="Next" Type="PushButton" X="290" Y="237" Width="90" Height="24" Attributes="3" Text="[ButtonText_Next]" Order="700" TextLocId="-" MsiKey="CustomizeDlg#Next" Options="1"/>
+    <ROW Dialog_="CustomizeDlg" Control="Description" Type="Text" X="15" Y="27" Width="280" Height="20" Attributes="196611" Text="Select the way you want features to be installed." Order="1100" TextLocId="Control.Text.CustomizeDlg#Description" MsiKey="CustomizeDlg#Description"/>
+    <ROW Dialog_="DiskCostDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="DiskCostDlg#Bitmap"/>
+    <ROW Dialog_="ExitDialog" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="1" Text="[ButtonText_Back]" Order="100" TextLocId="-" MsiKey="ExitDialog#Back" Options="1"/>
+    <ROW Dialog_="ExitDialog" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="300" MsiKey="ExitDialog#Bitmap"/>
+    <ROW Dialog_="ExitDialog" Control="ViewReadmeText" Type="Text" X="46" Y="139" Width="220" Height="20" Attributes="196611" Text="View readme file" Order="400" TextLocId="Control.Text.ExitDialog#ViewReadmeText" MsiKey="ExitDialog#ViewReadmeText"/>
+    <ROW Dialog_="ExitDialog" Control="LaunchProdText" Type="Text" X="46" Y="166" Width="220" Height="20" Attributes="196611" Text="Launch [ProductName]" Order="700" TextLocId="Control.Text.ExitDialog#LaunchProdText" MsiKey="ExitDialog#LaunchProdText"/>
+    <ROW Dialog_="ExitDialog" Control="Finish" Type="PushButton" X="308" Y="237" Width="72" Height="24" Attributes="3" Text="[ButtonText_Finish]" Order="1000" TextLocId="-" MsiKey="ExitDialog#Finish" Options="1"/>
+    <ROW Dialog_="FatalError" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="1" Text="[ButtonText_Back]" Order="100" TextLocId="-" MsiKey="FatalError#Back" Options="1"/>
+    <ROW Dialog_="FatalError" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="200" MsiKey="FatalError#Bitmap"/>
+    <ROW Dialog_="FatalError" Control="Cancel" Type="PushButton" X="1" Y="1" Width="1" Height="1" Attributes="1" Text="[ButtonText_Cancel]" Order="300" TextLocId="-" MsiKey="FatalError#Cancel" Options="1"/>
+    <ROW Dialog_="FatalError" Control="Finish" Type="PushButton" X="330" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Finish]" Order="400" TextLocId="-" MsiKey="FatalError#Finish" Options="1"/>
+    <ROW Dialog_="FilesInUse" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="FilesInUse#Bitmap"/>
+    <ROW Dialog_="InstallDlg" Control="InstallDlgDialogInitializer" Type="DialogInitializer" X="0" Y="0" Width="0" Height="0" Attributes="0" Order="-1" TextLocId="-" HelpLocId="-" ExtDataLocId="-"/>
+    <ROW Dialog_="InstallDlg" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="3" Text="[ButtonText_Back]" Order="100" TextLocId="-" MsiKey="InstallDlg#Back" Options="1"/>
+    <ROW Dialog_="InstallDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="200" MsiKey="InstallDlg#Bitmap"/>
+    <ROW Dialog_="InstallDlg" Control="Next" Type="PushButton" X="290" Y="237" Width="90" Height="24" Attributes="3" Text="[ButtonText_Next]" Order="300" TextLocId="-" MsiKey="InstallDlg#Next" Options="1"/>
+    <ROW Dialog_="InstallDlg" Control="Options" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="3" Text="Options" Order="500" TextLocId="-" MsiKey="InstallDlg#Options" Options="1"/>
+    <ROW Dialog_="InstallDlg" Control="AgreementText" Type="Hyperlink" X="21" Y="161" Width="366" Height="31" Attributes="65539" Property="AiLicenseAgreementLink" Text="&lt;a href=&quot;&quot;&gt;Click &quot;Install&quot; to install the program or click &quot;Options&quot; to customize.&lt;/a&gt;" Order="600" MsiKey="InstallDlg#AgreementText"/>
+    <ROW Dialog_="InstallDlg" Control="Bitmap_1" Type="Bitmap" X="164" Y="57" Width="72" Height="72" Attributes="1" Text="[AppIcon256]" Order="700"/>
+    <ROW Dialog_="InstallDlg" Control="Text_1" Type="Text" X="150" Y="133" Width="112" Height="29" Attributes="65539" Property="ProductName" Text="MCSkinn Editor" TextStyle="Title" Order="800"/>
+    <ROW Dialog_="InstallTypeDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="InstallTypeDlg#Bitmap"/>
+    <ROW Dialog_="InstallTypeDlg" Control="Next" Type="PushButton" X="290" Y="237" Width="90" Height="24" Attributes="3" Text="[ButtonText_Next]" Order="200" TextLocId="-" MsiKey="InstallTypeDlg#Next" Options="1"/>
+    <ROW Dialog_="InstallTypeDlg" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="3" Text="[ButtonText_Back]" Order="400" TextLocId="-" MsiKey="InstallTypeDlg#Back" Options="1"/>
+    <ROW Dialog_="InstallTypeDlg" Control="Description" Type="Text" X="15" Y="27" Width="280" Height="15" Attributes="196611" Text="Choose the installation type." Order="500" TextLocId="Control.Text.InstallTypeDlg#Description" MsiKey="InstallTypeDlg#Description"/>
+    <ROW Dialog_="InstallTypeDlg" Control="TotalSpaceText" Type="Text" X="157" Y="134" Width="120" Height="18" Attributes="589827" Property="PrimaryVolumeSpaceRequired" Text="[PrimaryVolumeSpaceRequired]" Order="800" TextLocId="Azure.Control.Text.FolderDlg#TotalSpaceText" MsiKey="InstallTypeDlg#TotalSpaceText"/>
+    <ROW Dialog_="InstallTypeDlg" Control="AvailableSpaceText" Type="Text" X="157" Y="152" Width="120" Height="18" Attributes="589827" Property="PrimaryVolumeSpaceAvailable" Text="[PrimaryVolumeSpaceAvailable]" Order="900" TextLocId="Azure.Control.Text.FolderDlg#AvailableSpaceText" MsiKey="InstallTypeDlg#AvailableSpaceText"/>
+    <ROW Dialog_="InstallTypeDlg" Control="RemainingSpaceText" Type="Text" X="157" Y="170" Width="120" Height="20" Attributes="589827" Property="PrimaryVolumeSpaceRemaining" Text="[PrimaryVolumeSpaceRemaining]" Order="1000" TextLocId="Azure.Control.Text.FolderDlg#RemainingSpaceText" MsiKey="InstallTypeDlg#RemainingSpaceText"/>
+    <ROW Dialog_="InstallTypeDlg" Control="RemainingSpaceLabel" Type="Text" X="22" Y="170" Width="135" Height="39" Attributes="196611" Property="REMAINING_SPACE_LABEL_PROP" Text="Remaining free space on drive: " Order="1100" TextLocId="Azure.Control.Text.FolderDlg#RemainingSpaceLabel" MsiKey="InstallTypeDlg#RemainingSpaceLabel"/>
+    <ROW Dialog_="InstallTypeDlg" Control="TotalSpaceLabel" Type="Text" X="22" Y="134" Width="127" Height="18" Attributes="196611" Property="TOTAL_SPACE_LABEL_PROP" Text="Total space required on drive:" Order="1200" TextLocId="Azure.Control.Text.FolderDlg#TotalSpaceLabel" MsiKey="InstallTypeDlg#TotalSpaceLabel"/>
+    <ROW Dialog_="InstallTypeDlg" Control="InstallForTextLabel" Type="Text" X="22" Y="57" Width="65" Height="16" Attributes="65539" Property="InstallForTextLabel_PROP" Text="Install for:" Order="1300" TextLocId="Control.Text.InstallTypeDlg#InstallForTextLabel" MsiKey="InstallTypeDlg#InstallForTextLabel"/>
+    <ROW Dialog_="InstallTypeDlg" Control="InstallPathTextLabel" Type="Text" X="22" Y="95" Width="65" Height="21" Attributes="65539" Property="InstallPathTextLabel_PROP" Text="Install path:" Order="1400" TextLocId="Control.Text.InstallTypeDlg#InstallPathTextLabel" MsiKey="InstallTypeDlg#InstallPathTextLabel"/>
+    <ROW Dialog_="InstallTypeDlg" Control="AvailableSpaceLabel" Type="Text" X="22" Y="152" Width="127" Height="18" Attributes="196611" Property="AVAILABLE_SPACE_LABEL_PROP" Text="Space available on drive: " Order="1500" TextLocId="Azure.Control.Text.FolderDlg#AvailableSpaceLabel" MsiKey="InstallTypeDlg#AvailableSpaceLabel"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control="Next" Type="PushButton" X="290" Y="237" Width="90" Height="24" Attributes="1" Text="[ButtonText_Next]" Order="100" TextLocId="-" MsiKey="MaintenanceTypeDlg#Next" Options="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="300" MsiKey="MaintenanceTypeDlg#Bitmap"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="3" Text="[ButtonText_Back]" Order="1000" TextLocId="-" MsiKey="MaintenanceTypeDlg#Back" Options="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control="Description" Type="Text" X="15" Y="27" Width="280" Height="20" Attributes="196611" Text="Select the operation you wish to perform." Order="1100" TextLocId="Control.Text.MaintenanceTypeDlg#Description" MsiKey="MaintenanceTypeDlg#Description"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="1" Text="[ButtonText_Back]" Order="100" TextLocId="-" MsiKey="MaintenanceWelcomeDlg#Back" Options="1"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="300" MsiKey="MaintenanceWelcomeDlg#Bitmap"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control="Next" Type="PushButton" X="290" Y="237" Width="90" Height="24" Attributes="3" Text="[ButtonText_Next]" Order="400" TextLocId="-" MsiKey="MaintenanceWelcomeDlg#Next" Options="1"/>
+    <ROW Dialog_="MsiRMFilesInUse" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="MsiRMFilesInUse#Bitmap"/>
+    <ROW Dialog_="OutOfDiskDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="OutOfDiskDlg#Bitmap"/>
+    <ROW Dialog_="OutOfRbDiskDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="OutOfRbDiskDlg#Bitmap"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="200" MsiKey="PatchWelcomeDlg#Bitmap"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="1" Text="[ButtonText_Back]" Order="400" TextLocId="-" MsiKey="PatchWelcomeDlg#Back" Options="1"/>
+    <ROW Dialog_="PrepareDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="200" MsiKey="PrepareDlg#Bitmap"/>
+    <ROW Dialog_="PrepareDlg" Control="Next" Type="PushButton" X="290" Y="237" Width="90" Height="24" Attributes="1" Text="[ButtonText_Next]" Order="400" TextLocId="-" MsiKey="PrepareDlg#Next" Options="1"/>
+    <ROW Dialog_="PrepareDlg" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="1048577" Text="[ButtonText_Back]" Order="600" TextLocId="-" MsiKey="PrepareDlg#Back" Options="1"/>
+    <ROW Dialog_="ProgressDlg" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="0" Text="[ButtonText_Back]" Order="200" TextLocId="-" MsiKey="ProgressDlg#Back" Options="1"/>
+    <ROW Dialog_="ProgressDlg" Control="Next" Type="PushButton" X="290" Y="237" Width="90" Height="24" Attributes="0" Text="[ButtonText_Next]" Order="300" TextLocId="-" MsiKey="ProgressDlg#Next" Options="1"/>
+    <ROW Dialog_="ProgressDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="400" MsiKey="ProgressDlg#Bitmap"/>
+    <ROW Dialog_="ResumeDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="ResumeDlg#Bitmap"/>
+    <ROW Dialog_="UserExit" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="1" Text="[ButtonText_Back]" Order="100" TextLocId="-" MsiKey="UserExit#Back" Options="1"/>
+    <ROW Dialog_="UserExit" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="200" MsiKey="UserExit#Bitmap"/>
+    <ROW Dialog_="UserExit" Control="Finish" Type="PushButton" X="308" Y="237" Width="72" Height="24" Attributes="3" Text="[ButtonText_Finish]" Order="400" TextLocId="-" MsiKey="UserExit#Finish" Options="1"/>
+    <ROW Dialog_="VerifyReadyDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="VerifyReadyDlg#Bitmap"/>
+    <ROW Dialog_="VerifyReadyDlg" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="3" Text="[ButtonText_Back]" Order="400" TextLocId="-" MsiKey="VerifyReadyDlg#Back" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="VerifyRemoveDlg#Bitmap"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="3" Text="[ButtonText_Back]" Order="200" TextLocId="-" MsiKey="VerifyRemoveDlg#Back" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control="Description" Type="Text" X="15" Y="27" Width="280" Height="15" Attributes="196611" Text="You have chosen to remove the program from your computer." Order="700" TextLocId="Control.Text.VerifyRemoveDlg#Description" MsiKey="VerifyRemoveDlg#Description"/>
+    <ROW Dialog_="VerifyRepairDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="400" Height="270" Attributes="1048577" Text="[BannerBitmap]" Order="100" MsiKey="VerifyRepairDlg#Bitmap"/>
+    <ROW Dialog_="VerifyRepairDlg" Control="Back" Type="PushButton" X="15" Y="237" Width="72" Height="24" Attributes="3" Text="[ButtonText_Back]" Order="400" TextLocId="-" MsiKey="VerifyRepairDlg#Back" Options="1"/>
+    <ROW Dialog_="VerifyRepairDlg" Control="Description" Type="Text" X="15" Y="27" Width="280" Height="15" Attributes="196611" Text="The [Wizard] is ready to begin the repair of [ProductName]." Order="700" TextLocId="Control.Text.VerifyRepairDlg#Description" MsiKey="VerifyRepairDlg#Description"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
+    <ROW Dialog_="InstallDlg" Control_="Next" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="InstallDlg" Control_="Options" Event="NewDialog" Argument="InstallTypeDlg" Condition="AI_INSTALL AND InstallType" Ordering="101"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="Back" Event="NewDialog" Argument="InstallDlg" Condition="AI_INSTALL AND InstallType" Ordering="1"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="Next" Event="EndDialog" Argument="Return" Condition="AI_INSTALL AND InstallType" Ordering="1"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control_="Next" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="99"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="101"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_MAINT" Ordering="198"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="201"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RepairButton" Event="NewDialog" Argument="VerifyRepairDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="1"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Repair" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="399" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Remove" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="299" Options="1"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_PATCH" Ordering="201"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="202"/>
+    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
+    <ROW Dialog_="InstallDlg" Control_="Next" Event="SpawnDialog" Argument="OutOfRbDiskDlg" Condition="AI_INSTALL AND OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND (PROMPTROLLBACKCOST=&quot;P&quot; OR NOT PROMPTROLLBACKCOST)" Ordering="2" Options="2"/>
+    <ROW Dialog_="InstallDlg" Control_="Next" Event="EnableRollback" Argument="False" Condition="AI_INSTALL AND OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST=&quot;D&quot;" Ordering="3" Options="2"/>
+    <ROW Dialog_="InstallDlg" Control_="Next" Event="SpawnDialog" Argument="OutOfDiskDlg" Condition="AI_INSTALL AND ( (OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 1) OR (OutOfDiskSpace = 1 AND PROMPTROLLBACKCOST=&quot;F&quot;) )" Ordering="4" Options="2"/>
+    <ROW Dialog_="InstallDlg" Control_="InstallDlgDialogInitializer" Event="[AI_ButtonText_Next_Orig]" Argument="[ButtonText_Next]" Condition="AI_INSTALL" Ordering="0" Options="2"/>
+    <ROW Dialog_="InstallDlg" Control_="InstallDlgDialogInitializer" Event="[ButtonText_Next]" Argument="[[AI_CommitButton]]" Condition="AI_INSTALL" Ordering="1" Options="2"/>
+    <ROW Dialog_="InstallDlg" Control_="InstallDlgDialogInitializer" Event="[AI_Text_Next_Orig]" Argument="[Text_Next]" Condition="AI_INSTALL" Ordering="2" Options="2"/>
+    <ROW Dialog_="InstallDlg" Control_="InstallDlgDialogInitializer" Event="[Text_Next]" Argument="[Text_Install]" Condition="AI_INSTALL" Ordering="3" Options="2"/>
+    <ROW Dialog_="InstallDlg" Control_="Options" Event="[ButtonText_Next]" Argument="[AI_ButtonText_Next_Orig]" Condition="AI_INSTALL" Ordering="102" Options="2"/>
+    <ROW Dialog_="InstallDlg" Control_="Options" Event="[Text_Next]" Argument="[AI_Text_Next_Orig]" Condition="AI_INSTALL" Ordering="103" Options="2"/>
+    <ROW Dialog_="InstallDlg" Control_="Back" Event="[ButtonText_Next]" Argument="[AI_ButtonText_Next_Orig]" Condition="AI_INSTALL" Ordering="0" Options="2"/>
+    <ROW Dialog_="InstallDlg" Control_="Back" Event="[Text_Next]" Argument="[AI_Text_Next_Orig]" Condition="AI_INSTALL" Ordering="1" Options="2"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="Next" Event="SpawnDialog" Argument="OutOfRbDiskDlg" Condition="AI_INSTALL AND InstallType AND OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND (PROMPTROLLBACKCOST=&quot;P&quot; OR NOT PROMPTROLLBACKCOST)" Ordering="2" Options="2"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="Next" Event="EnableRollback" Argument="False" Condition="AI_INSTALL AND InstallType AND OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST=&quot;D&quot;" Ordering="3" Options="2"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="Next" Event="SpawnDialog" Argument="OutOfDiskDlg" Condition="AI_INSTALL AND InstallType AND ( (OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 1) OR (OutOfDiskSpace = 1 AND PROMPTROLLBACKCOST=&quot;F&quot;) )" Ordering="4" Options="2"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="TemplateDlgDialogInitializer" Event="[AI_ButtonText_Next_Orig]" Argument="[ButtonText_Next]" Condition="AI_INSTALL AND InstallType" Ordering="201" Options="2"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="TemplateDlgDialogInitializer" Event="[ButtonText_Next]" Argument="[[AI_CommitButton]]" Condition="AI_INSTALL AND InstallType" Ordering="202" Options="2"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="TemplateDlgDialogInitializer" Event="[AI_Text_Next_Orig]" Argument="[Text_Next]" Condition="AI_INSTALL AND InstallType" Ordering="203" Options="2"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="TemplateDlgDialogInitializer" Event="[Text_Next]" Argument="[Text_Install]" Condition="AI_INSTALL AND InstallType" Ordering="204" Options="2"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="Back" Event="[ButtonText_Next]" Argument="[AI_ButtonText_Next_Orig]" Condition="AI_INSTALL AND InstallType" Ordering="2" Options="2"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="Back" Event="[Text_Next]" Argument="[AI_Text_Next_Orig]" Condition="AI_INSTALL AND InstallType" Ordering="3" Options="2"/>
+    <ROW Dialog_="ExitDialog" Control_="Finish" Event="DoAction" Argument="AI_CleanPrereq" Condition="1" Ordering="301"/>
+    <ROW Dialog_="FatalError" Control_="Finish" Event="DoAction" Argument="AI_CleanPrereq" Condition="1" Ordering="102"/>
+    <ROW Dialog_="UserExit" Control_="Finish" Event="DoAction" Argument="AI_CleanPrereq" Condition="1" Ordering="101"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
+    <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+    <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR" ManualDelete="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
+    <ROW Action="AI_AppSearchEx" Type="1" Source="Prereq.dll" Target="DoAppSearchEx"/>
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH_ORIGINAL" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_CleanPrereq" Type="65" Source="Prereq.dll" Target="CleanPrereq" WithoutSeq="true"/>
+    <ROW Action="AI_ConfigureChainer" Type="1" Source="Prereq.dll" Target="ConfigurePrereqLauncher"/>
+    <ROW Action="AI_DATA_SETTER" Type="51" Source="CustomActionData" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
+    <ROW Action="AI_DeleteCadLzma" Type="51" Source="AI_DeleteLzma" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_DeleteLzma" Type="1025" Source="lzmaextractor.dll" Target="DeleteLZMAFiles"/>
+    <ROW Action="AI_DeleteRCadLzma" Type="51" Source="AI_DeleteRLzma" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_DeleteRLzma" Type="1281" Source="lzmaextractor.dll" Target="DeleteLZMAFiles"/>
+    <ROW Action="AI_DetectSoftware" Type="257" Source="SoftwareDetector.dll" Target="OnDetectSoftware"/>
+    <ROW Action="AI_DownloadPrereq" Type="1" Source="Prereq.dll" Target="DownloadPrereq"/>
+    <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
+    <ROW Action="AI_ExtractCadLzma" Type="51" Source="AI_ExtractLzma" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_ExtractFiles" Type="1" Source="Prereq.dll" Target="ExtractSourceFiles" AdditionalSeq="AI_DATA_SETTER"/>
+    <ROW Action="AI_ExtractLzma" Type="1025" Source="lzmaextractor.dll" Target="ExtractLZMAFiles"/>
+    <ROW Action="AI_ExtractPrereq" Type="65" Source="Prereq.dll" Target="ExtractPrereq"/>
+    <ROW Action="AI_FindExeLzma" Type="1" Source="lzmaextractor.dll" Target="FindEXE"/>
+    <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_InstallPostPrerequisite" Type="1" Source="Prereq.dll" Target="InstallPostPrereq"/>
+    <ROW Action="AI_InstallPrerequisite" Type="1" Source="Prereq.dll" Target="InstallPrereq"/>
+    <ROW Action="AI_LaunchApp" Type="1" Source="aicustact.dll" Target="[#MCSkinn.exe]"/>
+    <ROW Action="AI_LaunchChainer" Type="3314" Source="AI_PREREQ_CHAINER"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH" Target="[AI_SETUPEXEPATH_ORIGINAL]"/>
+    <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
+    <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
+    <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
+    <ROW Action="AI_VerifyPrereq" Type="1" Source="Prereq.dll" Target="VerifyPrereq"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]"/>
+    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
+    <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
+    <ROW Feature_="MainFeature" Component_="APPDIR"/>
+    <ROW Feature_="MainFeature" Component_="ProductInformation"/>
+    <ROW Feature_="MainFeature" Component_="enus.lang"/>
+    <ROW Feature_="MainFeature" Component_="MCSkinn.dll"/>
+    <ROW Feature_="MainFeature" Component_="MCSkinn.exe"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.DwayneNeed.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.DwayneNeed.Win32.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Windows.SDK.NET.dll"/>
+    <ROW Feature_="MainFeature" Component_="Banner.xml"/>
+    <ROW Feature_="MainFeature" Component_="ArmorStand.xml"/>
+    <ROW Feature_="MainFeature" Component_="Elytra.xml"/>
+    <ROW Feature_="MainFeature" Component_="Bat.xml"/>
+    <ROW Feature_="MainFeature" Component_="AlexMinimal.xml"/>
+    <ROW Feature_="MainFeature" Component_="ModernWpf.Controls.dll"/>
+    <ROW Feature_="MainFeature" Component_="ModernWpf.dll"/>
+    <ROW Feature_="MainFeature" Component_="OpenTK.dll"/>
+    <ROW Feature_="MainFeature" Component_="OpenTK.GLControl.dll"/>
+    <ROW Feature_="MainFeature" Component_="Defaultwhite.png"/>
+    <ROW Feature_="MainFeature" Component_="Alex.png"/>
+    <ROW Feature_="MainFeature" Component_="Template.png"/>
+    <ROW Feature_="MainFeature" Component_="alex.png"/>
+    <ROW Feature_="MainFeature" Component_="Styler.dll"/>
+    <ROW Feature_="MainFeature" Component_="Base.gpl"/>
+    <ROW Feature_="MainFeature" Component_="WinRT.Runtime.dll"/>
+    <ROW Feature_="MainFeature" Component_="grass.png_1"/>
+    <ROW Feature_="B37BEDE240349B0F3A200E11BEFB" Component_="B37BEDE240349B0F3A200E11BEFB"/>
+    <ROW Feature_="MainFeature" Component_="AI_INSTALLPERUSER"/>
+    <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
+    <ROW Feature_="MainFeature" Component_="MCSkinn.ThirdParty.dll"/>
+    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
+    <ROW Name="MCSkinn.exe" SourcePath="..\MCSkinn\Resources\Icons\MCSkinn_Logo.ico" Index="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
+    <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1501"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1397"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_ConfigureChainer" Condition="((UILevel = 2) OR (UILevel = 3)) AND (NOT UPGRADINGPRODUCTCODE)" Sequence="6597"/>
+    <ROW Action="AI_LaunchChainer" Condition="AI_PREREQ_CHAINER AND (NOT UPGRADINGPRODUCTCODE)" Sequence="6598"/>
+    <ROW Action="AI_VerifyPrereq" Sequence="1101"/>
+    <ROW Action="AI_AppSearchEx" Sequence="102"/>
+    <ROW Action="AI_DetectSoftware" Sequence="103"/>
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99" Builds="DefaultBuild"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="101" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="199" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteRCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="198" Builds="DefaultBuild"/>
+    <ROW Action="AI_ExtractCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="197" Builds="DefaultBuild"/>
+    <ROW Action="AI_FindExeLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="196" Builds="DefaultBuild"/>
+    <ROW Action="AI_ExtractLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1549" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteRLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1548" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="6599" Builds="DefaultBuild"/>
+    <ROW Action="AI_ExtractFiles" Sequence="1399" Builds="DefaultBuild"/>
+    <ROW Action="AI_DATA_SETTER" Sequence="1398"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
+    <ROW Action="AI_DpiContentScale" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="103"/>
+    <ROW Action="AI_DownloadPrereq" Sequence="1297"/>
+    <ROW Action="AI_ExtractPrereq" Sequence="1298"/>
+    <ROW Action="AI_InstallPrerequisite" Sequence="1299"/>
+    <ROW Action="AI_InstallPostPrerequisite" Sequence="1301"/>
+    <ROW Action="AI_CleanPrereq" Sequence="1302"/>
+    <ROW Action="AI_AppSearchEx" Sequence="101"/>
+    <ROW Action="AI_DetectSoftware" Sequence="102"/>
+    <ROW Action="InstallDlg" Condition="AI_INSTALL" Sequence="1230" SeqType="3" MsiKey="WelcomeDlg"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
+    <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="AI_DETECTED_INTERNET_CONNECTION" Description="[ProductName] requires an active Internet connection for installation. Please check your network configuration and proxy settings." DescriptionLocId="AI.LaunchCondition.Internet" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="SETUPEXEDIR OR (REMOVE=&quot;ALL&quot;)" Description="This package can only be run from a bootstrapper." DescriptionLocId="AI.LaunchCondition.RequireBootstrapper" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegLocatorComponent">
+    <ROW Signature_="AI_EXE_PATH_CU" Root="1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Type="2"/>
+    <ROW Signature_="AI_EXE_PATH_LM" Root="2" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Type="2"/>
+    <ROW Signature_="AI_INSTALLPERUSER" Root="2" Key="Software\[Manufacturer]\[UpgradeCode]" Name="AI_INSTALLPERUSER" Type="2"/>
+    <ROW Signature_="AI_INSTALLPERUSER_1" Root="1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="AI_INSTALLPERUSER" Type="2"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
+    <ROW Registry="AI_ExePath" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Value="[AI_SETUPEXEPATH]" Component_="AI_ExePath"/>
+    <ROW Registry="AI_INSTALLPERUSER" Root="-1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="AI_INSTALLPERUSER" Value="[AI_INSTALLPERUSER]" Component_="AI_INSTALLPERUSER"/>
+    <ROW Registry="AdvancedInstaller" Root="-1" Key="Software\Caphyon\Advanced Installer" Name="\"/>
+    <ROW Registry="B37BEDE240349B0F3A200E11BEFB" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]\[ProductVersion]" Name="B37BEDE240349B0F3A200E11BEFB" Value="1" Component_="B37BEDE240349B0F3A200E11BEFB"/>
+    <ROW Registry="Caphyon" Root="-1" Key="Software\Caphyon" Name="\"/>
+    <ROW Registry="LZMA" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA" Name="\"/>
+    <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
+    <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
+    <ROW Registry="Prereqs" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs" Name="\"/>
+    <ROW Registry="ProductCode" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]" Name="\"/>
+    <ROW Registry="ProductCode_2" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]" Name="\"/>
+    <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
+    <ROW Registry="ProductVersion" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="\"/>
+    <ROW Registry="ProductVersion_2" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]\[ProductVersion]" Name="\"/>
+    <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
+    <ROW Registry="UpgradeCode" Root="-1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="\"/>
+    <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
+    <ROW Shortcut="MCSkinnEditor" Directory_="Overlays_Dir" Name="MCSKIN~1|MCSkinn Editor" Component_="MCSkinn.exe" Target="[#MCSkinn.exe]" Description="Launch MCSkinn Editor" Hotkey="0" Icon_="MCSkinn.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR" Advertised="true"/>
+    <ROW Shortcut="MCSkinnEditor_1" Directory_="SHORTCUTDIR" Name="MCSKIN~1|MCSkinn Editor" Component_="MCSkinn.exe" Target="[#MCSkinn.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiTextStyleComponent">
+    <ROW TextStyle="DlgFont8" FaceName="Segoe UI" Size="9" Color="0" StyleBits="0" MsiKey="DlgFont8"/>
+    <ROW TextStyle="DlgFontBold8" FaceName="gg sans" Size="14" Color="0" StyleBits="1" MsiKey="DlgFontBold8"/>
+    <ROW TextStyle="Title" FaceName="gg sans Medium" Size="15" Color="0" StyleBits="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
+    <ATTRIBUTE name="UsedTheme" value="light"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiUpgradeComponent">
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="[|ProductVersion]" Attributes="257" ActionProperty="OLDPRODUCTS"/>
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.PreReqComponent">
+    <ROW PrereqKey="B37BEDE240349B0F3A200E11BEFB" DisplayName=".NET Desktop Runtime 6.0.14 x86" VersionMin="6.0" SetupFileUrl="https://download.visualstudio.microsoft.com/download/pr/e66c97f8-3ca5-4cbc-aaf8-77079b21f41f/3ce8574df28f49d85091b1af758eccb7/windowsdesktop-runtime-6.0.14-win-x86.exe" Location="1" ExactSize="52131832" WinNTVersions="Windows Vista x86, Windows Server 2008 x86, Windows 7 RTM x86, Windows 10 version 1507 x86, Windows 10 version 1511 x86" WinNT64Versions="Windows Vista x64, Windows Server 2008 x64, Windows 7 RTM x64, Windows Server 2008 R2 x64, Windows Server 2012 x64, Windows 10 version 1507 x64, Windows 10 version 1511 x64" Operator="1" NoUiComLine="/q /norestart" Options="f" MD5="6f87254f2cb177287951ea86217f888e" TargetName=".NET 6.0" Feature="B37BEDE240349B0F3A200E11BEFB"/>
+    <ATTRIBUTE name="PrereqsOrder" value="B37BEDE240349B0F3A200E11BEFB"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.PreReqSearchComponent">
+    <ROW SearchKey="B37BEDE240349B0F3A200E11BEFBMicroso" Prereq="B37BEDE240349B0F3A200E11BEFB" SearchType="14" SearchString="[ProgramFilesFolder]dotnet\shared\Microsoft.WindowsDesktop.App" VerMin="6.0.14" Order="1" Property="PreReqSearch_B37BEDE240349B0F3A200E"/>
+  </COMPONENT>
+</DOCUMENT>
