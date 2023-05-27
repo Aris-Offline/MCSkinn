@@ -63,6 +63,10 @@ Click the links below to see and get the latest releases.
 
 # 🙋🏻‍♂️ Contribution
 
+- **React us**
+
+  Give us a star or follow me, which really encourages us a lot moren than you think!
+
 - **Translate**
 
   Help us translate new languages by editing or adding files to [`languages`](https://github.com/InkoreStudios/MCSkinn/tree/main/languages) folder.
