@@ -65,7 +65,7 @@ Click the links below to see and get the latest releases.
 
 - **React us**
 
-  Give us a star or follow me, which really encourages us a lot moren than you think!
+  Give us a star or follow me, which really encourages us a lot more than you think!
 
 - **Translate**
 
