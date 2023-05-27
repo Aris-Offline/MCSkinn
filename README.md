@@ -84,9 +84,9 @@ Click the links below to see and get the latest releases.
 - @Hehonge051
 
 
-# 🎊 Communities
+# 🎊 Community
 
-This project is made and maintained by [**NotYoojun**](github.com/NotYoojun) from [**Inkore Studios**](github.com/InkoreStudios)
+This project is made and maintained by [**NotYoojun**](https://github.com/NotYoojun) from [**Inkore Studios**](https://github.com/InkoreStudios)
 
 | Site  | Link  | Type  |
 | ------------ | ------------ | ------------ |
