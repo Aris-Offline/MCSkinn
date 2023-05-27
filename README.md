@@ -1,3 +1,4 @@
+
 <p align="center">
   <a href="http://www.animasterstudios.com/products/apps/mcskinn" target="_blank" rel="noopener noreferrer">
     <img width="128" src="https://github.com/InkoreStudios/MCSkinn/blob/main/logos/MCSkinn.png?raw=true" alt="MCSkinn Logo">
@@ -38,14 +39,17 @@
 # ✨ Features
 
 
-**Design your very own skins for Minecraft**
-One of the keys to Minecraft’s success has to do with the fact that players can customize and modify the environment however they like. Thus, why not do the same with the characters they play with? That’s the function of a program of the likes of MCSkinn, a tool that allows us to create Minecraft skins.
+- **Design your very own skins for Minecraft** 
 
-**Paint all just the way you like the best**
-Unlike other real-time editors, this editor actually lets you paint on the model, as well as the 2d texture map, also providing a neat management facility for all of your installed skins.
+  One of the keys to Minecraft’s success has to do with the fact that players can customize and modify the environment however they like. Thus, why not do the same with the characters they play with? That’s the function of a program of the likes of MCSkinn, a tool that allows us to create Minecraft skins.
 
-**Organize your wardrobe as well**
-It’s both a skin management and skin editing tool. It holds all of your skins in a convenient place, lets you manage them from within the program.
+- **Paint all just the way you like the best**
+
+  Unlike other real-time editors, this editor actually lets you paint on the model, as well as the 2d texture map, also providing a neat management facility for all of your installed skins.
+
+- **Organize your wardrobe as well**
+
+  It’s both a skin management and skin editing tool. It holds all of your skins in a convenient place, lets you manage them from within the program.
 
 # 📥 Downloads
 
@@ -59,20 +63,21 @@ Click the links below to see and get the latest releases.
 
 # 🙋🏻‍♂️ Contribution
 
-**Translate**
+- **Translate**
 
-- Help us translate new languages by editing or adding files to [`languages`](https://github.com/InkoreStudios/MCSkinn/tree/main/languages) folder.
+  Help us translate new languages by editing or adding files to [`languages`](https://github.com/InkoreStudios/MCSkinn/tree/main/languages) folder.
   
-**Report Bugs**
-- For those who want to request new features or submit bug reports, click [this link](https://github.com/InkoreStudios/MCSkinn/issues/new/choose) to open a new issue.
+- **Report Bugs**
 
-**Create More Skins**
+  For those who want to request new features or submit bug reports, click [this link](https://github.com/InkoreStudios/MCSkinn/issues/new/choose) to open a new issue.
 
-- Create more beautiful skins with MCSkinn Editor and upload thema into [`skins`](https://github.com/InkoreStudios/MCSkinn/tree/main/skins) folder.
+- **Create More Skins**
+
+  Create more beautiful skins with MCSkinn Editor and upload thema into [`skins`](https://github.com/InkoreStudios/MCSkinn/tree/main/skins) folder.
 
 
 
-# 🤝 Secial Thanks to
+# 🤝 Special Thanks to
 
 - @Paril
 - @Hongshiits
