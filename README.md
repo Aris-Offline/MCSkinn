@@ -38,13 +38,13 @@
 # ✨ Features
 
 
-## Design your very own skins for Minecraft
+**Design your very own skins for Minecraft**
 One of the keys to Minecraft’s success has to do with the fact that players can customize and modify the environment however they like. Thus, why not do the same with the characters they play with? That’s the function of a program of the likes of MCSkinn, a tool that allows us to create Minecraft skins.
 
-## Paint all just the way you like the best
+**Paint all just the way you like the best**
 Unlike other real-time editors, this editor actually lets you paint on the model, as well as the 2d texture map, also providing a neat management facility for all of your installed skins.
 
-## Organize your wardrobe as well
+**Organize your wardrobe as well**
 It’s both a skin management and skin editing tool. It holds all of your skins in a convenient place, lets you manage them from within the program.
 
 # 📥 Downloads
