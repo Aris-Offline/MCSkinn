@@ -1,6 +1,0 @@
-E:\Yujun Products\MCSkinn\source\Resources\ThirdParty.dll
-E:\Yujun Products\MCSkinn\source\Resources\ThirdParty.pdb
-E:\Yujun Products\MCSkinn\source\ThirdParty\obj\Debug\ThirdParty.csproj.AssemblyReference.cache
-E:\Yujun Products\MCSkinn\source\ThirdParty\obj\Debug\ThirdParty.csproj.CoreCompileInputs.cache
-E:\Yujun Products\MCSkinn\source\ThirdParty\obj\Debug\ThirdParty.dll
-E:\Yujun Products\MCSkinn\source\ThirdParty\obj\Debug\ThirdParty.pdb

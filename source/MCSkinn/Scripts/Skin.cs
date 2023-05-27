@@ -188,7 +188,10 @@ namespace MCSkinn.Scripts
             }
             catch (Exception)
             {
-                MessageBox.Show(string.Format(Editor.GetLanguageString("E_SKINERROR"), File.FullName));
+#if DEBUG
+                throw;
+#endif
+                //MessageBox.Show(string.Format(Editor.GetLanguageString("E_SKINERROR"), File.FullName));
                 return false;
             }
             finally
@@ -219,7 +222,7 @@ namespace MCSkinn.Scripts
             }
             else
             {
-                var f =Program.Context.SplashForm.Dispatcher;
+                var f =Program.Page_Splash.Dispatcher;
 
                 f.Invoke(SetImage, this);
 
@@ -247,8 +250,8 @@ namespace MCSkinn.Scripts
 
         public override string ToString()
         {
-            if (Dirty)
-                return Name + " *";
+            //if (Dirty)
+            //    return Name + " *";
             return Name;
         }
 

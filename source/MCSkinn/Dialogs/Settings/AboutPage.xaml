@@ -1,0 +1,92 @@
+﻿<Page x:Class="MCSkinn.Dialogs.Settings.AboutPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MCSkinn.Dialogs.Settings" xmlns:ui="https://schemas.animasterstudios.com/lib/ui/wpf/modern"
+      mc:Ignorable="d" xmlns:root="clr-namespace:MCSkinn"
+      d:DesignWidth="800"
+      Title="AboutPage" FontFamily="gg sans" FontSize="14">
+
+    <Grid>
+        
+        <Image x:Name="Image_Background" Source="/Resources/Images/Pictures/AboutBackground.jpg" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" HorizontalAlignment="Center"/>
+        <StackPanel HorizontalAlignment="Center" TextElement.Foreground="White" Margin="0,0,0,40">
+            <StackPanel.Effect>
+                    <DropShadowEffect Color="#FF585858" BlurRadius="20" ShadowDepth="0" Opacity="0.4"/>
+            </StackPanel.Effect>
+            
+            <ui:AcrylicPanel Target="{Binding ElementName=Image_Background}" TintOpacity="0.4" Margin="0,40,0,40" TextElement.Foreground="Black">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Rectangle Fill="#99FFFFFF"/>
+                    <Image Source="/Resources/Images/AppIcon/MCSkinn_Logo_256.png" Width="72" RenderOptions.BitmapScalingMode="Fant" Margin="20,40,20,40"/>
+                    <ui:SimpleStackPanel Grid.Column="1" Margin="40,20,80,20" Spacing="5" VerticalAlignment="Center">
+                        <TextBlock Text="MCSkinn Editor" FontSize="24" FontWeight="Bold"/>
+                        <TextBlock Text="by NotYoojun.!" Margin="0,-5,0,0" />
+                        <TextBlock>
+                            <Run>Version</Run>
+                            <Run Text="{x:Static root:Program.VersionFull}"/>
+                        </TextBlock>
+                    </ui:SimpleStackPanel>
+                </Grid>
+            </ui:AcrylicPanel>
+
+            <TextBlock Text="Contributors &amp; Special Thanks to" FontSize="20" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBlock Text="Hehonge"/>
+            <TextBlock Text="Paril"/>
+            <TextBlock Text="Hongshiite (PtCu)"/>
+            
+            <TextBlock Text="Framework Details" FontSize="20" FontWeight="Bold" Margin="0,20,0,5"/>
+            <TextBlock Text="Run on Microsoft .NET 6.0 Desktop Runtime"/>
+            <TextBlock Text="Target OS: Microsoft Windows"/>
+            <TextBlock Text="Minimun OS Version: 7.0"/>
+            <TextBlock Text="Target OS Version: 10.0.18362.0"/>
+            <TextBlock Text="IDE: Microsoft Visual Studio 2022"/>
+
+            
+            
+            <TextBlock Text="Social Links" FontSize="20" FontWeight="Bold" Margin="0,20,0,5"/>
+
+            <TextBlock>
+                <Run>Website:</Run>
+                <Hyperlink NavigateUri="http://www.animasterstudios.com/products/apps/mcskinn/" Foreground="#FFE9F5FF" Click="Hyperlink_Click">animasterstudios.com/products/apps/mcskinn</Hyperlink>
+            </TextBlock>
+
+            <TextBlock>
+                <Run>Github Repo:</Run>
+                <Hyperlink NavigateUri="https://github.com/InkoreStudios/MCSkinn" Foreground="#FFE9F5FF" Click="Hyperlink_Click">github.com/InkoreStudios/MCSkinn</Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                <Run>Discord Server:</Run>
+                <Hyperlink NavigateUri="https://discord.gg/m6NPNVk4bs" Foreground="#FFE9F5FF" Click="Hyperlink_Click">discord.gg/m6NPNVk4bs</Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                <Run>QQ Channel:</Run>
+                <Hyperlink NavigateUri="https://pd.qq.com/s/g3o1pmidm" Foreground="#FFE9F5FF" Click="Hyperlink_Click">pd.qq.com/s/g3o1pmidm</Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                <Run>QQ Group:</Run>
+                <Hyperlink NavigateUri="https://jq.qq.com/?_wv=1027&amp;k=nGrOXbFS" Foreground="#FFE9F5FF" Click="Hyperlink_Click">jq.qq.com/?_wv=1027&amp;k=nGrOXbFS</Hyperlink>
+            </TextBlock>
+            <!--<TextBlock>
+                <Run>Reddit Community:</Run>
+                <Hyperlink NavigateUri="https://www.reddit.com/r/animasterStudios" Foreground="#FFE9F5FF" Click="Hyperlink_Click">reddit.com/r/animasterStudios</Hyperlink>
+            </TextBlock>-->
+            <TextBlock>
+                <Run>Telegram Group:</Run>
+                <Hyperlink NavigateUri="https://t.me/Inkore_group" Foreground="#FFE9F5FF" Click="Hyperlink_Click">t.me/Inkore_group</Hyperlink>
+            </TextBlock>
+
+            <TextBlock Text="P R E S E N T E D    B Y" FontSize="12" Margin="0,60,0,0" HorizontalAlignment="Center">
+            </TextBlock>
+            <Image Source="{DynamicResource Inkore_Title_DrawingImage}" Height="100" RenderOptions.BitmapScalingMode="Fant" Margin="0,20,0,0"/>
+            <!--<TextBlock FontWeight="Bold" FontSize="24" HorizontalAlignment="Center" Margin="0,-10,0,0">
+                <Run FontFamily="French Script MT" FontSize="54">animaster</Run><Run>Studios</Run>
+            </TextBlock>-->
+        </StackPanel>
+    </Grid>
+</Page>

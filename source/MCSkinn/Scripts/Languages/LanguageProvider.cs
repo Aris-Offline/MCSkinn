@@ -223,6 +223,9 @@ namespace MCSkinn.Scripts.Languages
             get { return _language; }
             set
             {
+                if (value == null)
+                    return;
+
                 _language = value;
 
                 foreach (var obj in _properties)

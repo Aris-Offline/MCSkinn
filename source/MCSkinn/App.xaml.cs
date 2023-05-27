@@ -23,27 +23,28 @@ namespace MCSkinn
             Environment.CurrentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             GlobalSettings.Load();
 
-            try
-            {
-                if (Directory.Exists(GlobalSettings.GetDataURI("__updateFiles")))
-                    Directory.Delete(GlobalSettings.GetDataURI("__updateFiles"), true);
-            }
-            catch
-            {
-            }
+            //try
+            //{
+            //    if (Directory.Exists(GlobalSettings.GetDataURI("__updateFiles")))
+            //        Directory.Delete(GlobalSettings.GetDataURI("__updateFiles"), true);
+            //}
+            //catch
+            //{
+            //}
 
-            Program.Window_Splash = new Dialogs.SplashWindow();
+            Program.Page_Splash = new Pages.PageSplash();
 
             Program.Form_Editor = new Editor();
             //Program.Form_Editor.FormClosing += (sender, e) => GlobalSettings.Save();
             //Program.Form_Editor.FormClosed += (sender, e) => ExitThread();
 
             Program.Window_Main = new MainWindow();
+            Program.Page_Editor = new Pages.PageEditor();
             this.MainWindow = Program.Window_Main;
 
-            Program.Window_Splash.Show();
+            Program.Window_Main.Show();
 
-
+            Inkore.UI.WPF.Modern.ThemeManager.Current.ApplicationTheme = Inkore.UI.WPF.Modern.ApplicationTheme.Light;
 
         }
     }

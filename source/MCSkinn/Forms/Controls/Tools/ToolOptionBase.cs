@@ -26,6 +26,8 @@ namespace MCSkinn.Forms.Controls.Tools
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             DoubleBuffered = true;
+
+            this.AutoScroll = true;
         }
 
         public virtual void BoxShown()
@@ -39,7 +41,9 @@ namespace MCSkinn.Forms.Controls.Tools
             // ToolOptionBase
             // 
             AutoScaleMode = AutoScaleMode.None;
+            AutoScroll = true;
             Name = "ToolOptionBase";
+            Size = new System.Drawing.Size(289, 115);
             ResumeLayout(false);
         }
 

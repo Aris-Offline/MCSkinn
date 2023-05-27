@@ -46,13 +46,12 @@ namespace MCSkinn
             // 
             // checkBox1
             // 
-            checkBox1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             checkBox1.AutoSize = true;
-            checkBox1.Location = new System.Drawing.Point(361, 11);
-            checkBox1.Margin = new System.Windows.Forms.Padding(4);
+            checkBox1.Location = new System.Drawing.Point(13, 98);
+            checkBox1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             checkBox1.Name = "checkBox1";
             languageProvider1.SetPropertyNames(checkBox1, "Text");
-            checkBox1.Size = new System.Drawing.Size(129, 21);
+            checkBox1.Size = new System.Drawing.Size(188, 28);
             checkBox1.TabIndex = 0;
             checkBox1.Text = "O_INCREMENTAL";
             checkBox1.UseVisualStyleBackColor = true;
@@ -60,49 +59,47 @@ namespace MCSkinn
             // 
             // label1
             // 
-            label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(470, 12);
-            label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label1.Location = new System.Drawing.Point(13, 132);
+            label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             label1.Name = "label1";
             languageProvider1.SetPropertyNames(label1, "Text");
-            label1.Size = new System.Drawing.Size(86, 17);
+            label1.Size = new System.Drawing.Size(126, 24);
             label1.TabIndex = 1;
             label1.Text = "O_EXPOSURE";
             // 
             // trackBar1
             // 
-            trackBar1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            trackBar1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             trackBar1.AutoSize = false;
-            trackBar1.Location = new System.Drawing.Point(538, 11);
-            trackBar1.Margin = new System.Windows.Forms.Padding(4);
+            trackBar1.Location = new System.Drawing.Point(119, 131);
+            trackBar1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             trackBar1.Maximum = 100;
             trackBar1.Name = "trackBar1";
-            trackBar1.Size = new System.Drawing.Size(97, 29);
+            trackBar1.Size = new System.Drawing.Size(152, 41);
             trackBar1.TabIndex = 2;
             trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
             trackBar1.Scroll += trackBar1_Scroll;
             // 
             // numericUpDown1
             // 
-            numericUpDown1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            numericUpDown1.Location = new System.Drawing.Point(634, 9);
-            numericUpDown1.Margin = new System.Windows.Forms.Padding(4);
+            numericUpDown1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            numericUpDown1.Location = new System.Drawing.Point(270, 128);
+            numericUpDown1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new System.Drawing.Size(47, 23);
+            numericUpDown1.Size = new System.Drawing.Size(74, 30);
             numericUpDown1.TabIndex = 3;
             numericUpDown1.ValueChanged += numericUpDown1_ValueChanged;
             // 
             // radioButton1
             // 
-            radioButton1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             radioButton1.AutoSize = true;
             radioButton1.Checked = true;
-            radioButton1.Location = new System.Drawing.Point(200, 10);
-            radioButton1.Margin = new System.Windows.Forms.Padding(4);
+            radioButton1.Location = new System.Drawing.Point(13, 58);
+            radioButton1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             radioButton1.Name = "radioButton1";
             languageProvider1.SetPropertyNames(radioButton1, "Text");
-            radioButton1.Size = new System.Drawing.Size(93, 21);
+            radioButton1.Size = new System.Drawing.Size(134, 28);
             radioButton1.TabIndex = 4;
             radioButton1.TabStop = true;
             radioButton1.Text = "O_LIGHTEN";
@@ -110,13 +107,12 @@ namespace MCSkinn
             // 
             // radioButton2
             // 
-            radioButton2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             radioButton2.AutoSize = true;
-            radioButton2.Location = new System.Drawing.Point(273, 10);
-            radioButton2.Margin = new System.Windows.Forms.Padding(4);
+            radioButton2.Location = new System.Drawing.Point(138, 58);
+            radioButton2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             radioButton2.Name = "radioButton2";
             languageProvider1.SetPropertyNames(radioButton2, "Text");
-            radioButton2.Size = new System.Drawing.Size(91, 21);
+            radioButton2.Size = new System.Drawing.Size(133, 28);
             radioButton2.TabIndex = 5;
             radioButton2.Text = "O_DARKEN";
             radioButton2.UseVisualStyleBackColor = true;
@@ -127,26 +123,27 @@ namespace MCSkinn
             // 
             // label2
             // 
-            label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(8, 12);
+            label2.Location = new System.Drawing.Point(13, 17);
+            label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             label2.Name = "label2";
             languageProvider1.SetPropertyNames(label2, "Text");
-            label2.Size = new System.Drawing.Size(63, 17);
+            label2.Size = new System.Drawing.Size(91, 24);
             label2.TabIndex = 7;
             label2.Text = "G_BRUSH";
             // 
             // BrushPanel
             // 
-            BrushPanel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            BrushPanel.Location = new System.Drawing.Point(60, 6);
+            BrushPanel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            BrushPanel.Location = new System.Drawing.Point(94, 8);
+            BrushPanel.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             BrushPanel.Name = "BrushPanel";
-            BrushPanel.Size = new System.Drawing.Size(120, 28);
+            BrushPanel.Size = new System.Drawing.Size(250, 40);
             BrushPanel.TabIndex = 6;
             // 
             // DarkenLightenOptions
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.SystemColors.Window;
             Controls.Add(numericUpDown1);
@@ -157,9 +154,9 @@ namespace MCSkinn
             Controls.Add(label2);
             Controls.Add(radioButton2);
             Controls.Add(radioButton1);
-            Margin = new System.Windows.Forms.Padding(4);
+            Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             Name = "DarkenLightenOptions";
-            Size = new System.Drawing.Size(919, 40);
+            Size = new System.Drawing.Size(358, 191);
             Load += DodgeBurnOptions_Load;
             ((System.ComponentModel.ISupportInitialize)trackBar1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();

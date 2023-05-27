@@ -31,10 +31,16 @@ namespace MCSkinn.Scripts
             Name = Text = name;
         }
 
+
+        public string RootDir { get; set; }
+
         string TransformedPath
         {
             get
             {
+                if (RootDir != null)
+                    return RootDir;
+
                 if (Parent == null)
                 {
                     if (Editor.HasOneRoot)

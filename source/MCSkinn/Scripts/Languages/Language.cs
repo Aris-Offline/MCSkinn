@@ -32,53 +32,69 @@ namespace MCSkinn.Scripts.Languages
             StringTable = new Dictionary<string, string>();
         }
 
+        public string Product { get; private set; }
+        public string FileName { get; private set; }
         public string Name { get; private set; }
-        public string Version { get; private set; }
+        public string LangVersion { get; private set; }
+        public string AppVersion { get; private set; }
+        public string Author { get; private set; }
         public Version SupportedVersion { get; private set; }
         public Dictionary<string, string> StringTable { get; private set; }
         public ToolStripMenuItem Item { get; set; }
         public CultureInfo Culture { get; set; }
 
-        public static Language Parse(StreamReader sr)
+        public static Language Parse(StreamReader sr, string fileName)
         {
             var lang = new Language();
             bool headerFound = false;
-
+            lang.FileName = fileName;
             while (!sr.EndOfStream)
             {
-                string line = sr.ReadLine();
-
-                if (line.StartsWith("//") || string.IsNullOrEmpty(line))
-                    continue;
-
-                if (line == "MCSkinn Language File")
+                try
                 {
-                    headerFound = true;
-                    continue;
+                    string line = sr.ReadLine();
+
+                    if (line.StartsWith("//") || string.IsNullOrEmpty(line))
+                        continue;
+
+                    //if (line == "MCSkinn Language File")
+                    //{
+                    //    headerFound = true;
+                    //    continue;
+                    //}
+
+                    //if (!headerFound)
+                    //    throw new Exception("No header");
+
+                    //if (!line.Contains('='))
+                    //    throw new Exception("Parse error");
+
+                    string left = line.Substring(0, line.IndexOf('=')).Trim();
+                    string right = line.Substring(line.IndexOf('=') + 1).Trim(' ', '\t', '\"', '\'').Replace("\\r", "\r").Replace(
+                        "\\n", "\n");
+                    lang.StringTable.Add(left, right);
+
+                    if (left[0] == '#')
+                    {
+                        if (left == "#Product")
+                            lang.Product = right;
+                        if (left == "#Name")
+                            lang.Name = right;
+                        else if (left == "#LangVersion")
+                            lang.LangVersion = right;
+                        else if (left == "#AppVersion")
+                        {
+                            lang.SupportedVersion = new Version(right);
+                            lang.AppVersion = right;
+                        }
+                        else if (left == "#Culture")
+                            lang.Culture = CultureInfo.GetCultureInfo(right);
+                        else if (left == "#Author")
+                            lang.Author = right;
+                    }
+
                 }
-
-                if (!headerFound)
-                    throw new Exception("No header");
-
-                if (!line.Contains('='))
-                    throw new Exception("Parse error");
-
-                string left = line.Substring(0, line.IndexOf('=')).Trim();
-                string right = line.Substring(line.IndexOf('=') + 1).Trim(' ', '\t', '\"', '\'').Replace("\\r", "\r").Replace(
-                    "\\n", "\n");
-                lang.StringTable.Add(left, right);
-
-                if (left[0] == '#')
-                {
-                    if (left == "#Name")
-                        lang.Name = right;
-                    else if (left == "#Version")
-                        lang.Version = right;
-                    else if (left == "#SuppVersion")
-                        lang.SupportedVersion = new Version(right);
-                    else if (left == "#Culture")
-                        lang.Culture = CultureInfo.GetCultureInfo(right);
-                }
+                catch { }
             }
 
             return lang;

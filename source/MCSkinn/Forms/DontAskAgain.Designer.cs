@@ -3,117 +3,127 @@
 namespace MCSkinn.Forms
 {
     partial class DontAskAgain
-	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			this.button1 = new System.Windows.Forms.Button();
-			this.button2 = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.languageProvider1 = new MCSkinn.Scripts.Languages.LanguageProvider();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
-			((System.ComponentModel.ISupportInitialize)(this.languageProvider1)).BeginInit();
-			this.SuspendLayout();
-			// 
-			// button1
-			// 
-			this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-			this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button1.Location = new System.Drawing.Point(208, 122);
-			this.button1.Name = "button1";
-			this.languageProvider1.SetPropertyNames(this.button1, "Text");
-			this.button1.Size = new System.Drawing.Size(75, 23);
-			this.button1.TabIndex = 0;
-			this.button1.Text = "C_NO";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
-			// button2
-			// 
-			this.button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-			this.button2.Location = new System.Drawing.Point(127, 122);
-			this.button2.Name = "button2";
-			this.languageProvider1.SetPropertyNames(this.button2, "Text");
-			this.button2.Size = new System.Drawing.Size(75, 23);
-			this.button2.TabIndex = 1;
-			this.button2.Text = "C_YES";
-			this.button2.UseVisualStyleBackColor = true;
-			this.button2.Click += new System.EventHandler(this.button2_Click);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(12, 9);
-			this.label1.Name = "label1";
-			this.languageProvider1.SetPropertyNames(this.label1, "Text");
-			this.label1.Size = new System.Drawing.Size(387, 81);
-			this.label1.TabIndex = 3;
-			this.label1.Text = "M_IRREVERSIBLE";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// languageProvider1
-			// 
-			this.languageProvider1.BaseControl = this;
-			// 
-			// checkBox1
-			// 
-			this.checkBox1.AutoSize = true;
-			this.checkBox1.Location = new System.Drawing.Point(208, 93);
-			this.checkBox1.Name = "checkBox1";
-			this.languageProvider1.SetPropertyNames(this.checkBox1, "Text");
-			this.checkBox1.Size = new System.Drawing.Size(92, 17);
-			this.checkBox1.TabIndex = 2;
-			this.checkBox1.Text = "D_DONTASK";
-			this.checkBox1.UseVisualStyleBackColor = true;
-			// 
-			// DontAskAgain
-			// 
-			this.AcceptButton = this.button2;
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.button1;
-			this.ClientSize = new System.Drawing.Size(411, 151);
-			this.Controls.Add(this.checkBox1);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.button2);
-			this.Controls.Add(this.button1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Name = "DontAskAgain";
-			this.Load += new System.EventHandler(this.DontAskAgain_Load);
-			((System.ComponentModel.ISupportInitialize)(this.languageProvider1)).EndInit();
-			this.ResumeLayout(false);
-			this.PerformLayout();
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            button1 = new System.Windows.Forms.Button();
+            button2 = new System.Windows.Forms.Button();
+            label1 = new System.Windows.Forms.Label();
+            languageProvider1 = new LanguageProvider();
+            checkBox1 = new System.Windows.Forms.CheckBox();
+            ((System.ComponentModel.ISupportInitialize)languageProvider1).BeginInit();
+            SuspendLayout();
+            // 
+            // button1
+            // 
+            button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            button1.Location = new System.Drawing.Point(381, 225);
+            button1.Margin = new System.Windows.Forms.Padding(6);
+            button1.Name = "button1";
+            languageProvider1.SetPropertyNames(button1, "Text");
+            button1.Size = new System.Drawing.Size(138, 42);
+            button1.TabIndex = 0;
+            button1.Text = "C_NO";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // button2
+            // 
+            button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            button2.Location = new System.Drawing.Point(233, 225);
+            button2.Margin = new System.Windows.Forms.Padding(6);
+            button2.Name = "button2";
+            languageProvider1.SetPropertyNames(button2, "Text");
+            button2.Size = new System.Drawing.Size(138, 42);
+            button2.TabIndex = 1;
+            button2.Text = "C_YES";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // label1
+            // 
+            label1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            label1.Location = new System.Drawing.Point(22, 17);
+            label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            label1.Name = "label1";
+            languageProvider1.SetPropertyNames(label1, "Text");
+            label1.Size = new System.Drawing.Size(710, 150);
+            label1.TabIndex = 3;
+            label1.Text = "M_IRREVERSIBLE";
+            label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // languageProvider1
+            // 
+            languageProvider1.BaseControl = this;
+            // 
+            // checkBox1
+            // 
+            checkBox1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new System.Drawing.Point(381, 172);
+            checkBox1.Margin = new System.Windows.Forms.Padding(6);
+            checkBox1.Name = "checkBox1";
+            languageProvider1.SetPropertyNames(checkBox1, "Text");
+            checkBox1.Size = new System.Drawing.Size(146, 28);
+            checkBox1.TabIndex = 2;
+            checkBox1.Text = "D_DONTASK";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // DontAskAgain
+            // 
+            AcceptButton = button2;
+            AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            CancelButton = button1;
+            ClientSize = new System.Drawing.Size(754, 279);
+            Controls.Add(checkBox1);
+            Controls.Add(label1);
+            Controls.Add(button2);
+            Controls.Add(button1);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            Margin = new System.Windows.Forms.Padding(6);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "DontAskAgain";
+            ShowInTaskbar = false;
+            SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+            Load += DontAskAgain_Load;
+            ((System.ComponentModel.ISupportInitialize)languageProvider1).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
+        }
 
-		}
+        #endregion
 
-		#endregion
-
-		private System.Windows.Forms.Button button1;
-		private System.Windows.Forms.Button button2;
-		private System.Windows.Forms.Label label1;
-		private LanguageProvider languageProvider1;
-		private System.Windows.Forms.CheckBox checkBox1;
-	}
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label1;
+        private LanguageProvider languageProvider1;
+        private System.Windows.Forms.CheckBox checkBox1;
+    }
 }

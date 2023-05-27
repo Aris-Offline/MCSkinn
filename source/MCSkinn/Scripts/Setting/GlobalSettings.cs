@@ -119,9 +119,9 @@ namespace MCSkinn.Scripts.Setting
         [Savable]
         public static string LanguageFile { get; set; }
 
-        [Savable]
-        [DefaultValue(25)]
-        public static int TreeViewHeight { get; set; }
+        //[Savable]
+        //[DefaultValue(48)]
+        //public static int TreeViewHeight { get; set; }
 
         [Savable]
         [DefaultValue(0)]

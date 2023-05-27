@@ -31,9 +31,9 @@ namespace MCSkinn
         private void InitializeComponent()
         {
             languageProvider1 = new LanguageProvider();
-            BrushPanel = new System.Windows.Forms.Panel();
             checkBox1 = new System.Windows.Forms.CheckBox();
             label1 = new System.Windows.Forms.Label();
+            BrushPanel = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)languageProvider1).BeginInit();
             SuspendLayout();
             // 
@@ -41,37 +41,35 @@ namespace MCSkinn
             // 
             languageProvider1.BaseControl = this;
             // 
-            // BrushPanel
-            // 
-            BrushPanel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            BrushPanel.Location = new System.Drawing.Point(60, 6);
-            BrushPanel.Name = "BrushPanel";
-            BrushPanel.Size = new System.Drawing.Size(120, 28);
-            BrushPanel.TabIndex = 6;
-            // 
             // checkBox1
             // 
-            checkBox1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             checkBox1.AutoSize = true;
-            checkBox1.Location = new System.Drawing.Point(200, 10);
+            checkBox1.Location = new System.Drawing.Point(8, 60);
             checkBox1.Margin = new System.Windows.Forms.Padding(4);
             checkBox1.Name = "checkBox1";
             languageProvider1.SetPropertyNames(checkBox1, "Text");
-            checkBox1.Size = new System.Drawing.Size(129, 21);
+            checkBox1.Size = new System.Drawing.Size(188, 28);
             checkBox1.TabIndex = 5;
             checkBox1.Text = "O_INCREMENTAL";
             checkBox1.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
-            label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(8, 12);
+            label1.Location = new System.Drawing.Point(8, 19);
             label1.Name = "label1";
             languageProvider1.SetPropertyNames(label1, "Text");
-            label1.Size = new System.Drawing.Size(63, 17);
+            label1.Size = new System.Drawing.Size(91, 24);
             label1.TabIndex = 7;
             label1.Text = "G_BRUSH";
+            // 
+            // BrushPanel
+            // 
+            BrushPanel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            BrushPanel.Location = new System.Drawing.Point(60, 13);
+            BrushPanel.Name = "BrushPanel";
+            BrushPanel.Size = new System.Drawing.Size(215, 28);
+            BrushPanel.TabIndex = 6;
             // 
             // StampOptions
             // 
@@ -82,7 +80,7 @@ namespace MCSkinn
             Controls.Add(label1);
             Margin = new System.Windows.Forms.Padding(4);
             Name = "StampOptions";
-            Size = new System.Drawing.Size(475, 40);
+            Size = new System.Drawing.Size(290, 108);
             Load += StampOptions_Load;
             ((System.ComponentModel.ISupportInitialize)languageProvider1).EndInit();
             ResumeLayout(false);

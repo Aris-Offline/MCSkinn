@@ -31,8 +31,8 @@ namespace MCSkinn
         private void InitializeComponent()
         {
             languageProvider1 = new LanguageProvider();
-            BrushPanel = new System.Windows.Forms.Panel();
             label1 = new System.Windows.Forms.Label();
+            BrushPanel = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)languageProvider1).BeginInit();
             SuspendLayout();
             // 
@@ -40,35 +40,36 @@ namespace MCSkinn
             // 
             languageProvider1.BaseControl = this;
             // 
-            // BrushPanel
-            // 
-            BrushPanel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            BrushPanel.Location = new System.Drawing.Point(60, 6);
-            BrushPanel.Name = "BrushPanel";
-            BrushPanel.Size = new System.Drawing.Size(120, 28);
-            BrushPanel.TabIndex = 5;
-            // 
             // label1
             // 
-            label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(8, 12);
+            label1.Location = new System.Drawing.Point(13, 17);
+            label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             label1.Name = "label1";
             languageProvider1.SetPropertyNames(label1, "Text");
-            label1.Size = new System.Drawing.Size(63, 17);
+            label1.Size = new System.Drawing.Size(91, 24);
             label1.TabIndex = 6;
             label1.Text = "G_BRUSH";
             // 
+            // BrushPanel
+            // 
+            BrushPanel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            BrushPanel.Location = new System.Drawing.Point(94, 8);
+            BrushPanel.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            BrushPanel.Name = "BrushPanel";
+            BrushPanel.Size = new System.Drawing.Size(286, 40);
+            BrushPanel.TabIndex = 5;
+            // 
             // EraserOptions
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.SystemColors.Window;
             Controls.Add(BrushPanel);
             Controls.Add(label1);
-            Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             Name = "EraserOptions";
-            Size = new System.Drawing.Size(475, 40);
+            Size = new System.Drawing.Size(388, 181);
             Load += EraserOptions_Load;
             ((System.ComponentModel.ISupportInitialize)languageProvider1).EndInit();
             ResumeLayout(false);

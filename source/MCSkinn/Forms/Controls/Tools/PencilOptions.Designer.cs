@@ -39,13 +39,12 @@ namespace MCSkinn
             // 
             // checkBox1
             // 
-            checkBox1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             checkBox1.AutoSize = true;
-            checkBox1.Location = new System.Drawing.Point(200, 10);
-            checkBox1.Margin = new System.Windows.Forms.Padding(4);
+            checkBox1.Location = new System.Drawing.Point(13, 58);
+            checkBox1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             checkBox1.Name = "checkBox1";
             languageProvider1.SetPropertyNames(checkBox1, "Text");
-            checkBox1.Size = new System.Drawing.Size(129, 21);
+            checkBox1.Size = new System.Drawing.Size(188, 28);
             checkBox1.TabIndex = 0;
             checkBox1.Text = "O_INCREMENTAL";
             checkBox1.UseVisualStyleBackColor = true;
@@ -57,34 +56,35 @@ namespace MCSkinn
             // 
             // label1
             // 
-            label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(8, 12);
+            label1.Location = new System.Drawing.Point(13, 17);
+            label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             label1.Name = "label1";
             languageProvider1.SetPropertyNames(label1, "Text");
-            label1.Size = new System.Drawing.Size(63, 17);
+            label1.Size = new System.Drawing.Size(91, 24);
             label1.TabIndex = 4;
             label1.Text = "G_BRUSH";
             // 
             // BrushPanel
             // 
-            BrushPanel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            BrushPanel.Location = new System.Drawing.Point(60, 6);
+            BrushPanel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            BrushPanel.Location = new System.Drawing.Point(94, 8);
+            BrushPanel.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             BrushPanel.Name = "BrushPanel";
-            BrushPanel.Size = new System.Drawing.Size(120, 28);
+            BrushPanel.Size = new System.Drawing.Size(246, 40);
             BrushPanel.TabIndex = 3;
             // 
             // PencilOptions
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.SystemColors.Window;
             Controls.Add(BrushPanel);
             Controls.Add(checkBox1);
             Controls.Add(label1);
-            Margin = new System.Windows.Forms.Padding(4);
+            Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             Name = "PencilOptions";
-            Size = new System.Drawing.Size(475, 40);
+            Size = new System.Drawing.Size(354, 99);
             Load += PencilOptions_Load;
             ((System.ComponentModel.ISupportInitialize)languageProvider1).EndInit();
             ResumeLayout(false);

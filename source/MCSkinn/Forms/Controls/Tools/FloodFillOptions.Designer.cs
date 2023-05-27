@@ -41,36 +41,35 @@ namespace MCSkinn
             // 
             // label1
             // 
-            label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(8, 12);
-            label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label1.Location = new System.Drawing.Point(13, 17);
+            label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             label1.Name = "label1";
             languageProvider1.SetPropertyNames(label1, "Text");
-            label1.Size = new System.Drawing.Size(95, 17);
+            label1.Size = new System.Drawing.Size(141, 24);
             label1.TabIndex = 1;
             label1.Text = "Q_THRESHOLD";
             // 
             // trackBar1
             // 
-            trackBar1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            trackBar1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             trackBar1.AutoSize = false;
-            trackBar1.Location = new System.Drawing.Point(94, 10);
-            trackBar1.Margin = new System.Windows.Forms.Padding(4);
+            trackBar1.Location = new System.Drawing.Point(148, 14);
+            trackBar1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             trackBar1.Maximum = 100;
             trackBar1.Name = "trackBar1";
-            trackBar1.Size = new System.Drawing.Size(125, 29);
+            trackBar1.Size = new System.Drawing.Size(196, 41);
             trackBar1.TabIndex = 2;
             trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
             trackBar1.Scroll += trackBar1_Scroll;
             // 
             // numericUpDown1
             // 
-            numericUpDown1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            numericUpDown1.Location = new System.Drawing.Point(217, 9);
-            numericUpDown1.Margin = new System.Windows.Forms.Padding(4);
+            numericUpDown1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            numericUpDown1.Location = new System.Drawing.Point(341, 13);
+            numericUpDown1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new System.Drawing.Size(47, 23);
+            numericUpDown1.Size = new System.Drawing.Size(74, 30);
             numericUpDown1.TabIndex = 3;
             numericUpDown1.ValueChanged += numericUpDown1_ValueChanged;
             // 
@@ -80,15 +79,15 @@ namespace MCSkinn
             // 
             // FloodFillOptions
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.SystemColors.Window;
             Controls.Add(numericUpDown1);
             Controls.Add(trackBar1);
             Controls.Add(label1);
-            Margin = new System.Windows.Forms.Padding(4);
+            Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             Name = "FloodFillOptions";
-            Size = new System.Drawing.Size(272, 40);
+            Size = new System.Drawing.Size(427, 56);
             Load += DodgeBurnOptions_Load;
             ((System.ComponentModel.ISupportInitialize)trackBar1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();

@@ -53,13 +53,13 @@ namespace MCSkinn.Scripts
                 foreach (string x in GlobalSettings.SkinDirectories)
                 {
                     var expanded = MacroHandler.ReplaceMacros(x);
-                    var folder = new FolderNode(new DirectoryInfo(expanded).Name);
+                    var folder = new FolderNode(new DirectoryInfo(expanded).Name) { RootDir = expanded };
                     RecurseAddDirectories(expanded, folder.Nodes, skins);
                     rootNodes.Add(folder);
                 }
             }
 
-            Program.Context.SplashForm.Dispatcher.Invoke((Action<List<TreeNode>>)Editor.MainForm.BeginFinishedLoadingSkins, rootNodes);
+            Program.Page_Splash.Dispatcher.Invoke((Action<List<TreeNode>>)Editor.MainForm.BeginFinishedLoadingSkins, rootNodes);
 
             var invalidSkins = new List<Skin>();
 
@@ -71,7 +71,7 @@ namespace MCSkinn.Scripts
 
             skins.RemoveAll((s) => invalidSkins.Contains(s));
 
-            Program.Context.SplashForm.Dispatcher.Invoke((Action<List<Skin>, TreeNode>)Editor.MainForm.FinishedLoadingSkins, skins, _tempToSelect);
+            Program.Page_Splash.Dispatcher.Invoke((Action<List<Skin>, TreeNode>)Editor.MainForm.FinishedLoadingSkins, skins, _tempToSelect);
         }
     }
 }

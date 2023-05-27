@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows;
 using MCSkinn.Properties;
 using MCSkinn.Scripts.Macros;
 using MCSkinn.Scripts.Setting;
@@ -39,7 +40,7 @@ namespace MCSkinn.Scripts.Languages
                 try
                 {
                     using (var sr = new StreamReader(file, Encoding.Unicode))
-                        Languages.Add(Language.Parse(sr));
+                        Languages.Add(Language.Parse(sr, file));
                 }
                 catch
                 {
@@ -51,8 +52,9 @@ namespace MCSkinn.Scripts.Languages
         {
             foreach (Language l in Languages)
             {
-                if (l.Name == p ||
-                    l.Culture.Name == p)
+
+                if (l.Name == p || l.Culture.Parent?.Name.ToLower() == p.ToLower() || l.FileName.ToLower() == p.ToLower() || System.IO.Path.GetFileNameWithoutExtension(l.FileName).ToLower() == p.ToLower() || System.IO.Path.GetFileName(l.FileName).ToLower() == p.ToLower() ||
+                    l.Culture.Name.ToLower() == p.ToLower())
                     return l;
             }
 
@@ -62,12 +64,12 @@ namespace MCSkinn.Scripts.Languages
         public static Language LoadDefault()
         {
             Directory.CreateDirectory(GlobalSettings.GetDataURI("Languages"));
-            using (var writer = new FileStream(MacroHandler.ReplaceMacros(GlobalSettings.GetDataURI("Languages\\English.lang")), FileMode.Create))
+            using (var writer = new FileStream(MacroHandler.ReplaceMacros(GlobalSettings.GetDataURI("Languages\\en-us.lang")), FileMode.Create))
                 writer.Write(Resources.English, 0, Resources.English.Length);
 
             using (var reader = new StreamReader(new MemoryStream(Resources.English), Encoding.Unicode))
             {
-                Language lang = Language.Parse(reader);
+                Language lang = Language.Parse(reader, "en-US.lang");
                 Languages.Add(lang);
                 return lang;
             }

@@ -87,6 +87,9 @@ namespace MCSkinn.Scripts.Tools
                 Editor.MainForm.RotateView(delta, 1);
             else if (e.Button == Editor.MainForm.CameraZoom)
                 Editor.MainForm.ScaleView(delta, 1);
+            else if (e.Button == Editor.MainForm.CameraTranslate)
+                Editor.MainForm.TranslateView(delta, 1);
+
         }
 
         public bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y)

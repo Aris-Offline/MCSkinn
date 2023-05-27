@@ -134,13 +134,13 @@ namespace MCSkinn.Scripts.Tools
 
                     ColorPixel c = pixels[xx, yy];
                     Color oldColor = Color.FromArgb(c.Alpha, c.Red, c.Green, c.Blue);
-                    ColorManager.RGBColor color =
+                    ColorManager.RGBColor color =new ColorManager.RGBColor
                         ((Control.ModifierKeys & Keys.Shift) != 0
-                             ? Editor.MainForm.ColorPanel.UnselectedColor
-                             : Editor.MainForm.ColorPanel.SelectedColor).RGB;
+                             ? Editor.MainForm.ColorPanel.SecondaryColor
+                             : Editor.MainForm.ColorPanel.SelectedColor);
 
                     byte maxAlpha = color.A;
-                    var alphaToAdd = (float)(byte)(brush[rx, ry] * 255 * (Editor.MainForm.ColorPanel.SelectedColor.RGB.A / 255.0f));
+                    var alphaToAdd = (float)(byte)(brush[rx, ry] * 255 * (Editor.MainForm.ColorPanel.SelectedColor.A / 255.0f));
 
                     if (!incremental && _undo.Points.ContainsKey(new Point(xx, yy)) &&
                         _undo.Points[new Point(xx, yy)].Item2.TotalAlpha >= maxAlpha)

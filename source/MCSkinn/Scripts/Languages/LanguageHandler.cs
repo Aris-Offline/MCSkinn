@@ -30,6 +30,8 @@ namespace MCSkinn.Scripts.Languages
 
                 foreach (var provider in _providers)
                     provider.Language = _language;
+
+                LanguageWpf.Refresh();
             }
         }
     }

@@ -131,17 +131,16 @@ namespace MCSkinn
             bROWSEIDToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new VisibleSplitContainer();
             splitContainer3 = new VisibleSplitContainer();
-            tabControl1 = new TabControl();
-            tabPage1 = new TabPage();
-            treeView1 = new SkinTreeView();
+            LibraryPanel = new Panel();
             toolStrip2 = new SkinTreeViewToolBar();
-            tabPage2 = new TabPage();
-            treeView2 = new TreeView();
+            treeView2 = new SeaSharp.Styler.Controls.AdvTreeView();
+            treeView1 = new SkinTreeView();
             hScrollBar1 = new HScrollBar();
             colorPanel = new ColorPanel();
             panel4 = new Panel();
             splitContainer4 = new SplitContainer();
             ToolsPanel = new Panel();
+            label1 = new Label();
             ViewportPanel = new Panel();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
@@ -189,14 +188,13 @@ namespace MCSkinn
             splitContainer3.Panel1.SuspendLayout();
             splitContainer3.Panel2.SuspendLayout();
             splitContainer3.SuspendLayout();
-            tabControl1.SuspendLayout();
-            tabPage1.SuspendLayout();
-            tabPage2.SuspendLayout();
+            LibraryPanel.SuspendLayout();
             panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer4).BeginInit();
             splitContainer4.Panel1.SuspendLayout();
             splitContainer4.Panel2.SuspendLayout();
             splitContainer4.SuspendLayout();
+            ToolsPanel.SuspendLayout();
             statusStrip1.SuspendLayout();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)languageProvider1).BeginInit();
@@ -205,11 +203,12 @@ namespace MCSkinn
             // mainMenuStrip
             // 
             mainMenuStrip.AllowMerge = false;
+            mainMenuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             mainMenuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, viewToolStripMenuItem, optionsToolStripMenuItem, helpToolStripMenuItem });
             mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             mainMenuStrip.Name = "mainMenuStrip";
-            mainMenuStrip.Padding = new Padding(7, 3, 0, 3);
-            mainMenuStrip.Size = new System.Drawing.Size(1102, 27);
+            mainMenuStrip.Padding = new Padding(10, 4, 0, 4);
+            mainMenuStrip.Size = new System.Drawing.Size(1653, 36);
             mainMenuStrip.TabIndex = 1;
             mainMenuStrip.Text = "mainMenuStrip";
             // 
@@ -218,7 +217,7 @@ namespace MCSkinn
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, saveAsToolStripMenuItem, saveAllToolStripMenuItem, toolStripSeparator5, exitToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             languageProvider1.SetPropertyNames(fileToolStripMenuItem, "Text");
-            fileToolStripMenuItem.Size = new System.Drawing.Size(60, 21);
+            fileToolStripMenuItem.Size = new System.Drawing.Size(86, 28);
             fileToolStripMenuItem.Text = "M_FILE";
             // 
             // saveToolStripMenuItem
@@ -227,7 +226,7 @@ namespace MCSkinn
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             languageProvider1.SetPropertyNames(saveToolStripMenuItem, "Text");
             saveToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.S;
-            saveToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            saveToolStripMenuItem.Size = new System.Drawing.Size(331, 34);
             saveToolStripMenuItem.Text = "M_SAVE";
             saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
@@ -236,7 +235,7 @@ namespace MCSkinn
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             languageProvider1.SetPropertyNames(saveAsToolStripMenuItem, "Text");
             saveAsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
-            saveAsToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            saveAsToolStripMenuItem.Size = new System.Drawing.Size(331, 34);
             saveAsToolStripMenuItem.Text = "M_SAVEAS";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 
@@ -246,20 +245,20 @@ namespace MCSkinn
             saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
             languageProvider1.SetPropertyNames(saveAllToolStripMenuItem, "Text");
             saveAllToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.A;
-            saveAllToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            saveAllToolStripMenuItem.Size = new System.Drawing.Size(331, 34);
             saveAllToolStripMenuItem.Text = "M_SAVEALL";
             saveAllToolStripMenuItem.Click += saveAllToolStripMenuItem_Click;
             // 
             // toolStripSeparator5
             // 
             toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new System.Drawing.Size(219, 6);
+            toolStripSeparator5.Size = new System.Drawing.Size(328, 6);
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             languageProvider1.SetPropertyNames(exitToolStripMenuItem, "Text");
-            exitToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            exitToolStripMenuItem.Size = new System.Drawing.Size(331, 34);
             exitToolStripMenuItem.Text = "M_EXIT";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
@@ -268,7 +267,7 @@ namespace MCSkinn
             editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { undoToolStripMenuItem, redoToolStripMenuItem, toolStripSeparator7, toolToolStripMenuItem });
             editToolStripMenuItem.Name = "editToolStripMenuItem";
             languageProvider1.SetPropertyNames(editToolStripMenuItem, "Text");
-            editToolStripMenuItem.Size = new System.Drawing.Size(64, 21);
+            editToolStripMenuItem.Size = new System.Drawing.Size(91, 28);
             editToolStripMenuItem.Text = "M_EDIT";
             // 
             // undoToolStripMenuItem
@@ -277,7 +276,7 @@ namespace MCSkinn
             undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             languageProvider1.SetPropertyNames(undoToolStripMenuItem, "Text");
             undoToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Z;
-            undoToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            undoToolStripMenuItem.Size = new System.Drawing.Size(258, 34);
             undoToolStripMenuItem.Text = "M_UNDO";
             undoToolStripMenuItem.Click += undoToolStripMenuItem_Click;
             // 
@@ -287,20 +286,20 @@ namespace MCSkinn
             redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             languageProvider1.SetPropertyNames(redoToolStripMenuItem, "Text");
             redoToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Y;
-            redoToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            redoToolStripMenuItem.Size = new System.Drawing.Size(258, 34);
             redoToolStripMenuItem.Text = "M_REDO";
             redoToolStripMenuItem.Click += redoToolStripMenuItem_Click;
             // 
             // toolStripSeparator7
             // 
             toolStripSeparator7.Name = "toolStripSeparator7";
-            toolStripSeparator7.Size = new System.Drawing.Size(172, 6);
+            toolStripSeparator7.Size = new System.Drawing.Size(255, 6);
             // 
             // toolToolStripMenuItem
             // 
             toolToolStripMenuItem.Name = "toolToolStripMenuItem";
             languageProvider1.SetPropertyNames(toolToolStripMenuItem, "Text");
-            toolToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            toolToolStripMenuItem.Size = new System.Drawing.Size(258, 34);
             toolToolStripMenuItem.Text = "M_TOOL";
             // 
             // viewToolStripMenuItem
@@ -308,7 +307,7 @@ namespace MCSkinn
             viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { modeToolStripMenuItem, toolStripSeparator3, threeDToolStripMenuItem, twoDToolStripMenuItem, mSHAREDToolStripMenuItem, toolStripSeparator8, transparencyModeToolStripMenuItem, visiblePartsToolStripMenuItem });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             languageProvider1.SetPropertyNames(viewToolStripMenuItem, "Text");
-            viewToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            viewToolStripMenuItem.Size = new System.Drawing.Size(97, 28);
             viewToolStripMenuItem.Text = "M_VIEW";
             // 
             // modeToolStripMenuItem
@@ -316,7 +315,7 @@ namespace MCSkinn
             modeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { perspectiveToolStripMenuItem, textureToolStripMenuItem, hybridViewToolStripMenuItem });
             modeToolStripMenuItem.Name = "modeToolStripMenuItem";
             languageProvider1.SetPropertyNames(modeToolStripMenuItem, "Text");
-            modeToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            modeToolStripMenuItem.Size = new System.Drawing.Size(254, 34);
             modeToolStripMenuItem.Text = "M_MODE";
             // 
             // perspectiveToolStripMenuItem
@@ -325,7 +324,7 @@ namespace MCSkinn
             perspectiveToolStripMenuItem.Name = "perspectiveToolStripMenuItem";
             languageProvider1.SetPropertyNames(perspectiveToolStripMenuItem, "Text");
             perspectiveToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Q;
-            perspectiveToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            perspectiveToolStripMenuItem.Size = new System.Drawing.Size(318, 34);
             perspectiveToolStripMenuItem.Text = "M_PERSPECTIVE";
             perspectiveToolStripMenuItem.Click += perspectiveToolStripMenuItem_Click;
             // 
@@ -335,7 +334,7 @@ namespace MCSkinn
             textureToolStripMenuItem.Name = "textureToolStripMenuItem";
             languageProvider1.SetPropertyNames(textureToolStripMenuItem, "Text");
             textureToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.W;
-            textureToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            textureToolStripMenuItem.Size = new System.Drawing.Size(318, 34);
             textureToolStripMenuItem.Text = "M_TEXTURE";
             textureToolStripMenuItem.Click += textureToolStripMenuItem_Click;
             // 
@@ -345,21 +344,21 @@ namespace MCSkinn
             hybridViewToolStripMenuItem.Name = "hybridViewToolStripMenuItem";
             languageProvider1.SetPropertyNames(hybridViewToolStripMenuItem, "Text");
             hybridViewToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.H;
-            hybridViewToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            hybridViewToolStripMenuItem.Size = new System.Drawing.Size(318, 34);
             hybridViewToolStripMenuItem.Text = "M_HYBRID";
             hybridViewToolStripMenuItem.Click += hybridViewToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new System.Drawing.Size(171, 6);
+            toolStripSeparator3.Size = new System.Drawing.Size(251, 6);
             // 
             // threeDToolStripMenuItem
             // 
             threeDToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { grassToolStripMenuItem, ghostHiddenPartsToolStripMenuItem, antialiasingToolStripMenuItem });
             threeDToolStripMenuItem.Name = "threeDToolStripMenuItem";
             languageProvider1.SetPropertyNames(threeDToolStripMenuItem, "Text");
-            threeDToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            threeDToolStripMenuItem.Size = new System.Drawing.Size(254, 34);
             threeDToolStripMenuItem.Text = "M_3D";
             // 
             // grassToolStripMenuItem
@@ -369,7 +368,7 @@ namespace MCSkinn
             grassToolStripMenuItem.Name = "grassToolStripMenuItem";
             languageProvider1.SetPropertyNames(grassToolStripMenuItem, "Text");
             grassToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.G;
-            grassToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            grassToolStripMenuItem.Size = new System.Drawing.Size(317, 34);
             grassToolStripMenuItem.Text = "M_GRASS";
             grassToolStripMenuItem.Click += grassToolStripMenuItem_Click;
             // 
@@ -378,7 +377,7 @@ namespace MCSkinn
             ghostHiddenPartsToolStripMenuItem.Name = "ghostHiddenPartsToolStripMenuItem";
             languageProvider1.SetPropertyNames(ghostHiddenPartsToolStripMenuItem, "Text");
             ghostHiddenPartsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.G;
-            ghostHiddenPartsToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            ghostHiddenPartsToolStripMenuItem.Size = new System.Drawing.Size(317, 34);
             ghostHiddenPartsToolStripMenuItem.Text = "M_GHOST";
             ghostHiddenPartsToolStripMenuItem.Click += ghostHiddenPartsToolStripMenuItem_Click;
             // 
@@ -387,41 +386,41 @@ namespace MCSkinn
             antialiasingToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { xToolStripMenuItem4, xToolStripMenuItem, xToolStripMenuItem1, xToolStripMenuItem2, xToolStripMenuItem3 });
             antialiasingToolStripMenuItem.Name = "antialiasingToolStripMenuItem";
             languageProvider1.SetPropertyNames(antialiasingToolStripMenuItem, "Text");
-            antialiasingToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            antialiasingToolStripMenuItem.Size = new System.Drawing.Size(317, 34);
             antialiasingToolStripMenuItem.Text = "M_MULTISAMPLING";
             // 
             // xToolStripMenuItem4
             // 
             xToolStripMenuItem4.Name = "xToolStripMenuItem4";
-            xToolStripMenuItem4.Size = new System.Drawing.Size(89, 22);
+            xToolStripMenuItem4.Size = new System.Drawing.Size(130, 34);
             xToolStripMenuItem4.Text = "0x";
             xToolStripMenuItem4.Click += xToolStripMenuItem4_Click;
             // 
             // xToolStripMenuItem
             // 
             xToolStripMenuItem.Name = "xToolStripMenuItem";
-            xToolStripMenuItem.Size = new System.Drawing.Size(89, 22);
+            xToolStripMenuItem.Size = new System.Drawing.Size(130, 34);
             xToolStripMenuItem.Text = "1x";
             xToolStripMenuItem.Click += xToolStripMenuItem_Click;
             // 
             // xToolStripMenuItem1
             // 
             xToolStripMenuItem1.Name = "xToolStripMenuItem1";
-            xToolStripMenuItem1.Size = new System.Drawing.Size(89, 22);
+            xToolStripMenuItem1.Size = new System.Drawing.Size(130, 34);
             xToolStripMenuItem1.Text = "2x";
             xToolStripMenuItem1.Click += xToolStripMenuItem1_Click;
             // 
             // xToolStripMenuItem2
             // 
             xToolStripMenuItem2.Name = "xToolStripMenuItem2";
-            xToolStripMenuItem2.Size = new System.Drawing.Size(89, 22);
+            xToolStripMenuItem2.Size = new System.Drawing.Size(130, 34);
             xToolStripMenuItem2.Text = "4x";
             xToolStripMenuItem2.Click += xToolStripMenuItem2_Click;
             // 
             // xToolStripMenuItem3
             // 
             xToolStripMenuItem3.Name = "xToolStripMenuItem3";
-            xToolStripMenuItem3.Size = new System.Drawing.Size(89, 22);
+            xToolStripMenuItem3.Size = new System.Drawing.Size(130, 34);
             xToolStripMenuItem3.Text = "8x";
             xToolStripMenuItem3.Click += xToolStripMenuItem3_Click;
             // 
@@ -430,7 +429,7 @@ namespace MCSkinn
             twoDToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { alphaCheckerboardToolStripMenuItem, backgroundsToolStripMenuItem, toolStripSeparator11, gridEnabledToolStripMenuItem, mGRIDOPACITYToolStripMenuItem, mGRIDCOLORToolStripMenuItem });
             twoDToolStripMenuItem.Name = "twoDToolStripMenuItem";
             languageProvider1.SetPropertyNames(twoDToolStripMenuItem, "Text");
-            twoDToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            twoDToolStripMenuItem.Size = new System.Drawing.Size(254, 34);
             twoDToolStripMenuItem.Text = "M_2D";
             // 
             // alphaCheckerboardToolStripMenuItem
@@ -438,7 +437,7 @@ namespace MCSkinn
             alphaCheckerboardToolStripMenuItem.Name = "alphaCheckerboardToolStripMenuItem";
             languageProvider1.SetPropertyNames(alphaCheckerboardToolStripMenuItem, "Text");
             alphaCheckerboardToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.A;
-            alphaCheckerboardToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            alphaCheckerboardToolStripMenuItem.Size = new System.Drawing.Size(344, 34);
             alphaCheckerboardToolStripMenuItem.Text = "M_ALPHACHECKER";
             alphaCheckerboardToolStripMenuItem.Click += alphaCheckerboardToolStripMenuItem_Click;
             // 
@@ -447,7 +446,7 @@ namespace MCSkinn
             backgroundsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { textureOverlayToolStripMenuItem, toolStripSeparator16, mDYNAMICOVERLAYToolStripMenuItem, mLINECOLORToolStripMenuItem, mTEXTCOLORToolStripMenuItem, mLINESIZEToolStripMenuItem, mOVERLAYTEXTSIZEToolStripMenuItem, toolStripMenuItem2 });
             backgroundsToolStripMenuItem.Name = "backgroundsToolStripMenuItem";
             languageProvider1.SetPropertyNames(backgroundsToolStripMenuItem, "Text");
-            backgroundsToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            backgroundsToolStripMenuItem.Size = new System.Drawing.Size(344, 34);
             backgroundsToolStripMenuItem.Text = "M_OVERLAY";
             // 
             // textureOverlayToolStripMenuItem
@@ -455,27 +454,28 @@ namespace MCSkinn
             textureOverlayToolStripMenuItem.Name = "textureOverlayToolStripMenuItem";
             languageProvider1.SetPropertyNames(textureOverlayToolStripMenuItem, "Text");
             textureOverlayToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.O;
-            textureOverlayToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
+            textureOverlayToolStripMenuItem.Size = new System.Drawing.Size(355, 34);
             textureOverlayToolStripMenuItem.Text = "M_ENABLEOVERLAY";
             textureOverlayToolStripMenuItem.Click += textureOverlayToolStripMenuItem_Click;
             // 
             // toolStripSeparator16
             // 
             toolStripSeparator16.Name = "toolStripSeparator16";
-            toolStripSeparator16.Size = new System.Drawing.Size(237, 6);
+            toolStripSeparator16.Size = new System.Drawing.Size(352, 6);
             // 
             // mDYNAMICOVERLAYToolStripMenuItem
             // 
             mDYNAMICOVERLAYToolStripMenuItem.Name = "mDYNAMICOVERLAYToolStripMenuItem";
             languageProvider1.SetPropertyNames(mDYNAMICOVERLAYToolStripMenuItem, "Text");
-            mDYNAMICOVERLAYToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
+            mDYNAMICOVERLAYToolStripMenuItem.Size = new System.Drawing.Size(355, 34);
             mDYNAMICOVERLAYToolStripMenuItem.Text = "M_DYNAMICOVERLAY";
+            mDYNAMICOVERLAYToolStripMenuItem.Click += mDYNAMICOVERLAYToolStripMenuItem_Click;
             // 
             // mLINECOLORToolStripMenuItem
             // 
             mLINECOLORToolStripMenuItem.Name = "mLINECOLORToolStripMenuItem";
             languageProvider1.SetPropertyNames(mLINECOLORToolStripMenuItem, "Text");
-            mLINECOLORToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
+            mLINECOLORToolStripMenuItem.Size = new System.Drawing.Size(355, 34);
             mLINECOLORToolStripMenuItem.Text = "M_LINECOLOR";
             mLINECOLORToolStripMenuItem.Click += mLINECOLORToolStripMenuItem_Click;
             // 
@@ -485,7 +485,7 @@ namespace MCSkinn
             mTEXTCOLORToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText;
             mTEXTCOLORToolStripMenuItem.Name = "mTEXTCOLORToolStripMenuItem";
             languageProvider1.SetPropertyNames(mTEXTCOLORToolStripMenuItem, "Text");
-            mTEXTCOLORToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
+            mTEXTCOLORToolStripMenuItem.Size = new System.Drawing.Size(355, 34);
             mTEXTCOLORToolStripMenuItem.Text = "M_TEXTCOLOR";
             mTEXTCOLORToolStripMenuItem.TextDirection = ToolStripTextDirection.Horizontal;
             mTEXTCOLORToolStripMenuItem.Click += mTEXTCOLORToolStripMenuItem_Click;
@@ -507,18 +507,18 @@ namespace MCSkinn
             // toolStripMenuItem2
             // 
             toolStripMenuItem2.Name = "toolStripMenuItem2";
-            toolStripMenuItem2.Size = new System.Drawing.Size(237, 6);
+            toolStripMenuItem2.Size = new System.Drawing.Size(352, 6);
             // 
             // toolStripSeparator11
             // 
             toolStripSeparator11.Name = "toolStripSeparator11";
-            toolStripSeparator11.Size = new System.Drawing.Size(228, 6);
+            toolStripSeparator11.Size = new System.Drawing.Size(341, 6);
             // 
             // gridEnabledToolStripMenuItem
             // 
             gridEnabledToolStripMenuItem.Name = "gridEnabledToolStripMenuItem";
             languageProvider1.SetPropertyNames(gridEnabledToolStripMenuItem, "Text");
-            gridEnabledToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            gridEnabledToolStripMenuItem.Size = new System.Drawing.Size(344, 34);
             gridEnabledToolStripMenuItem.Text = "M_GRIDENABLED";
             gridEnabledToolStripMenuItem.Click += gridEnabledToolStripMenuItem_Click;
             // 
@@ -535,7 +535,7 @@ namespace MCSkinn
             mGRIDCOLORToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText;
             mGRIDCOLORToolStripMenuItem.Name = "mGRIDCOLORToolStripMenuItem";
             languageProvider1.SetPropertyNames(mGRIDCOLORToolStripMenuItem, "Text");
-            mGRIDCOLORToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            mGRIDCOLORToolStripMenuItem.Size = new System.Drawing.Size(344, 34);
             mGRIDCOLORToolStripMenuItem.Text = "M_GRIDCOLOR";
             mGRIDCOLORToolStripMenuItem.TextDirection = ToolStripTextDirection.Horizontal;
             mGRIDCOLORToolStripMenuItem.Click += mGRIDCOLORToolStripMenuItem_Click;
@@ -545,14 +545,14 @@ namespace MCSkinn
             mSHAREDToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { mINFINITEMOUSEToolStripMenuItem, mRENDERSTATSToolStripMenuItem });
             mSHAREDToolStripMenuItem.Name = "mSHAREDToolStripMenuItem";
             languageProvider1.SetPropertyNames(mSHAREDToolStripMenuItem, "Text");
-            mSHAREDToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            mSHAREDToolStripMenuItem.Size = new System.Drawing.Size(254, 34);
             mSHAREDToolStripMenuItem.Text = "M_SHARED";
             // 
             // mINFINITEMOUSEToolStripMenuItem
             // 
             mINFINITEMOUSEToolStripMenuItem.Name = "mINFINITEMOUSEToolStripMenuItem";
             languageProvider1.SetPropertyNames(mINFINITEMOUSEToolStripMenuItem, "Text");
-            mINFINITEMOUSEToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            mINFINITEMOUSEToolStripMenuItem.Size = new System.Drawing.Size(277, 34);
             mINFINITEMOUSEToolStripMenuItem.Text = "M_INFINITEMOUSE";
             mINFINITEMOUSEToolStripMenuItem.Click += mINFINITEMOUSEToolStripMenuItem_Click;
             // 
@@ -560,21 +560,21 @@ namespace MCSkinn
             // 
             mRENDERSTATSToolStripMenuItem.Name = "mRENDERSTATSToolStripMenuItem";
             languageProvider1.SetPropertyNames(mRENDERSTATSToolStripMenuItem, "Text");
-            mRENDERSTATSToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            mRENDERSTATSToolStripMenuItem.Size = new System.Drawing.Size(277, 34);
             mRENDERSTATSToolStripMenuItem.Text = "M_RENDERSTATS";
             mRENDERSTATSToolStripMenuItem.Click += mRENDERSTATSToolStripMenuItem_Click;
             // 
             // toolStripSeparator8
             // 
             toolStripSeparator8.Name = "toolStripSeparator8";
-            toolStripSeparator8.Size = new System.Drawing.Size(171, 6);
+            toolStripSeparator8.Size = new System.Drawing.Size(251, 6);
             // 
             // transparencyModeToolStripMenuItem
             // 
             transparencyModeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { offToolStripMenuItem, helmetOnlyToolStripMenuItem, allToolStripMenuItem });
             transparencyModeToolStripMenuItem.Name = "transparencyModeToolStripMenuItem";
             languageProvider1.SetPropertyNames(transparencyModeToolStripMenuItem, "Text");
-            transparencyModeToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            transparencyModeToolStripMenuItem.Size = new System.Drawing.Size(254, 34);
             transparencyModeToolStripMenuItem.Text = "M_TRANSMODE";
             // 
             // offToolStripMenuItem
@@ -582,7 +582,7 @@ namespace MCSkinn
             offToolStripMenuItem.Name = "offToolStripMenuItem";
             languageProvider1.SetPropertyNames(offToolStripMenuItem, "Text");
             offToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.J;
-            offToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            offToolStripMenuItem.Size = new System.Drawing.Size(378, 34);
             offToolStripMenuItem.Text = "M_OFF";
             offToolStripMenuItem.Click += offToolStripMenuItem_Click;
             // 
@@ -591,7 +591,7 @@ namespace MCSkinn
             helmetOnlyToolStripMenuItem.Name = "helmetOnlyToolStripMenuItem";
             languageProvider1.SetPropertyNames(helmetOnlyToolStripMenuItem, "Text");
             helmetOnlyToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.O;
-            helmetOnlyToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            helmetOnlyToolStripMenuItem.Size = new System.Drawing.Size(378, 34);
             helmetOnlyToolStripMenuItem.Text = "M_HELMETONLY";
             helmetOnlyToolStripMenuItem.Click += helmetOnlyToolStripMenuItem_Click;
             // 
@@ -600,7 +600,7 @@ namespace MCSkinn
             allToolStripMenuItem.Name = "allToolStripMenuItem";
             languageProvider1.SetPropertyNames(allToolStripMenuItem, "Text");
             allToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.P;
-            allToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            allToolStripMenuItem.Size = new System.Drawing.Size(378, 34);
             allToolStripMenuItem.Text = "M_ALL";
             allToolStripMenuItem.Click += allToolStripMenuItem_Click;
             // 
@@ -609,7 +609,7 @@ namespace MCSkinn
             visiblePartsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { headToolStripMenuItem, chestToolStripMenuItem, leftArmToolStripMenuItem, rightArmToolStripMenuItem, leftLegToolStripMenuItem, rightLegToolStripMenuItem, helmetToolStripMenuItem, chestArmorToolStripMenuItem, leftArmArmorToolStripMenuItem, rightArmArmorToolStripMenuItem, leftLegArmorToolStripMenuItem, rightLegArmorToolStripMenuItem });
             visiblePartsToolStripMenuItem.Name = "visiblePartsToolStripMenuItem";
             languageProvider1.SetPropertyNames(visiblePartsToolStripMenuItem, "Text");
-            visiblePartsToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            visiblePartsToolStripMenuItem.Size = new System.Drawing.Size(254, 34);
             visiblePartsToolStripMenuItem.Text = "M_VISIBLEPARTS";
             // 
             // headToolStripMenuItem
@@ -618,7 +618,7 @@ namespace MCSkinn
             headToolStripMenuItem.Name = "headToolStripMenuItem";
             languageProvider1.SetPropertyNames(headToolStripMenuItem, "Text");
             headToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.D1;
-            headToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            headToolStripMenuItem.Size = new System.Drawing.Size(426, 34);
             headToolStripMenuItem.Text = "M_HEAD";
             headToolStripMenuItem.Click += headToolStripMenuItem_Click;
             // 
@@ -628,7 +628,7 @@ namespace MCSkinn
             chestToolStripMenuItem.Name = "chestToolStripMenuItem";
             languageProvider1.SetPropertyNames(chestToolStripMenuItem, "Text");
             chestToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.D2;
-            chestToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            chestToolStripMenuItem.Size = new System.Drawing.Size(426, 34);
             chestToolStripMenuItem.Text = "M_CHEST";
             chestToolStripMenuItem.Click += chestToolStripMenuItem_Click;
             // 
@@ -638,7 +638,7 @@ namespace MCSkinn
             leftArmToolStripMenuItem.Name = "leftArmToolStripMenuItem";
             languageProvider1.SetPropertyNames(leftArmToolStripMenuItem, "Text");
             leftArmToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.D3;
-            leftArmToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            leftArmToolStripMenuItem.Size = new System.Drawing.Size(426, 34);
             leftArmToolStripMenuItem.Text = "M_LEFTARM";
             leftArmToolStripMenuItem.Click += leftArmToolStripMenuItem_Click;
             // 
@@ -648,7 +648,7 @@ namespace MCSkinn
             rightArmToolStripMenuItem.Name = "rightArmToolStripMenuItem";
             languageProvider1.SetPropertyNames(rightArmToolStripMenuItem, "Text");
             rightArmToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.D4;
-            rightArmToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            rightArmToolStripMenuItem.Size = new System.Drawing.Size(426, 34);
             rightArmToolStripMenuItem.Text = "M_RIGHTARM";
             rightArmToolStripMenuItem.Click += rightArmToolStripMenuItem_Click;
             // 
@@ -658,7 +658,7 @@ namespace MCSkinn
             leftLegToolStripMenuItem.Name = "leftLegToolStripMenuItem";
             languageProvider1.SetPropertyNames(leftLegToolStripMenuItem, "Text");
             leftLegToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.D5;
-            leftLegToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            leftLegToolStripMenuItem.Size = new System.Drawing.Size(426, 34);
             leftLegToolStripMenuItem.Text = "M_LEFTLEG";
             leftLegToolStripMenuItem.Click += leftLegToolStripMenuItem_Click;
             // 
@@ -668,7 +668,7 @@ namespace MCSkinn
             rightLegToolStripMenuItem.Name = "rightLegToolStripMenuItem";
             languageProvider1.SetPropertyNames(rightLegToolStripMenuItem, "Text");
             rightLegToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.D6;
-            rightLegToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            rightLegToolStripMenuItem.Size = new System.Drawing.Size(426, 34);
             rightLegToolStripMenuItem.Text = "M_RIGHTLEG";
             rightLegToolStripMenuItem.Click += rightLegToolStripMenuItem_Click;
             // 
@@ -678,7 +678,7 @@ namespace MCSkinn
             helmetToolStripMenuItem.Name = "helmetToolStripMenuItem";
             languageProvider1.SetPropertyNames(helmetToolStripMenuItem, "Text");
             helmetToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.D7;
-            helmetToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            helmetToolStripMenuItem.Size = new System.Drawing.Size(426, 34);
             helmetToolStripMenuItem.Text = "M_HELMET";
             helmetToolStripMenuItem.Click += helmetToolStripMenuItem_Click;
             // 
@@ -688,7 +688,7 @@ namespace MCSkinn
             chestArmorToolStripMenuItem.Name = "chestArmorToolStripMenuItem";
             languageProvider1.SetPropertyNames(chestArmorToolStripMenuItem, "Text");
             chestArmorToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.D8;
-            chestArmorToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            chestArmorToolStripMenuItem.Size = new System.Drawing.Size(426, 34);
             chestArmorToolStripMenuItem.Text = "M_CHESTARMOR";
             chestArmorToolStripMenuItem.Click += chestArmorToolStripMenuItem_Click;
             // 
@@ -698,7 +698,7 @@ namespace MCSkinn
             leftArmArmorToolStripMenuItem.Name = "leftArmArmorToolStripMenuItem";
             languageProvider1.SetPropertyNames(leftArmArmorToolStripMenuItem, "Text");
             leftArmArmorToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.D9;
-            leftArmArmorToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            leftArmArmorToolStripMenuItem.Size = new System.Drawing.Size(426, 34);
             leftArmArmorToolStripMenuItem.Text = "M_LEFTARMARMOR";
             leftArmArmorToolStripMenuItem.Click += leftArmArmorToolStripMenuItem_Click;
             // 
@@ -708,7 +708,7 @@ namespace MCSkinn
             rightArmArmorToolStripMenuItem.Name = "rightArmArmorToolStripMenuItem";
             languageProvider1.SetPropertyNames(rightArmArmorToolStripMenuItem, "Text");
             rightArmArmorToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.D0;
-            rightArmArmorToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            rightArmArmorToolStripMenuItem.Size = new System.Drawing.Size(426, 34);
             rightArmArmorToolStripMenuItem.Text = "M_RIGHTARMARMOR";
             rightArmArmorToolStripMenuItem.Click += rightArmArmorToolStripMenuItem_Click;
             // 
@@ -718,7 +718,7 @@ namespace MCSkinn
             leftLegArmorToolStripMenuItem.Name = "leftLegArmorToolStripMenuItem";
             languageProvider1.SetPropertyNames(leftLegArmorToolStripMenuItem, "Text");
             leftLegArmorToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.OemMinus;
-            leftLegArmorToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            leftLegArmorToolStripMenuItem.Size = new System.Drawing.Size(426, 34);
             leftLegArmorToolStripMenuItem.Text = "M_LEFTLEGARMOR";
             leftLegArmorToolStripMenuItem.Click += leftLegArmorToolStripMenuItem_Click;
             // 
@@ -728,7 +728,7 @@ namespace MCSkinn
             rightLegArmorToolStripMenuItem.Name = "rightLegArmorToolStripMenuItem";
             languageProvider1.SetPropertyNames(rightLegArmorToolStripMenuItem, "Text");
             rightLegArmorToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Oemplus;
-            rightLegArmorToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            rightLegArmorToolStripMenuItem.Size = new System.Drawing.Size(426, 34);
             rightLegArmorToolStripMenuItem.Text = "M_RIGHTLEGARMOR";
             rightLegArmorToolStripMenuItem.Click += rightLegArmorToolStripMenuItem_Click;
             // 
@@ -737,14 +737,14 @@ namespace MCSkinn
             optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { keyboardShortcutsToolStripMenuItem, backgroundColorToolStripMenuItem, mSKINDIRSToolStripMenuItem, toolStripSeparator12, useTextureBasesMenuItem, toolStripMenuItem4, languageToolStripMenuItem });
             optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             languageProvider1.SetPropertyNames(optionsToolStripMenuItem, "Text");
-            optionsToolStripMenuItem.Size = new System.Drawing.Size(92, 21);
+            optionsToolStripMenuItem.Size = new System.Drawing.Size(133, 28);
             optionsToolStripMenuItem.Text = "M_OPTIONS";
             // 
             // keyboardShortcutsToolStripMenuItem
             // 
             keyboardShortcutsToolStripMenuItem.Name = "keyboardShortcutsToolStripMenuItem";
             languageProvider1.SetPropertyNames(keyboardShortcutsToolStripMenuItem, "Text");
-            keyboardShortcutsToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            keyboardShortcutsToolStripMenuItem.Size = new System.Drawing.Size(300, 34);
             keyboardShortcutsToolStripMenuItem.Text = "M_KEYSHORTCUTS";
             keyboardShortcutsToolStripMenuItem.Click += keyboardShortcutsToolStripMenuItem_Click;
             // 
@@ -752,7 +752,7 @@ namespace MCSkinn
             // 
             backgroundColorToolStripMenuItem.Name = "backgroundColorToolStripMenuItem";
             languageProvider1.SetPropertyNames(backgroundColorToolStripMenuItem, "Text");
-            backgroundColorToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            backgroundColorToolStripMenuItem.Size = new System.Drawing.Size(300, 34);
             backgroundColorToolStripMenuItem.Text = "M_BGCOLOR";
             backgroundColorToolStripMenuItem.Click += backgroundColorToolStripMenuItem_Click;
             // 
@@ -760,33 +760,33 @@ namespace MCSkinn
             // 
             mSKINDIRSToolStripMenuItem.Name = "mSKINDIRSToolStripMenuItem";
             languageProvider1.SetPropertyNames(mSKINDIRSToolStripMenuItem, "Text");
-            mSKINDIRSToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            mSKINDIRSToolStripMenuItem.Size = new System.Drawing.Size(300, 34);
             mSKINDIRSToolStripMenuItem.Text = "M_SKINDIRS";
             mSKINDIRSToolStripMenuItem.Click += mSKINDIRSToolStripMenuItem_Click;
             // 
             // toolStripSeparator12
             // 
             toolStripSeparator12.Name = "toolStripSeparator12";
-            toolStripSeparator12.Size = new System.Drawing.Size(203, 6);
+            toolStripSeparator12.Size = new System.Drawing.Size(297, 6);
             // 
             // useTextureBasesMenuItem
             // 
             useTextureBasesMenuItem.Name = "useTextureBasesMenuItem";
             languageProvider1.SetPropertyNames(useTextureBasesMenuItem, "Text");
-            useTextureBasesMenuItem.Size = new System.Drawing.Size(206, 22);
+            useTextureBasesMenuItem.Size = new System.Drawing.Size(300, 34);
             useTextureBasesMenuItem.Text = "M_USETEXTUREBASES";
             useTextureBasesMenuItem.Click += useTextureBasesMenuItem_Click;
             // 
             // toolStripMenuItem4
             // 
             toolStripMenuItem4.Name = "toolStripMenuItem4";
-            toolStripMenuItem4.Size = new System.Drawing.Size(203, 6);
+            toolStripMenuItem4.Size = new System.Drawing.Size(297, 6);
             // 
             // languageToolStripMenuItem
             // 
             languageToolStripMenuItem.Name = "languageToolStripMenuItem";
             languageProvider1.SetPropertyNames(languageToolStripMenuItem, "Text");
-            languageToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            languageToolStripMenuItem.Size = new System.Drawing.Size(300, 34);
             languageToolStripMenuItem.Text = "M_LANGUAGE";
             // 
             // helpToolStripMenuItem
@@ -794,14 +794,14 @@ namespace MCSkinn
             helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForUpdatesToolStripMenuItem, automaticallyCheckForUpdatesToolStripMenuItem, toolStripMenuItem1, planetMinecraftSubmissionToolStripMenuItem, officialMinecraftForumsThreadToolStripMenuItem });
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             languageProvider1.SetPropertyNames(helpToolStripMenuItem, "Text");
-            helpToolStripMenuItem.Size = new System.Drawing.Size(66, 21);
+            helpToolStripMenuItem.Size = new System.Drawing.Size(96, 28);
             helpToolStripMenuItem.Text = "M_HELP";
             // 
             // checkForUpdatesToolStripMenuItem
             // 
             checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
             languageProvider1.SetPropertyNames(checkForUpdatesToolStripMenuItem, "Text");
-            checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(393, 34);
             checkForUpdatesToolStripMenuItem.Text = "M_CHECKUPDATES";
             checkForUpdatesToolStripMenuItem.Click += checkForUpdatesToolStripMenuItem_Click;
             // 
@@ -809,34 +809,35 @@ namespace MCSkinn
             // 
             automaticallyCheckForUpdatesToolStripMenuItem.Name = "automaticallyCheckForUpdatesToolStripMenuItem";
             languageProvider1.SetPropertyNames(automaticallyCheckForUpdatesToolStripMenuItem, "Text");
-            automaticallyCheckForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            automaticallyCheckForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(393, 34);
             automaticallyCheckForUpdatesToolStripMenuItem.Text = "M_AUTOUPDATE";
             automaticallyCheckForUpdatesToolStripMenuItem.Click += automaticallyCheckForUpdatesToolStripMenuItem_Click;
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new System.Drawing.Size(264, 6);
+            toolStripMenuItem1.Size = new System.Drawing.Size(390, 6);
             // 
             // planetMinecraftSubmissionToolStripMenuItem
             // 
             planetMinecraftSubmissionToolStripMenuItem.Name = "planetMinecraftSubmissionToolStripMenuItem";
-            planetMinecraftSubmissionToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            planetMinecraftSubmissionToolStripMenuItem.Size = new System.Drawing.Size(393, 34);
             planetMinecraftSubmissionToolStripMenuItem.Text = "PlanetMinecraft Submission";
             planetMinecraftSubmissionToolStripMenuItem.Click += planetMinecraftSubmissionToolStripMenuItem_Click;
             // 
             // officialMinecraftForumsThreadToolStripMenuItem
             // 
             officialMinecraftForumsThreadToolStripMenuItem.Name = "officialMinecraftForumsThreadToolStripMenuItem";
-            officialMinecraftForumsThreadToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            officialMinecraftForumsThreadToolStripMenuItem.Size = new System.Drawing.Size(393, 34);
             officialMinecraftForumsThreadToolStripMenuItem.Text = "Official Minecraft Forums Thread";
             officialMinecraftForumsThreadToolStripMenuItem.Click += officialMinecraftForumsThreadToolStripMenuItem_Click;
             // 
             // contextMenuStrip1
             // 
+            contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { importHereToolStripMenuItem, newSkinToolStripMenuItem, newFolderToolStripMenuItem, toolStripSeparator10, changeNameToolStripMenuItem, deleteToolStripMenuItem, cloneToolStripMenuItem, toolStripMenuItem3, mDECRESToolStripMenuItem, mINCRESToolStripMenuItem, toolStripMenuItem5, mFETCHNAMEToolStripMenuItem, bROWSEIDToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new System.Drawing.Size(205, 242);
+            contextMenuStrip1.Size = new System.Drawing.Size(282, 342);
             contextMenuStrip1.Opening += contextMenuStrip1_Opening;
             // 
             // importHereToolStripMenuItem
@@ -844,7 +845,7 @@ namespace MCSkinn
             importHereToolStripMenuItem.Image = Properties.Resources._112_ArrowCurve_Blue_Left_16x16_72;
             importHereToolStripMenuItem.Name = "importHereToolStripMenuItem";
             languageProvider1.SetPropertyNames(importHereToolStripMenuItem, "Text");
-            importHereToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            importHereToolStripMenuItem.Size = new System.Drawing.Size(281, 32);
             importHereToolStripMenuItem.Text = "M_IMPORT_HERE";
             importHereToolStripMenuItem.Click += importHereToolStripMenuItem_Click;
             // 
@@ -853,7 +854,7 @@ namespace MCSkinn
             newSkinToolStripMenuItem.Image = Properties.Resources.newskin;
             newSkinToolStripMenuItem.Name = "newSkinToolStripMenuItem";
             languageProvider1.SetPropertyNames(newSkinToolStripMenuItem, "Text");
-            newSkinToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            newSkinToolStripMenuItem.Size = new System.Drawing.Size(281, 32);
             newSkinToolStripMenuItem.Text = "M_NEWSKIN_HERE";
             newSkinToolStripMenuItem.Click += toolStripMenuItem4_Click;
             // 
@@ -863,14 +864,14 @@ namespace MCSkinn
             newFolderToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             newFolderToolStripMenuItem.Name = "newFolderToolStripMenuItem";
             languageProvider1.SetPropertyNames(newFolderToolStripMenuItem, "Text");
-            newFolderToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            newFolderToolStripMenuItem.Size = new System.Drawing.Size(281, 32);
             newFolderToolStripMenuItem.Text = "M_NEWFOLDER_HERE";
             newFolderToolStripMenuItem.Click += toolStripMenuItem1_Click;
             // 
             // toolStripSeparator10
             // 
             toolStripSeparator10.Name = "toolStripSeparator10";
-            toolStripSeparator10.Size = new System.Drawing.Size(201, 6);
+            toolStripSeparator10.Size = new System.Drawing.Size(278, 6);
             // 
             // changeNameToolStripMenuItem
             // 
@@ -878,7 +879,7 @@ namespace MCSkinn
             changeNameToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             changeNameToolStripMenuItem.Name = "changeNameToolStripMenuItem";
             languageProvider1.SetPropertyNames(changeNameToolStripMenuItem, "Text");
-            changeNameToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            changeNameToolStripMenuItem.Size = new System.Drawing.Size(281, 32);
             changeNameToolStripMenuItem.Text = "M_RENAME";
             changeNameToolStripMenuItem.Click += changeNameToolStripMenuItem_Click;
             // 
@@ -888,7 +889,7 @@ namespace MCSkinn
             deleteToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             languageProvider1.SetPropertyNames(deleteToolStripMenuItem, "Text");
-            deleteToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            deleteToolStripMenuItem.Size = new System.Drawing.Size(281, 32);
             deleteToolStripMenuItem.Text = "M_DELETE";
             deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
@@ -897,21 +898,21 @@ namespace MCSkinn
             cloneToolStripMenuItem.Image = Properties.Resources.clone;
             cloneToolStripMenuItem.Name = "cloneToolStripMenuItem";
             languageProvider1.SetPropertyNames(cloneToolStripMenuItem, "Text");
-            cloneToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            cloneToolStripMenuItem.Size = new System.Drawing.Size(281, 32);
             cloneToolStripMenuItem.Text = "M_CLONE";
             cloneToolStripMenuItem.Click += cloneToolStripMenuItem_Click;
             // 
             // toolStripMenuItem3
             // 
             toolStripMenuItem3.Name = "toolStripMenuItem3";
-            toolStripMenuItem3.Size = new System.Drawing.Size(201, 6);
+            toolStripMenuItem3.Size = new System.Drawing.Size(278, 6);
             // 
             // mDECRESToolStripMenuItem
             // 
             mDECRESToolStripMenuItem.Image = Properties.Resources.incres;
             mDECRESToolStripMenuItem.Name = "mDECRESToolStripMenuItem";
             languageProvider1.SetPropertyNames(mDECRESToolStripMenuItem, "Text");
-            mDECRESToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            mDECRESToolStripMenuItem.Size = new System.Drawing.Size(281, 32);
             mDECRESToolStripMenuItem.Text = "T_DECRES";
             mDECRESToolStripMenuItem.Click += mDECRESToolStripMenuItem_Click;
             // 
@@ -920,21 +921,21 @@ namespace MCSkinn
             mINCRESToolStripMenuItem.Image = Properties.Resources.decres;
             mINCRESToolStripMenuItem.Name = "mINCRESToolStripMenuItem";
             languageProvider1.SetPropertyNames(mINCRESToolStripMenuItem, "Text");
-            mINCRESToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            mINCRESToolStripMenuItem.Size = new System.Drawing.Size(281, 32);
             mINCRESToolStripMenuItem.Text = "T_INCRES";
             mINCRESToolStripMenuItem.Click += mINCRESToolStripMenuItem_Click;
             // 
             // toolStripMenuItem5
             // 
             toolStripMenuItem5.Name = "toolStripMenuItem5";
-            toolStripMenuItem5.Size = new System.Drawing.Size(201, 6);
+            toolStripMenuItem5.Size = new System.Drawing.Size(278, 6);
             // 
             // mFETCHNAMEToolStripMenuItem
             // 
             mFETCHNAMEToolStripMenuItem.Image = Properties.Resources.import_from_mc;
             mFETCHNAMEToolStripMenuItem.Name = "mFETCHNAMEToolStripMenuItem";
             languageProvider1.SetPropertyNames(mFETCHNAMEToolStripMenuItem, "Text");
-            mFETCHNAMEToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            mFETCHNAMEToolStripMenuItem.Size = new System.Drawing.Size(281, 32);
             mFETCHNAMEToolStripMenuItem.Text = "M_FETCH_NAME";
             mFETCHNAMEToolStripMenuItem.Click += mFETCHNAMEToolStripMenuItem_Click;
             // 
@@ -942,7 +943,7 @@ namespace MCSkinn
             // 
             bROWSEIDToolStripMenuItem.Image = Properties.Resources.browseto;
             bROWSEIDToolStripMenuItem.Name = "bROWSEIDToolStripMenuItem";
-            bROWSEIDToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            bROWSEIDToolStripMenuItem.Size = new System.Drawing.Size(281, 32);
             bROWSEIDToolStripMenuItem.Text = "BROWSE_ID";
             bROWSEIDToolStripMenuItem.Click += bROWSEIDToolStripMenuItem_Click;
             // 
@@ -950,8 +951,8 @@ namespace MCSkinn
             // 
             splitContainer1.Dock = DockStyle.Fill;
             splitContainer1.FixedPanel = FixedPanel.Panel1;
-            splitContainer1.Location = new System.Drawing.Point(0, 27);
-            splitContainer1.Margin = new Padding(4);
+            splitContainer1.Location = new System.Drawing.Point(0, 36);
+            splitContainer1.Margin = new Padding(6);
             splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -962,9 +963,9 @@ namespace MCSkinn
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(panel4);
-            splitContainer1.Size = new System.Drawing.Size(1102, 629);
+            splitContainer1.Size = new System.Drawing.Size(1653, 948);
             splitContainer1.SplitterDistance = 302;
-            splitContainer1.SplitterWidth = 5;
+            splitContainer1.SplitterWidth = 8;
             splitContainer1.TabIndex = 4;
             // 
             // splitContainer3
@@ -972,111 +973,88 @@ namespace MCSkinn
             splitContainer3.Dock = DockStyle.Fill;
             splitContainer3.FixedPanel = FixedPanel.Panel2;
             splitContainer3.Location = new System.Drawing.Point(0, 0);
-            splitContainer3.Margin = new Padding(4);
+            splitContainer3.Margin = new Padding(6);
             splitContainer3.Name = "splitContainer3";
             splitContainer3.Orientation = Orientation.Horizontal;
             // 
             // splitContainer3.Panel1
             // 
-            splitContainer3.Panel1.Controls.Add(tabControl1);
+            splitContainer3.Panel1.Controls.Add(LibraryPanel);
             splitContainer3.Panel1.Controls.Add(hScrollBar1);
             // 
             // splitContainer3.Panel2
             // 
             splitContainer3.Panel2.Controls.Add(colorPanel);
-            splitContainer3.Size = new System.Drawing.Size(302, 629);
-            splitContainer3.SplitterDistance = 304;
-            splitContainer3.SplitterWidth = 5;
+            splitContainer3.Size = new System.Drawing.Size(302, 948);
+            splitContainer3.SplitterDistance = 588;
+            splitContainer3.SplitterWidth = 8;
             splitContainer3.TabIndex = 1;
             // 
-            // tabControl1
+            // LibraryPanel
             // 
-            tabControl1.Controls.Add(tabPage1);
-            tabControl1.Controls.Add(tabPage2);
-            tabControl1.Dock = DockStyle.Fill;
-            tabControl1.Location = new System.Drawing.Point(0, 0);
-            tabControl1.Margin = new Padding(0);
-            tabControl1.Multiline = true;
-            tabControl1.Name = "tabControl1";
-            tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new System.Drawing.Size(302, 287);
-            tabControl1.TabIndex = 0;
+            LibraryPanel.Controls.Add(toolStrip2);
+            LibraryPanel.Controls.Add(treeView2);
+            LibraryPanel.Controls.Add(treeView1);
+            LibraryPanel.Location = new System.Drawing.Point(39, 38);
+            LibraryPanel.Margin = new Padding(4);
+            LibraryPanel.Name = "LibraryPanel";
+            LibraryPanel.Size = new System.Drawing.Size(297, 306);
+            LibraryPanel.TabIndex = 8;
             // 
-            // tabPage1
+            // toolStrip2
             // 
-            tabPage1.Controls.Add(treeView1);
-            tabPage1.Controls.Add(toolStrip2);
-            tabPage1.Location = new System.Drawing.Point(4, 26);
-            tabPage1.Margin = new Padding(0);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Size = new System.Drawing.Size(294, 257);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "Skins";
-            tabPage1.UseVisualStyleBackColor = true;
+            toolStrip2.ImageScalingSize = new System.Drawing.Size(24, 24);
+            toolStrip2.Location = new System.Drawing.Point(0, 0);
+            toolStrip2.Name = "toolStrip2";
+            toolStrip2.Size = new System.Drawing.Size(297, 33);
+            toolStrip2.TabIndex = 2;
+            toolStrip2.Visible = false;
+            // 
+            // treeView2
+            // 
+            treeView2.BorderStyle = BorderStyle.None;
+            treeView2.FullRowSelect = true;
+            treeView2.HideSelection = false;
+            treeView2.HotTracking = true;
+            treeView2.ItemHeight = 28;
+            treeView2.Location = new System.Drawing.Point(124, 91);
+            treeView2.Margin = new Padding(6);
+            treeView2.Name = "treeView2";
+            treeView2.ShowHScroll = false;
+            treeView2.ShowLines = false;
+            treeView2.Size = new System.Drawing.Size(86, 81);
+            treeView2.TabIndex = 0;
+            treeView2.NodeMouseClick += treeView2_NodeMouseClick;
             // 
             // treeView1
             // 
             treeView1.AllowDrop = true;
             treeView1.BorderStyle = BorderStyle.None;
-            treeView1.Dock = DockStyle.Fill;
             treeView1.DrawMode = TreeViewDrawMode.OwnerDrawAll;
             treeView1.Enabled = false;
+            treeView1.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeView1.FullRowSelect = true;
             treeView1.HideSelection = false;
             treeView1.HotTracking = true;
-            treeView1.ItemHeight = 23;
-            treeView1.Location = new System.Drawing.Point(0, 25);
+            treeView1.Indent = 20;
+            treeView1.ItemHeight = 40;
+            treeView1.Location = new System.Drawing.Point(9, 91);
             treeView1.Margin = new Padding(0);
             treeView1.Name = "treeView1";
             treeView1.ScrollPosition = new System.Drawing.Point(0, 0);
             treeView1.ShowNodeToolTips = true;
-            treeView1.Size = new System.Drawing.Size(294, 232);
+            treeView1.Size = new System.Drawing.Size(92, 84);
             treeView1.Sorted = true;
             treeView1.TabIndex = 1;
             treeView1.AfterSelect += treeView1_AfterSelect;
             treeView1.MouseDown += treeView1_MouseDown;
             treeView1.MouseUp += treeView1_MouseUp;
             // 
-            // toolStrip2
-            // 
-            toolStrip2.Enabled = false;
-            toolStrip2.GripStyle = ToolStripGripStyle.Hidden;
-            toolStrip2.ImeMode = ImeMode.On;
-            toolStrip2.Location = new System.Drawing.Point(0, 0);
-            toolStrip2.Name = "toolStrip2";
-            toolStrip2.Size = new System.Drawing.Size(294, 25);
-            toolStrip2.TabIndex = 6;
-            toolStrip2.Text = "toolStrip2";
-            toolStrip2.ItemClicked += toolStrip2_ItemClicked;
-            // 
-            // tabPage2
-            // 
-            tabPage2.Controls.Add(treeView2);
-            tabPage2.Location = new System.Drawing.Point(4, 26);
-            tabPage2.Margin = new Padding(0);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Size = new System.Drawing.Size(294, 258);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "Parts";
-            tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // treeView2
-            // 
-            treeView2.BorderStyle = BorderStyle.None;
-            treeView2.Dock = DockStyle.Fill;
-            treeView2.HideSelection = false;
-            treeView2.Location = new System.Drawing.Point(0, 0);
-            treeView2.Margin = new Padding(4);
-            treeView2.Name = "treeView2";
-            treeView2.Size = new System.Drawing.Size(294, 258);
-            treeView2.TabIndex = 0;
-            treeView2.NodeMouseClick += treeView2_NodeMouseClick;
-            // 
             // hScrollBar1
             // 
             hScrollBar1.Dock = DockStyle.Bottom;
             hScrollBar1.LargeChange = 1;
-            hScrollBar1.Location = new System.Drawing.Point(0, 287);
+            hScrollBar1.Location = new System.Drawing.Point(0, 571);
             hScrollBar1.Maximum = 0;
             hScrollBar1.Name = "hScrollBar1";
             hScrollBar1.Size = new System.Drawing.Size(302, 17);
@@ -1089,12 +1067,12 @@ namespace MCSkinn
             colorPanel.Dock = DockStyle.Fill;
             colorPanel.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             colorPanel.Location = new System.Drawing.Point(0, 0);
-            colorPanel.Margin = new Padding(5);
+            colorPanel.Margin = new Padding(8);
             colorPanel.Name = "colorPanel";
             colorManager1.CurrentSpace = ColorManager.ColorSpace.RGB;
             colorPanel.SelectedColor = colorManager1;
             colorPanel.Selection = 0;
-            colorPanel.Size = new System.Drawing.Size(302, 320);
+            colorPanel.Size = new System.Drawing.Size(302, 352);
             colorPanel.TabIndex = 0;
             colorManager2.CurrentSpace = ColorManager.ColorSpace.RGB;
             colorPanel.UnselectedColor = colorManager2;
@@ -1106,19 +1084,17 @@ namespace MCSkinn
             panel4.Controls.Add(toolStrip1);
             panel4.Dock = DockStyle.Fill;
             panel4.Location = new System.Drawing.Point(0, 0);
-            panel4.Margin = new Padding(4);
+            panel4.Margin = new Padding(6);
             panel4.Name = "panel4";
-            panel4.Size = new System.Drawing.Size(795, 629);
+            panel4.Size = new System.Drawing.Size(1343, 948);
             panel4.TabIndex = 1;
             // 
             // splitContainer4
             // 
             splitContainer4.BorderStyle = BorderStyle.Fixed3D;
             splitContainer4.Dock = DockStyle.Fill;
-            splitContainer4.FixedPanel = FixedPanel.Panel1;
-            splitContainer4.IsSplitterFixed = true;
-            splitContainer4.Location = new System.Drawing.Point(0, 25);
-            splitContainer4.Margin = new Padding(4);
+            splitContainer4.Location = new System.Drawing.Point(0, 33);
+            splitContainer4.Margin = new Padding(6);
             splitContainer4.Name = "splitContainer4";
             splitContainer4.Orientation = Orientation.Horizontal;
             // 
@@ -1130,37 +1106,54 @@ namespace MCSkinn
             // splitContainer4.Panel2
             // 
             splitContainer4.Panel2.Controls.Add(ViewportPanel);
-            splitContainer4.Size = new System.Drawing.Size(795, 582);
-            splitContainer4.SplitterDistance = 25;
+            splitContainer4.Size = new System.Drawing.Size(1343, 884);
+            splitContainer4.SplitterDistance = 182;
             splitContainer4.SplitterIncrement = 5;
-            splitContainer4.SplitterWidth = 1;
+            splitContainer4.SplitterWidth = 2;
             splitContainer4.TabIndex = 6;
             // 
             // ToolsPanel
             // 
             ToolsPanel.AutoScroll = true;
             ToolsPanel.BackColor = System.Drawing.SystemColors.Window;
+            ToolsPanel.Controls.Add(label1);
             ToolsPanel.Dock = DockStyle.Fill;
             ToolsPanel.Location = new System.Drawing.Point(0, 0);
+            ToolsPanel.Margin = new Padding(4);
             ToolsPanel.Name = "ToolsPanel";
-            ToolsPanel.Size = new System.Drawing.Size(791, 21);
+            ToolsPanel.Size = new System.Drawing.Size(1339, 178);
             ToolsPanel.TabIndex = 0;
+            // 
+            // label1
+            // 
+            label1.Dock = DockStyle.Fill;
+            label1.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            label1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            label1.Location = new System.Drawing.Point(0, 0);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(1339, 178);
+            label1.TabIndex = 0;
+            label1.Text = "label1";
+            label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ViewportPanel
             // 
             ViewportPanel.Dock = DockStyle.Fill;
             ViewportPanel.Location = new System.Drawing.Point(0, 0);
+            ViewportPanel.Margin = new Padding(4);
             ViewportPanel.Name = "ViewportPanel";
-            ViewportPanel.Size = new System.Drawing.Size(791, 552);
+            ViewportPanel.Size = new System.Drawing.Size(1339, 696);
             ViewportPanel.TabIndex = 0;
             // 
             // statusStrip1
             // 
+            statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1 });
-            statusStrip1.Location = new System.Drawing.Point(0, 607);
+            statusStrip1.Location = new System.Drawing.Point(0, 917);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Padding = new Padding(1, 0, 16, 0);
-            statusStrip1.Size = new System.Drawing.Size(795, 22);
+            statusStrip1.Padding = new Padding(2, 0, 24, 0);
+            statusStrip1.Size = new System.Drawing.Size(1343, 31);
             statusStrip1.SizingGrip = false;
             statusStrip1.TabIndex = 0;
             statusStrip1.Text = "statusStrip1";
@@ -1169,16 +1162,18 @@ namespace MCSkinn
             // 
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             toolStripStatusLabel1.Overflow = ToolStripItemOverflow.Never;
-            toolStripStatusLabel1.Size = new System.Drawing.Size(228, 17);
+            toolStripStatusLabel1.Size = new System.Drawing.Size(333, 24);
             toolStripStatusLabel1.Text = "Look down here for important things!";
             // 
             // toolStrip1
             // 
             toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
+            toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             toolStrip1.Items.AddRange(new ToolStripItem[] { saveToolStripButton, saveAlltoolStripButton, toolStripSeparator6, undoToolStripButton, redoToolStripButton, toolStripSeparator1, toolStripSeparator2, perspectiveToolStripButton, orthographicToolStripButton, hybridToolStripButton, toolStripSeparator4, resetCameraToolStripButton, screenshotToolStripButton, toolStripSeparator9, toggleHeadToolStripButton, toggleChestToolStripButton, toggleLeftArmToolStripButton, toggleRightArmToolStripButton, toggleLeftLegToolStripButton, toggleRightLegToolStripButton, toggleHelmetToolStripButton, toggleChestArmorToolStripButton, toggleLeftArmArmorToolStripButton, toggleRightArmArmorToolStripButton, toggleLeftLegArmorToolStripButton, toggleRightLegArmorToolStripButton, toolStripSeparator15, toolStripDropDownButton1, toolStripButton7, toolStripButton1 });
             toolStrip1.Location = new System.Drawing.Point(0, 0);
             toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new System.Drawing.Size(795, 25);
+            toolStrip1.Padding = new Padding(0, 0, 3, 0);
+            toolStrip1.Size = new System.Drawing.Size(1343, 33);
             toolStrip1.TabIndex = 5;
             toolStrip1.Text = "toolStrip1";
             // 
@@ -1190,7 +1185,7 @@ namespace MCSkinn
             saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             saveToolStripButton.Name = "saveToolStripButton";
             languageProvider1.SetPropertyNames(saveToolStripButton, "Text");
-            saveToolStripButton.Size = new System.Drawing.Size(23, 22);
+            saveToolStripButton.Size = new System.Drawing.Size(34, 28);
             saveToolStripButton.Text = "T_SAVE";
             saveToolStripButton.Click += saveToolStripButton_Click;
             // 
@@ -1201,14 +1196,14 @@ namespace MCSkinn
             saveAlltoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             saveAlltoolStripButton.Name = "saveAlltoolStripButton";
             languageProvider1.SetPropertyNames(saveAlltoolStripButton, "Text");
-            saveAlltoolStripButton.Size = new System.Drawing.Size(23, 22);
+            saveAlltoolStripButton.Size = new System.Drawing.Size(34, 28);
             saveAlltoolStripButton.Text = "T_SAVEALL";
             saveAlltoolStripButton.Click += saveAlltoolStripButton_Click;
             // 
             // toolStripSeparator6
             // 
             toolStripSeparator6.Name = "toolStripSeparator6";
-            toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+            toolStripSeparator6.Size = new System.Drawing.Size(6, 33);
             // 
             // undoToolStripButton
             // 
@@ -1217,7 +1212,7 @@ namespace MCSkinn
             undoToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             undoToolStripButton.Name = "undoToolStripButton";
             languageProvider1.SetPropertyNames(undoToolStripButton, "Text");
-            undoToolStripButton.Size = new System.Drawing.Size(32, 22);
+            undoToolStripButton.Size = new System.Drawing.Size(45, 28);
             undoToolStripButton.Text = "T_UNDO";
             undoToolStripButton.ButtonClick += undoToolStripButton_ButtonClick;
             // 
@@ -1228,19 +1223,19 @@ namespace MCSkinn
             redoToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             redoToolStripButton.Name = "redoToolStripButton";
             languageProvider1.SetPropertyNames(redoToolStripButton, "Text");
-            redoToolStripButton.Size = new System.Drawing.Size(32, 22);
+            redoToolStripButton.Size = new System.Drawing.Size(45, 28);
             redoToolStripButton.Text = "T_REDO";
             redoToolStripButton.ButtonClick += redoToolStripButton_ButtonClick;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            toolStripSeparator1.Size = new System.Drawing.Size(6, 33);
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            toolStripSeparator2.Size = new System.Drawing.Size(6, 33);
             // 
             // perspectiveToolStripButton
             // 
@@ -1249,7 +1244,7 @@ namespace MCSkinn
             perspectiveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             perspectiveToolStripButton.Name = "perspectiveToolStripButton";
             languageProvider1.SetPropertyNames(perspectiveToolStripButton, "Text");
-            perspectiveToolStripButton.Size = new System.Drawing.Size(23, 22);
+            perspectiveToolStripButton.Size = new System.Drawing.Size(34, 28);
             perspectiveToolStripButton.Text = "T_PERSPECTIVE";
             perspectiveToolStripButton.Click += perspectiveToolStripButton_Click;
             // 
@@ -1260,7 +1255,7 @@ namespace MCSkinn
             orthographicToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             orthographicToolStripButton.Name = "orthographicToolStripButton";
             languageProvider1.SetPropertyNames(orthographicToolStripButton, "Text");
-            orthographicToolStripButton.Size = new System.Drawing.Size(23, 22);
+            orthographicToolStripButton.Size = new System.Drawing.Size(34, 28);
             orthographicToolStripButton.Text = "T_TEXTURE";
             orthographicToolStripButton.Click += orthographicToolStripButton_Click;
             // 
@@ -1271,14 +1266,14 @@ namespace MCSkinn
             hybridToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             hybridToolStripButton.Name = "hybridToolStripButton";
             languageProvider1.SetPropertyNames(hybridToolStripButton, "Text");
-            hybridToolStripButton.Size = new System.Drawing.Size(23, 22);
+            hybridToolStripButton.Size = new System.Drawing.Size(34, 28);
             hybridToolStripButton.Text = "T_HYBRID";
             hybridToolStripButton.Click += hybridToolStripButton_Click;
             // 
             // toolStripSeparator4
             // 
             toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            toolStripSeparator4.Size = new System.Drawing.Size(6, 33);
             // 
             // resetCameraToolStripButton
             // 
@@ -1287,7 +1282,7 @@ namespace MCSkinn
             resetCameraToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             resetCameraToolStripButton.Name = "resetCameraToolStripButton";
             languageProvider1.SetPropertyNames(resetCameraToolStripButton, "Text");
-            resetCameraToolStripButton.Size = new System.Drawing.Size(23, 22);
+            resetCameraToolStripButton.Size = new System.Drawing.Size(34, 28);
             resetCameraToolStripButton.Text = "T_RESETCAMERA";
             resetCameraToolStripButton.Click += resetCameraToolStripButton_Click;
             // 
@@ -1298,14 +1293,14 @@ namespace MCSkinn
             screenshotToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             screenshotToolStripButton.Name = "screenshotToolStripButton";
             languageProvider1.SetPropertyNames(screenshotToolStripButton, "Text");
-            screenshotToolStripButton.Size = new System.Drawing.Size(23, 22);
+            screenshotToolStripButton.Size = new System.Drawing.Size(34, 28);
             screenshotToolStripButton.Text = "T_SCREENSHOT";
             screenshotToolStripButton.Click += screenshotToolStripButton_Click;
             // 
             // toolStripSeparator9
             // 
             toolStripSeparator9.Name = "toolStripSeparator9";
-            toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
+            toolStripSeparator9.Size = new System.Drawing.Size(6, 33);
             // 
             // toggleHeadToolStripButton
             // 
@@ -1314,7 +1309,7 @@ namespace MCSkinn
             toggleHeadToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             toggleHeadToolStripButton.Name = "toggleHeadToolStripButton";
             languageProvider1.SetPropertyNames(toggleHeadToolStripButton, "Text");
-            toggleHeadToolStripButton.Size = new System.Drawing.Size(23, 22);
+            toggleHeadToolStripButton.Size = new System.Drawing.Size(34, 28);
             toggleHeadToolStripButton.Text = "T_TOGGLEHEAD";
             toggleHeadToolStripButton.Click += toggleHeadToolStripButton_Click;
             // 
@@ -1325,7 +1320,7 @@ namespace MCSkinn
             toggleChestToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             toggleChestToolStripButton.Name = "toggleChestToolStripButton";
             languageProvider1.SetPropertyNames(toggleChestToolStripButton, "Text");
-            toggleChestToolStripButton.Size = new System.Drawing.Size(23, 22);
+            toggleChestToolStripButton.Size = new System.Drawing.Size(34, 28);
             toggleChestToolStripButton.Text = "T_TOGGLECHEST";
             toggleChestToolStripButton.Click += toggleChestToolStripButton_Click;
             // 
@@ -1336,7 +1331,7 @@ namespace MCSkinn
             toggleLeftArmToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             toggleLeftArmToolStripButton.Name = "toggleLeftArmToolStripButton";
             languageProvider1.SetPropertyNames(toggleLeftArmToolStripButton, "Text");
-            toggleLeftArmToolStripButton.Size = new System.Drawing.Size(23, 22);
+            toggleLeftArmToolStripButton.Size = new System.Drawing.Size(34, 28);
             toggleLeftArmToolStripButton.Text = "T_TOGGLELEFTARM";
             toggleLeftArmToolStripButton.Click += toggleLeftArmToolStripButton_Click;
             // 
@@ -1347,7 +1342,7 @@ namespace MCSkinn
             toggleRightArmToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             toggleRightArmToolStripButton.Name = "toggleRightArmToolStripButton";
             languageProvider1.SetPropertyNames(toggleRightArmToolStripButton, "Text");
-            toggleRightArmToolStripButton.Size = new System.Drawing.Size(23, 22);
+            toggleRightArmToolStripButton.Size = new System.Drawing.Size(34, 28);
             toggleRightArmToolStripButton.Text = "T_TOGGLERIGHTARM";
             toggleRightArmToolStripButton.Click += toggleRightArmToolStripButton_Click;
             // 
@@ -1358,7 +1353,7 @@ namespace MCSkinn
             toggleLeftLegToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             toggleLeftLegToolStripButton.Name = "toggleLeftLegToolStripButton";
             languageProvider1.SetPropertyNames(toggleLeftLegToolStripButton, "Text");
-            toggleLeftLegToolStripButton.Size = new System.Drawing.Size(23, 22);
+            toggleLeftLegToolStripButton.Size = new System.Drawing.Size(34, 28);
             toggleLeftLegToolStripButton.Text = "T_TOGGLELEFTLEG";
             toggleLeftLegToolStripButton.Click += toggleLeftLegToolStripButton_Click;
             // 
@@ -1369,7 +1364,7 @@ namespace MCSkinn
             toggleRightLegToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             toggleRightLegToolStripButton.Name = "toggleRightLegToolStripButton";
             languageProvider1.SetPropertyNames(toggleRightLegToolStripButton, "Text");
-            toggleRightLegToolStripButton.Size = new System.Drawing.Size(23, 22);
+            toggleRightLegToolStripButton.Size = new System.Drawing.Size(34, 28);
             toggleRightLegToolStripButton.Text = "T_TOGGLERIGHTLEG";
             toggleRightLegToolStripButton.Click += toggleRightLegToolStripButton_Click;
             // 
@@ -1380,7 +1375,7 @@ namespace MCSkinn
             toggleHelmetToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             toggleHelmetToolStripButton.Name = "toggleHelmetToolStripButton";
             languageProvider1.SetPropertyNames(toggleHelmetToolStripButton, "Text");
-            toggleHelmetToolStripButton.Size = new System.Drawing.Size(23, 22);
+            toggleHelmetToolStripButton.Size = new System.Drawing.Size(34, 28);
             toggleHelmetToolStripButton.Text = "T_TOGGLEHELMET";
             toggleHelmetToolStripButton.Click += toggleHelmetToolStripButton_Click;
             // 
@@ -1391,7 +1386,7 @@ namespace MCSkinn
             toggleChestArmorToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             toggleChestArmorToolStripButton.Name = "toggleChestArmorToolStripButton";
             languageProvider1.SetPropertyNames(toggleChestArmorToolStripButton, "Text");
-            toggleChestArmorToolStripButton.Size = new System.Drawing.Size(23, 22);
+            toggleChestArmorToolStripButton.Size = new System.Drawing.Size(34, 28);
             toggleChestArmorToolStripButton.Text = "T_TOGGLECHESTARMOR";
             toggleChestArmorToolStripButton.Click += toggleChestArmorToolStripButton_Click;
             // 
@@ -1402,7 +1397,7 @@ namespace MCSkinn
             toggleLeftArmArmorToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             toggleLeftArmArmorToolStripButton.Name = "toggleLeftArmArmorToolStripButton";
             languageProvider1.SetPropertyNames(toggleLeftArmArmorToolStripButton, "Text");
-            toggleLeftArmArmorToolStripButton.Size = new System.Drawing.Size(23, 22);
+            toggleLeftArmArmorToolStripButton.Size = new System.Drawing.Size(34, 28);
             toggleLeftArmArmorToolStripButton.Text = "T_TOGGLELEFTARMARMOR";
             toggleLeftArmArmorToolStripButton.Click += toggleLeftArmArmorToolStripButton_Click;
             // 
@@ -1413,7 +1408,7 @@ namespace MCSkinn
             toggleRightArmArmorToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             toggleRightArmArmorToolStripButton.Name = "toggleRightArmArmorToolStripButton";
             languageProvider1.SetPropertyNames(toggleRightArmArmorToolStripButton, "Text");
-            toggleRightArmArmorToolStripButton.Size = new System.Drawing.Size(23, 22);
+            toggleRightArmArmorToolStripButton.Size = new System.Drawing.Size(34, 28);
             toggleRightArmArmorToolStripButton.Text = "T_TOGGLERIGHTARMARMOR";
             toggleRightArmArmorToolStripButton.Click += toggleRightArmArmorToolStripButton_Click;
             // 
@@ -1424,7 +1419,7 @@ namespace MCSkinn
             toggleLeftLegArmorToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             toggleLeftLegArmorToolStripButton.Name = "toggleLeftLegArmorToolStripButton";
             languageProvider1.SetPropertyNames(toggleLeftLegArmorToolStripButton, "Text");
-            toggleLeftLegArmorToolStripButton.Size = new System.Drawing.Size(23, 22);
+            toggleLeftLegArmorToolStripButton.Size = new System.Drawing.Size(34, 28);
             toggleLeftLegArmorToolStripButton.Text = "T_TOGGLELEFTLEGARMOR";
             toggleLeftLegArmorToolStripButton.Click += toggleLeftLegArmorToolStripButton_Click;
             // 
@@ -1435,14 +1430,14 @@ namespace MCSkinn
             toggleRightLegArmorToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             toggleRightLegArmorToolStripButton.Name = "toggleRightLegArmorToolStripButton";
             languageProvider1.SetPropertyNames(toggleRightLegArmorToolStripButton, "Text");
-            toggleRightLegArmorToolStripButton.Size = new System.Drawing.Size(23, 22);
+            toggleRightLegArmorToolStripButton.Size = new System.Drawing.Size(34, 28);
             toggleRightLegArmorToolStripButton.Text = "T_TOGGLERIGHTLEGARMOR";
             toggleRightLegArmorToolStripButton.Click += toggleRightLegArmorToolStripButton_Click;
             // 
             // toolStripSeparator15
             // 
             toolStripSeparator15.Name = "toolStripSeparator15";
-            toolStripSeparator15.Size = new System.Drawing.Size(6, 25);
+            toolStripSeparator15.Size = new System.Drawing.Size(6, 33);
             // 
             // toolStripDropDownButton1
             // 
@@ -1451,7 +1446,7 @@ namespace MCSkinn
             toolStripDropDownButton1.Image = (System.Drawing.Image)resources.GetObject("toolStripDropDownButton1.Image");
             toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            toolStripDropDownButton1.Size = new System.Drawing.Size(62, 22);
+            toolStripDropDownButton1.Size = new System.Drawing.Size(91, 28);
             toolStripDropDownButton1.Text = "Human";
             // 
             // toolStripButton7
@@ -1462,7 +1457,7 @@ namespace MCSkinn
             toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButton7.Name = "toolStripButton7";
             languageProvider1.SetPropertyNames(toolStripButton7, "Text");
-            toolStripButton7.Size = new System.Drawing.Size(23, 22);
+            toolStripButton7.Size = new System.Drawing.Size(34, 28);
             toolStripButton7.Text = "W_POPOUT";
             toolStripButton7.Click += toolStripButton7_Click;
             // 
@@ -1474,17 +1469,17 @@ namespace MCSkinn
             toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButton1.Name = "toolStripButton1";
             languageProvider1.SetPropertyNames(toolStripButton1, "Text");
-            toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            toolStripButton1.Size = new System.Drawing.Size(34, 28);
             toolStripButton1.Text = "W_OPTIONS";
             toolStripButton1.Click += toolStripButton1_Click;
             // 
             // labelEditTextBox
             // 
             labelEditTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            labelEditTextBox.Location = new System.Drawing.Point(538, 1);
-            labelEditTextBox.Margin = new Padding(4);
+            labelEditTextBox.Location = new System.Drawing.Point(807, 2);
+            labelEditTextBox.Margin = new Padding(6);
             labelEditTextBox.Name = "labelEditTextBox";
-            labelEditTextBox.Size = new System.Drawing.Size(116, 20);
+            labelEditTextBox.Size = new System.Drawing.Size(172, 26);
             labelEditTextBox.TabIndex = 5;
             labelEditTextBox.Visible = false;
             labelEditTextBox.KeyDown += labelEditTextBox_KeyDown;
@@ -1499,6 +1494,7 @@ namespace MCSkinn
             miniToolStrip.Dock = DockStyle.None;
             miniToolStrip.Enabled = false;
             miniToolStrip.GripStyle = ToolStripGripStyle.Hidden;
+            miniToolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             miniToolStrip.ImeMode = ImeMode.On;
             miniToolStrip.Location = new System.Drawing.Point(1, 209);
             miniToolStrip.Name = "miniToolStrip";
@@ -1511,15 +1507,14 @@ namespace MCSkinn
             // 
             // Editor
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1102, 656);
+            AutoScaleMode = AutoScaleMode.None;
+            ClientSize = new System.Drawing.Size(1653, 984);
             Controls.Add(labelEditTextBox);
             Controls.Add(splitContainer1);
             Controls.Add(mainMenuStrip);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = mainMenuStrip;
-            Margin = new Padding(4);
+            Margin = new Padding(6);
             MinimizeBox = false;
             Name = "Editor";
             ShowIcon = false;
@@ -1527,6 +1522,7 @@ namespace MCSkinn
             Text = "MCSkinn Preload Window";
             WindowState = FormWindowState.Minimized;
             Load += Editor_Load;
+            DpiChanged += Editor_DpiChanged;
             mainMenuStrip.ResumeLayout(false);
             mainMenuStrip.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
@@ -1538,16 +1534,15 @@ namespace MCSkinn
             splitContainer3.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer3).EndInit();
             splitContainer3.ResumeLayout(false);
-            tabControl1.ResumeLayout(false);
-            tabPage1.ResumeLayout(false);
-            tabPage1.PerformLayout();
-            tabPage2.ResumeLayout(false);
+            LibraryPanel.ResumeLayout(false);
+            LibraryPanel.PerformLayout();
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
             splitContainer4.Panel1.ResumeLayout(false);
             splitContainer4.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer4).EndInit();
             splitContainer4.ResumeLayout(false);
+            ToolsPanel.ResumeLayout(false);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             toolStrip1.ResumeLayout(false);
@@ -1558,7 +1553,7 @@ namespace MCSkinn
         }
 
         #endregion
-        public System.Windows.Forms.HScrollBar hScrollBar1;
+        public HScrollBar hScrollBar1;
         public LanguageProvider languageProvider1;
         public NativeMenuStrip mainMenuStrip;
         public ToolStripMenuItem fileToolStripMenuItem;
@@ -1672,12 +1667,8 @@ namespace MCSkinn
         public ToolStripMenuItem gridEnabledToolStripMenuItem;
         public NumericUpDownMenuItem mGRIDOPACITYToolStripMenuItem;
         public ColorToolStripMenuItem mGRIDCOLORToolStripMenuItem;
-        public TabControl tabControl1;
-        public TabPage tabPage1;
         public SkinTreeView treeView1;
-        public SkinTreeViewToolBar toolStrip2;
-        public TabPage tabPage2;
-        public TreeView treeView2;
+        public SeaSharp.Styler.Controls.AdvTreeView treeView2;
         public SkinTreeViewToolBar miniToolStrip;
         public ToolStripSeparator toolStripMenuItem1;
         public ToolStripMenuItem officialMinecraftForumsThreadToolStripMenuItem;
@@ -1699,6 +1690,8 @@ namespace MCSkinn
         public ToolStripMenuItem useTextureBasesMenuItem;
         public Panel ViewportPanel;
         public Panel ToolsPanel;
+        public Panel LibraryPanel;
+        private Label label1;
+        private SkinTreeViewToolBar toolStrip2;
     }
 }
-

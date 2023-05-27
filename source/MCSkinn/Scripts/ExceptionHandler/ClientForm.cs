@@ -131,7 +131,6 @@ namespace MCSkinn.ExceptionHandler
 
 			report.SoftwareData.Add("OS", Environment.OSVersion.ToString() + " " + (Is64BitOperatingSystem() ? "x64" : "x86"));
 			report.SoftwareData.Add(".NET Version", Environment.Version.ToString());
-			report.SoftwareData.Add("MCSkinn Version", Program.Version.ToString());
 
 			return report;
 		}

@@ -65,6 +65,8 @@ namespace MCSkinn.Forms.Controls
         private int prevValue;
         public int scrollMargin = 20;
 
+        public const int DefaultTreeViewHeight = 40;
+
         public SkinTreeView()
         {
             t.SynchronizingObject = this;
@@ -80,7 +82,7 @@ namespace MCSkinn.Forms.Controls
             skinHeadImage = new Bitmap(32, 32);
 
             DrawMode = TreeViewDrawMode.OwnerDrawAll;
-            ItemHeight = 23;
+            ItemHeight = DefaultTreeViewHeight;
             FullRowSelect = true;
             HotTracking = true;
             TreeViewNodeSorter = new SkinNodeSorter();
@@ -406,15 +408,17 @@ namespace MCSkinn.Forms.Controls
             if (ItemHeight > 12)
                 ItemHeight--;
 
-            GlobalSettings.TreeViewHeight = ItemHeight;
+            //GlobalSettings.TreeViewHeight = ItemHeight;
         }
 
         public void ZoomIn()
         {
             ItemHeight++;
 
-            GlobalSettings.TreeViewHeight = ItemHeight;
+            //GlobalSettings.TreeViewHeight = ItemHeight;
         }
+
+        public double DpiScale { get { return DeviceDpi / 96; } }
 
         protected override void OnDrawNode(DrawTreeNodeEventArgs e)
         {
@@ -430,13 +434,16 @@ namespace MCSkinn.Forms.Controls
 
             realX -= _scrollX;
 
-            e.Graphics.FillRectangle(new SolidBrush(BackColor), 0, e.Bounds.Y, Width, e.Bounds.Height);
+            bool isDarkTheme = Inkore.UI.WPF.Modern.ThemeManager.Current.ActualApplicationTheme == Inkore.UI.WPF.Modern.ApplicationTheme.Dark;
+            Color accent = Color.FromArgb(Inkore.UI.WPF.Modern.ThemeManager.Current.ActualAccentColor.A, Inkore.UI.WPF.Modern.ThemeManager.Current.ActualAccentColor.R, Inkore.UI.WPF.Modern.ThemeManager.Current.ActualAccentColor.G, Inkore.UI.WPF.Modern.ThemeManager.Current.ActualAccentColor.B);
+
+            e.Graphics.FillRectangle(new SolidBrush(isDarkTheme ? Color.Black : BackColor), 0, e.Bounds.Y, Width, Height);
             Skin skin = e.Node is Skin ? (Skin)e.Node : null;
             bool skinIsNull = skin == null;
 
             if (e.Node.IsSelected || e.Node == _overNode)
             {
-                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(127, SystemColors.Highlight)), realX, e.Bounds.Y, Width,
+                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(96, accent)), 0, e.Bounds.Y, Width,
                                          e.Bounds.Height - 1);
             }
             else if (!skinIsNull && skin.IsLastSkin)
@@ -451,10 +458,10 @@ namespace MCSkinn.Forms.Controls
 
             if (skinIsNull)
             {
-                if (e.Node.IsExpanded)
-                    e.Graphics.DrawImage(FolderOpen_32x32_72, realX, e.Bounds.Y, ItemHeight - 1, ItemHeight - 1);
-                else
-                    e.Graphics.DrawImage(Folder_32x32, realX, e.Bounds.Y, ItemHeight - 1, ItemHeight - 1);
+                //if (e.Node.IsExpanded)
+                //    e.Graphics.DrawImage(FolderOpen_32x32_72, realX, e.Bounds.Y, ItemHeight - 1, ItemHeight - 1);
+                //else
+                e.Graphics.DrawImage(Folder_32x32, realX, e.Bounds.Y, ItemHeight - 1, ItemHeight - 1);
 
                 if (e.Node.Level == 0 && !Editor.HasOneRoot)
                 {
@@ -464,7 +471,9 @@ namespace MCSkinn.Forms.Controls
                 }
             }
             else
-                e.Graphics.DrawImage(skin.Head, realX, e.Bounds.Y, ItemHeight - 1, ItemHeight - 1);
+            {
+                e.Graphics.DrawImage(skin.Head, realX, e.Bounds.Y + 4 * DeviceDpi / 96, ItemHeight - 8 * DeviceDpi / 96, ItemHeight - 8 * DeviceDpi / 96);
+            }
 
             if (skinIsNull && e.Node.Nodes.Count != 0)
             {
@@ -497,11 +506,18 @@ namespace MCSkinn.Forms.Controls
             }
 
             string text = e.Node.ToString();
+            bool isBold = skinIsNull ? false : skin.Dirty;
 
-            TextRenderer.DrawText(e.Graphics, text, Font,
+
+
+            TextRenderer.DrawText(e.Graphics, text, new Font(Font, isBold ? FontStyle.Bold : FontStyle.Regular),
                                   new Rectangle(realX + ItemHeight + 1, e.Bounds.Y, Width, e.Bounds.Height),
-                                  e.Node.IsSelected || e.Node == _overNode ? Color.White : Color.FromArgb(255,10,10,10),
+                                  isDarkTheme ? Color.White : Color.Black, //e.Node.IsSelected || e.Node == _overNode ? Color.White : Color.FromArgb(255,10,10,10),
                                   TextFormatFlags.VerticalCenter);
+            if (isBold)
+            {
+                e.Graphics.FillEllipse(new SolidBrush(Color.FromArgb(216, accent)), new Rectangle(this.ClientSize.Width - 20 * DeviceDpi / 96, e.Bounds.Y + e.Bounds.Height / 2 - 4 * DeviceDpi / 96, 8 * DeviceDpi / 96, 8 * DeviceDpi / 96));
+            }
 
             //TextRenderer.DrawText(e.Graphics, "64x32", new Font(Font.FontFamily, 7), new Rectangle(e.Bounds.X, e.Bounds.Y, Width - 20, e.Bounds.Height), (e.Node.IsSelected || e.Node == _overNode) ? Color.White : Color.Black, TextFormatFlags.Right | TextFormatFlags.VerticalCenter);
         }

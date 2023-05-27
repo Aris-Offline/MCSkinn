@@ -96,7 +96,7 @@ namespace MCSkinn.Scripts.Paril.Drawing
                     else if (max == rgb.B)
                         H = (rgb.R - rgb.G) / d + 4;
                     else
-                        throw new InvalidOperationException();
+                        //throw new InvalidOperationException();
 
                     H /= 6;
                 }
@@ -345,7 +345,7 @@ namespace MCSkinn.Scripts.Paril.Drawing
             int b = (int)(B * 255.0f);
             int a = (int)(A * 255.0f);
 
-            return Color.FromArgb(a, r, g, b);
+            return Color.FromArgb(Math.Min(Math.Max(0, a), 255), Math.Min(Math.Max(0, r), 255), Math.Min(Math.Max(0, g), 255), Math.Min(Math.Max(0, b), 255));
         }
     }
 }

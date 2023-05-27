@@ -34,8 +34,8 @@ namespace MCSkinn
             label1 = new System.Windows.Forms.Label();
             numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             languageProvider1 = new LanguageProvider();
-            BrushPanel = new System.Windows.Forms.Panel();
             label2 = new System.Windows.Forms.Label();
+            BrushPanel = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)languageProvider1).BeginInit();
@@ -43,36 +43,35 @@ namespace MCSkinn
             // 
             // trackBar1
             // 
-            trackBar1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            trackBar1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             trackBar1.AutoSize = false;
-            trackBar1.Location = new System.Drawing.Point(275, 10);
-            trackBar1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            trackBar1.Location = new System.Drawing.Point(144, 60);
+            trackBar1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             trackBar1.Maximum = 100;
             trackBar1.Name = "trackBar1";
-            trackBar1.Size = new System.Drawing.Size(119, 29);
+            trackBar1.Size = new System.Drawing.Size(187, 41);
             trackBar1.TabIndex = 2;
             trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
             trackBar1.Scroll += trackBar1_Scroll;
             // 
             // label1
             // 
-            label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(200, 12);
-            label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label1.Location = new System.Drawing.Point(13, 65);
+            label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             label1.Name = "label1";
             languageProvider1.SetPropertyNames(label1, "Text");
-            label1.Size = new System.Drawing.Size(88, 17);
+            label1.Size = new System.Drawing.Size(130, 24);
             label1.TabIndex = 1;
             label1.Text = "O_HOLDNESS";
             // 
             // numericUpDown1
             // 
-            numericUpDown1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            numericUpDown1.Location = new System.Drawing.Point(394, 9);
-            numericUpDown1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            numericUpDown1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            numericUpDown1.Location = new System.Drawing.Point(331, 59);
+            numericUpDown1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new System.Drawing.Size(47, 23);
+            numericUpDown1.Size = new System.Drawing.Size(74, 30);
             numericUpDown1.TabIndex = 3;
             numericUpDown1.ValueChanged += numericUpDown1_ValueChanged;
             // 
@@ -80,37 +79,38 @@ namespace MCSkinn
             // 
             languageProvider1.BaseControl = this;
             // 
-            // BrushPanel
-            // 
-            BrushPanel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            BrushPanel.Location = new System.Drawing.Point(60, 6);
-            BrushPanel.Name = "BrushPanel";
-            BrushPanel.Size = new System.Drawing.Size(120, 28);
-            BrushPanel.TabIndex = 5;
-            // 
             // label2
             // 
-            label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(8, 12);
+            label2.Location = new System.Drawing.Point(13, 17);
+            label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             label2.Name = "label2";
             languageProvider1.SetPropertyNames(label2, "Text");
-            label2.Size = new System.Drawing.Size(63, 17);
+            label2.Size = new System.Drawing.Size(91, 24);
             label2.TabIndex = 6;
             label2.Text = "G_BRUSH";
             // 
+            // BrushPanel
+            // 
+            BrushPanel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            BrushPanel.Location = new System.Drawing.Point(94, 8);
+            BrushPanel.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            BrushPanel.Name = "BrushPanel";
+            BrushPanel.Size = new System.Drawing.Size(311, 40);
+            BrushPanel.TabIndex = 5;
+            // 
             // NoiseOptions
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(BrushPanel);
             Controls.Add(label2);
             Controls.Add(trackBar1);
             Controls.Add(label1);
             Controls.Add(numericUpDown1);
-            Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             Name = "NoiseOptions";
-            Size = new System.Drawing.Size(467, 40);
+            Size = new System.Drawing.Size(418, 109);
             Load += EraserOptions_Load;
             ((System.ComponentModel.ISupportInitialize)trackBar1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();

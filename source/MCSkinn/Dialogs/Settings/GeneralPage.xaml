@@ -1,0 +1,18 @@
+﻿<Page x:Class="MCSkinn.Dialogs.Settings.GeneralPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MCSkinn.Dialogs.Settings" xmlns:ui="https://schemas.animasterstudios.com/lib/ui/wpf/modern"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="GeneralPage" Loaded="Page_Loaded">
+
+    <ui:SimpleStackPanel Spacing="20">
+        <CheckBox x:Name="CheckBox_InfiniteMouse" Content="M_INFINITEMOUSE" Click="CheckBox_InfiniteMouse_Click"/>
+        <CheckBox x:Name="CheckBox_RenderStats" Content="M_RENDERSTATS" Click="CheckBox_RenderStats_Click" Margin="0,-15,0,0"/>
+
+        <TextBlock x:Name="TextBlock_Hotkey" Text="M_KEYSHORTCUTS" Margin="0,10,0,0"/>
+        <Button x:Name="Button_OpenKeyEditor" Content="T_OPENKEYEDITOR" Click="Button_OpenKeyEditor_Click"/>
+    </ui:SimpleStackPanel>
+</Page>

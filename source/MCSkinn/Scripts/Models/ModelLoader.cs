@@ -27,6 +27,7 @@ using MCSkinn.Scripts.Paril.OpenGL;
 using MCSkinn.Scripts.Setting;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using static MCSkinn.Scripts.Models.ModelLoader;
 
 namespace MCSkinn.Scripts.Models
 {
@@ -43,19 +44,13 @@ namespace MCSkinn.Scripts.Models
 
             foreach (string m in Directory.EnumerateFiles(GlobalSettings.GetDataURI("Models"), "*.*", SearchOption.AllDirectories))
             {
-                try
-                {
-                    Model model = tcnParser.Load(m);
+                Model model = tcnParser.Load(m);
 
-                    if (model == null)
-                        continue;
+                if (model == null)
+                    continue;
 
-                    model.File = new FileInfo(m);
-                    Models.Add(model.Path, model);
-                }
-                catch
-                {
-                }
+                model.File = new FileInfo(m);
+                Models.Add(model.Path, model);
             }
         }
 
@@ -286,6 +281,9 @@ namespace MCSkinn.Scripts.Models
 
                         foreach (TexturedQuad quad in face.quadList)
                         {
+                            if (quad == null)
+                                continue;
+
                             var vertices = new List<Vector3>();
                             var texcoords = new List<Vector2>();
 
@@ -299,19 +297,34 @@ namespace MCSkinn.Scripts.Models
                             var newFace = new Face(vertices.ToArray(), texcoords.ToArray(), cwwIndices);
 
                             Vector3 zero = Model.TranslateVertex(mesh.Translate, mesh.Rotate, mesh.Pivot, newFace.Vertices[0]);
-                            Vector3 one = Model.TranslateVertex(mesh.Translate, mesh.Rotate, mesh.Pivot, newFace.Vertices[1]);
-                            Vector3 two = Model.TranslateVertex(mesh.Translate, mesh.Rotate, mesh.Pivot, newFace.Vertices[2]);
+                            Vector3 one;
+                            Vector3 two;
 
+                            try
+                            {
+                                one = Model.TranslateVertex(mesh.Translate, mesh.Rotate, mesh.Pivot, newFace.Vertices[1]);
+                                two = Model.TranslateVertex(mesh.Translate, mesh.Rotate, mesh.Pivot, newFace.Vertices[2]);
+                            }
+                            catch 
+                            {
+                                one = new Vector3(0, 0, 0);
+                                two = new Vector3(0, 0, 0);
+
+                            }
                             Vector3 dir = Vector3.Cross(one - zero, two - zero);
                             newFace.Normal = Vector3.Normalize(dir);
 
-                            dir = Vector3.Cross(newFace.Vertices[1] - newFace.Vertices[0], newFace.Vertices[2] - newFace.Vertices[0]);
-                            Vector3 realNormal = Vector3.Normalize(dir);
+                            try
+                            {
+                                dir = Vector3.Cross(newFace.Vertices[1] - newFace.Vertices[0], newFace.Vertices[2] - newFace.Vertices[0]);
+                                Vector3 realNormal = Vector3.Normalize(dir);
 
-                            if (realNormal == new Vector3(0, 1, 0))
-                                newFace.Downface = true;
+                                if (realNormal == new Vector3(0, 1, 0))
+                                    newFace.Downface = true;
 
-                            mesh.Faces.Add(newFace);
+                                mesh.Faces.Add(newFace);
+                            }
+                            catch { }
                         }
 
                         mesh.CalculateCenter();
@@ -366,12 +379,12 @@ namespace MCSkinn.Scripts.Models
             public float sizeOfs;
             public bool mirrored;
 
-            public ModelBox(ModelRenderer renderer, int p_i46359_2_, int p_i46359_3_, float p_i46359_4_, float p_i46359_5_, float p_i46359_6_, int p_i46359_7_, int p_i46359_8_, int p_i46359_9_, float p_i46359_10_) :
-                this(renderer, p_i46359_2_, p_i46359_3_, p_i46359_4_, p_i46359_5_, p_i46359_6_, p_i46359_7_, p_i46359_8_, p_i46359_9_, p_i46359_10_, renderer.mirror)
+            public ModelBox(ModelRenderer renderer, int p_i46359_2_, int p_i46359_3_, float p_i46359_4_, float p_i46359_5_, float p_i46359_6_, int p_i46359_7_, int p_i46359_8_, int p_i46359_9_, float p_i46359_10_, bool isSurface = false) :
+                this(renderer, p_i46359_2_, p_i46359_3_, p_i46359_4_, p_i46359_5_, p_i46359_6_, p_i46359_7_, p_i46359_8_, p_i46359_9_, p_i46359_10_, renderer.mirror,isSurface)
             {
             }
 
-            public ModelBox(ModelRenderer renderer, int textureX, int textureY, float p_i46301_4_, float p_i46301_5_, float p_i46301_6_, int p_i46301_7_, int p_i46301_8_, int p_i46301_9_, float p_i46301_10_, bool p_i46301_11_)
+            public ModelBox(ModelRenderer renderer, int textureX, int textureY, float p_i46301_4_, float p_i46301_5_, float p_i46301_6_, int p_i46301_7_, int p_i46301_8_, int p_i46301_9_, float p_i46301_10_, bool p_i46301_11_, bool isSurface= false)
             {
                 this.textureX = textureX;
                 this.textureY = textureY;
@@ -403,34 +416,62 @@ namespace MCSkinn.Scripts.Models
                     p_i46301_4_ = f3;
                 }
 
-                PositionTextureVertex positiontexturevertex7 = new PositionTextureVertex(p_i46301_4_, p_i46301_5_, p_i46301_6_, 0.0F, 0.0F);
-                PositionTextureVertex positiontexturevertex = new PositionTextureVertex(f, p_i46301_5_, p_i46301_6_, 0.0F, 8.0F);
-                PositionTextureVertex positiontexturevertex1 = new PositionTextureVertex(f, f1, p_i46301_6_, 8.0F, 8.0F);
-                PositionTextureVertex positiontexturevertex2 = new PositionTextureVertex(p_i46301_4_, f1, p_i46301_6_, 8.0F, 0.0F);
-                PositionTextureVertex positiontexturevertex3 = new PositionTextureVertex(p_i46301_4_, p_i46301_5_, f2, 0.0F, 0.0F);
-                PositionTextureVertex positiontexturevertex4 = new PositionTextureVertex(f, p_i46301_5_, f2, 0.0F, 8.0F);
-                PositionTextureVertex positiontexturevertex5 = new PositionTextureVertex(f, f1, f2, 8.0F, 8.0F);
-                PositionTextureVertex positiontexturevertex6 = new PositionTextureVertex(p_i46301_4_, f1, f2, 8.0F, 0.0F);
-                vertexPositions[0] = positiontexturevertex7;
-                vertexPositions[1] = positiontexturevertex;
-                vertexPositions[2] = positiontexturevertex1;
-                vertexPositions[3] = positiontexturevertex2;
-                vertexPositions[4] = positiontexturevertex3;
-                vertexPositions[5] = positiontexturevertex4;
-                vertexPositions[6] = positiontexturevertex5;
-                vertexPositions[7] = positiontexturevertex6;
-                quadList[0] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex4, positiontexturevertex, positiontexturevertex1, positiontexturevertex5 }, textureX + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_, textureX + p_i46301_9_ + p_i46301_7_ + p_i46301_9_, textureY + p_i46301_9_ + p_i46301_8_, renderer.textureWidth, renderer.textureHeight);
-                quadList[1] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex7, positiontexturevertex3, positiontexturevertex6, positiontexturevertex2 }, textureX, textureY + p_i46301_9_, textureX + p_i46301_9_, textureY + p_i46301_9_ + p_i46301_8_, renderer.textureWidth, renderer.textureHeight);
-                quadList[2] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex4, positiontexturevertex3, positiontexturevertex7, positiontexturevertex }, textureX + p_i46301_9_, textureY, textureX + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_, renderer.textureWidth, renderer.textureHeight);
-                quadList[3] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex1, positiontexturevertex2, positiontexturevertex6, positiontexturevertex5 }, textureX + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_, textureX + p_i46301_9_ + p_i46301_7_ + p_i46301_7_, textureY, renderer.textureWidth, renderer.textureHeight);
-                quadList[4] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex, positiontexturevertex7, positiontexturevertex2, positiontexturevertex1 }, textureX + p_i46301_9_, textureY + p_i46301_9_, textureX + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_ + p_i46301_8_, renderer.textureWidth, renderer.textureHeight);
-                quadList[5] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex3, positiontexturevertex4, positiontexturevertex5, positiontexturevertex6 }, textureX + p_i46301_9_ + p_i46301_7_ + p_i46301_9_, textureY + p_i46301_9_, textureX + p_i46301_9_ + p_i46301_7_ + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_ + p_i46301_8_, renderer.textureWidth, renderer.textureHeight);
+                if (!isSurface)
+                {
+                    PositionTextureVertex positiontexturevertex7 = new PositionTextureVertex(p_i46301_4_, p_i46301_5_, p_i46301_6_, 0.0F, 0.0F);
+                    PositionTextureVertex positiontexturevertex = new PositionTextureVertex(f, p_i46301_5_, p_i46301_6_, 0.0F, 8.0F);
+                    PositionTextureVertex positiontexturevertex1 = new PositionTextureVertex(f, f1, p_i46301_6_, 8.0F, 8.0F);
+                    PositionTextureVertex positiontexturevertex2 = new PositionTextureVertex(p_i46301_4_, f1, p_i46301_6_, 8.0F, 0.0F);
+                    PositionTextureVertex positiontexturevertex3 = new PositionTextureVertex(p_i46301_4_, p_i46301_5_, f2, 0.0F, 0.0F);
+                    PositionTextureVertex positiontexturevertex4 = new PositionTextureVertex(f, p_i46301_5_, f2, 0.0F, 8.0F);
+                    PositionTextureVertex positiontexturevertex5 = new PositionTextureVertex(f, f1, f2, 8.0F, 8.0F);
+                    PositionTextureVertex positiontexturevertex6 = new PositionTextureVertex(p_i46301_4_, f1, f2, 8.0F, 0.0F);
+                    vertexPositions[0] = positiontexturevertex7;
+                    vertexPositions[1] = positiontexturevertex;
+                    vertexPositions[2] = positiontexturevertex1;
+                    vertexPositions[3] = positiontexturevertex2;
+                    vertexPositions[4] = positiontexturevertex3;
+                    vertexPositions[5] = positiontexturevertex4;
+                    vertexPositions[6] = positiontexturevertex5;
+                    vertexPositions[7] = positiontexturevertex6;
+                    quadList[0] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex4, positiontexturevertex, positiontexturevertex1, positiontexturevertex5 }, textureX + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_, textureX + p_i46301_9_ + p_i46301_7_ + p_i46301_9_, textureY + p_i46301_9_ + p_i46301_8_, renderer.textureWidth, renderer.textureHeight);
+                    quadList[1] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex7, positiontexturevertex3, positiontexturevertex6, positiontexturevertex2 }, textureX, textureY + p_i46301_9_, textureX + p_i46301_9_, textureY + p_i46301_9_ + p_i46301_8_, renderer.textureWidth, renderer.textureHeight);
+                    quadList[2] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex4, positiontexturevertex3, positiontexturevertex7, positiontexturevertex }, textureX + p_i46301_9_, textureY, textureX + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_, renderer.textureWidth, renderer.textureHeight);
+                    quadList[3] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex1, positiontexturevertex2, positiontexturevertex6, positiontexturevertex5 }, textureX + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_, textureX + p_i46301_9_ + p_i46301_7_ + p_i46301_7_, textureY, renderer.textureWidth, renderer.textureHeight);
+                    quadList[4] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex, positiontexturevertex7, positiontexturevertex2, positiontexturevertex1 }, textureX + p_i46301_9_, textureY + p_i46301_9_, textureX + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_ + p_i46301_8_, renderer.textureWidth, renderer.textureHeight);
+                    quadList[5] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex3, positiontexturevertex4, positiontexturevertex5, positiontexturevertex6 }, textureX + p_i46301_9_ + p_i46301_7_ + p_i46301_9_, textureY + p_i46301_9_, textureX + p_i46301_9_ + p_i46301_7_ + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_ + p_i46301_8_, renderer.textureWidth, renderer.textureHeight);
+                }
+                else
+                {
+                    PositionTextureVertex positiontexturevertex7 = new PositionTextureVertex(p_i46301_4_, p_i46301_5_, p_i46301_6_, 0.0F, 0.0F);
+                    PositionTextureVertex positiontexturevertex = new PositionTextureVertex(f, p_i46301_5_, p_i46301_6_, 0.0F, 8.0F);
+                    PositionTextureVertex positiontexturevertex1 = new PositionTextureVertex(f, f1, p_i46301_6_, 8.0F, 8.0F);
+                    PositionTextureVertex positiontexturevertex2 = new PositionTextureVertex(p_i46301_4_, f1, p_i46301_6_, 8.0F, 0.0F);
+                    PositionTextureVertex positiontexturevertex3 = new PositionTextureVertex(p_i46301_4_, p_i46301_5_, f2, 0.0F, 0.0F);
+                    PositionTextureVertex positiontexturevertex4 = new PositionTextureVertex(f, p_i46301_5_, f2, 0.0F, 8.0F);
+                    PositionTextureVertex positiontexturevertex5 = new PositionTextureVertex(f, f1, f2, 8.0F, 8.0F);
+                    PositionTextureVertex positiontexturevertex6 = new PositionTextureVertex(p_i46301_4_, f1, f2, 8.0F, 0.0F);
+                    vertexPositions[0] = positiontexturevertex7;
+                    vertexPositions[1] = positiontexturevertex;
+                    vertexPositions[2] = positiontexturevertex1;
+                    vertexPositions[3] = positiontexturevertex2;
+                    vertexPositions[4] = positiontexturevertex3;
+                    vertexPositions[5] = positiontexturevertex4;
+                    vertexPositions[6] = positiontexturevertex5;
+                    vertexPositions[7] = positiontexturevertex6;
+                    quadList[0] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex4, positiontexturevertex, positiontexturevertex1, positiontexturevertex5 }, textureX + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_, textureX + p_i46301_9_ + p_i46301_7_ + p_i46301_9_, textureY + p_i46301_9_ + p_i46301_8_, renderer.textureWidth, renderer.textureHeight);
+                    quadList[1] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex7, positiontexturevertex3, positiontexturevertex6, positiontexturevertex2 }, textureX, textureY + p_i46301_9_, textureX + p_i46301_9_, textureY + p_i46301_9_ + p_i46301_8_, renderer.textureWidth, renderer.textureHeight);
+                    quadList[2] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex4, positiontexturevertex3, positiontexturevertex7, positiontexturevertex }, textureX + p_i46301_9_, textureY, textureX + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_, renderer.textureWidth, renderer.textureHeight);
+                    quadList[3] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex1, positiontexturevertex2, positiontexturevertex6, positiontexturevertex5 }, textureX + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_, textureX + p_i46301_9_ + p_i46301_7_ + p_i46301_7_, textureY, renderer.textureWidth, renderer.textureHeight);
+                    quadList[4] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex, positiontexturevertex7, positiontexturevertex2, positiontexturevertex1 }, textureX + p_i46301_9_, textureY + p_i46301_9_, textureX + p_i46301_9_ + p_i46301_7_, textureY + p_i46301_9_ + p_i46301_8_, renderer.textureWidth, renderer.textureHeight);
+                    //quadList[5] = new TexturedQuad(new PositionTextureVertex[] { positiontexturevertex3, positiontexturevertex4, positiontexturevertex5, positiontexturevertex6 }, 0, 0, 0, 0, renderer.textureWidth, renderer.textureHeight);
+                }
 
                 if (p_i46301_11_)
                 {
                     for (int i = 0; i < quadList.Length; ++i)
                     {
-                        quadList[i].flipFace();
+                        quadList[i]?.flipFace();
                     }
                 }
             }
@@ -510,12 +551,12 @@ namespace MCSkinn.Scripts.Models
                 this.part = part;
             }
 
-            public ModelRenderer(ModelBase model, ModelPart part = ModelPart.None) :
+            public ModelRenderer(ModelBase model, ModelPart part = ModelPart.None, bool isSurface = false) :
                 this(model, null, part)
             {
             }
 
-            public ModelRenderer(ModelBase model, int texOffX, int texOffY, ModelPart part = ModelPart.None) :
+            public ModelRenderer(ModelBase model, int texOffX, int texOffY, ModelPart part = ModelPart.None, bool isSurface = false) :
                 this(model, part)
             {
                 setTextureOffset(texOffX, texOffY);
@@ -542,39 +583,39 @@ namespace MCSkinn.Scripts.Models
                 return this;
             }
 
-            public ModelRenderer addBox(string partName, float offX, float offY, float offZ, int width, int height, int depth, bool mirror = false)
+            public ModelRenderer addBox(string partName, float offX, float offY, float offZ, int width, int height, int depth, bool mirror = false, bool isSurface = false)
             {
                 partName = boxName + "." + partName;
                 TextureOffset textureoffset = baseModel.getTextureOffset(partName);
                 setTextureOffset(textureoffset.textureOffsetX, textureoffset.textureOffsetY);
-                cubeList.Add(new ModelBox(this, textureOffsetX, textureOffsetY, offX, offY, offZ, width, height, depth, 0.0F, mirror).setBoxName(partName));
+                cubeList.Add(new ModelBox(this, textureOffsetX, textureOffsetY, offX, offY, offZ, width, height, depth, 0.0F, mirror, isSurface).setBoxName(partName));
                 return this;
             }
 
-            public ModelRenderer addBox(float offX, float offY, float offZ, int width, int height, int depth, string name = null)
+            public ModelRenderer addBox(float offX, float offY, float offZ, int width, int height, int depth, string name = null, bool isSurface = false)
             {
-                cubeList.Add(new ModelBox(this, textureOffsetX, textureOffsetY, offX, offY, offZ, width, height, depth, 0.0F).setBoxName(name));
+                cubeList.Add(new ModelBox(this, textureOffsetX, textureOffsetY, offX, offY, offZ, width, height, depth, 0.0F, isSurface).setBoxName(name));
                 return this;
             }
 
-            public ModelRenderer addBox(float p_178769_1_, float p_178769_2_, float p_178769_3_, int p_178769_4_, int p_178769_5_, int p_178769_6_, bool p_178769_7_, float scale, string name = null)
+            public ModelRenderer addBox(float p_178769_1_, float p_178769_2_, float p_178769_3_, int p_178769_4_, int p_178769_5_, int p_178769_6_, bool p_178769_7_, float scale, string name = null, bool isSurface = false)
             {
-                cubeList.Add(new ModelBox(this, textureOffsetX, textureOffsetY, p_178769_1_, p_178769_2_, p_178769_3_, p_178769_4_, p_178769_5_, p_178769_6_, scale, p_178769_7_).setBoxName(name));
+                cubeList.Add(new ModelBox(this, textureOffsetX, textureOffsetY, p_178769_1_, p_178769_2_, p_178769_3_, p_178769_4_, p_178769_5_, p_178769_6_, scale, p_178769_7_, isSurface).setBoxName(name));
                 return this;
             }
 
-            public ModelRenderer addBox(float p_178769_1_, float p_178769_2_, float p_178769_3_, int p_178769_4_, int p_178769_5_, int p_178769_6_, bool p_178769_7_, string name = null)
+            public ModelRenderer addBox(float p_178769_1_, float p_178769_2_, float p_178769_3_, int p_178769_4_, int p_178769_5_, int p_178769_6_, bool p_178769_7_, string name = null, bool isSurface = false)
             {
-                cubeList.Add(new ModelBox(this, textureOffsetX, textureOffsetY, p_178769_1_, p_178769_2_, p_178769_3_, p_178769_4_, p_178769_5_, p_178769_6_, 0.0F, p_178769_7_).setBoxName(name));
+                cubeList.Add(new ModelBox(this, textureOffsetX, textureOffsetY, p_178769_1_, p_178769_2_, p_178769_3_, p_178769_4_, p_178769_5_, p_178769_6_, 0.0F, p_178769_7_, isSurface).setBoxName(name));
                 return this;
             }
 
             /**
 			 * Creates a textured box. Args: originX, originY, originZ, width, height, depth, scaleFactor.
 			 */
-            public void addBox(float p_78790_1_, float p_78790_2_, float p_78790_3_, int width, int height, int depth, float scaleFactor, string name = null)
+            public void addBox(float p_78790_1_, float p_78790_2_, float p_78790_3_, int width, int height, int depth, float scaleFactor, string name = null, bool isSurface = false)
             {
-                cubeList.Add(new ModelBox(this, textureOffsetX, textureOffsetY, p_78790_1_, p_78790_2_, p_78790_3_, width, height, depth, scaleFactor).setBoxName(name));
+                cubeList.Add(new ModelBox(this, textureOffsetX, textureOffsetY, p_78790_1_, p_78790_2_, p_78790_3_, width, height, depth, scaleFactor, isSurface).setBoxName(name));
             }
 
             public void setRotationPoint(float rotationPointXIn, float rotationPointYIn, float rotationPointZIn)
@@ -850,9 +891,13 @@ namespace MCSkinn.Scripts.Models
                 float f = 0.0F / textureWidth;
                 float f1 = 0.0F / textureHeight;
                 vertices[0] = vertices[0].setTexturePosition(texcoordU2 / textureWidth - f, texcoordV1 / textureHeight + f1);
-                vertices[1] = vertices[1].setTexturePosition(texcoordU1 / textureWidth + f, texcoordV1 / textureHeight + f1);
-                vertices[2] = vertices[2].setTexturePosition(texcoordU1 / textureWidth + f, texcoordV2 / textureHeight - f1);
-                vertices[3] = vertices[3].setTexturePosition(texcoordU2 / textureWidth - f, texcoordV2 / textureHeight - f1);
+                try
+                {
+                    vertices[1] = vertices[1].setTexturePosition(texcoordU1 / textureWidth + f, texcoordV1 / textureHeight + f1);
+                    vertices[2] = vertices[2].setTexturePosition(texcoordU1 / textureWidth + f, texcoordV2 / textureHeight - f1);
+                    vertices[3] = vertices[3].setTexturePosition(texcoordU2 / textureWidth - f, texcoordV2 / textureHeight - f1);
+                }
+                catch { }
             }
 
             public void flipFace()

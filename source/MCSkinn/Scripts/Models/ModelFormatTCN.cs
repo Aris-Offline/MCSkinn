@@ -53,6 +53,7 @@ namespace MCSkinn.Scripts.Models
         public bool IsDecorative;
         public bool IsFixed;
         public bool IsSolid = false;
+        public bool IsSurface = false;
         public bool IsArmor = false;
 
         public override void Parse(XmlNode node)
@@ -71,6 +72,8 @@ namespace MCSkinn.Scripts.Models
                     IsSolid = bool.Parse(child.InnerText);
                 else if (name == "isarmor")
                     IsArmor = bool.Parse(child.InnerText);
+                else if (name == "issurface")
+                    IsSurface = bool.Parse(child.InnerText);
             }
         }
     }
@@ -289,7 +292,7 @@ namespace MCSkinn.Scripts.Models
                             var renderer = new ModelLoader.ModelRenderer(mb, (int)box.TextureOffset.X, (int)box.TextureOffset.Y);
                             renderer.part = box.Part;
                             renderer.addBox(box.Offset.X, box.Offset.Y, box.Offset.Z, (int)box.Size.X, (int)box.Size.Y,
-                                            (int)box.Size.Z, box.IsMirrored, box.Scale, z.name);
+                                        (int)box.Size.Z, box.IsMirrored, box.Scale, z.name, box.IsSurface);
                             renderer.setRotationPoint(box.Position.X, box.Position.Y, box.Position.Z);
                             renderer.rotateAngleX = MathHelper.DegreesToRadians(box.Rotation.X);
                             renderer.rotateAngleY = MathHelper.DegreesToRadians(box.Rotation.Y);
@@ -331,8 +334,8 @@ namespace MCSkinn.Scripts.Models
             }
             else if (fileName.EndsWith(".xml"))
                 document.Load(fileName);
-            else
-                throw new FileLoadException();
+            //else
+                //throw new FileLoadException();
 
             var tcnModel = new TCNFile();
             tcnModel.Parse(document.DocumentElement);

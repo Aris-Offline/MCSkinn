@@ -85,7 +85,14 @@ namespace MCSkinn.Scripts.lemon42.Colors
                     ColorChanged();
             }
         }
-
+        public System.Windows.Media.Color W()
+        {
+            return System.Windows.Media.Color.FromArgb(RGB.A, RGB.R, RGB.G, RGB.B);
+        }
+        public System.Drawing.Color D()
+        {
+            return System.Drawing.Color.FromArgb(RGB.A, RGB.R, RGB.G, RGB.B);
+        }
         public HSVColor HSV
         {
             get { return _hsv; }
@@ -301,6 +308,27 @@ namespace MCSkinn.Scripts.lemon42.Colors
                 G = green;
                 B = blue;
                 A = 255;
+            }
+            public RGBColor(System.Windows.Media.Color c)
+            {
+                R = c.R;
+                G = c.G;
+                B = c.B;
+                A = c.A;
+            }
+            public RGBColor(System.Drawing.Color c)
+            {
+                R = c.R;
+                G = c.G;
+                B = c.B;
+                A = c.A;
+            }
+            public RGBColor(ColorPicker.Models.NotifyableColor c)
+            {
+                R = (byte)Math.Min(255, Math.Max(0, c.RGB_R));
+                G = (byte)Math.Min(255, Math.Max(0, c.RGB_G));
+                B = (byte)Math.Min(255, Math.Max(0, c.RGB_B));
+                A = (byte)Math.Min(255, Math.Max(0, c.A));
             }
 
             public static implicit operator Color(RGBColor c)

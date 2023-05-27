@@ -74,9 +74,9 @@ namespace MCSkinn.Scripts.Tools
 
             ColorPixel c = pixels[x, y];
             Color oldColor = Color.FromArgb(c.Alpha, c.Red, c.Green, c.Blue);
-            ColorManager newColor = (Control.ModifierKeys & Keys.Shift) != 0
-                                        ? Editor.MainForm.ColorPanel.UnselectedColor
-                                        : Editor.MainForm.ColorPanel.SelectedColor;
+            ColorManager newColor = new ColorManager(new ColorManager.RGBColor((Control.ModifierKeys & Keys.Shift) != 0
+                                        ? Editor.MainForm.ColorPanel.SecondaryColor
+                                        : Editor.MainForm.ColorPanel.SelectedColor));
 
             FloodFill(x, y, oldColor, newColor, pixels);
             _done = true;
@@ -112,8 +112,8 @@ namespace MCSkinn.Scripts.Tools
 
             newColor =
                 ((Control.ModifierKeys & Keys.Shift) != 0
-                     ? Editor.MainForm.ColorPanel.UnselectedColor
-                     : Editor.MainForm.ColorPanel.SelectedColor).RGB;
+                     ? Editor.MainForm.ColorPanel.SecondaryColor
+                     : Editor.MainForm.ColorPanel.SelectedColor).W2D();
             pixels[x, y] = new ColorPixel(newColor.R | newColor.G << 8 | newColor.B << 16 | newColor.A << 24);
             return true;
         }

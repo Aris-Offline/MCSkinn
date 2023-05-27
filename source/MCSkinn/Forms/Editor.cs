@@ -49,13 +49,13 @@ using MultiPainter;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using MCSkinn.Scripts.Paril.Components.Shortcuts;
 using MCSkinn.Scripts.Paril.Controls;
-using PopupControl;
 using KeyPressEventArgs = System.Windows.Forms.KeyPressEventArgs;
 using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
-using MCSkinn.Forms.Controls;
 using Brushes = MCSkinn.Forms.Controls.Brushes;
+using Modern = Inkore.UI.WPF.Modern;
+using WPF = System.Windows;
+using WPFC = System.Windows.Controls;
 
 namespace MCSkinn
 {
@@ -63,21 +63,23 @@ namespace MCSkinn
     {
         #region Variables
 
-        private static readonly ShortcutEditor _shortcutEditor = new ShortcutEditor();
+        public static readonly ShortcutEditor _shortcutEditor = new ShortcutEditor();
         private List<BackgroundImage> _backgrounds = new List<BackgroundImage>();
         private Dictionary<Size, Texture> _charPaintSizes = new Dictionary<Size, Texture>();
-        private UndoRedoPanel _redoListBox;
+        public UndoRedoPanel _redoListBox;
         private List<ToolIndex> _tools = new List<ToolIndex>();
-        private UndoRedoPanel _undoListBox;
+        public UndoRedoPanel _undoListBox;
 
         private float _2DCamOffsetX;
         private float _2DCamOffsetY;
+        private float _3DCamOffsetX;
+        private float _3DCamOffsetY;
         private float _2DZoom = 8;
         private Vector3 _3DOffset = Vector3.Zero;
         static float _3DRotationX = 180, _3DRotationY;
         private float _3DZoom = -80;
         private Texture _alphaTex;
-        private UndoBuffer _currentUndoBuffer;
+        public UndoBuffer _currentUndoBuffer;
         private ViewMode _currentViewMode = ViewMode.Perspective;
         private Texture _font;
         private Texture _grassTop;
@@ -160,15 +162,25 @@ namespace MCSkinn
             get
             {
                 if (_selectedTool == _tools[(int)Tools.Camera])
+                    return MouseButtons.Middle;
+                else
+                    return MouseButtons.None;
+            }
+        }
+        public MouseButtons CameraTranslate
+        {
+            get
+            {
+                if (_selectedTool == _tools[(int)Tools.Camera])
                     return MouseButtons.Right;
                 else
                     return MouseButtons.Middle;
             }
         }
 
-        public ColorPanel ColorPanel
+        public ColorPicker.ColorDisplay ColorPanel
         {
-            get { return colorPanel; }
+            get { return Program.Page_Editor.ColorDisplay_MainDisplay; }
         }
 
         public static Model CurrentModel
@@ -181,29 +193,6 @@ namespace MCSkinn
             get { return 200.0f / Renderer.Size.Width; }
         }
 
-        public static Language CurrentLanguage
-        {
-            get { return LanguageHandler.Language; }
-            set
-            {
-                if (LanguageHandler.Language != null &&
-                    LanguageHandler.Language.Item != null)
-                    LanguageHandler.Language.Item.Checked = false;
-
-                LanguageHandler.Language = value;
-
-                GlobalSettings.LanguageFile = LanguageHandler.Language.Culture.Name;
-
-                if (MainForm._selectedTool != null)
-                    if (Program.Window_Main != null)
-                        Program.Window_Main.TextBlock_Status.Text = MainForm._selectedTool.Tool.GetStatusLabelText();
-
-                //MainForm.toolStripStatusLabel1.Text = MainForm._selectedTool.Tool.GetStatusLabelText();
-
-                if (LanguageHandler.Language.Item != null)
-                    LanguageHandler.Language.Item.Checked = true;
-            }
-        }
 
         public static Vector3 CameraPosition { get; private set; }
 
@@ -663,8 +652,8 @@ namespace MCSkinn
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Front);
 
-            if (grassToolStripMenuItem.Checked)
-                DrawSkinnedRectangle(0, GrassY + 0.25f, 0, 1024, 0, 1024, 0, 0, 1024, 1024, _grassTop, 16, 16);
+            if (GlobalSettings.Grass)
+                DrawSkinnedRectangle(0, GrassY + 0.25f, 0, 128, 0, 128, 0, 0, 128, 128, _grassTop, 16, 16);
 
             GL.Disable(EnableCap.CullFace);
 
@@ -1063,7 +1052,7 @@ namespace MCSkinn
                         output.Y >= CurrentModel.DefaultHeight)
                         return false;
 
-                    hitPixel = new Point((int)Math.Floor(output.X), (int)Math.Floor(output.Y));
+                    hitPixel = new Point((int)Math.Floor(output.X * (_lastSkin.Width / CurrentModel.DefaultWidth)), (int)Math.Floor(output.Y * (_lastSkin.Width / CurrentModel.DefaultWidth)));
                     return true;
                 }
 
@@ -1173,7 +1162,7 @@ namespace MCSkinn
 
                         //var coord = u * tc0 + v * tc1 + (1 - u - v) * tc2;
                         var coord = (1 - u - v) * st0 + u * st1 + v * st2;
-                        hitPixel = new Point((int)Math.Floor(coord.X * CurrentModel.DefaultWidth), (int)Math.Floor(coord.Y * CurrentModel.DefaultHeight));
+                        hitPixel = new Point((int)Math.Floor(coord.X * _lastSkin.Width), (int)Math.Floor(coord.Y * _lastSkin.Height));
 
                         return true;
                     }
@@ -1398,59 +1387,64 @@ namespace MCSkinn
 
         private void CalculateMatrices()
         {
-            Rectangle viewport = GetViewport3D();
-            _projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), viewport.Width / (float)viewport.Height, 8, 512);
-
-            viewport = GetViewport2D();
-            _orthoMatrix = Matrix4.CreateOrthographicOffCenter(viewport.Left, viewport.Right, viewport.Bottom, viewport.Top, -1, 1);
-
-            Bounds3 vec = Bounds3.EmptyBounds;
-            Bounds3 allBounds = Bounds3.EmptyBounds;
-            int count = 0;
-
-            if (CurrentModel != null)
+            try
             {
-                var viewMatrix =
-                    Matrix4.CreateTranslation(-(CurrentModel.DefaultWidth / 2), -(CurrentModel.DefaultHeight / 2), 0) *
-                    Matrix4.CreateTranslation((_2DCamOffsetX), (_2DCamOffsetY), 0) *
-                    Matrix4.CreateScale(_2DZoom, _2DZoom, 1) *
-                    Matrix4.CreateTranslation((viewport.Width / 2), (viewport.Height / 2), 0);
+                Rectangle viewport = GetViewport3D();
+                _projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), viewport.Width / (float)viewport.Height, 8, 512);
 
-                _orthoCameraMatrix = viewMatrix * _orthoMatrix;
+                viewport = GetViewport2D();
+                _orthoMatrix = Matrix4.CreateOrthographicOffCenter(viewport.Left, viewport.Right, viewport.Bottom, viewport.Top, -1, 1);
 
-                int meshIndex = 0;
-                foreach (Mesh mesh in CurrentModel.Meshes)
+                Bounds3 vec = Bounds3.EmptyBounds;
+                Bounds3 allBounds = Bounds3.EmptyBounds;
+                int count = 0;
+
+                if (CurrentModel != null)
                 {
-                    allBounds += mesh.Bounds;
+                    var viewMatrix =
+                        Matrix4.CreateTranslation(-(CurrentModel.DefaultWidth / 2), -(CurrentModel.DefaultHeight / 2), 0) *
+                        Matrix4.CreateTranslation((_2DCamOffsetX), (_2DCamOffsetY), 0) *
+                        Matrix4.CreateScale(_2DZoom, _2DZoom, 1) *
+                        Matrix4.CreateTranslation((viewport.Width / 2), (viewport.Height / 2), 0);
 
-                    if (CurrentModel.PartsEnabled[meshIndex])
+                    _orthoCameraMatrix = viewMatrix * _orthoMatrix;
+
+                    int meshIndex = 0;
+                    foreach (Mesh mesh in CurrentModel.Meshes)
                     {
-                        vec += mesh.Bounds;
-                        count++;
+                        allBounds += mesh.Bounds;
+
+                        if (CurrentModel.PartsEnabled[meshIndex])
+                        {
+                            vec += mesh.Bounds;
+                            count++;
+                        }
+
+                        meshIndex++;
                     }
-
-                    meshIndex++;
                 }
+
+                if (count == 0)
+                    vec.Mins = vec.Maxs = allBounds.Mins = allBounds.Maxs = Vector3.Zero;
+
+                GrassY = allBounds.Maxs.Y;
+                Vector3 center = vec.Center;
+
+                _viewMatrix3d =
+                    Matrix4.CreateTranslation(-center.X + _3DOffset.X, -center.Y + _3DOffset.Y, -center.Z + _3DOffset.Z) *
+                    Matrix4.CreateFromAxisAngle(new Vector3(0, -1, 0), MathHelper.DegreesToRadians(_3DRotationY)) *
+                    Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), MathHelper.DegreesToRadians(_3DRotationX)) *
+                    Matrix4.CreateTranslation(_3DCamOffsetX, _3DCamOffsetY, _3DZoom);
+
+                _projectionMatrix = _viewMatrix3d * _projectionMatrix;
+
+                var cameraMatrix = _viewMatrix3d;
+                cameraMatrix.Invert();
+
+                CameraPosition = Vector3.TransformPosition(Vector3.Zero, cameraMatrix);
+
             }
-
-            if (count == 0)
-                vec.Mins = vec.Maxs = allBounds.Mins = allBounds.Maxs = Vector3.Zero;
-
-            GrassY = allBounds.Maxs.Y;
-            Vector3 center = vec.Center;
-
-            _viewMatrix3d =
-                Matrix4.CreateTranslation(-center.X + _3DOffset.X, -center.Y + _3DOffset.Y, -center.Z + _3DOffset.Z) *
-                Matrix4.CreateFromAxisAngle(new Vector3(0, -1, 0), MathHelper.DegreesToRadians(_3DRotationY)) *
-                Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), MathHelper.DegreesToRadians(_3DRotationX)) *
-                Matrix4.CreateTranslation(0, 0, _3DZoom);
-
-            _projectionMatrix = _viewMatrix3d * _projectionMatrix;
-
-            var cameraMatrix = _viewMatrix3d;
-            cameraMatrix.Invert();
-
-            CameraPosition = Vector3.TransformPosition(Vector3.Zero, cameraMatrix);
+            catch { }
         }
 
         private void Setup3D(Rectangle viewport)
@@ -1545,6 +1539,22 @@ namespace MCSkinn
 
                 if (_2DZoom < 0.25f)
                     _2DZoom = 0.25f;
+            }
+
+            CalculateMatrices();
+            Renderer.Invalidate();
+        }
+        public void TranslateView(Point delta, float factor)
+        {
+            if (_currentViewMode == ViewMode.Perspective || (_currentViewMode == ViewMode.Hybrid && _mouseIn3D))
+            {
+                _3DCamOffsetX -= delta.X / _3DZoom;
+                _3DCamOffsetY += delta.Y / _3DZoom;
+            }
+            else
+            {
+                _2DCamOffsetX += delta.X / _2DZoom;
+                _2DCamOffsetY += delta.Y / _2DZoom;
             }
 
             CalculateMatrices();
@@ -1726,8 +1736,8 @@ namespace MCSkinn
 
             if (Program.Window_Main != null)
             {
-                Program.Window_Main.AppBarButton_Undo.IsEnabled = Program.Window_Main.MenuItem_Edit_Undo.IsEnabled = undoToolStripMenuItem.Enabled;
-                Program.Window_Main.AppBarButton_Redo.IsEnabled = Program.Window_Main.MenuItem_Edit_Redo.IsEnabled = redoToolStripMenuItem.Enabled;
+                Program.Page_Editor.Button_Undo.IsEnabled = Program.Page_Editor.DropDownButton_Undo.IsEnabled = Program.Page_Editor.MenuItem_Edit_Undo.IsEnabled = undoToolStripMenuItem.Enabled;
+                Program.Page_Editor.Button_Redo.IsEnabled = Program.Page_Editor.DropDownButton_Redo.IsEnabled = Program.Page_Editor.MenuItem_Edit_Redo.IsEnabled = redoToolStripMenuItem.Enabled;
             }
 
         }
@@ -1802,13 +1812,13 @@ namespace MCSkinn
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (treeView1.SelectedNode == _lastSkin ||
+            if ( //treeView1.SelectedNode == _lastSkin ||
                 !(e.Node is Skin))
                 return;
 
             Renderer.MakeCurrent();
 
-            if (_lastSkin != null && treeView1.SelectedNode != _lastSkin)
+            if (_lastSkin != null) // && treeView1.SelectedNode != _lastSkin)
             {
                 // Copy over the current changes to the tex stored in the skin.
                 // This allows us to pick up where we left off later, without undoing any work.
@@ -1840,8 +1850,8 @@ namespace MCSkinn
                 redoToolStripMenuItem.Enabled = redoToolStripButton.Enabled = false;
                 if (Program.Window_Main != null)
                 {
-                    Program.Window_Main.AppBarButton_Undo.IsEnabled = Program.Window_Main.MenuItem_Edit_Undo.IsEnabled = undoToolStripMenuItem.Enabled;
-                    Program.Window_Main.AppBarButton_Redo.IsEnabled = Program.Window_Main.MenuItem_Edit_Redo.IsEnabled = redoToolStripMenuItem.Enabled;
+                    Program.Page_Editor.DropDownButton_Undo.IsEnabled = Program.Page_Editor.MenuItem_Edit_Undo.IsEnabled = undoToolStripMenuItem.Enabled;
+                    Program.Page_Editor.DropDownButton_Undo.IsEnabled = Program.Page_Editor.MenuItem_Edit_Redo.IsEnabled = redoToolStripMenuItem.Enabled;
                 }
 
             }
@@ -2096,7 +2106,7 @@ namespace MCSkinn
 
         private void backgroundColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var picker = new ColorPicker())
+            using (var picker = new MultiPainter.ColorPicker())
             {
                 picker.CurrentColor = GlobalSettings.BackgroundColor;
 
@@ -2276,57 +2286,58 @@ namespace MCSkinn
 
         public static string GetLanguageString(string id)
         {
-            if (!CurrentLanguage.StringTable.ContainsKey(id))
-            {
-#if BETA
-				MessageBox.Show("Stringtable string not found: " + id);
-#endif
-
-                return id;
-            }
-
-            return CurrentLanguage.StringTable[id];
+            return Program.GetLanguageString(id);
         }
 
-        static void CreateModelDropdownItems(ToolStripItemCollection mainCollection, bool main, Action<Model> callback)
+
+        static void CreateModelDropdownItems(WPFC.ItemCollection mainCollection, bool main, Action<Model> callback, string prefix)
         {
+            Dictionary<string, WPFC.MenuItem> FolderMenus = new Dictionary<string, WPFC.MenuItem>();
             foreach (var x in ModelLoader.Models)
             {
-                ToolStripItemCollection collection = mainCollection;
+                WPFC.ItemCollection collection = mainCollection;
                 string path = Path.GetDirectoryName(x.Value.File.ToString()).Substring(Environment.CurrentDirectory.Length + 7);
+
+                WPFC.MenuItem subi = null;
 
                 while (!string.IsNullOrEmpty(path))
                 {
                     string sub = path.Substring(1, path.IndexOf('\\', 1) == -1 ? (path.Length - 1) : (path.IndexOf('\\', 1) - 1));
 
-                    ToolStripItem[] subMenu = collection.Find(sub, false);
+                    subi = FolderMenus.GetValueOrDefault(ModelToolStripMenuItem.GetName(sub, prefix) + "_FOLDER", null);
 
-                    if (subMenu.Length == 0)
+                    if (subi == null)
                     {
-                        var item = ((ToolStripMenuItem)collection.Add(sub));
-                        item.Name = item.Text;
-                        collection = item.DropDownItems;
+                        var item = new WPFC.MenuItem();
+                        item.Header = sub;
+                        item.Name = ModelToolStripMenuItem.GetName(sub, prefix) + "_FOLDER";
+                        collection.Add(item);
+                        FolderMenus.Add(item.Name, item);
+                        collection = item.Items;
+                        subi = item;
+
                     }
                     else
-                        collection = ((ToolStripMenuItem)subMenu[0]).DropDownItems;
+                    {
+                        collection = subi.Items;
+                    }
 
                     path = path.Remove(0, sub.Length + 1);
                 }
-
-                collection.Add(new ModelToolStripMenuItem(x.Value, main, callback));
+                collection.Add(new ModelToolStripMenuItem(x.Value, main, callback, prefix, subi));
             }
         }
 
         public void FinishedLoadingModels()
         {
-            CreateModelDropdownItems(toolStripDropDownButton1.DropDownItems, true, (model) =>
+            CreateModelDropdownItems(Program.Page_Editor.MenuFlyout_Model.Items, true, (model) =>
             {
                 SetModel(model);
-            });
-            CreateModelDropdownItems(toolStrip2.NewSkinToolStripButton.DropDownItems, false, (model) =>
+            }, "model_");
+            CreateModelDropdownItems(Program.Page_Editor.MenuItem_NewSkin.Items, false, (model) =>
             {
                 PerformNewSkin(model);
-            });
+            }, "create_");
 
             toolStripDropDownButton1.Enabled = true;
             toolStripDropDownButton1.Text = "None";
@@ -2347,6 +2358,8 @@ namespace MCSkinn
         public void BeginFinishedLoadingSkins(List<TreeNode> rootNodes)
         {
             treeView1.BeginUpdate();
+
+            treeView1.Nodes.Clear();
 
             foreach (var root in rootNodes)
                 treeView1.Nodes.Add(root);
@@ -2373,7 +2386,7 @@ namespace MCSkinn
 
         private void languageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CurrentLanguage = (Language)((ToolStripMenuItem)sender).Tag;
+            Program.CurrentLanguage = (Language)((ToolStripMenuItem)sender).Tag;
         }
 
         private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
@@ -2384,7 +2397,7 @@ namespace MCSkinn
         private bool ShowDontAskAgain()
         {
             bool againValue = GlobalSettings.ResChangeDontShowAgain;
-            bool ret = DontAskAgain.Show(CurrentLanguage, "M_IRREVERSIBLE", ref againValue);
+            bool ret = DontAskAgain.Show(Program.CurrentLanguage, "M_IRREVERSIBLE", ref againValue);
             GlobalSettings.ResChangeDontShowAgain = againValue;
 
             return ret;
@@ -2603,22 +2616,29 @@ namespace MCSkinn
 
             if (_oldModel != null)
             {
-                _oldModel.Checked = false;
+                _oldModel.IsChecked = false;
 
-                for (ToolStripItem parent = _oldModel.OwnerItem; parent != null; parent = parent.OwnerItem)
-                    parent.Image = null;
+                //for (WPF.DependencyObject parent = _oldModel.Parent; parent != null; parent = (parent as WPF.FrameworkElement).Parent as WPF.DependencyObject)
+                //    (parent as WPFC.Control).FontWeight = WPF.FontWeights.Light;
+                _oldModel.FontWeight = WPF.FontWeights.Normal;
+                _oldModel.Parent.FontWeight = WPF.FontWeights.Normal;
             }
 
             toolStripDropDownButton1.Text = _lastSkin.Model.Name;
+            Program.Page_Editor.AppBarButton_Viewport_Model.Label = _lastSkin.Model.Name;
             _oldModel = _lastSkin.Model.DropDownItem;
-            _oldModel.Checked = true;
 
             _lastSkin.TransparentParts.Clear();
             _lastSkin.SetTransparentParts();
             FillPartList();
 
-            for (ToolStripItem parent = _oldModel.OwnerItem; parent != null; parent = parent.OwnerItem)
-                parent.Image = Resources.right_arrow_next;
+            //for (WPF.DependencyObject parent = _oldModel.Parent; parent != null; parent = (parent as WPF.FrameworkElement).Parent as WPF.DependencyObject)
+            //    (parent as WPFC.Control).FontWeight = WPF.FontWeights.Bold;
+
+            _oldModel.Parent.FontWeight = WPF.FontWeights.Bold;
+
+            _oldModel.FontWeight = WPF.FontWeights.Bold;
+            //_oldModel.IsChecked = true;
 
             treeView1.Invalidate();
 
@@ -2633,7 +2653,7 @@ namespace MCSkinn
 
         private void mLINECOLORToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var picker = new ColorPicker())
+            using (var picker = new MultiPainter.ColorPicker())
             {
                 picker.CurrentColor = GlobalSettings.DynamicOverlayLineColor;
 
@@ -2651,7 +2671,7 @@ namespace MCSkinn
 
         private void mTEXTCOLORToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var picker = new ColorPicker())
+            using (var picker = new MultiPainter.ColorPicker())
             {
                 picker.CurrentColor = GlobalSettings.DynamicOverlayTextColor;
 
@@ -2669,7 +2689,7 @@ namespace MCSkinn
 
         private void mGRIDCOLORToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var picker = new ColorPicker())
+            using (var picker = new MultiPainter.ColorPicker())
             {
                 picker.CurrentColor = GlobalSettings.DynamicOverlayGridColor;
 
@@ -3260,19 +3280,21 @@ namespace MCSkinn
             InitUnlinkedShortcut("T_TREE_NEWFOLDER", Keys.Control | Keys.Shift | Keys.N, PerformNewFolder);
             InitUnlinkedShortcut("M_NEWSKIN_HERE", Keys.Control | Keys.Shift | Keys.M, () => PerformNewSkin(null));
             InitUnlinkedShortcut("S_COLORSWAP", Keys.S, PerformSwitchColor);
-            InitControlShortcut("S_SWATCH_ZOOMIN", ColorPanel.SwatchContainer.SwatchDisplayer, Keys.Oemplus, PerformSwatchZoomIn);
-            InitControlShortcut("S_SWATCH_ZOOMOUT", ColorPanel.SwatchContainer.SwatchDisplayer, Keys.OemMinus,
-                                PerformSwatchZoomOut);
+            //InitControlShortcut("S_SWATCH_ZOOMIN", ColorPanel.SwatchContainer.SwatchDisplayer, Keys.Oemplus, PerformSwatchZoomIn);
+            //InitControlShortcut("S_SWATCH_ZOOMOUT", ColorPanel.SwatchContainer.SwatchDisplayer, Keys.OemMinus,
+            //                    PerformSwatchZoomOut);
             InitControlShortcut("S_TREEVIEW_ZOOMIN", treeView1, Keys.Control | Keys.Oemplus, PerformTreeViewZoomIn);
             InitControlShortcut("S_TREEVIEW_ZOOMOUT", treeView1, Keys.Control | Keys.OemMinus, PerformTreeViewZoomOut);
             InitUnlinkedShortcut("T_DECRES", Keys.Control | Keys.Shift | Keys.D, PerformDecreaseResolution);
             InitUnlinkedShortcut("T_INCRES", Keys.Control | Keys.Shift | Keys.I, PerformIncreaseResolution);
             InitUnlinkedShortcut("T_RESETCAMERA", Keys.Control | Keys.Shift | Keys.R, PerformResetCamera);
 
-            InitUnlinkedShortcut("T_SWATCHEDIT", Keys.Shift | Keys.S, ColorPanel.SwatchContainer.ToggleEditMode);
-            InitUnlinkedShortcut("T_ADDSWATCH", Keys.Shift | Keys.A, ColorPanel.SwatchContainer.PerformAddSwatch);
-            InitUnlinkedShortcut("T_DELETESWATCH", Keys.Shift | Keys.R, ColorPanel.SwatchContainer.PerformRemoveSwatch);
+            //InitUnlinkedShortcut("T_SWATCHEDIT", Keys.Shift | Keys.S, ColorPanel.SwatchContainer.ToggleEditMode);
+            //InitUnlinkedShortcut("T_ADDSWATCH", Keys.Shift | Keys.A, ColorPanel.SwatchContainer.PerformAddSwatch);
+            //InitUnlinkedShortcut("T_DELETESWATCH", Keys.Shift | Keys.R, ColorPanel.SwatchContainer.PerformRemoveSwatch);
         }
+
+
 
         private void PerformSwitchColor()
         {
@@ -3300,11 +3322,23 @@ namespace MCSkinn
                 _selectedTool.OptionsPanel.Dock = DockStyle.Fill;
                 ToolsPanel.Controls.Add(_selectedTool.OptionsPanel);
             }
+            else
+            {
+                Label la = new Label();
+                la.Text = index.Tool.GetStatusLabelText();
+                la.AutoSize = false;
+                la.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+                la.ForeColor = Color.Gray;
+                la.Font = new Font(la.Font.FontFamily.Name, 10);
+                la.Dock = DockStyle.Fill;
+                ToolsPanel.Controls.Add(la);
+
+            }
 
             //toolStripStatusLabel1.Text = index.Tool.GetStatusLabelText();
 
             if (Program.Window_Main != null)
-                Program.Window_Main.TextBlock_Status.Text = index.Tool.GetStatusLabelText();
+                Program.Page_Editor.TextBlock_Status.Text = index.Tool.GetStatusLabelText();
         }
 
         private void ToolMenuItemClicked(object sender, EventArgs e)
@@ -3371,13 +3405,13 @@ namespace MCSkinn
             return false;
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            if ((e.Handled = CheckKeyShortcut(e)))
-                return;
+        //protected override void OnKeyDown(KeyEventArgs e)
+        //{
+        //    if ((e.Handled = CheckKeyShortcut(e)))
+        //        return;
 
-            base.OnKeyDown(e);
-        }
+        //    base.OnKeyDown(e);
+        //}
 
         private void popoutForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -3427,8 +3461,10 @@ namespace MCSkinn
                 Environment.CurrentDirectory.StartsWith(Environment.ExpandEnvironmentVariables("%temp%")))
             {
                 MessageBox.Show(GetLanguageString("M_TEMP"));
-                Application.Exit();
+                //Application.Exit();
             }
+
+            //tabControl1.ItemSize = new Size(0, 1);
         }
 
         private void DontCloseMe(object sender, ToolStripDropDownClosingEventArgs e)
@@ -3481,18 +3517,22 @@ namespace MCSkinn
             Renderer.Invalidate();
         }
 
-        private void ToggleGrass()
+        public void ToggleGrass()
         {
-            grassToolStripMenuItem.Checked = !grassToolStripMenuItem.Checked;
-            GlobalSettings.Grass = grassToolStripMenuItem.Checked;
+            //grassToolStripMenuItem.Checked = !grassToolStripMenuItem.Checked;
+            //GlobalSettings.Grass = grassToolStripMenuItem.Checked;
+
+            //Program.Page_Editor.MenuItem_View_3D_Grass.IsChecked = !Program.Page_Editor.MenuItem_View_3D_Grass.IsChecked;
+            GlobalSettings.Grass = Program.Page_Editor.MenuItem_View_3D_Grass.IsChecked;
 
             Renderer.Invalidate();
         }
 
-        private void ToggleGhosting()
+        public void ToggleGhosting()
         {
-            ghostHiddenPartsToolStripMenuItem.Checked = !ghostHiddenPartsToolStripMenuItem.Checked;
-            GlobalSettings.Ghost = ghostHiddenPartsToolStripMenuItem.Checked;
+            //ghostHiddenPartsToolStripMenuItem.Checked = !ghostHiddenPartsToolStripMenuItem.Checked;
+            //GlobalSettings.Ghost = ghostHiddenPartsToolStripMenuItem.Checked;
+            GlobalSettings.Ghost = Program.Page_Editor.MenuItem_View_3D_Ghost.IsChecked;
 
             Renderer.Invalidate();
         }
@@ -3539,8 +3579,8 @@ namespace MCSkinn
 
             if (Program.Window_Main != null)
             {
-                Program.Window_Main.AppBarButton_Undo.IsEnabled = Program.Window_Main.MenuItem_Edit_Undo.IsEnabled = undoToolStripMenuItem.Enabled;
-                Program.Window_Main.AppBarButton_Redo.IsEnabled = Program.Window_Main.MenuItem_Edit_Redo.IsEnabled = redoToolStripMenuItem.Enabled;
+                Program.Page_Editor.DropDownButton_Undo.IsEnabled = Program.Page_Editor.MenuItem_Edit_Undo.IsEnabled = undoToolStripMenuItem.Enabled;
+                Program.Page_Editor.DropDownButton_Redo.IsEnabled = Program.Page_Editor.MenuItem_Edit_Redo.IsEnabled = redoToolStripMenuItem.Enabled;
             }
 
             SetCanSave(_lastSkin.Dirty = true);
@@ -3560,24 +3600,34 @@ namespace MCSkinn
 
         private void UndoListBox_MouseClick(object sender, MouseEventArgs e)
         {
-            undoToolStripButton.DropDown.Close();
+            //undoToolStripButton.DropDown.Close();
 
-            if (!_currentUndoBuffer.CanUndo)
-                return;
+            //if (!_currentUndoBuffer.CanUndo)
+            //    return;
 
-            BeginUndo();
-            for (int i = 0; i <= _undoListBox.ListBox.HighestItemSelected; ++i)
-                DoUndo();
-            EndUndo();
+            //BeginUndo();
+            //for (int i = 0; i <= _undoListBox.ListBox.HighestItemSelected; ++i)
+            //    DoUndo();
+            //EndUndo();
         }
 
-        private void undoToolStripButton_DropDownOpening(object sender, EventArgs e)
+        public void undoToolStripButton_DropDownOpening(object sender, EventArgs e)
         {
-            _undoListBox.ListBox.Items.Clear();
+            Program.Page_Editor?.ListView_UndoPanel.Items.Clear();
 
+            int n = _currentUndoBuffer.UndoList.Count();
             foreach (IUndoable x in _currentUndoBuffer.UndoList)
-                _undoListBox.ListBox.Items.Insert(0, x.Action);
+            {
+                //WPFC.MenuItem i = new WPFC.MenuItem();
+                //i.Header = x.Action;
+                //i.Click += MenuItem_UndoListItem_Click;
+                Program.Page_Editor?.ListView_UndoPanel.Items.Insert(0, new WPFC.ListViewItem { DataContext = x.Action, Content = x.Action, Tag = n });
+
+                n = n - 1;
+            }
+            //_undoListBox.ListBox.Items.Insert(0, x.Action);
         }
+
 
         public void BeginRedo()
         {
@@ -3624,12 +3674,18 @@ namespace MCSkinn
             PerformRedo();
         }
 
-        private void redoToolStripButton_DropDownOpening(object sender, EventArgs e)
+        public void redoToolStripButton_DropDownOpening(object sender, EventArgs e)
         {
-            _redoListBox.ListBox.Items.Clear();
+            Program.Page_Editor?.ListView_RedoPanel.Items.Clear();
 
+            int n = _currentUndoBuffer.RedoList.Count();
             foreach (IUndoable x in _currentUndoBuffer.RedoList)
-                _redoListBox.ListBox.Items.Insert(0, x.Action);
+            {
+                Program.Page_Editor?.ListView_RedoPanel.Items.Insert(0, new WPFC.ListViewItem { DataContext = x.Action, Content = x.Action, Tag = n });
+                n = n - 1;
+
+            }
+            // _redoListBox.ListBox.Items.Insert(0, x.Action);
         }
 
         public void SetViewMode(ViewMode newMode)
@@ -3638,19 +3694,32 @@ namespace MCSkinn
             perspectiveToolStripMenuItem.Checked = textureToolStripMenuItem.Checked = hybridViewToolStripMenuItem.Checked = false;
             _currentViewMode = newMode;
 
+            if (Program.Window_Main != null)
+            {
+                Program.Page_Editor.MenuItem_View_ViewMode_3D.IsChecked = false;
+                Program.Page_Editor.MenuItem_View_ViewMode_2D.IsChecked = false;
+                Program.Page_Editor.MenuItem_View_ViewMode_Split.IsChecked = false;
+            }
+
             switch (_currentViewMode)
             {
                 case ViewMode.Orthographic:
                     orthographicToolStripButton.Checked = true;
                     textureToolStripMenuItem.Checked = true;
+                    if (Program.Window_Main != null)
+                        Program.Page_Editor.MenuItem_View_ViewMode_2D.IsChecked = true;
                     break;
                 case ViewMode.Perspective:
                     perspectiveToolStripButton.Checked = true;
                     perspectiveToolStripMenuItem.Checked = true;
+                    if (Program.Window_Main != null)
+                        Program.Page_Editor.MenuItem_View_ViewMode_3D.IsChecked = true;
                     break;
                 case ViewMode.Hybrid:
                     hybridToolStripButton.Checked = true;
                     hybridViewToolStripMenuItem.Checked = true;
+                    if (Program.Window_Main != null)
+                        Program.Page_Editor.MenuItem_View_ViewMode_Split.IsChecked = true;
                     break;
             }
 
@@ -3658,28 +3727,43 @@ namespace MCSkinn
             Renderer.Invalidate();
         }
 
-        private void SetTransparencyMode(TransparencyMode trans)
+        public void SetTransparencyMode(TransparencyMode trans)
         {
             offToolStripMenuItem.Checked = helmetOnlyToolStripMenuItem.Checked = allToolStripMenuItem.Checked = false;
             GlobalSettings.Transparency = trans;
+
+            if (Program.Window_Main != null)
+            {
+                Program.Page_Editor.MenuItem_View_Transparency_All.IsChecked = false;
+                Program.Page_Editor.MenuItem_View_Transparency_Helmet.IsChecked = false;
+                Program.Page_Editor.MenuItem_View_Transparency_Off.IsChecked = false;
+            }
 
             switch (GlobalSettings.Transparency)
             {
                 case TransparencyMode.Off:
                     offToolStripMenuItem.Checked = true;
+                    if (Program.Window_Main != null)
+                        Program.Page_Editor.MenuItem_View_Transparency_Off.IsChecked = true;
                     break;
                 case TransparencyMode.Helmet:
                     helmetOnlyToolStripMenuItem.Checked = true;
+                    if (Program.Window_Main != null)
+                        Program.Page_Editor.MenuItem_View_Transparency_Helmet.IsChecked = true;
                     break;
                 case TransparencyMode.All:
                     allToolStripMenuItem.Checked = true;
+                    if (Program.Window_Main != null)
+                        Program.Page_Editor.MenuItem_View_Transparency_All.IsChecked = true;
                     break;
             }
+
+
 
             Renderer.Invalidate();
         }
 
-        private void ToggleVisiblePart(ModelPart part)
+        public void ToggleVisiblePart(ModelPart part)
         {
             var meshes = new List<Mesh>();
             var item = _partItems[(int)part];
@@ -3701,14 +3785,17 @@ namespace MCSkinn
             Renderer.Invalidate();
         }
 
-        private void ToggleAlphaCheckerboard()
+        public void ToggleAlphaCheckerboard()
         {
             GlobalSettings.AlphaCheckerboard = !GlobalSettings.AlphaCheckerboard;
             alphaCheckerboardToolStripMenuItem.Checked = GlobalSettings.AlphaCheckerboard;
             Renderer.Invalidate();
+
+            if (Program.Window_Main != null)
+                Program.Page_Editor.MenuItem_View_2D_Checkerboard.IsChecked = GlobalSettings.AlphaCheckerboard;
         }
 
-        private void ToggleOverlay()
+        public void ToggleOverlay()
         {
             GlobalSettings.TextureOverlay = !GlobalSettings.TextureOverlay;
             textureOverlayToolStripMenuItem.Checked = GlobalSettings.TextureOverlay;
@@ -3824,7 +3911,7 @@ namespace MCSkinn
             saveToolStripButton.Enabled = saveToolStripMenuItem.Enabled = value;
 
             if (Program.Window_Main != null)
-                Program.Window_Main.AppBarButton_Save.IsEnabled = Program.Window_Main.MenuItem_File_Save.IsEnabled = saveToolStripButton.Enabled;
+                Program.Page_Editor.Button_Save.IsEnabled = Program.Page_Editor.MenuItem_File_Save.IsEnabled = saveToolStripButton.Enabled;
 
             CheckUndo();
 
@@ -4371,21 +4458,27 @@ namespace MCSkinn
 #endif
 
             // Settings
-            mGRIDOPACITYToolStripMenuItem.NumericBox.Minimum = 0;
-            mGRIDOPACITYToolStripMenuItem.NumericBox.Maximum = 255;
-            mGRIDOPACITYToolStripMenuItem.NumericBox.Value = GlobalSettings.DynamicOverlayGridColor.A;
-            mGRIDOPACITYToolStripMenuItem.NumericBox.ValueChanged += new System.EventHandler(mGRIDOPACITYToolStripMenuItem_NumericBox_ValueChanged);
-            mOVERLAYTEXTSIZEToolStripMenuItem.NumericBox.Minimum = 1;
-            mOVERLAYTEXTSIZEToolStripMenuItem.NumericBox.Maximum = 16;
-            mOVERLAYTEXTSIZEToolStripMenuItem.NumericBox.Value = GlobalSettings.DynamicOverlayTextSize;
-            mOVERLAYTEXTSIZEToolStripMenuItem.NumericBox.ValueChanged += new System.EventHandler(mOVERLAYTEXTSIZEToolStripMenuItem_NumericBox_ValueChanged);
-            mLINESIZEToolStripMenuItem.NumericBox.Minimum = 1;
-            mLINESIZEToolStripMenuItem.NumericBox.Maximum = 16;
-            mLINESIZEToolStripMenuItem.NumericBox.Value = GlobalSettings.DynamicOverlayLineSize;
-            mLINESIZEToolStripMenuItem.NumericBox.ValueChanged += new System.EventHandler(mLINESIZEToolStripMenuItem_NumericBox_ValueChanged);
+            try
+            {
+                mGRIDOPACITYToolStripMenuItem.NumericBox.Minimum = 0;
+                mGRIDOPACITYToolStripMenuItem.NumericBox.Maximum = 255;
+                mGRIDOPACITYToolStripMenuItem.NumericBox.Value = GlobalSettings.DynamicOverlayGridColor.A;
+                mGRIDOPACITYToolStripMenuItem.NumericBox.ValueChanged += new System.EventHandler(mGRIDOPACITYToolStripMenuItem_NumericBox_ValueChanged);
+                mOVERLAYTEXTSIZEToolStripMenuItem.NumericBox.Minimum = 1;
+                mOVERLAYTEXTSIZEToolStripMenuItem.NumericBox.Maximum = 16;
+                mOVERLAYTEXTSIZEToolStripMenuItem.NumericBox.Value = GlobalSettings.DynamicOverlayTextSize;
+                mOVERLAYTEXTSIZEToolStripMenuItem.NumericBox.ValueChanged += new System.EventHandler(mOVERLAYTEXTSIZEToolStripMenuItem_NumericBox_ValueChanged);
+                mLINESIZEToolStripMenuItem.NumericBox.Minimum = 1;
+                mLINESIZEToolStripMenuItem.NumericBox.Maximum = 16;
+                mLINESIZEToolStripMenuItem.NumericBox.Value = GlobalSettings.DynamicOverlayLineSize;
+                mLINESIZEToolStripMenuItem.NumericBox.ValueChanged += new System.EventHandler(mLINESIZEToolStripMenuItem_NumericBox_ValueChanged);
 
-            grassToolStripMenuItem.Checked = GlobalSettings.Grass;
-            ghostHiddenPartsToolStripMenuItem.Checked = GlobalSettings.Ghost;
+            }
+            catch { }
+
+            //grassToolStripMenuItem.Checked = GlobalSettings.Grass;
+
+            //ghostHiddenPartsToolStripMenuItem.Checked = GlobalSettings.Ghost;
 
             alphaCheckerboardToolStripMenuItem.Checked = GlobalSettings.AlphaCheckerboard;
             textureOverlayToolStripMenuItem.Checked = GlobalSettings.TextureOverlay;
@@ -4400,9 +4493,16 @@ namespace MCSkinn
             useTextureBasesMenuItem.Checked = GlobalSettings.UseTextureBases;
             mINFINITEMOUSEToolStripMenuItem.Checked = GlobalSettings.InfiniteMouse;
             mRENDERSTATSToolStripMenuItem.Checked = GlobalSettings.RenderBenchmark;
-            treeView1.ItemHeight = GlobalSettings.TreeViewHeight;
+            //treeView1.ItemHeight = GlobalSettings.TreeViewHeight;
             treeView1.Scrollable = true;
-            splitContainer4.SplitterDistance = 74;
+            //splitContainer4.SplitterDistance = 74;
+
+            treeView1.Dock = treeView2.Dock = DockStyle.Fill;
+            treeView1.Visible = true;
+            treeView2.Visible = false;
+
+            treeView1.ItemHeight = SkinTreeView.DefaultTreeViewHeight * DeviceDpi / 96;
+            treeView2.ItemHeight = 28 * DeviceDpi / 96;
         }
 
         public static string GLExtensions { get; private set; }
@@ -4413,8 +4513,10 @@ namespace MCSkinn
         private void Editor_Load(object sender, EventArgs e)
         {
             Program.Form_Editor.Hide();
-            Program.Window_Main.InitializeHosts();
+            Program.Page_Editor.InitializeHosts();
             this.Hide();
+
+
         }
 
         public ToolIndex ToolCamera;
@@ -4493,7 +4595,7 @@ namespace MCSkinn
             LoadShortcutKeys(GlobalSettings.ShortcutKeys);
             _shortcutEditor.ShortcutExists += _shortcutEditor_ShortcutExists;
 
-            Editor.CurrentLanguage = language;
+            Program.CurrentLanguage = language;
             SetSelectedTool(_tools[0]);
 
             Brushes.LoadBrushes();
@@ -4521,6 +4623,7 @@ namespace MCSkinn
             Renderer.Name = "rendererControl";
             Renderer.Size = new Size(641, 580);
             Renderer.TabIndex = 4;
+            Renderer.KeyDown += tabControl1_KeyDown;
 
             ViewportPanel.Controls.Add(Renderer);
             Renderer.BringToFront();
@@ -4552,7 +4655,7 @@ namespace MCSkinn
 
             _undoListBox.ListBox.MouseClick += UndoListBox_MouseClick;
 
-            undoToolStripButton.DropDown = new Popup(_undoListBox);
+            //undoToolStripButton.DropDown = new Popup(_undoListBox);
             undoToolStripButton.DropDownOpening += undoToolStripButton_DropDownOpening;
 
             _redoListBox = new UndoRedoPanel();
@@ -4561,7 +4664,7 @@ namespace MCSkinn
 
             _redoListBox.ListBox.MouseClick += RedoListBox_MouseClick;
 
-            redoToolStripButton.DropDown = new Popup(_redoListBox);
+            //redoToolStripButton.DropDown = new Popup(_redoListBox);
             redoToolStripButton.DropDownOpening += redoToolStripButton_DropDownOpening;
 
             undoToolStripButton.DropDown.AutoClose = redoToolStripButton.DropDown.AutoClose = true;
@@ -4674,6 +4777,27 @@ namespace MCSkinn
         private void toolStrip2_ItemClicked(global::System.Object sender, global::System.Windows.Forms.ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void splitContainer3_Panel1_Paint(global::System.Object sender, global::System.Windows.Forms.PaintEventArgs e)
+        {
+
+        }
+
+        private void tabControl1_KeyDown(global::System.Object sender, global::System.Windows.Forms.KeyEventArgs e)
+        {
+            CheckKeyShortcut(e);
+        }
+
+        private void mDYNAMICOVERLAYToolStripMenuItem_Click(global::System.Object sender, global::System.EventArgs e)
+        {
+
+        }
+
+        private void Editor_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            treeView1.ItemHeight = SkinTreeView.DefaultTreeViewHeight * e.DeviceDpiNew / 96;
+            treeView2.ItemHeight = 28 * e.DeviceDpiNew / 96;
         }
     }
 }

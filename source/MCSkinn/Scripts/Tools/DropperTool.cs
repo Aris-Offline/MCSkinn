@@ -45,9 +45,9 @@ namespace MCSkinn.Scripts.Tools
             ColorManager oldColor = ColorManager.FromRGBA(c.Red, c.Green, c.Blue, c.Alpha);
 
             if ((Control.ModifierKeys & Keys.Shift) != 0)
-                Editor.MainForm.ColorPanel.UnselectedColor = oldColor;
+                Editor.MainForm.ColorPanel.SecondaryColor = oldColor.W();
             else
-                Editor.MainForm.ColorPanel.SelectedColor = oldColor;
+                Editor.MainForm.ColorPanel.SelectedColor = oldColor.W();
             return false;
         }
 

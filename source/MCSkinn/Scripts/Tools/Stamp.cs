@@ -189,7 +189,7 @@ namespace MCSkinn.Scripts.Tools
                     byte maxAlpha = color.A;
                     var alphaToAdd =
                         (float)
-                        (byte)(brush[rx, ry] * 255 * (Editor.MainForm.ColorPanel.SelectedColor.RGB.A / 255.0f * (color.A / 255.0f)));
+                        (byte)(brush[rx, ry] * 255 * (Editor.MainForm.ColorPanel.SelectedColor.A / 255.0f * (color.A / 255.0f)));
 
                     if (!incremental && _undo.Points.ContainsKey(new Point(xx, yy)) &&
                         _undo.Points[new Point(xx, yy)].Item2.TotalAlpha >= maxAlpha)
