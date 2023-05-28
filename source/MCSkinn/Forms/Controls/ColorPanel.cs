@@ -400,8 +400,9 @@ namespace MCSkinn.Forms.Controls
                 SetColor(ColorManager.FromRGBA(r, g, b, a));
                 _editingHex = false;
             }
-            catch
+            catch (Exception ex)
             {
+                Program.Log(ex, false);
             }
         }
 

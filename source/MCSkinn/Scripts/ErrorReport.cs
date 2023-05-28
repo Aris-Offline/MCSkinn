@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace MCSkinn.Scripts.ExceptionHandler
+namespace MCSkinn.Scripts
 {
     public struct StackFrame
     {
@@ -47,6 +47,35 @@ namespace MCSkinn.Scripts.ExceptionHandler
 
     public class ErrorReport
     {
+        public static ErrorReport Construct(Exception topException)
+        {
+            ErrorReport report = new ErrorReport();
+
+            report.Data = new List<ExceptionData>();
+
+            report.UserData = new Dictionary<string, string>();
+
+            for (var ex = topException; ex != null; ex = ex.InnerException)
+                report.Data.Add(new ExceptionData(ex));
+
+            // build GL info
+            report.OpenGLData = new Dictionary<string, string>();
+
+            if (!string.IsNullOrWhiteSpace(Editor.GLVendor))
+                report.OpenGLData.Add("OpenGL", Editor.GLVendor + " " + Editor.GLVersion + " " + Editor.GLRenderer);
+            else
+                report.OpenGLData.Add("OpenGL", "Not Loaded");
+
+            // build software info
+            report.SoftwareData = new Dictionary<string, string>();
+
+            report.SoftwareData.Add("OS", Environment.OSVersion.ToString() + " " + (Inkore.Coreworks.Windows.Helpers.SystemHelper.Is64BitOperatingSystem() ? "x64" : "x86"));
+            report.SoftwareData.Add(".NET Version", Environment.Version.ToString());
+
+            return report;
+        }
+
+
         public static readonly uint MagicHeader = 0xDEADF00D;
         public static readonly uint VersionHeader = 1;
 

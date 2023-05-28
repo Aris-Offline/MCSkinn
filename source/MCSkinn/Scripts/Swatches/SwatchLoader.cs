@@ -36,7 +36,7 @@ namespace MCSkinn.Scripts.Swatches
         public static void LoadSwatches()
         {
             Swatches = new List<ISwatch>();
-            AddDirectory(GlobalSettings.GetDataURI("Swatches"), Swatches);
+            //AddDirectory(GlobalSettings.GetDataURI("Swatches"), Swatches);
         }
 
         public static void FinishedLoadingSwatches()

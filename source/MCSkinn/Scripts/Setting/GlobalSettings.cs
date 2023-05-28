@@ -16,6 +16,7 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
@@ -83,7 +84,7 @@ namespace MCSkinn.Scripts.Setting
         public static string ShortcutKeys { get; set; }
 
         [Savable]
-        [DefaultValue("135 206 235 255")]
+        [DefaultValue("230 240 250 255")]
         [TypeSerializer(typeof(ColorSerializer), true)]
         public static Color BackgroundColor { get; set; }
 
@@ -188,7 +189,7 @@ namespace MCSkinn.Scripts.Setting
                 Settings = new Settings();
                 Settings.Structures.Add(typeof(GlobalSettings));
 
-                Settings.Load(GetDataURI("settings.ini"));
+                Settings.Load(GetDataURI("MCSkinn.ini"));
 
                 for (var i = 0; i < SkinDirectories.Length; ++i)
                 {
@@ -202,8 +203,10 @@ namespace MCSkinn.Scripts.Setting
 
                 Loaded = true;
             }
-            catch
-            {
+            catch (Exception ex) 
+            { 
+                Program.Log(ex, false);
+
                 Settings.LoadDefaults();
                 Loaded = false;
             }
@@ -213,7 +216,7 @@ namespace MCSkinn.Scripts.Setting
 
         public static void Save()
         {
-            Settings.Save(GetDataURI("settings.ini"));
+            Settings.Save(GetDataURI("MCSkinn.ini"));
         }
     }
 }

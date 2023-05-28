@@ -36,7 +36,10 @@ namespace MCSkinn.Forms.Controls
             {
                 this.Style = App.Current.FindResource("DefaultMenuItemStyle") as Style;
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Program.Log(ex, false);
+            }
 
             if (IsMain)
                 Model.DropDownItem = this;

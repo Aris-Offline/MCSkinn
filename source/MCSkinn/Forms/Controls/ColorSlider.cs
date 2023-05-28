@@ -16,6 +16,7 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using MCSkinn;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -252,12 +253,12 @@ namespace MB.Controls
 					}
 				}
 			}
-			catch
-			{
-				//	Console.WriteLine("DrawBackGround Error in " + Slider.Name + ":" + Err.Message);
-			}
-			finally
-			{
+            catch (Exception ex)
+            {
+                Program.Log(ex, false);
+            }
+            finally
+            {
 			}
 		}
 

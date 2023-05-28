@@ -1,4 +1,4 @@
-﻿using MCSkinn.Scripts.Languages;
+﻿using Inkore.Coreworks.Localization;
 
 namespace MCSkinn.Swatches
 {
@@ -30,7 +30,7 @@ namespace MCSkinn.Swatches
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.languageProvider1 = new MCSkinn.Scripts.Languages.LanguageProvider();
+			this.languageProvider1 = new Inkore.Coreworks.Localization.LanguageProvider();
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();

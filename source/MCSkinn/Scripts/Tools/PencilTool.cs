@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using MCSkinn.Scripts.Paril.Drawing;
 using MCSkinn.Scripts.Paril.OpenGL;
 using MCSkinn.Scripts.Setting;
+using Inkore.Coreworks.Windows.Helpers;
 
 namespace MCSkinn.Scripts.Tools
 {

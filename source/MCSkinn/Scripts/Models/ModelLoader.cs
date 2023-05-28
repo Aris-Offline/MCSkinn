@@ -22,6 +22,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
+using Inkore.Common;
 using MCSkinn.Scripts.Models;
 using MCSkinn.Scripts.Paril.OpenGL;
 using MCSkinn.Scripts.Setting;
@@ -51,7 +52,11 @@ namespace MCSkinn.Scripts.Models
 
                 model.File = new FileInfo(m);
                 Models.Add(model.Path, model);
+
+                Program.Log(LogType.Load, string.Format("Loaded model '{0}' with {1} meshes", model.File.Name, model.Meshes?.Count.ToString()), "at MCSkinn.Scripts.Models.ModelLoader.LoadModels()");
+
             }
+
         }
 
         public static Model GetModelForPath(string p)
@@ -150,7 +155,7 @@ namespace MCSkinn.Scripts.Models
                                     if (!string.IsNullOrEmpty(textureRef))
                                         writer.WriteElementString("DefaultTexture", Convert.ToBase64String(File.ReadAllBytes(rootPos)));
                                 }
-                                catch { }
+                                catch (Exception ex) { Program.Log(ex, false); }
 
                                 int tw = textureWidth, th = textureHeight;
 
@@ -324,7 +329,7 @@ namespace MCSkinn.Scripts.Models
 
                                 mesh.Faces.Add(newFace);
                             }
-                            catch { }
+                            catch (Exception ex) { Program.Log(ex, false); }
                         }
 
                         mesh.CalculateCenter();
@@ -897,7 +902,7 @@ namespace MCSkinn.Scripts.Models
                     vertices[2] = vertices[2].setTexturePosition(texcoordU1 / textureWidth + f, texcoordV2 / textureHeight - f1);
                     vertices[3] = vertices[3].setTexturePosition(texcoordU2 / textureWidth - f, texcoordV2 / textureHeight - f1);
                 }
-                catch { }
+                catch (Exception ex) { Program.Log(ex, false); }
             }
 
             public void flipFace()

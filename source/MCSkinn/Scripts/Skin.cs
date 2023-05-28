@@ -31,6 +31,7 @@ using Microsoft.VisualBasic.FileIO;
 using OpenTK;
 using MCSkinn.Scripts.Paril.Drawing;
 using MCSkinn.Scripts.Paril.OpenGL;
+using Inkore.Common;
 
 namespace MCSkinn.Scripts
 {
@@ -49,6 +50,9 @@ namespace MCSkinn.Scripts
         {
             Undo = new UndoBuffer(this);
             Name = Path.GetFileNameWithoutExtension(fileName);
+
+            Program.Log(LogType.Load, string.Format("Loaded skin '{0}'", Path.GetFileName(fileName)), "at MCSkinn.Scripts.Skin(string)");
+
         }
 
         public Skin(FileInfo file) :
@@ -186,10 +190,11 @@ namespace MCSkinn.Scripts
                     }
                 }
             }
-            catch (Exception)
-            {
+            catch (Exception ex) 
+            { 
+                Program.Log(ex, false); 
 #if DEBUG
-                throw;
+            throw;
 #endif
                 //MessageBox.Show(string.Format(Editor.GetLanguageString("E_SKINERROR"), File.FullName));
                 return false;

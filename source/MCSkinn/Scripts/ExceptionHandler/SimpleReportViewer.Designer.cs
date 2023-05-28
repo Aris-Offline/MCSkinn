@@ -1,4 +1,4 @@
-﻿using MCSkinn.Scripts.Languages;
+﻿using Inkore.Coreworks.Localization;
 
 namespace MCSkinn.ExceptionHandler
 {
@@ -32,7 +32,7 @@ namespace MCSkinn.ExceptionHandler
 		{
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.button1 = new System.Windows.Forms.Button();
-			this.languageProvider1 = new MCSkinn.Scripts.Languages.LanguageProvider();
+			this.languageProvider1 = new Inkore.Coreworks.Localization.LanguageProvider();
 			this.button2 = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.languageProvider1)).BeginInit();
 			this.SuspendLayout();

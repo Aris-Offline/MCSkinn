@@ -50,10 +50,7 @@ namespace MCSkinn.Scripts.Paril.Settings.Serializers
                                initVector,
                                keySize);
             }
-            catch
-            {
-                return "";
-            }
+            catch (Exception ex) { Program.Log(ex, false); return ""; }
         }
 
         public string Serialize(object obj)

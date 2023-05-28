@@ -1,4 +1,4 @@
-﻿using MCSkinn.Scripts.Languages;
+﻿using Inkore.Coreworks.Localization;
 
 namespace MCSkinn.Forms
 {
@@ -35,7 +35,7 @@ namespace MCSkinn.Forms
 			this.label2 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
-			this.languageProvider1 = new MCSkinn.Scripts.Languages.LanguageProvider();
+			this.languageProvider1 = new Inkore.Coreworks.Localization.LanguageProvider();
 			((System.ComponentModel.ISupportInitialize)(this.languageProvider1)).BeginInit();
 			this.SuspendLayout();
 			// 

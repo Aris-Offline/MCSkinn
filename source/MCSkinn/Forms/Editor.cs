@@ -32,7 +32,7 @@ using MCSkinn.Forms.Controls;
 using MCSkinn.Forms;
 using MCSkinn.Properties;
 using MCSkinn.Scripts;
-using MCSkinn.Scripts.Languages;
+using Inkore.Coreworks.Localization;
 using MCSkinn.Scripts.Macros;
 using MCSkinn.Scripts.Models;
 using MCSkinn.Scripts.Paril.Components.Shortcuts;
@@ -56,6 +56,7 @@ using Brushes = MCSkinn.Forms.Controls.Brushes;
 using Modern = Inkore.UI.WPF.Modern;
 using WPF = System.Windows;
 using WPFC = System.Windows.Controls;
+using Inkore.Common;
 
 namespace MCSkinn
 {
@@ -216,6 +217,8 @@ namespace MCSkinn
 
         public void PerformResetCamera()
         {
+            Program.Log(LogType.Load, "Performing ResetCamera", "at MCSkinn.Editor.PerformResetCamera()");
+
             _2DCamOffsetX = 0;
             _2DCamOffsetY = 0;
             _2DZoom = 8;
@@ -282,7 +285,16 @@ namespace MCSkinn
 
             _charWidths[(byte)' ' - 32] = 4;
 
-            _grassTop = new TextureGL(GlobalSettings.GetDataURI("grass.png"));
+            if (!File.Exists(GlobalSettings.GetDataURI("grass.png")))
+            {
+                _grassTop = new TextureGL(Properties.Resources.grass);
+            }
+            else
+            {
+                _grassTop = new TextureGL(GlobalSettings.GetDataURI("grass.png"));
+
+            }
+
             _grassTop.SetMipmapping(false);
             _grassTop.SetRepeat(true);
 
@@ -290,23 +302,25 @@ namespace MCSkinn
             _dynamicOverlay.Item = mDYNAMICOVERLAYToolStripMenuItem;
             _backgrounds.Add(_dynamicOverlay);
 
-            foreach (string file in Directory.EnumerateFiles(GlobalSettings.GetDataURI("Overlays"), "*.png"))
-            {
-                try
-                {
-                    var image = new TextureGL(file);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+            //foreach (string file in Directory.EnumerateFiles(GlobalSettings.GetDataURI("Overlays"), "*.png"))
+            //{
+            //    try
+            //    {
+            //        var image = new TextureGL(file);
+            //        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            //        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            //        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+            //        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
 
-                    _backgrounds.Add(new BackgroundImage(file, Path.GetFileNameWithoutExtension(file), image));
-                }
-                catch
-                {
-                    MessageBox.Show(this, string.Format(GetLanguageString("B_MSG_OVERLAYERROR"), file));
-                }
-            }
+            //        _backgrounds.Add(new BackgroundImage(file, Path.GetFileNameWithoutExtension(file), image));
+            //    }
+            //    catch(Exception ex)
+            //    {
+            //        Program.Log(ex, false);
+
+            //        MessageBox.Show(this, string.Format(GetLanguageString("B_MSG_OVERLAYERROR"), file));
+            //    }
+            //}
 
             int index = 0;
             foreach (BackgroundImage b in _backgrounds)
@@ -1444,7 +1458,10 @@ namespace MCSkinn
                 CameraPosition = Vector3.TransformPosition(Vector3.Zero, cameraMatrix);
 
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Program.Log(ex, false);
+            }
         }
 
         private void Setup3D(Rectangle viewport)
@@ -1626,11 +1643,12 @@ namespace MCSkinn
                     else
                         _tools[(int)Tools.Camera].Tool.BeginClick(_lastSkin, Point.Empty, e);
                 }
-                catch
+                catch(Exception ex)
                 {
                     backup.Save();
                     saveAllToolStripMenuItem_Click(null, null);
-                    throw;
+
+                    Program.Log(ex, true);
                 }
             }
         }
@@ -1664,11 +1682,12 @@ namespace MCSkinn
                     _mousePoint = e.Location;
                     Renderer.Invalidate();
                 }
-                catch
+                catch(Exception ex)
                 {
                     backup.Save();
                     saveAllToolStripMenuItem_Click(null, null);
-                    throw;
+                    
+                    Program.Log(ex, true);
                 }
             }
         }
@@ -1709,11 +1728,12 @@ namespace MCSkinn
                             _tools[(int)Tools.Camera].Tool.EndClick(currentSkin, _lastSkin, e);
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
                     backup.Save();
                     saveAllToolStripMenuItem_Click(null, null);
-                    throw;
+
+                    Program.Log(ex, true);
                 }
             }
 
@@ -1878,6 +1898,9 @@ namespace MCSkinn
 
             VerifySelectionButtons();
             FillPartList();
+
+            Program.Log(LogType.Info, string.Format("Set current skin to '{0}'", _lastSkin.File.Name), "at MCSkinn.Editor.treeView1_AfterSelect(object, TreeViewEventArgs)");
+
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2405,6 +2428,8 @@ namespace MCSkinn
 
         public void PerformDecreaseResolution()
         {
+            Program.Log(LogType.Load, "Performing DecreaseResolution", "at MCSkinn.Editor.PerformDecreaseResolution()");
+           
             if (!treeView1.Enabled)
                 return;
 
@@ -2416,6 +2441,9 @@ namespace MCSkinn
                 return;
 
             _lastSkin.Resize(_lastSkin.Width / 2, _lastSkin.Height / 2);
+
+            Program.Log(LogType.Info, string.Format("Decreased skin '{0}' to resolution '{1}*{2}'", _lastSkin.File.Name, _lastSkin.Width.ToString(), _lastSkin.Height.ToString()), "at MCSkinn.Editor.PerformDecreaseResolution()");
+
 
             using (var grabber = new ColorGrabber(_lastSkin.GLImage, _lastSkin.Width, _lastSkin.Height))
             {
@@ -2429,6 +2457,8 @@ namespace MCSkinn
 
         public void PerformIncreaseResolution()
         {
+            Program.Log(LogType.Load, "Performing IncreaseResolution", "at MCSkinn.Editor.PerformIncreaseResolution()");
+
             if (!treeView1.Enabled)
                 return;
 
@@ -2447,51 +2477,54 @@ namespace MCSkinn
                 grabber.Texture = _previewPaint;
                 grabber.Save();
             }
+
+            Program.Log(LogType.Info, string.Format("Increased skin '{0}' to resolution '{1}*{2}'", _lastSkin.File.Name, _lastSkin.Width.ToString(), _lastSkin.Height.ToString()), "at MCSkinn.Editor.PerformIncreaseResolution()");
         }
 
         public void PerformImportFromSite()
         {
-            if (!treeView1.Enabled)
-                return;
+            //if (!treeView1.Enabled)
+            //    return;
 
-            string accountName = _importFromSite.Show();
+            //string accountName = _importFromSite.Show();
 
-            if (string.IsNullOrEmpty(accountName))
-                return;
+            //if (string.IsNullOrEmpty(accountName))
+            //    return;
 
-            string url = "http://s3.amazonaws.com/MinecraftSkins/" + accountName + ".png";
+            //string url = "http://s3.amazonaws.com/MinecraftSkins/" + accountName + ".png";
 
-            string folderLocation;
-            TreeNodeCollection collection;
+            //string folderLocation;
+            //TreeNodeCollection collection;
 
-            if (_rightClickedNode == null)
-                _rightClickedNode = treeView1.SelectedNode;
+            //if (_rightClickedNode == null)
+            //    _rightClickedNode = treeView1.SelectedNode;
 
-            GetFolderLocationAndCollectionForNode(treeView1, _rightClickedNode, out folderLocation, out collection);
+            //GetFolderLocationAndCollectionForNode(treeView1, _rightClickedNode, out folderLocation, out collection);
 
-            string newSkinName = accountName;
+            //string newSkinName = accountName;
 
-            while (File.Exists(folderLocation + newSkinName + ".png"))
-                newSkinName += " - " + GetLanguageString("C_NEW");
+            //while (File.Exists(folderLocation + newSkinName + ".png"))
+            //    newSkinName += " - " + GetLanguageString("C_NEW");
 
-            try
-            {
-                byte[] pngData = WebHelpers.DownloadFile(url);
+            //try
+            //{
+            //    byte[] pngData = WebHelpers.DownloadFile(url);
 
-                using (FileStream file = File.Create(folderLocation + newSkinName + ".png"))
-                    file.Write(pngData, 0, pngData.Length);
+            //    using (FileStream file = File.Create(folderLocation + newSkinName + ".png"))
+            //        file.Write(pngData, 0, pngData.Length);
 
-                var skin = new Skin(folderLocation + newSkinName + ".png");
-                collection.Add(skin);
-                skin.SetImages();
+            //    var skin = new Skin(folderLocation + newSkinName + ".png");
+            //    collection.Add(skin);
+            //    skin.SetImages();
 
-                treeView1.Invalidate();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, GetLanguageString("M_SKINERROR") + "\r\n" + ex);
-                return;
-            }
+            //    treeView1.Invalidate();
+            //}
+            //catch (Exception ex)
+            //{
+            //    Program.Log(ex, true);
+            //    MessageBox.Show(this, GetLanguageString("M_SKINERROR") + "\r\n" + ex);
+            //    return;
+            //}
         }
 
         private void mDECRESToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2644,6 +2677,9 @@ namespace MCSkinn
 
             CalculateMatrices();
             Renderer.Invalidate();
+
+            Program.Log(LogType.Info, string.Format("Set current model to '{0}'", Model.Name), "at MCSkinn.Editor.treeView1_AfterSelect(object, TreeViewEventArgs)"); ;
+
         }
 
         private void resetCameraToolStripButton_Click(object sender, EventArgs e)
@@ -2711,6 +2747,8 @@ namespace MCSkinn
 
         private void PerformBrowseTo()
         {
+            Program.Log(LogType.Load, "Performing BrowseTo", "at MCSkinn.Editor.PerformSaveAll()");
+
             if (treeView1.SelectedNode == null)
                 return;
 
@@ -3339,6 +3377,9 @@ namespace MCSkinn
 
             if (Program.Window_Main != null)
                 Program.Page_Editor.TextBlock_Status.Text = index.Tool.GetStatusLabelText();
+
+            Program.Log(LogType.Info, string.Format("Set current tool to '{0}'", index.Name), "at MCSkinn.Editor.SetSelectedTool(ToolIndex)");
+
         }
 
         private void ToolMenuItemClicked(object sender, EventArgs e)
@@ -3375,6 +3416,8 @@ namespace MCSkinn
 
         public static bool PerformShortcut(Keys key, Keys modifiers)
         {
+            Program.Log(LogType.Info, string.Format("Shortcut key down '{0}' ({1})",key.ToString(), modifiers.ToString()), "at MCSkinn.Editor.PerformShortcut()");
+
             foreach (IShortcutImplementor shortcut in _shortcutEditor.Shortcuts)
             {
                 if (shortcut.CanEvaluate() && (shortcut.Keys & ~Keys.Modifiers) == key &&
@@ -3570,6 +3613,9 @@ namespace MCSkinn
                 throw new Exception();
 
             _currentUndoBuffer.Undo();
+
+            Program.Log(LogType.Info, "Undone action", "at MCSkinn.Editor.PerformNewFolder()");
+
         }
 
         public void EndUndo()
@@ -3590,6 +3636,8 @@ namespace MCSkinn
 
         public void PerformUndo()
         {
+            Program.Log(LogType.Load, "Performing Undo", "at MCSkinn.Editor.PerformNameUndo()");
+
             if (!_currentUndoBuffer.CanUndo)
                 return;
 
@@ -3640,6 +3688,9 @@ namespace MCSkinn
                 throw new Exception();
 
             _currentUndoBuffer.Redo();
+
+            Program.Log(LogType.Info, "Redone action", "at MCSkinn.Editor.PerformNewFolder()");
+
         }
 
         public void EndRedo()
@@ -3653,6 +3704,8 @@ namespace MCSkinn
         {
             if (!_currentUndoBuffer.CanRedo)
                 return;
+
+            Program.Log(LogType.Load, "Performing Redo", "at MCSkinn.Editor.PerformRedo()");
 
             BeginRedo();
             DoRedo();
@@ -3973,6 +4026,9 @@ namespace MCSkinn
             Renderer.MakeCurrent();
 
             s.CommitChanges((s == _lastSkin) ? GlobalDirtiness.CurrentSkin : s.GLImage, true);
+
+            Program.Log(LogType.Info, string.Format("Saved skin '{0}'", s.File.Name), "at MCSkinn.Editor.PerformSaveSkin(Skin)");
+
         }
 
         public bool RecursiveNodeIsDirty(TreeNodeCollection nodes)
@@ -4011,12 +4067,16 @@ namespace MCSkinn
 
         public void PerformSaveAll()
         {
+            Program.Log(LogType.Load, "Performing Save all", "at MCSkinn.Editor.PerformSaveAll()");
+
             RecursiveNodeSave(treeView1.Nodes);
             treeView1.Invalidate();
         }
 
         public void PerformSave()
         {
+            Program.Log(LogType.Load, "Performing Save", "at MCSkinn.Editor.PerformSave()");
+
             Skin skin = _lastSkin;
 
             if (skin == null || !skin.Dirty)
@@ -4137,6 +4197,8 @@ namespace MCSkinn
 
         public void PerformImportSkin()
         {
+            Program.Log(LogType.Load, "Performing ImportSkin", "at MCSkinn.Editor.PerformImportSkin()");
+
             if (!treeView1.Enabled)
                 return;
 
@@ -4164,6 +4226,8 @@ namespace MCSkinn
             if (!treeView1.Enabled)
                 return;
 
+            Program.Log(LogType.Load, "Performing NewFolder", "at MCSkinn.Editor.PerformNewFolder()");
+
             string folderLocation;
             TreeNodeCollection collection;
 
@@ -4189,6 +4253,8 @@ namespace MCSkinn
             treeView1.SelectedNode = newNode;
             treeView1.Invalidate();
 
+            Program.Log(LogType.Info, string.Format("New folder '{0}'", newFolderName), "at MCSkinn.Editor.PerformNewFolder()");
+
             PerformNameChange();
         }
 
@@ -4212,6 +4278,8 @@ namespace MCSkinn
         {
             if (!treeView1.Enabled)
                 return;
+
+            Program.Log(LogType.Load, "Performing NewSkin", "at MCSkinn.Editor.PerformNewSkin()");
 
             string folderLocation;
             TreeNodeCollection collection;
@@ -4288,6 +4356,8 @@ namespace MCSkinn
             treeView1.SelectedNode = newSkin;
             treeView1.Invalidate();
 
+            Program.Log(LogType.Info, string.Format("New skin '{0}' from model '{1}'", newSkin.File.Name, specificModel.Name), "at MCSkinn.Editor.PerformNewSkin()");
+
             PerformNameChange();
         }
 
@@ -4317,6 +4387,8 @@ namespace MCSkinn
 
         public void PerformDeleteSkin()
         {
+            Program.Log(LogType.Load, "Performing DeleteSkin", "at MCSkinn.Editor.PerformDeleteSkin()");
+
             if (!treeView1.Enabled)
                 return;
 
@@ -4368,6 +4440,8 @@ namespace MCSkinn
 
         public void PerformCloneSkin()
         {
+            Program.Log(LogType.Load, "Performing CloneSkin", "at MCSkinn.Editor.PerformCloneSkin()");
+
             if (!treeView1.Enabled)
                 return;
 
@@ -4388,6 +4462,9 @@ namespace MCSkinn
             File.Copy(skin.File.FullName, newFileName);
             var newSkin = new Skin(newFileName);
 
+            Program.Log(LogType.Info, string.Format("Cloned skin '{0}'", Path.GetFileName(newFileName)), "at MCSkinn.Editor.PerformCloneSkin()");
+
+
             skin.GetParentCollection().Add(newSkin);
 
             newSkin.SetImages();
@@ -4395,8 +4472,11 @@ namespace MCSkinn
 
         public void PerformNameChange()
         {
+
             if (!treeView1.Enabled)
                 return;
+
+            Program.Log(LogType.Load, "Performing NameChange", "at MCSkinn.Editor.PerformNameChange()");
 
             if (treeView1.SelectedNode != null)
             {
@@ -4423,16 +4503,16 @@ namespace MCSkinn
 
         public void FinishedLoadingLanguages()
         {
-            foreach (Language lang in LanguageLoader.Languages)
-            {
-                lang.Item =
-                    new ToolStripMenuItem((lang.Culture != null)
-                                            ? (char.ToUpper(lang.Culture.NativeName[0]) + lang.Culture.NativeName.Substring(1))
-                                            : lang.Name);
-                lang.Item.Tag = lang;
-                lang.Item.Click += languageToolStripMenuItem_Click;
-                languageToolStripMenuItem.DropDownItems.Add(lang.Item);
-            }
+            //foreach (Language lang in LanguageLoader.Languages)
+            //{
+            //    lang.Item =
+            //        new ToolStripMenuItem((lang.Culture != null)
+            //                                ? (char.ToUpper(lang.Culture.NativeName[0]) + lang.Culture.NativeName.Substring(1))
+            //                                : lang.Name);
+            //    lang.Item.Tag = lang;
+            //    lang.Item.Click += languageToolStripMenuItem_Click;
+            //    languageToolStripMenuItem.DropDownItems.Add(lang.Item);
+            //}
         }
 
         #endregion
@@ -4474,7 +4554,7 @@ namespace MCSkinn
                 mLINESIZEToolStripMenuItem.NumericBox.ValueChanged += new System.EventHandler(mLINESIZEToolStripMenuItem_NumericBox_ValueChanged);
 
             }
-            catch { }
+            catch (Exception ex) { Program.Log(ex, false); }
 
             //grassToolStripMenuItem.Checked = GlobalSettings.Grass;
 
@@ -4595,7 +4675,7 @@ namespace MCSkinn
             LoadShortcutKeys(GlobalSettings.ShortcutKeys);
             _shortcutEditor.ShortcutExists += _shortcutEditor_ShortcutExists;
 
-            Program.CurrentLanguage = language;
+            //Program.CurrentLanguage = language;
             SetSelectedTool(_tools[0]);
 
             Brushes.LoadBrushes();

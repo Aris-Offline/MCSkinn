@@ -1,5 +1,5 @@
 ﻿using MCSkinn.Forms.Controls;
-using MCSkinn.Scripts.Languages;
+using Inkore.Coreworks.Localization;
 using MCSkinn.Scripts.lemon42.Colors;
 using MCSkinn.Scripts.Paril.Controls;
 using System.Windows.Forms;

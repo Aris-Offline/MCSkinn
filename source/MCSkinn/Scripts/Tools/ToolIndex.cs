@@ -18,7 +18,9 @@
 
 using System.Drawing;
 using System.Windows.Forms;
+using Inkore.Common;
 using MCSkinn.Forms.Controls.Tools;
+using MCSkinn.Scripts.Paril.OpenGL;
 
 namespace MCSkinn.Scripts.Tools
 {
@@ -45,6 +47,8 @@ namespace MCSkinn.Scripts.Tools
             Button.Text = name;
             Button.DisplayStyle = ToolStripItemDisplayStyle.Image;
             Button.Tag = this;
+
+            Program.Log(LogType.Load, string.Format("Loaded tool '{0}'", name), "at MCSkinn.Scripts.Tools.ToolIndex(ITool, ToolOptionBase, string, Image, Keys)");
         }
 
         public void SetMeAsTool()

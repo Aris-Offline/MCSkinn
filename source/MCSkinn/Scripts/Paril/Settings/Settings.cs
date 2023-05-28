@@ -16,6 +16,7 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using Inkore.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -266,10 +267,17 @@ namespace MCSkinn.Scripts.Paril.Settings
                             {
                                 object val = _serializer.Deserialize(prop, pair[1], prop.PropertyType);
                                 prop.SetValue(null, val, null);
+
+                                try
+                                {
+                                    Program.Log(LogType.Load, string.Format("Loaded setting '{0}' ('{1}')", prop.Name, val), "at MCSkinn.Scripts.Paril.Settings.Settings.Load(string)");
+                                }
+                                catch(Exception ex) { Program.Log(ex, false); }
                             }
                         }
                     }
                 }
+
             }
 
             reader.Close();

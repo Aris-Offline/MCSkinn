@@ -168,9 +168,10 @@ namespace MCSkinn.Scripts.Paril.Imaging
 
                 return metadata;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new Dictionary<string, string>();
+				Program.Log(ex, false);
+				return new Dictionary<string, string>();
             }
         }
 

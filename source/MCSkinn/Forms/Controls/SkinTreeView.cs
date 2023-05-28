@@ -95,7 +95,10 @@ namespace MCSkinn.Forms.Controls
             {
                 SetWindowLong(Handle, GWL_STYLE, style);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Program.Log(ex, false);
+            }
         }
 
         protected override void OnEnabledChanged(EventArgs e)

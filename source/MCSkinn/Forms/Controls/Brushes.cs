@@ -132,8 +132,9 @@ namespace MCSkinn.Forms.Controls
                     {
                         BrushList.Add(new Brush(file));
                     }
-                    catch
+                    catch(Exception ex)
                     {
+                        Program.Log(ex, false);
                     }
                 }
             }

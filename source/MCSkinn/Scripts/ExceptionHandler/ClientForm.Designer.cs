@@ -1,4 +1,4 @@
-﻿using MCSkinn.Scripts.Languages;
+﻿using Inkore.Coreworks.Localization;
 
 namespace MCSkinn.ExceptionHandler
 {
@@ -42,7 +42,7 @@ namespace MCSkinn.ExceptionHandler
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.checkBox2 = new System.Windows.Forms.CheckBox();
 			this.button2 = new System.Windows.Forms.Button();
-			this.languageProvider1 = new MCSkinn.Scripts.Languages.LanguageProvider();
+			this.languageProvider1 = new Inkore.Coreworks.Localization.LanguageProvider();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();

@@ -18,7 +18,7 @@
 
 using System;
 using System.Windows.Forms;
-using MCSkinn.Scripts.Languages;
+using Inkore.Coreworks.Localization;
 
 namespace MCSkinn.Forms
 {
@@ -52,7 +52,7 @@ namespace MCSkinn.Forms
                 {
                     form.label1.Text = language.StringTable[labelValue];
                 }
-                catch { form.label1.Text = labelValue; }
+                catch(Exception ex) { form.label1.Text = labelValue; Program.Log(ex, false); }
 
                 form.ShowDialog();
 

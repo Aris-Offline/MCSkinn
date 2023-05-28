@@ -1,4 +1,4 @@
-﻿using MCSkinn.Scripts.Languages;
+﻿using Inkore.Coreworks.Localization;
 using MCSkinn.Scripts.Paril.Controls;
 
 namespace MCSkinn

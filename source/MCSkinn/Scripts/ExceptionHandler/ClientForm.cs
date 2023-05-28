@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using MCSkinn.Scripts.ExceptionHandler;
+using MCSkinn.Scripts;
 
 namespace MCSkinn.ExceptionHandler
 {
@@ -106,34 +106,6 @@ namespace MCSkinn.ExceptionHandler
 		private static extern bool IsWow64Process(IntPtr hProcess, out bool wow64Process);
 
 		#endregion
-
-		public static ErrorReport Construct(Exception topException)
-		{
-			ErrorReport report = new ErrorReport();
-
-			report.Data = new List<ExceptionData>();
-
-			report.UserData = new Dictionary<string, string>();
-
-			for (var ex = topException; ex != null; ex = ex.InnerException)
-				report.Data.Add(new ExceptionData(ex));
-
-			// build GL info
-			report.OpenGLData = new Dictionary<string, string>();
-
-			if (!string.IsNullOrWhiteSpace(Editor.GLVendor))
-				report.OpenGLData.Add("OpenGL", Editor.GLVendor + " " + Editor.GLVersion + " " + Editor.GLRenderer);
-			else
-				report.OpenGLData.Add("OpenGL", "Not Loaded");
-
-			// build software info
-			report.SoftwareData = new Dictionary<string, string>();
-
-			report.SoftwareData.Add("OS", Environment.OSVersion.ToString() + " " + (Is64BitOperatingSystem() ? "x64" : "x86"));
-			report.SoftwareData.Add(".NET Version", Environment.Version.ToString());
-
-			return report;
-		}
 
 		private ErrorReport BuildErrorReport()
 		{

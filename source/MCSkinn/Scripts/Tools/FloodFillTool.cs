@@ -25,6 +25,7 @@ using MCSkinn.Scripts.Paril.Drawing;
 using MCSkinn.Scripts.Paril.OpenGL;
 using MCSkinn.Scripts.Setting;
 using OpenTK;
+using Inkore.Coreworks.Windows.Helpers;
 
 namespace MCSkinn.Scripts.Tools
 {
