@@ -12,7 +12,7 @@
 </h1>
 
 <p align="center">Offical Website: <a href="http://www.animasterstudios.com/en-us/products/apps/mcskinn/">http://www.animasterstudios.com/en-us/products/apps/mcskinn/</p>
-
+<p align="center">Give us a star if you like this!</p>
 <p align="center">
   <a href="https://github.com/InkoreStudios/MCSkinn/releases"><img src="https://img.shields.io/github/downloads/InkoreStudios/MCSkinn/total?color=%239F7AEA" alt="Release Downloads"></a>
   <a href="#"><img src="https://img.shields.io/github/repo-size/InkoreStudios/MCSkinn?color=6882C4" alt="GitHub Repo Size"></a>
