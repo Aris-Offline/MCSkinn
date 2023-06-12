@@ -34,7 +34,8 @@
 
 <br>
 
-![](https://github.com/InkoreStudios/MCSkinn/blob/main/docs/images/image_product_mcskinn_screenshot.png?raw=true)
+![](https://github.com/InkoreStudios/MCSkinn/blob/main/docs/images/image_product_mcskinn_screenshot_1.png?raw=true)
+
 
 # ✨ Features
 
@@ -53,65 +54,72 @@
 
 # 📥 Downloads
 
-Click the links below to see and get the latest releases.
+- Click the links below to see and get the latest releases.
 
-| Site  | Link  | Password  |
-| ------------ | ------------ | ------------ |
-| Github  | <https://github.com/InkoreStudios/MCSkinn/releases>  | *(None)*  |
-| Lanzou  | <https://wwyo.lanzouy.com/b04dw34tg>  | bynotyoojun  |
+   | Site  | Link  | Password  |
+   | ------------ | ------------ | ------------ |
+   | Github  | <https://github.com/InkoreStudios/MCSkinn/releases>  | *(None)*  |
+   | Lanzou  | <https://wwyo.lanzouy.com/b04dw34tg>  | bynotyoojun  |
 
 
 # 🙋🏻‍♂️ Contribution
 
-- **React us**
+- **React us!**
 
-  Give us a star or follow me, which really encourages us a lot more than you think!
+  Give us a star, or follow me, which really encourages us a lot more than you think! Watch this project or join our community to get the latest updates.
 
-- **Translate**
+- **Help with translation**
 
-  Help us translate new languages by editing or adding files to [`languages`](https://github.com/InkoreStudios/MCSkinn/tree/main/languages) folder.
+  Help us translate new languages by editing or adding files to [`languages`](https://github.com/InkoreStudios/MCSkinn/tree/main/languages) folder. Use `en-us.lang` as a template to make your own translation, or you can edit the existing translation file to correct the mistakes.
   
-- **Report Bugs**
+- **Report issues or give feedback**
 
-  For those who want to request new features or submit bug reports, click [this link](https://github.com/InkoreStudios/MCSkinn/issues/new/choose) to open a new issue.
+  For those who want to request new features or submit bug reports, click [this link](https://github.com/InkoreStudios/MCSkinn/issues/new/choose) to open a new issue. Also give us feedback in our community or on Github.
 
-- **Create More Skins**
+- **Design your skins**
 
-  Create more beautiful skins with MCSkinn Editor and upload thema into [`skins`](https://github.com/InkoreStudios/MCSkinn/tree/main/skins) folder.
+  Create more beautiful skins with MCSkinn Editor and upload thema into [`skins`](https://github.com/InkoreStudios/MCSkinn/tree/main/skins) folder. The copyright of the skin you made is ALL YOURS, we just put it into samples.
 
 # 📝 License Agreement
 
 - ✔️ **Permissions**
 
-   -  **Private use** You can use this product for private use with no limitations.
+   - [x] **Private use** You can use this product for private use with no limitations.
  
-   -  **Modification** You are allow to modificate this product ONLY WITH THE PUBLIC SOURCE CODE. The versions RELEASED BY US may NOT be everse-engineered, or de-compiled in any manner through current or future available technologies. And modified version can only be privately used.
+   - [x]  **Modification** You are allow to modificate this product ONLY WITH THE PUBLIC SOURCE CODE. The versions RELEASED BY US may NOT be everse-engineered, or de-compiled in any manner through current or future available technologies. And modified version can only be privately used.
 
-   -  **Distribution** You can only distribute the original version built by us. Do not distribute ANY modified version.
+   - [x]  **Distribution** You can only distribute the original version built by us. Do not distribute ANY modified version.
 
-   - **References** You can reference code or files those are OPEN to PUBLIC, but you must label the project and its address when your own project goes public and you are NOT allowed to build a product which has the same or similar features and usages of this product.
+   - [x] **References** You can reference code or files those are OPEN to PUBLIC, but you must label the project and its address when your own project goes public and you are NOT allowed to build a product which has the same or similar features and usages of this product.
 
 - ✖️ **Limitations**
 
-   -  **Commercial use** You can to put THE STAFF YOU MADE with or based on this product (such as skins you made) into commercial uses. But you cannot put THIS APP ITSELF into any commercial use.
+   - [ ]  **Commercial use** You can to put THE STAFF YOU MADE with or based on this product (such as skins you made) into commercial uses. But you cannot put THIS APP ITSELF into any commercial use.
 
-   -  **Liability** We are NOT liable for any damages, loss of data, or any other disadvantage suffered by the Licensee arising out of the use or failure to use this product.
+   - [ ]  **Liability** We are NOT liable for any damages, loss of data, or any other disadvantage suffered by the Licensee arising out of the use or failure to use this product.
 
-# 🤝 Special Thanks to
+# 🤝 Cooperation
 
-- @Paril
-- @Hongshiits
-- @Hehonge051
+- **Special Thanks to**
+  - @Paril
+  - @Hongshiits
+  - @Hehonge051
 
 
 # 🎊 Community
 
-This project is made and maintained by [**NotYoojun**](https://github.com/NotYoojun) from [**Inkore Studios**](https://github.com/InkoreStudios)
+- This project is made and maintained by [**NotYoojun**](https://github.com/NotYoojun) from     [**Inkore Studios**](https://github.com/InkoreStudios)
 
-| Site  | Link  | Type  |
-| ------------ | ------------ | ------------ |
-| Discord Server | <https://discord.gg/m6NPNVk4bs>  | Public  |
-| QQ Channel  | <https://pd.qq.com/s/g3o1pmidm> (1nkoreStudios)  | Public  |
-| QQ Group |<https://jq.qq.com/?_wv=1027&k=KefGAM42> (686027177)  | Public  |
-| Telegram Group | <https://t.me/Inkore_group>  | Public  |
-| Telegram Channel | <https://t.me/Inkore_channel>  | Public  |
+   | Site  | Link  | Type  |
+   | ------------ | ------------ | ------------ |
+   | Discord Server | <https://discord.gg/m6NPNVk4bs>  | Public  |
+   | QQ Channel  | <https://pd.qq.com/s/g3o1pmidm> *(1nkoreStudios)*  | Public  |
+   | QQ Group |<https://jq.qq.com/?_wv=1027&k=KefGAM42> *(686027177)*  | Public  |
+   | Telegram Group | <https://t.me/Inkore_group>  | Public  |
+   | Telegram Channel | <https://t.me/Inkore_channel>  | Public  |
+
+
+---
+
+![](https://github.com/InkoreStudios/MCSkinn/blob/main/docs/images/image_product_mcskinn_screenshot_2.png?raw=true)
+![](https://github.com/InkoreStudios/MCSkinn/blob/main/docs/images/image_product_mcskinn_screenshot_3.png?raw=true)
