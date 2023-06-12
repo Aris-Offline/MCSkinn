@@ -29,8 +29,8 @@ namespace MCSkinn.Scripts.Paril.OpenGL
 
         public void Sort()
         {
-            if (GlobalSettings.RenderBenchmark && Editor.IsRendering)
-                Editor._sortTimer.Start();
+            //if (GlobalSettings.RenderBenchmark && Editor.IsRendering)
+            //    Editor._sortTimer.Start();
 
             _transparentMeshes.Sort(
                 (left, right) =>
@@ -42,16 +42,16 @@ namespace MCSkinn.Scripts.Paril.OpenGL
                 }
                 );
 
-            if (GlobalSettings.RenderBenchmark && Editor.IsRendering)
-                Editor._sortTimer.Stop();
+            //if (GlobalSettings.RenderBenchmark && Editor.IsRendering)
+            //    Editor._sortTimer.Stop();
         }
 
         public void Render()
         {
             Sort();
 
-            if (GlobalSettings.RenderBenchmark && Editor.IsRendering)
-                Editor._batchTimer.Start();
+            //if (GlobalSettings.RenderBenchmark && Editor.IsRendering)
+            //    Editor._batchTimer.Start();
 
             PreRender();
 
@@ -76,8 +76,8 @@ namespace MCSkinn.Scripts.Paril.OpenGL
 
             PostRender();
 
-            if (GlobalSettings.RenderBenchmark && Editor.IsRendering)
-                Editor._batchTimer.Stop();
+            //if (GlobalSettings.RenderBenchmark && Editor.IsRendering)
+            //    Editor._batchTimer.Stop();
 
             _opaqueMeshes.Clear();
             _transparentMeshes.Clear();

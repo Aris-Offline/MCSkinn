@@ -19,9 +19,12 @@ namespace MCSkinn.Scripts.Paril.OpenGL
         public FileInfo File;
         public List<Mesh> Meshes = new List<Mesh>();
         public string Name;
-        public bool[] PartsEnabled;
+        public string DisplayName;
+        public Dictionary<Mesh, bool> PartsEnabled = new Dictionary<Mesh, bool>();
         public string DefaultTexture;
         public ModelToolStripMenuItem DropDownItem { get; set; }
+
+        public bool IsTCNFile { get; set; }
 
         public string Path
         {

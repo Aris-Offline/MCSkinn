@@ -30,7 +30,6 @@ using MCSkinn.Scripts.Paril.OpenGL;
 using Microsoft.VisualBasic.FileIO;
 using OpenTK;
 using MCSkinn.Scripts.Paril.Drawing;
-using MCSkinn.Scripts.Paril.OpenGL;
 using Inkore.Common;
 
 namespace MCSkinn.Scripts
@@ -60,7 +59,15 @@ namespace MCSkinn.Scripts
         {
         }
 
-        public Model Model { get; set; }
+        private Model _model;
+        public Model Model
+        {
+            get 
+            { 
+                return _model; 
+            }
+            set { _model = value; }
+        }
 
         public int Width
         {
@@ -171,22 +178,23 @@ namespace MCSkinn.Scripts
 
                     if (metadata.ContainsKey("Model"))
                     {
-                        Model = ModelLoader.GetModelForPath(metadata["Model"]);
+                        Model = ModelLoader.GetModelByName(metadata["Model"]);
 
                         if (Model == null)
                         {
                             if (image.Height == 64)
-                                Model = ModelLoader.GetModelForPath("Players/Steve");
+                                Model = ModelLoader.GetModelByName("geometry.humanoid.custom");
                             else
-                                Model = ModelLoader.GetModelForPath("Players/Steve (Minimal)");
+                                Model = ModelLoader.GetModelByName("geometry.humanoid.custom.minimal");
                         }
                     }
-                    else
+                    
+                    if (Model == null)
                     {
                         if (image.Height == 64)
-                            Model = ModelLoader.GetModelForPath("Players/Steve");
+                            Model = ModelLoader.GetModelByName("geometry.humanoid.custom");
                         else
-                            Model = ModelLoader.GetModelForPath("Players/Steve (Minimal)");
+                            Model = ModelLoader.GetModelByName("geometry.humanoid.custom.minimal");
                     }
                 }
             }
@@ -292,7 +300,7 @@ namespace MCSkinn.Scripts
                     newBitmap.Dispose();
 
                     var md = new Dictionary<string, string>();
-                    md.Add("Model", Model.Path);
+                    md.Add("Model", Model.Name);
                     PNGMetadata.WriteMetadata(File.FullName, md);
 
                     SetImages(true);

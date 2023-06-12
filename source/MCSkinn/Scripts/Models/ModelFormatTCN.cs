@@ -6,10 +6,20 @@ using System.Xml;
 using ICSharpCode.SharpZipLib.Zip;
 using MCSkinn.Scripts.Paril.OpenGL;
 using OpenTK;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Reflection.Metadata;
+using System.Xml.Linq;
+using Windows.ApplicationModel.Appointments.DataProvider;
+using System.Windows.Media;
+using Inkore.Coreworks.Helpers;
+using System.Windows;
+using System.Windows.Controls;
+using System.Collections.ObjectModel;
 
 namespace MCSkinn.Scripts.Models
 {
-    internal class TCNRenderBase
+    public class TCNRenderBase
     {
         public bool IsMirrored;
         public Vector3 Offset;
@@ -78,7 +88,7 @@ namespace MCSkinn.Scripts.Models
         }
     }
 
-    internal class TCNRenderPlane : TCNRenderBase
+    public class TCNRenderPlane : TCNRenderBase
     {
         public int Side;
 
@@ -96,7 +106,7 @@ namespace MCSkinn.Scripts.Models
         }
     }
 
-    internal class TCNShape
+    public class TCNShape
     {
         private static readonly Dictionary<string, Type> _guidMap = new Dictionary<string, Type>();
         public TCNRenderBase RenderData;
@@ -129,12 +139,25 @@ namespace MCSkinn.Scripts.Models
         }
     }
 
-    internal class TCNFolder
+    public class TCNFolder
     {
         public string Name;
 
-        public List<TCNShape> Shapes = new List<TCNShape>();
+        public Vector3 Pivot = new Vector3(0, 0, 0);
+        public Vector3 BindPoseRotation = new Vector3(0, 0, 0);
+
+
+        public ObservableCollection<TCNShape> Shapes = new ObservableCollection<TCNShape>();
+        public ObservableCollection<TCNFolder> Subfolders = new ObservableCollection<TCNFolder>();
+
         public string type;
+
+        public TCNFolder Parent;
+
+        public string ParentName
+        {
+            get => Parent == null ? "" : Parent.Name;
+        }
 
         public void Parse(XmlNode node)
         {
@@ -157,21 +180,31 @@ namespace MCSkinn.Scripts.Models
                     Shapes.Add(shape);
                 }
             }
+
+        }
+
+        public override string ToString()
+        {
+            return Name + string.Format(" ({0} shapes, {1} folders)", Shapes.Count, Subfolders.Count);
         }
     }
 
-    internal class TCNModel
+    public class TCNModel
     {
         public string BaseClass;
 
         public List<TCNFolder> Geometry = new List<TCNFolder>();
 
         public string Name;
-        public Vector2 TextureSize;
+        public Vector2 TextureSize = new Vector2();
         public string DefaultTexture;
+
+        public bool IsTCNFile;
 
         public void Parse(XmlNode node)
         {
+            IsTCNFile = true;
+
             foreach (XmlNode child in node.ChildNodes)
             {
                 string name = child.Name.ToLower();
@@ -209,6 +242,145 @@ namespace MCSkinn.Scripts.Models
                     DefaultTexture = child.InnerText;
             }
         }
+
+        public void Parse(JToken t_bones)
+        {
+            IsTCNFile = false;
+
+            if(t_bones.Type == JTokenType.Property)
+            {
+                JProperty p_bones = (JProperty)t_bones;
+
+                Dictionary<string, TCNFolder> folders = new Dictionary<string, TCNFolder>();
+                Dictionary<TCNFolder, string> folderParentNames = new Dictionary<TCNFolder, string>();
+
+
+                foreach (JToken t_bonesChild in p_bones.First.Children())
+                {
+                    if(t_bonesChild is JObject)
+                    {
+                        JObject o_bonesChild= (JObject)t_bonesChild;
+                        TCNFolder folder = new TCNFolder();
+                  
+                        foreach (JProperty p_objProp in o_bonesChild.Properties())
+                        {
+
+                            if (p_objProp.Name.ToLower() == "name")
+                            {
+                                folder.Name = ((JValue)p_objProp.Value).Value as string;
+                            }
+                            else if (p_objProp.Name.ToLower() == "pivot")
+                            {
+                                if (p_objProp.Value.Type == JTokenType.Array)
+                                {
+                                    JArray a_pivot = (JArray)p_objProp.Value;
+                                    folder.Pivot.X = (float)a_pivot[0];
+                                    folder.Pivot.Y = (float)a_pivot[1];
+                                    folder.Pivot.Z = (float)a_pivot[2];
+                                }                                
+                            }
+                            else if (p_objProp.Name.ToLower() == "parent")
+                            {
+                                if (!folderParentNames.ContainsKey(folder))
+                                    folderParentNames.Add(folder, ((JValue)p_objProp.Value).Value as string);
+                            }
+                            else if (p_objProp.Name.ToLower() == "bind_pose_rotation")
+                            {
+                                if (p_objProp.Value.Type == JTokenType.Array)
+                                {
+                                    JArray a_bindposerotation = (JArray)p_objProp.Value;
+                                    folder.BindPoseRotation.X = (float)a_bindposerotation[0];
+                                    folder.BindPoseRotation.Y = (float)a_bindposerotation[1];
+                                    folder.BindPoseRotation.Z = (float)a_bindposerotation[2];
+                                }
+
+                            }
+                            else if (p_objProp.Name.ToLower() == "cubes")
+                            {
+                                if (p_objProp.Value.Type == JTokenType.Array)
+                                {
+                                    JArray a_pivot = (JArray)p_objProp.Value;
+                                    
+                                    foreach(JObject o_cube in a_pivot)
+                                    {
+                                        TCNShape shape = new TCNShape();
+                                        shape.RenderData = new TCNRenderBox();
+
+                                        foreach(JProperty p_cubeChild in o_cube.Properties())
+                                        {
+                                            switch(p_cubeChild.Name.ToLower())
+                                            {
+                                                case "origin":
+                                                    if (p_cubeChild.Value.Type == JTokenType.Array)
+                                                    {
+                                                        JArray a_origin = (JArray)p_cubeChild.Value;
+                                                        shape.RenderData.Position.X = (float)a_origin[0];
+                                                        shape.RenderData.Position.Y = -(float)a_origin[1];
+                                                        shape.RenderData.Position.Z = (float)a_origin[2];
+                                                    }
+                                                    break;
+                                                case "size":
+                                                    if (p_cubeChild.Value.Type == JTokenType.Array)
+                                                    {
+                                                        JArray a_origin = (JArray)p_cubeChild.Value;
+                                                        shape.RenderData.Size.X = (float)a_origin[0];
+                                                        shape.RenderData.Size.Y = (float)a_origin[1];
+                                                        shape.RenderData.Size.Z = (float)a_origin[2];
+                                                    }
+                                                    break;
+                                                case "uv":
+                                                    if (p_cubeChild.Value.Type == JTokenType.Array)
+                                                    {
+                                                        JArray a_origin = (JArray)p_cubeChild.Value;
+                                                        shape.RenderData.TextureOffset.X = (float)a_origin[0];
+                                                        shape.RenderData.TextureOffset.Y = (float)a_origin[1];
+                                                    }
+                                                    break;
+                                                case "inflate":
+                                                    shape.RenderData.Scale = (float)TypeHelper.ToDouble(((JValue)p_cubeChild.Value).Value);
+                                                    break;
+                                                case "mirror":
+                                                    if (((JValue)p_cubeChild.Value).Value is bool)
+                                                        shape.RenderData.IsMirrored = (bool)((JValue)p_cubeChild.Value).Value;
+                                                    else if(((JValue)p_cubeChild.Value).Value is string)
+                                                        shape.RenderData.IsMirrored = Convert.ToBoolean(((JValue)p_cubeChild.Value).Value);
+                                                    break;
+                                            }
+                                        }
+
+                                        //shape.RenderData.Rotation = folder.BindPoseRotation;
+                                        shape.RenderData.Position.Y = shape.RenderData.Position.Y - shape.RenderData.Size.Y;
+                                        folder.Shapes.Add(shape);
+                                    }
+                                }
+                            }
+
+                        }
+
+                        while (folders.ContainsKey(folder.Name))
+                        {
+                            folder.Name = folder.Name + "_2";
+                        }
+                        folders.Add(folder.Name, folder);
+                    }
+                }
+
+
+                foreach (KeyValuePair<string, TCNFolder> pair in folders)
+                {
+                    if (folderParentNames.ContainsKey(pair.Value) && folders.ContainsKey(folderParentNames[pair.Value]))
+                    {
+                        folders[folderParentNames[pair.Value]].Subfolders.Add(pair.Value);
+                        pair.Value.Parent = folders[folderParentNames[pair.Value]];
+                    }
+                    else
+                    {
+                        Geometry.Add(pair.Value);
+                    }
+                }
+            }
+        }
+
     }
 
     internal class TCNFile
@@ -225,10 +397,16 @@ namespace MCSkinn.Scripts.Models
         public string ProjectType;
         public string Version;
 
+        public string DisplayName;
+        public bool IsTCNFile = false;
+
+
         public void Parse(XmlNode node)
         {
             if (node.Name != "Techne")
                 return;
+
+            IsTCNFile = true;
 
             foreach (XmlAttribute a in node.Attributes)
             {
@@ -242,6 +420,8 @@ namespace MCSkinn.Scripts.Models
 
                 if (name == "author")
                     Author = child.InnerText;
+                else if (name == "identifier")
+                    Name = child.InnerText;
                 else if (name == "datecreated")
                     DateCreated = child.InnerText;
                 else if (name == "description")
@@ -258,54 +438,237 @@ namespace MCSkinn.Scripts.Models
                         }
                     }
                 }
-                else if (name == "name")
-                    Name = child.InnerText;
                 else if (name == "previewimage")
                     PreviewImage = child.InnerText;
                 else if (name == "projectname")
                     ProjectName = child.InnerText;
                 else if (name == "projecttype")
                     ProjectType = child.InnerText;
+                else if (name == "displayname")
+                    DisplayName = child.InnerText;
             }
         }
 
+        public void Parse(JObject jroot)
+        {
+            IsTCNFile = false;
+
+            foreach (KeyValuePair<string, JToken> pairRoot in jroot)
+            {
+                if(pairRoot.Key.ToLower()== "format_version")
+                {
+                    Version= pairRoot.Value.ToString();
+                }
+                if (pairRoot.Key.ToLower() == "display_name")
+                {
+                    DisplayName = pairRoot.Value.ToString();
+                }
+                else if (pairRoot.Key.ToLower() == "minecraft:geometry")
+                {
+                    var tcnModel = new TCNModel();
+
+                    foreach (JToken t_geometryChild in pairRoot.Value.Values())
+                    {
+                        if (t_geometryChild is JProperty)
+                        {
+                            JProperty p_geometryChild = t_geometryChild as JProperty;
+
+                            if (p_geometryChild.Name.ToLower() == "description")
+                            {
+                                foreach (JToken t_DescriptionChild in p_geometryChild.First.Children())
+                                {
+                                    if (t_DescriptionChild is JProperty)
+                                    {
+                                        JProperty p_DescriptionChild = t_DescriptionChild as JProperty;
+
+                                        switch (p_DescriptionChild.Name.ToLower())
+                                        {
+                                            case "identifier":
+                                                tcnModel.Name =  Name = (p_DescriptionChild.Value as JValue)?.Value as string;
+                                                break;
+                                            case "texture_width":
+                                                tcnModel.TextureSize.X = TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
+                                                break;
+                                            case "texture_height":
+                                                tcnModel.TextureSize.Y = TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
+                                                break;
+                                            case "visible_bounds_offset":
+                                                break;
+                                            case "visible_bounds_width":
+                                                break;
+                                        }
+                                    }
+                                }
+
+                            }
+                            else if (p_geometryChild.Name == "bones")
+                            {
+                                tcnModel.Parse(p_geometryChild);
+                            }
+                        }
+                    }
+
+                    Models.Add(tcnModel);
+
+                }
+                else if (pairRoot.Key.ToLower().StartsWith("geometry."))
+                {
+                    var tcnModel = new TCNModel();
+
+                    tcnModel.Name = Name = pairRoot.Key;
+
+
+                    foreach (JToken t_geometryChild in pairRoot.Value.Children())
+                    {
+
+
+                        if (t_geometryChild is JProperty)
+                        {
+                            JProperty p_geometryChild = (JProperty)t_geometryChild;
+
+                            switch (p_geometryChild.Name.ToLower())
+                            {
+                                case "texturewidth":
+                                    tcnModel.TextureSize.X = TypeHelper.ToInt32((p_geometryChild.Value as JValue)?.Value);
+                                    break;
+                                case "textureheight":
+                                    tcnModel.TextureSize.Y = TypeHelper.ToInt32((p_geometryChild.Value as JValue)?.Value);
+                                    break;
+                                case "visible_bounds_height":
+                                    break;
+                                case "visible_bounds_width":
+                                    break;
+                            }
+                        }
+
+                        if (t_geometryChild is JProperty)
+                        {
+                            JProperty p_geometryChild = t_geometryChild as JProperty;
+
+                            if (p_geometryChild.Name.ToLower() == "description")
+                            {
+                                foreach (JToken t_DescriptionChild in p_geometryChild.First.Children())
+                                {
+                                    if (t_DescriptionChild is JProperty)
+                                    {
+                                        JProperty p_DescriptionChild = t_DescriptionChild as JProperty;
+
+                                        switch (p_DescriptionChild.Name.ToLower())
+                                        {
+                                            case "identifier":
+                                                Name = (p_DescriptionChild.Value as JValue)?.Value as string;
+                                                break;
+                                            case "texture_width":
+                                                tcnModel.TextureSize.X = TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
+                                                break;
+                                            case "texture_height":
+                                                tcnModel.TextureSize.Y = TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
+                                                break;
+                                            case "bones":
+                                                tcnModel.Parse(p_DescriptionChild.Value);
+                                                break;
+                                            case "visible_bounds_width":
+                                                break;
+                                        }
+                                    }
+                                }
+
+                            }
+                            else if (p_geometryChild.Name == "bones")
+                            {
+                                tcnModel.Parse(p_geometryChild);
+                            }
+                        }
+                    }
+
+                    Models.Add(tcnModel);
+
+                }
+            }
+
+
+            //foreach (XmlNode child in node.ChildNodes)
+            //{
+            //    string name = child.Name.ToLower();
+
+            //    if (name == "author")
+            //        Author = child.InnerText;
+            //    else if (name == "datecreated")
+            //        DateCreated = child.InnerText;
+            //    else if (name == "description")
+            //        Description = child.InnerText;
+            //    else if (name == "models")
+            //    {
+            //        foreach (XmlNode modelChild in child.ChildNodes)
+            //        {
+            //            if (modelChild.Name.ToLower() == "model")
+            //            {
+            //                var model = new TCNModel();
+            //                model.Parse(modelChild);
+            //                Models.Add(model);
+            //            }
+            //        }
+            //    }
+            //    else if (name == "name")
+            //        Name = child.InnerText;
+            //    else if (name == "previewimage")
+            //        PreviewImage = child.InnerText;
+            //    else if (name == "projectname")
+            //        ProjectName = child.InnerText;
+            //    else if (name == "projecttype")
+            //        ProjectType = child.InnerText;
+            //}
+        }
+
+
         public Model Convert()
         {
+
             var mb = new ModelLoader.ModelBase();
 
             foreach (TCNModel x in Models)
             {
-                foreach (TCNFolder y in x.Geometry)
+                foreach (TCNFolder folder in x.Geometry)
                 {
-                    foreach (TCNShape z in y.Shapes)
-                    {
-                        mb.textureWidth = (int)x.TextureSize.X;
-                        mb.textureHeight = (int)x.TextureSize.Y;
-
-                        if (z.RenderData == null)
-                            continue;
-
-                        if (z.RenderData is TCNRenderBox)
-                        {
-                            var box = (TCNRenderBox)z.RenderData;
-
-                            var renderer = new ModelLoader.ModelRenderer(mb, (int)box.TextureOffset.X, (int)box.TextureOffset.Y);
-                            renderer.part = box.Part;
-                            renderer.addBox(box.Offset.X, box.Offset.Y, box.Offset.Z, (int)box.Size.X, (int)box.Size.Y,
-                                        (int)box.Size.Z, box.IsMirrored, box.Scale, z.name, box.IsSurface);
-                            renderer.setRotationPoint(box.Position.X, box.Position.Y, box.Position.Z);
-                            renderer.rotateAngleX = MathHelper.DegreesToRadians(box.Rotation.X);
-                            renderer.rotateAngleY = MathHelper.DegreesToRadians(box.Rotation.Y);
-                            renderer.rotateAngleZ = MathHelper.DegreesToRadians(box.Rotation.Z);
-                            renderer.isSolid = box.IsSolid;
-                            renderer.isArmor = box.IsArmor;
-                        }
-                    }
+                    ConvertFolder(mb, folder, x);
                 }
             }
 
-            var model = mb.Compile(Name, 1, (int)Models[0].TextureSize.X, (int)Models[0].TextureSize.Y, Models[0].DefaultTexture);
+            var model = mb.Compile(Name, 1, (int)Models[0].TextureSize.X, (int)Models[0].TextureSize.Y, Models[0].DefaultTexture, DisplayName, IsTCNFile);
             return model;
+        }
+
+        private void ConvertFolder(ModelLoader.ModelBase mb, TCNFolder folder, TCNModel x)
+        {
+            foreach (TCNShape z in folder.Shapes)
+            {
+                mb.textureWidth = (int)x.TextureSize.X;
+                mb.textureHeight = (int)x.TextureSize.Y;
+
+                if (z.RenderData == null)
+                    continue;
+
+                if (z.RenderData is TCNRenderBox)
+                {
+                    var box = (TCNRenderBox)z.RenderData;
+
+                    var renderer = new ModelLoader.ModelRenderer(folder.Name, folder.ParentName, mb, (int)box.TextureOffset.X, (int)box.TextureOffset.Y);
+                    renderer.part = box.Part;
+                    renderer.addBox(box.Offset.X, box.Offset.Y, box.Offset.Z, (int)box.Size.X, (int)box.Size.Y,
+                                (int)box.Size.Z, box.IsMirrored, box.Scale, z.name, box.IsSurface);
+                    renderer.setRotationPoint(box.Position.X, box.Position.Y, box.Position.Z);
+                    renderer.rotateAngleX = MathHelper.DegreesToRadians(box.Rotation.X);
+                    renderer.rotateAngleY = MathHelper.DegreesToRadians(box.Rotation.Y);
+                    renderer.rotateAngleZ = MathHelper.DegreesToRadians(box.Rotation.Z);
+                    renderer.isSolid = box.IsSolid;
+                    renderer.isArmor = box.IsArmor;
+                }
+            }
+
+            foreach(TCNFolder subfolder in folder.Subfolders)
+            {
+                ConvertFolder(mb, subfolder, x);
+            }
         }
     }
 
@@ -315,7 +678,10 @@ namespace MCSkinn.Scripts.Models
 
         public Model Load(string fileName)
         {
-            var document = new XmlDocument();
+            XmlDocument docXml = null;
+            JObject docJson;
+
+            var tcnModel = new TCNFile();
 
             if (fileName.EndsWith(".tcn"))
             {
@@ -327,18 +693,34 @@ namespace MCSkinn.Scripts.Models
                 {
                     if (((ZipEntry)enumerator.Current).Name.EndsWith(".xml"))
                     {
-                        document.Load(file.GetInputStream((ZipEntry)enumerator.Current));
+                        docXml = new XmlDocument();
+                        docXml.Load(file.GetInputStream((ZipEntry)enumerator.Current));
+                       
+                        tcnModel.Parse(docXml.DocumentElement);
+
                         break;
                     }
                 }
             }
             else if (fileName.EndsWith(".xml"))
-                document.Load(fileName);
+            {
+                docXml = new XmlDocument();
+                docXml.Load(fileName);
+                tcnModel.Parse(docXml.DocumentElement);
+            }
+            else if (fileName.EndsWith(".json"))
+            {
+                docJson=JObject.Parse(File.ReadAllText(fileName));
+                tcnModel.Parse(docJson);
+            }
             //else
-                //throw new FileLoadException();
+            //throw new FileLoadException();
 
-            var tcnModel = new TCNFile();
-            tcnModel.Parse(document.DocumentElement);
+
+            if(tcnModel.Models.Count == 0)
+            {
+                return null;
+            }
 
             return tcnModel.Convert();
         }

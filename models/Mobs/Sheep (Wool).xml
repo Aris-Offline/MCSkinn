@@ -1,6 +1,7 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
-	<DateCreated />
+	<Identifier>geometry.sheep</Identifier>
+	<DisplayName>Sheep</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">
