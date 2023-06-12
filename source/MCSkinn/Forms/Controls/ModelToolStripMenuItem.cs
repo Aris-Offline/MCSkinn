@@ -14,7 +14,7 @@ namespace MCSkinn.Forms.Controls
         public Model Model;
         public bool IsMain;
         public Action<Model> Callback;
-        public MenuItem Parent;
+        public MenuItem ParentItem;
         static ModelToolStripMenuItem()
         {
         }
@@ -25,9 +25,9 @@ namespace MCSkinn.Forms.Controls
             Model = model;
             Name = GetName(model.Name, prefix);
             IsMain = main;
-            Header = Model.Name;
+            Header = Model.DisplayName;
             Callback = callback;
-            Parent = parent;         
+            ParentItem = parent;         
             IsCheckable = false;
 
             FontWeight = FontWeights.Normal;

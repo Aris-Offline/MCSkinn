@@ -28,11 +28,16 @@ namespace MCSkinn.Scripts.Paril.OpenGL
         public bool IsSolid;
         public bool IsArmor;
 
-        public Mesh(string name)
+        public string Folder;
+        public string FolderParent;
+
+        public Mesh(string name, string folder, string folderParent)
         {
             Bounds = new Bounds3(new Vector3(float.MaxValue, float.MaxValue, float.MaxValue),
                                  new Vector3(float.MinValue, float.MinValue, float.MinValue));
             Name = name;
+            Folder = folder;
+            FolderParent = folderParent;
         }
 
         public T GetUserData<T>() where

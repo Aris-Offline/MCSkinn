@@ -40,7 +40,6 @@ using MCSkinn.Scripts.Paril.Components.Undo;
 using MCSkinn.Scripts.Paril.Drawing;
 using MCSkinn.Scripts.Paril.Extensions;
 using MCSkinn.Scripts.Paril.Imaging;
-using MCSkinn.Scripts.Paril.Net;
 using MCSkinn.Scripts.Paril.OpenGL;
 using MCSkinn.Scripts.Setting;
 using MCSkinn.Scripts.Tools;
@@ -57,6 +56,7 @@ using Modern = Inkore.UI.WPF.Modern;
 using WPF = System.Windows;
 using WPFC = System.Windows.Controls;
 using Inkore.Common;
+using System.Collections.ObjectModel;
 
 namespace MCSkinn
 {
@@ -100,10 +100,10 @@ namespace MCSkinn
 
         private static bool _screenshotMode;
 
-        public static Stopwatch _renderTimer = new Stopwatch();
-        public static Stopwatch _sortTimer = new Stopwatch();
-        public static Stopwatch _batchTimer = new Stopwatch();
-        public static Stopwatch _compileTimer = new Stopwatch();
+        //public static Stopwatch _renderTimer = new Stopwatch();
+        //public static Stopwatch _sortTimer = new Stopwatch();
+        //public static Stopwatch _batchTimer = new Stopwatch();
+        //public static Stopwatch _compileTimer = new Stopwatch();
         private static bool _firstCalc;
         private static ToolStripMenuItem[] _antialiasOpts;
         private readonly ImportSite _importFromSite = new ImportSite();
@@ -672,8 +672,8 @@ namespace MCSkinn
             GL.Disable(EnableCap.CullFace);
 
             // add meshes
-            if (GlobalSettings.RenderBenchmark && IsRendering)
-                _compileTimer.Start();
+            //if (GlobalSettings.RenderBenchmark && IsRendering)
+            //    _compileTimer.Start();
 
             if (CurrentModel != null)
             {
@@ -681,7 +681,7 @@ namespace MCSkinn
                 foreach (Mesh mesh in CurrentModel.Meshes)
                 {
                     meshIndex++;
-                    bool meshVisible = CurrentModel.PartsEnabled[meshIndex];
+                    bool meshVisible = CurrentModel.PartsEnabled[mesh];
 
                     if (meshVisible == false && !GlobalSettings.Ghost)
                         continue;
@@ -702,8 +702,8 @@ namespace MCSkinn
                 }
             }
 
-            if (GlobalSettings.RenderBenchmark && IsRendering)
-                _compileTimer.Stop();
+            //if (GlobalSettings.RenderBenchmark && IsRendering)
+            //    _compileTimer.Stop();
 
             MeshRenderer.Render();
         }
@@ -955,11 +955,11 @@ namespace MCSkinn
             Vector3 vec0 = new Vector3(); // Edge vector from point 0 to point 1;
             Vector3 vec1 = new Vector3(); // Edge vector from point 0 to point 2 or 3;
             Vector3 pNrm = new Vector3();
-            float absNrmX, absNrmY, absNrmZ, pD = 0.0f;
+            float pD = 0.0f;// float absNrmX, absNrmY, absNrmZ, pD = 0.0f;
             Vector3 tempV3d = new Vector3();
-            float pNrmDotrDir = 0.0f;
+            //float pNrmDotrDir = 0.0f;
 
-            float tempD;
+            //float tempD;
 
             int i, j;
 
@@ -1085,7 +1085,7 @@ namespace MCSkinn
 
                     foreach (var mesh in CurrentModel.Meshes)
                     {
-                        if (!CurrentModel.PartsEnabled[CurrentModel.Meshes.IndexOf(mesh)])
+                        if (!CurrentModel.PartsEnabled[mesh])
                             continue;
 
                         foreach (var face in mesh.Faces)
@@ -1321,8 +1321,8 @@ namespace MCSkinn
                 GL.Color4((byte)255, (byte)255, (byte)255, (byte)255);
 
                 IsRendering = true;
-                if (GlobalSettings.RenderBenchmark)
-                    _renderTimer.Start();
+                //if (GlobalSettings.RenderBenchmark)
+                //    _renderTimer.Start();
 
                 Renderer.MakeCurrent();
 
@@ -1385,7 +1385,7 @@ namespace MCSkinn
                 }
 
                 GL.PopMatrix();
-                _renderTimer.Stop();
+                //_renderTimer.Stop();
 
                 if (!_screenshotMode)
                     Renderer.SwapBuffers();
@@ -1399,7 +1399,7 @@ namespace MCSkinn
 
         Matrix4 _orthoMatrix, _orthoCameraMatrix, _projectionMatrix, _viewMatrix3d;
 
-        private void CalculateMatrices()
+        public void CalculateMatrices()
         {
             try
             {
@@ -1428,7 +1428,7 @@ namespace MCSkinn
                     {
                         allBounds += mesh.Bounds;
 
-                        if (CurrentModel.PartsEnabled[meshIndex])
+                        if (CurrentModel.PartsEnabled[mesh])
                         {
                             vec += mesh.Bounds;
                             count++;
@@ -2654,11 +2654,12 @@ namespace MCSkinn
                 //for (WPF.DependencyObject parent = _oldModel.Parent; parent != null; parent = (parent as WPF.FrameworkElement).Parent as WPF.DependencyObject)
                 //    (parent as WPFC.Control).FontWeight = WPF.FontWeights.Light;
                 _oldModel.FontWeight = WPF.FontWeights.Normal;
-                _oldModel.Parent.FontWeight = WPF.FontWeights.Normal;
+
+                if (_oldModel.ParentItem != null)
+                    _oldModel.ParentItem.FontWeight = WPF.FontWeights.Normal;
             }
 
-            toolStripDropDownButton1.Text = _lastSkin.Model.Name;
-            Program.Page_Editor.AppBarButton_Viewport_Model.Label = _lastSkin.Model.Name;
+            Program.Page_Editor.AppBarButton_Viewport_Model.Label = toolStripDropDownButton1.Text = _lastSkin.Model.DisplayName;
             _oldModel = _lastSkin.Model.DropDownItem;
 
             _lastSkin.TransparentParts.Clear();
@@ -2668,7 +2669,8 @@ namespace MCSkinn
             //for (WPF.DependencyObject parent = _oldModel.Parent; parent != null; parent = (parent as WPF.FrameworkElement).Parent as WPF.DependencyObject)
             //    (parent as WPFC.Control).FontWeight = WPF.FontWeights.Bold;
 
-            _oldModel.Parent.FontWeight = WPF.FontWeights.Bold;
+            if (_oldModel.ParentItem != null)
+                _oldModel.ParentItem.FontWeight = WPF.FontWeights.Bold;
 
             _oldModel.FontWeight = WPF.FontWeights.Bold;
             //_oldModel.IsChecked = true;
@@ -2819,173 +2821,6 @@ namespace MCSkinn
         {
             e.Cancel = true;
         }
-
-        #region Nested type: PartTreeNode
-
-        private class PartTreeNode : TreeNode
-        {
-            public PartTreeNode(Model model, Mesh mesh, int index)
-            {
-                Name = Text = mesh.Name;
-                Model = model;
-                Mesh = mesh;
-                PartIndex = index;
-
-                if (PartIndex != -1)
-                    PartEnabled = model.PartsEnabled[index];
-            }
-
-            public PartTreeNode(Model model, Mesh mesh, int index, string name) :
-                this(model, mesh, index)
-            {
-                Text = name;
-
-                if (name.StartsWith("@"))
-                {
-                    IsRadio = true;
-                    Text = name.Substring(1);
-                }
-
-                Name = name;
-            }
-
-            private Model Model { get; set; }
-            private Mesh Mesh { get; set; }
-            private int PartIndex { get; set; }
-            public bool IsRadio { get; set; }
-
-            public bool PartEnabled
-            {
-                get
-                {
-                    if (PartIndex == -1)
-                    {
-                        bool hasEnabled = false, hasDisabled = false;
-
-                        foreach (PartTreeNode node in Nodes)
-                            RecursiveGroupImageCheck(node, ref hasEnabled, ref hasDisabled);
-
-                        return hasEnabled;
-                    }
-
-                    return Model.PartsEnabled[PartIndex];
-                }
-
-                set
-                {
-                    Model.PartsEnabled[PartIndex] = value;
-                    SelectedImageIndex = ImageIndex = (value) ? IsRadio ? 10 : 3 : IsRadio ? 9 : 0;
-
-                    for (TreeNode node = Parent; node != null; node = node.Parent)
-                        ((PartTreeNode)node).CheckGroupImage();
-                }
-            }
-
-            private void RecursiveGroupImageCheck(PartTreeNode node, ref bool hasEnabled, ref bool hasDisabled)
-            {
-                if (hasEnabled && hasDisabled)
-                    return;
-
-                if (node.Nodes.Count == 0)
-                {
-                    if (node.PartEnabled)
-                        hasEnabled = true;
-                    else
-                        hasDisabled = true;
-                }
-                else
-                {
-                    foreach (PartTreeNode n in node.Nodes)
-                        RecursiveGroupImageCheck(n, ref hasEnabled, ref hasDisabled);
-                }
-            }
-
-            public PartTreeNode IsOtherRadioButtonEnabled()
-            {
-                TreeNodeCollection parentCollection;
-
-                if (Parent != null)
-                    parentCollection = Parent.Nodes;
-                else
-                    parentCollection = TreeView.Nodes;
-
-                foreach (PartTreeNode node in parentCollection)
-                {
-                    if (node == this)
-                        continue;
-                    if (node.IsRadio && node.PartEnabled)
-                        return node;
-                }
-
-                return null;
-            }
-
-            public void CheckGroupImage()
-            {
-                bool hasEnabled = false, hasDisabled = false;
-
-                foreach (PartTreeNode node in Nodes)
-                    RecursiveGroupImageCheck(node, ref hasEnabled, ref hasDisabled);
-
-                if (hasEnabled && hasDisabled)
-                    SelectedImageIndex = ImageIndex = 6;
-                else if (hasEnabled)
-                    SelectedImageIndex = ImageIndex = IsRadio ? 10 : 3;
-                else if (hasDisabled)
-                    SelectedImageIndex = ImageIndex = IsRadio ? 9 : 0;
-            }
-
-            public static void RecursiveAssign(PartTreeNode node, bool setAll, bool setTo = true)
-            {
-                foreach (PartTreeNode subNode in node.Nodes)
-                {
-                    if (subNode.Nodes.Count != 0)
-                        RecursiveAssign(subNode, setAll, setTo);
-                    else
-                    {
-                        if (setAll)
-                            subNode.PartEnabled = setTo;
-                        else
-                            subNode.PartEnabled = !subNode.PartEnabled;
-                    }
-                }
-
-                node.CheckGroupImage();
-            }
-
-            public void TogglePart()
-            {
-                if (Nodes.Count != 0)
-                {
-                    if (ImageIndex == 9)
-                    {
-                        RecursiveAssign(this, true);
-
-                        var other = IsOtherRadioButtonEnabled();
-
-                        if (other != null)
-                        {
-                            RecursiveAssign(other, true, false);
-                            other.CheckGroupImage();
-                        }
-
-                        CheckGroupImage();
-                    }
-                    else
-                    {
-                        bool setAll = ImageIndex == 6;
-                        RecursiveAssign(this, setAll);
-
-                        CheckGroupImage();
-                    }
-                }
-                else
-                    PartEnabled = !PartEnabled;
-            }
-        }
-
-        #endregion
-
         private void CreatePartList()
         {
             _partItems = new[] { null, headToolStripMenuItem, helmetToolStripMenuItem, chestToolStripMenuItem, leftArmToolStripMenuItem, rightArmToolStripMenuItem, leftLegToolStripMenuItem, rightLegToolStripMenuItem, chestArmorToolStripMenuItem, leftArmArmorToolStripMenuItem, rightArmArmorToolStripMenuItem, leftLegArmorToolStripMenuItem, rightLegArmorToolStripMenuItem };
@@ -3009,43 +2844,62 @@ namespace MCSkinn
             treeView2.ImageList = list;
         }
 
-        private PartTreeNode CreateNodePath(TreeView treeView, Model m, Mesh part, string[] path, List<PartTreeNode> owners, List<PartTreeNode> radios)
+        private PartTreeNode CreateNodePath(ObservableCollection<PartTreeNode> collection, Model m, Mesh part, string[] path, List<PartTreeNode> owners, List<PartTreeNode> radios)
         {
             PartTreeNode node = null;
 
             for (int i = 0; i < path.Length - 1; ++i)
             {
-                if (node == null)
+                bool isFound = false;
+                foreach(PartTreeNode no in (node == null ? collection : node.Nodes))
                 {
-                    TreeNode[] nodes = treeView.Nodes.Find(path[i], false);
-
-                    if (nodes.Length == 0)
+                    if(no.Name == path[i])
                     {
-                        treeView.Nodes.Add(node = new PartTreeNode(CurrentModel, part, -1, path[i]));
-                        owners.Add(node);
-
-                        if (node.IsRadio)
-                            radios.Add(node);
+                        node = no;
+                        isFound = true;
+                        break;
                     }
-                    else
-                        node = (PartTreeNode)nodes[0];
                 }
-                else
+                if (!isFound)
                 {
-                    TreeNode[] nodes = node.Nodes.Find(path[i], false);
+                    (i == 0 ? collection : node.Nodes).Add(node = new PartTreeNode(CurrentModel, part, -1, path[i]));
+                    owners.Add(node);
 
-                    if (nodes.Length == 0)
-                    {
-                        PartTreeNode old = node;
-                        old.Nodes.Add(node = new PartTreeNode(CurrentModel, part, -1, path[i]));
-                        owners.Add(node);
-
-                        if (node.IsRadio)
-                            radios.Add(node);
-                    }
-                    else
-                        node = (PartTreeNode)nodes[0];
                 }
+                //if (node == null)
+                //{
+                    
+                //    //TreeNode[] nodes = collection.Find(path[i], false);
+
+                //    //if (nodes.Length == 0)
+                //    //{
+                //    //    treeView.Nodes.Add(node = new PartTreeNode(CurrentModel, part, -1, path[i]));
+                //    //    owners.Add(node);
+
+                //    //    if (node.IsRadio)
+                //    //        radios.Add(node);
+                //    //}
+                //    //else
+                //    //    node = (PartTreeNode)nodes[0];
+
+
+                //}
+                //else
+                //{
+                //    TreeNode[] nodes = node.Nodes.Find(path[i], false);
+
+                //    if (nodes.Length == 0)
+                //    {
+                //        PartTreeNode old = node;
+                //        old.Nodes.Add(node = new PartTreeNode(CurrentModel, part, -1, path[i]));
+                //        owners.Add(node);
+
+                //        if (node.IsRadio)
+                //            radios.Add(node);
+                //    }
+                //    else
+                //        node = (PartTreeNode)nodes[0];
+                //}
             }
 
             return node;
@@ -3053,53 +2907,105 @@ namespace MCSkinn
 
         private void FillPartList()
         {
-            var owners = new List<PartTreeNode>();
-            var radios = new List<PartTreeNode>();
+            if (Program.Page_Editor == null)
+                return;
 
-            treeView2.Nodes.Clear();
 
-            int meshIndex = 0;
-            foreach (Mesh part in CurrentModel.Meshes)
+            if (CurrentModel.IsTCNFile)
             {
-                string name = part.Name;
-                PartTreeNode node;
+                var owners = new List<PartTreeNode>();
+                var radios = new List<PartTreeNode>();
 
-                if (name.Contains('.'))
+                Program.Page_Editor.Parts.Clear();
+
+                int meshIndex = 0;
+                foreach (Mesh part in CurrentModel.Meshes)
                 {
-                    string[] args = name.Split('.');
-                    PartTreeNode owner = CreateNodePath(treeView2, CurrentModel, part, args, owners, radios);
+                    string name = part.Name;
+                    PartTreeNode node;
 
-                    owner.Nodes.Add(node = new PartTreeNode(CurrentModel, part, meshIndex, args[args.Length - 1]));
+                    if (name != null && name.Contains('.'))
+                    {
+                        string[] args = name.Split('.');
+                        PartTreeNode owner = CreateNodePath(Program.Page_Editor.Parts, CurrentModel, part, args, owners, radios);
+
+                        owner.Nodes.Add(node = new PartTreeNode(CurrentModel, part, meshIndex, args[args.Length - 1]));
+                    }
+                    else
+                        Program.Page_Editor.Parts.Add(node = new PartTreeNode(CurrentModel, part, meshIndex));
+
+                    if (node.IsRadio)
+                        radios.Add(node);
+
+                    meshIndex++;
                 }
-                else
-                    treeView2.Nodes.Add(node = new PartTreeNode(CurrentModel, part, meshIndex));
 
-                if (node.IsRadio)
-                    radios.Add(node);
-
-                meshIndex++;
             }
-
-            treeView2.Sort();
-
-            radios.Reverse();
-
-            foreach (PartTreeNode n in owners)
-                n.CheckGroupImage();
-
-            foreach (var r in radios)
+            else
             {
-                var other = r.IsOtherRadioButtonEnabled();
+                Program.Page_Editor.Parts.Clear();
 
-                if (other != null)
+                Dictionary<string, List<Mesh>> meshFolders = new Dictionary<string, List<Mesh>>();
+                Dictionary<string, string> folderParents = new Dictionary<string, string>();
+
+                foreach (Mesh part in CurrentModel.Meshes)
                 {
-                    PartTreeNode.RecursiveAssign(r, true, false);
-                    r.CheckGroupImage();
-                }
-            }
+                    if (!meshFolders.ContainsKey(part.Folder))
+                        meshFolders.Add(part.Folder, new List<Mesh>());
 
-            for (int i = 1; i <= (int)ModelPart.RightLegArmor; ++i)
-                CheckQuickPartState((ModelPart)i);
+                    meshFolders[part.Folder].Add(part);
+
+                    if (!string.IsNullOrEmpty(part.FolderParent) && !folderParents.ContainsKey(part.Folder))
+                        folderParents.Add(part.Folder, part.FolderParent);
+                }
+
+                Dictionary<string, PartTreeNode> folders = new Dictionary<string, PartTreeNode>();
+
+
+                foreach (string n in meshFolders.Keys)
+                {
+                    PartTreeNode node;
+
+                    node = new PartTreeNode(CurrentModel, meshFolders[n], n);
+
+                    folders.Add(n, node);
+
+                }
+
+                foreach (KeyValuePair<string, PartTreeNode> pair in folders)
+                {
+                    if (folderParents.ContainsKey(pair.Key) && folders.ContainsKey(folderParents[pair.Key]))
+                    {
+                        folders[folderParents[pair.Key]].Nodes.Add(pair.Value);
+                    }
+                    else
+                    {
+                        Program.Page_Editor.Parts.Add(pair.Value);
+                    }
+                }
+
+            }
+            //treeView2.Sort();
+
+            //radios.Reverse();
+
+            ////foreach (PartTreeNode n in owners)
+            ////    n.CheckGroupImage();
+
+            //foreach (var r in radios)
+            //{
+            //    var other = r.IsOtherRadioButtonEnabled();
+
+            //    if (other != null)
+            //    {
+            //        PartTreeNode.RecursiveAssign(r, true, false);
+            //        r.CheckGroupImage();
+            //    }
+            //}
+
+            //for (int i = 1; i <= (int)ModelPart.RightLegArmor; ++i)
+            //    CheckQuickPartState((ModelPart)i);
+
         }
 
         void CheckQuickPartState(ModelPart part)
@@ -3123,7 +3029,7 @@ namespace MCSkinn
 
             foreach (var m in meshes)
             {
-                if (CurrentModel.PartsEnabled[CurrentModel.Meshes.IndexOf(m)])
+                if (CurrentModel.PartsEnabled[m])
                     continue;
 
                 item.Checked = button.Checked = false;
@@ -3133,25 +3039,25 @@ namespace MCSkinn
 
         private void treeView2_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            var nodeBounds = e.Node.Bounds;
-            var pos = e.Location;
-            var node = (PartTreeNode)e.Node;
+            //var nodeBounds = e.Node.Bounds;
+            //var pos = e.Location;
+            //var node = (PartTreeNode)e.Node;
 
-            if (pos.X > nodeBounds.X - 18 && pos.X < nodeBounds.X - 4)
-            {
-                node.TogglePart();
+            //if (pos.X > nodeBounds.X - 18 && pos.X < nodeBounds.X - 4)
+            //{
+            //    node.TogglePart();
 
-                for (int i = 1; i <= (int)ModelPart.RightLegArmor; ++i)
-                    CheckQuickPartState((ModelPart)i);
+            //    for (int i = 1; i <= (int)ModelPart.RightLegArmor; ++i)
+            //        CheckQuickPartState((ModelPart)i);
 
-                CalculateMatrices();
-                Renderer.Invalidate();
-            }
+            //    CalculateMatrices();
+            //    Renderer.Invalidate();
+            //}
         }
 
         #region Update
 
-        public void Invoke(Action action)
+        public new void Invoke(Action action)
         {
             Invoke((Delegate)action);
         }
@@ -3461,7 +3367,7 @@ namespace MCSkinn
             e.Handled = CheckKeyShortcut(e);
         }
 
-        public bool FormClosing()
+        public new bool FormClosing()
         {
             if (RecursiveNodeIsDirty(treeView1.Nodes))
             {
@@ -3831,7 +3737,7 @@ namespace MCSkinn
                 item.Checked = button.Checked = !item.Checked;
 
                 foreach (var m in meshes)
-                    CurrentModel.PartsEnabled[CurrentModel.Meshes.IndexOf(m)] = item.Checked;
+                    CurrentModel.PartsEnabled[m] = item.Checked;
             }
 
             CalculateMatrices();
@@ -4596,7 +4502,7 @@ namespace MCSkinn
             Program.Page_Editor.InitializeHosts();
             this.Hide();
 
-
+            
         }
 
         public ToolIndex ToolCamera;

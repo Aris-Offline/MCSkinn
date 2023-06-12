@@ -23,12 +23,12 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using Inkore.Common;
+using Inkore.Coreworks.Helpers;
 using MCSkinn.Scripts.Models;
 using MCSkinn.Scripts.Paril.OpenGL;
 using MCSkinn.Scripts.Setting;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using static MCSkinn.Scripts.Models.ModelLoader;
 
 namespace MCSkinn.Scripts.Models
 {
@@ -41,25 +41,32 @@ namespace MCSkinn.Scripts.Models
             if (!Directory.Exists(GlobalSettings.GetDataURI("Models")))
                 return;
 
+            if (Models == null)
+                Models = new Dictionary<string, Model>();
+
             var tcnParser = new ModelFormatTCN();
 
             foreach (string m in Directory.EnumerateFiles(GlobalSettings.GetDataURI("Models"), "*.*", SearchOption.AllDirectories))
             {
-                Model model = tcnParser.Load(m);
-
-                if (model == null)
+                if (m.IsNullOrEmptyOrWhitespace())
                     continue;
 
-                model.File = new FileInfo(m);
-                Models.Add(model.Path, model);
+                Model model = tcnParser.Load(m);
 
-                Program.Log(LogType.Load, string.Format("Loaded model '{0}' with {1} meshes", model.File.Name, model.Meshes?.Count.ToString()), "at MCSkinn.Scripts.Models.ModelLoader.LoadModels()");
+                if (model != null)
+                {
+
+                    model.File = new FileInfo(m);
+                    Models.Add(model.Name, model);
+
+                    Program.Log(LogType.Load, string.Format("Loaded model '{0}' with {1} meshes", model.File.Name, model.Meshes == null ? "0" : model.Meshes?.Count.ToString()), "at MCSkinn.Scripts.Models.ModelLoader.LoadModels()");
+                }
 
             }
 
         }
 
-        public static Model GetModelForPath(string p)
+        public static Model GetModelByName(string p)
         {
             if (!Models.ContainsKey(p))
                 return null;
@@ -120,155 +127,157 @@ namespace MCSkinn.Scripts.Models
             }
 
             // Paril
-            public void Save(string name, float scale, string fileName, string textureRef)
-            {
-                var settings = new XmlWriterSettings();
-                settings.ConformanceLevel = ConformanceLevel.Fragment;
-                settings.Indent = true;
-                settings.NewLineOnAttributes = false;
-                settings.IndentChars = "\t";
-                settings.Encoding = Encoding.UTF8;
+            //public void Save(string name, float scale, string fileName, string textureRef)
+            //{
+            //    var settings = new XmlWriterSettings();
+            //    settings.ConformanceLevel = ConformanceLevel.Fragment;
+            //    settings.Indent = true;
+            //    settings.NewLineOnAttributes = false;
+            //    settings.IndentChars = "\t";
+            //    settings.Encoding = Encoding.UTF8;
 
-                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+            //    Directory.CreateDirectory(Path.GetDirectoryName(fileName));
 
-                var rootPos = Environment.ExpandEnvironmentVariables(@"%appdata%\.minecraft\versions\1.9.2\1.9.2\assets\minecraft\textures\entity\" + textureRef);
+            //    var rootPos = Environment.ExpandEnvironmentVariables(@"%appdata%\.minecraft\versions\1.9.2\1.9.2\assets\minecraft\textures\entity\" + textureRef);
 
-                using (XmlWriter writer = XmlWriter.Create(fileName, settings))
-                {
-                    writer.WriteStartElement("Techne");
-                    {
-                        writer.WriteAttributeString("Version", "2.2");
-                        writer.WriteElementString("Author", "Mojang");
-                        writer.WriteElementString("DateCreated", "");
-                        writer.WriteElementString("Description", "Compiled from Minecraft source. Mojang pls don't sue :(");
+            //    using (XmlWriter writer = XmlWriter.Create(fileName, settings))
+            //    {
+            //        writer.WriteStartElement("Techne");
+            //        {
+            //            writer.WriteAttributeString("Version", "2.2");
+            //            writer.WriteElementString("Author", "Mojang");
+            //            writer.WriteElementString("DateCreated", "");
+            //            writer.WriteElementString("Description", "Compiled from Minecraft source. Mojang pls don't sue :(");
 
-                        writer.WriteStartElement("Models");
-                        {
-                            writer.WriteStartElement("Model");
-                            {
-                                writer.WriteAttributeString("Texture", "none.png");
-                                writer.WriteElementString("BaseClass", "ModelBase");
-                                writer.WriteElementString("Name", name);
+            //            writer.WriteStartElement("Models");
+            //            {
+            //                writer.WriteStartElement("Model");
+            //                {
+            //                    writer.WriteAttributeString("Texture", "none.png");
+            //                    writer.WriteElementString("BaseClass", "ModelBase");
+            //                    writer.WriteElementString("Name", name);
 
-                                try
-                                {
-                                    if (!string.IsNullOrEmpty(textureRef))
-                                        writer.WriteElementString("DefaultTexture", Convert.ToBase64String(File.ReadAllBytes(rootPos)));
-                                }
-                                catch (Exception ex) { Program.Log(ex, false); }
+            //                    try
+            //                    {
+            //                        if (!string.IsNullOrEmpty(textureRef))
+            //                            writer.WriteElementString("DefaultTexture", Convert.ToBase64String(File.ReadAllBytes(rootPos)));
+            //                    }
+            //                    catch (Exception ex) { Program.Log(ex, false); }
 
-                                int tw = textureWidth, th = textureHeight;
+            //                    int tw = textureWidth, th = textureHeight;
 
-                                writer.WriteStartElement("Geometry");
-                                {
-                                    writer.WriteStartElement("Folder");
-                                    {
-                                        writer.WriteAttributeString("Type", "f8bf7d5b-37bf-455b-93f9-b6f9e81620e1");
-                                        writer.WriteAttributeString("Name", "Model");
-                                        HashSet<ModelBox> rendered = new HashSet<ModelBox>();
+            //                    writer.WriteStartElement("Geometry");
+            //                    {
+            //                        writer.WriteStartElement("Folder");
+            //                        {
+            //                            writer.WriteAttributeString("Type", "f8bf7d5b-37bf-455b-93f9-b6f9e81620e1");
+            //                            writer.WriteAttributeString("Name", "Model");
+            //                            HashSet<ModelBox> rendered = new HashSet<ModelBox>();
 
-                                        Action<ModelRenderer, ModelBox, Vector3, Vector3> renderRecursive = null;
+            //                            Action<ModelRenderer, ModelBox, Vector3, Vector3> renderRecursive = null;
 
-                                        renderRecursive = (renderer, x, translation, rotation) =>
-                                        {
-                                            if (!renderer.showModel)
-                                                return;
+            //                            renderRecursive = (renderer, x, translation, rotation) =>
+            //                            {
+            //                                if (!renderer.showModel)
+            //                                    return;
 
-                                            if (rendered.Contains(x))
-                                                return;
+            //                                if (rendered.Contains(x))
+            //                                    return;
 
-                                            rendered.Add(x);
+            //                                rendered.Add(x);
 
-                                            writer.WriteStartElement("Shape");
-                                            {
-                                                writer.WriteAttributeString("Type", "d9e621f7-957f-4b77-b1ae-20dcd0da7751");
-                                                writer.WriteAttributeString("Name", x.boxName == null ? renderer.boxName == null ? "Unknown" : renderer.boxName : x.boxName);
+            //                                writer.WriteStartElement("Shape");
+            //                                {
+            //                                    writer.WriteAttributeString("Type", "d9e621f7-957f-4b77-b1ae-20dcd0da7751");
+            //                                    writer.WriteAttributeString("Name", x.boxName == null ? renderer.boxName == null ? "Unknown" : renderer.boxName : x.boxName);
 
-                                                translation.X += renderer.rotationPointX;
-                                                translation.Y += renderer.rotationPointY;
-                                                translation.Z += renderer.rotationPointZ;
+            //                                    translation.X += renderer.rotationPointX;
+            //                                    translation.Y += renderer.rotationPointY;
+            //                                    translation.Z += renderer.rotationPointZ;
 
-                                                rotation.X += renderer.rotateAngleX;
-                                                rotation.Y += renderer.rotateAngleY;
-                                                rotation.Z += renderer.rotateAngleZ;
+            //                                    rotation.X += renderer.rotateAngleX;
+            //                                    rotation.Y += renderer.rotateAngleY;
+            //                                    rotation.Z += renderer.rotateAngleZ;
 
-                                                writer.WriteElementString("IsDecorative", "False");
-                                                writer.WriteElementString("IsFixed", "False");
-                                                writer.WriteElementString("IsMirrored", x.mirrored.ToString());
-                                                writer.WriteElementString("IsSolid", renderer.isSolid.ToString());
-                                                writer.WriteElementString("Offset",
-                                                                            x.posX1.ToString(CultureInfo.InvariantCulture) + "," +
-                                                                            x.posY1.ToString(CultureInfo.InvariantCulture) + "," +
-                                                                            x.posZ1.ToString(CultureInfo.InvariantCulture));
-                                                writer.WriteElementString("Position", translation.X.ToString(CultureInfo.InvariantCulture) + "," +
-                                                                            translation.Y.ToString(CultureInfo.InvariantCulture) + "," +
-                                                                            translation.Z.ToString(CultureInfo.InvariantCulture));
-                                                writer.WriteElementString("Rotation",
-                                                                            MathHelper.RadiansToDegrees(rotation.X).ToString(CultureInfo.InvariantCulture) + "," +
-                                                                            MathHelper.RadiansToDegrees(rotation.Y).ToString(CultureInfo.InvariantCulture) + "," +
-                                                                            MathHelper.RadiansToDegrees(rotation.Z).ToString(CultureInfo.InvariantCulture));
-                                                writer.WriteElementString("Size", (x.posX2 - x.posX1).ToString(CultureInfo.InvariantCulture) + "," + (x.posY2 - x.posY1).ToString(CultureInfo.InvariantCulture) + "," + (x.posZ2 - x.posZ1).ToString(CultureInfo.InvariantCulture));
-                                                writer.WriteElementString("TextureOffset", x.textureX + "," + x.textureY);
+            //                                    writer.WriteElementString("IsDecorative", "False");
+            //                                    writer.WriteElementString("IsFixed", "False");
+            //                                    writer.WriteElementString("IsMirrored", x.mirrored.ToString());
+            //                                    writer.WriteElementString("IsSolid", renderer.isSolid.ToString());
+            //                                    writer.WriteElementString("Offset",
+            //                                                                x.posX1.ToString(CultureInfo.InvariantCulture) + "," +
+            //                                                                x.posY1.ToString(CultureInfo.InvariantCulture) + "," +
+            //                                                                x.posZ1.ToString(CultureInfo.InvariantCulture));
+            //                                    writer.WriteElementString("Position", translation.X.ToString(CultureInfo.InvariantCulture) + "," +
+            //                                                                translation.Y.ToString(CultureInfo.InvariantCulture) + "," +
+            //                                                                translation.Z.ToString(CultureInfo.InvariantCulture));
+            //                                    writer.WriteElementString("Rotation",
+            //                                                                MathHelper.RadiansToDegrees(rotation.X).ToString(CultureInfo.InvariantCulture) + "," +
+            //                                                                MathHelper.RadiansToDegrees(rotation.Y).ToString(CultureInfo.InvariantCulture) + "," +
+            //                                                                MathHelper.RadiansToDegrees(rotation.Z).ToString(CultureInfo.InvariantCulture));
+            //                                    writer.WriteElementString("Size", (x.posX2 - x.posX1).ToString(CultureInfo.InvariantCulture) + "," + (x.posY2 - x.posY1).ToString(CultureInfo.InvariantCulture) + "," + (x.posZ2 - x.posZ1).ToString(CultureInfo.InvariantCulture));
+            //                                    writer.WriteElementString("TextureOffset", x.textureX + "," + x.textureY);
 
-                                                // Paril: MCSkinn additions
-                                                writer.WriteElementString("Scale", x.sizeOfs.ToString(CultureInfo.InvariantCulture));
-                                                writer.WriteElementString("Part", renderer.part.ToString());
-                                                writer.WriteElementString("Hidden", renderer.isHidden.ToString());
-                                                writer.WriteElementString("IsArmor", renderer.isArmor.ToString());
+            //                                    // Paril: MCSkinn additions
+            //                                    writer.WriteElementString("Scale", x.sizeOfs.ToString(CultureInfo.InvariantCulture));
+            //                                    writer.WriteElementString("Part", renderer.part.ToString());
+            //                                    writer.WriteElementString("Hidden", renderer.isHidden.ToString());
+            //                                    writer.WriteElementString("IsArmor", renderer.isArmor.ToString());
 
-                                                writer.WriteEndElement();
-                                            }
+            //                                    writer.WriteEndElement();
+            //                                }
 
-                                            if (renderer.childModels != null)
-                                                foreach (var child in renderer.childModels)
-                                                    foreach (var box in child.cubeList)
-                                                        renderRecursive(child, box, translation, rotation);
-                                        };
+            //                                if (renderer.childModels != null)
+            //                                    foreach (var child in renderer.childModels)
+            //                                        foreach (var box in child.cubeList)
+            //                                            renderRecursive(child, box, translation, rotation);
+            //                            };
 
-                                        foreach (ModelRenderer renderer in boxList)
-                                        {
-                                            if (renderer.parent != null)
-                                                continue;
+            //                            foreach (ModelRenderer renderer in boxList)
+            //                            {
+            //                                if (renderer.parent != null)
+            //                                    continue;
 
-                                            foreach (ModelBox x in renderer.cubeList)
-                                                renderRecursive(renderer, x, new Vector3(renderer.offsetX, renderer.offsetY, renderer.offsetZ), Vector3.Zero);
+            //                                foreach (ModelBox x in renderer.cubeList)
+            //                                    renderRecursive(renderer, x, new Vector3(renderer.offsetX, renderer.offsetY, renderer.offsetZ), Vector3.Zero);
 
-                                            tw = (int)Math.Max(renderer.textureWidth, tw);
-                                            th = (int)Math.Max(renderer.textureHeight, th);
-                                        }
+            //                                tw = (int)Math.Max(renderer.textureWidth, tw);
+            //                                th = (int)Math.Max(renderer.textureHeight, th);
+            //                            }
 
-                                        writer.WriteEndElement();
-                                    }
+            //                            writer.WriteEndElement();
+            //                        }
 
-                                    writer.WriteEndElement();
-                                }
+            //                        writer.WriteEndElement();
+            //                    }
 
-                                writer.WriteElementString("TextureSize", tw + "," + th);
-                                writer.WriteEndElement();
-                            }
-                            writer.WriteEndElement();
-                        }
+            //                    writer.WriteElementString("TextureSize", tw + "," + th);
+            //                    writer.WriteEndElement();
+            //                }
+            //                writer.WriteEndElement();
+            //            }
 
-                        writer.WriteElementString("Name", name);
+            //            writer.WriteElementString("Name", name);
 
-                        writer.WriteEndElement();
-                    }
-                }
-            }
+            //            writer.WriteEndElement();
+            //        }
+            //    }
+            //}
 
-            public Model Compile(string name, float scale, float defaultWidth, float defaultHeight, string defaultTexture)
+            public Model Compile(string name, float scale, float defaultWidth, float defaultHeight, string defaultTexture, string displayName, bool isTCN)
             {
                 var model = new Model();
                 model.Name = name;
+                model.DisplayName = displayName;
                 model.DefaultWidth = defaultWidth;
                 model.DefaultHeight = defaultHeight;
                 model.DefaultTexture = defaultTexture;
+                model.IsTCNFile = isTCN;
 
                 foreach (ModelRenderer box in boxList)
                 {
                     foreach (ModelBox face in box.cubeList)
                     {
-                        var mesh = new Mesh(face.boxName);
+                        var mesh = new Mesh(face.boxName, box.Folder, box.FolderParent);
                         mesh.Faces = new List<Face>();
                         mesh.Translate = new Vector3(box.rotationPointX, box.rotationPointY, box.rotationPointZ);
                         mesh.Part = box.part;
@@ -336,13 +345,16 @@ namespace MCSkinn.Scripts.Models
                         mesh.CalculateMatrix();
 
                         model.Meshes.Add(mesh);
+
+                        if (!model.PartsEnabled.ContainsKey(mesh))
+                            model.PartsEnabled.Add(mesh, true);
                     }
                 }
 
-                model.PartsEnabled = new bool[model.Meshes.Count];
+                //model.PartsEnabled = new bool[model.Meshes.Count];
 
-                for (int i = 0; i < model.Meshes.Count; ++i)
-                    model.PartsEnabled[i] = true;
+                //for (int i = 0; i < model.Meshes.Count; ++i)
+                //    model.PartsEnabled[i] = true;
 
                 return model;
             }
@@ -543,8 +555,13 @@ namespace MCSkinn.Scripts.Models
             public float scale = 1;
             public bool mirror = false;
 
-            public ModelRenderer(ModelBase model, string boxNameIn, ModelPart part = ModelPart.None)
+            public string Folder;
+            public string FolderParent;
+
+            public ModelRenderer(string folder, string folderParent, ModelBase model, string boxNameIn, ModelPart part = ModelPart.None)
             {
+                Folder = folder;
+
                 textureWidth = 64.0F;
                 textureHeight = 32.0F;
                 showModel = true;
@@ -554,15 +571,16 @@ namespace MCSkinn.Scripts.Models
                 boxName = boxNameIn;
                 setTextureSize(model.textureWidth, model.textureHeight);
                 this.part = part;
+                FolderParent = folderParent;
             }
 
-            public ModelRenderer(ModelBase model, ModelPart part = ModelPart.None, bool isSurface = false) :
-                this(model, null, part)
+            public ModelRenderer(string folder, string folderParent, ModelBase model, ModelPart part = ModelPart.None, bool isSurface = false) :
+                this(folder, folderParent, model, null, part)
             {
             }
 
-            public ModelRenderer(ModelBase model, int texOffX, int texOffY, ModelPart part = ModelPart.None, bool isSurface = false) :
-                this(model, part)
+            public ModelRenderer(string folder, string folderParent, ModelBase model, int texOffX, int texOffY, ModelPart part = ModelPart.None, bool isSurface = false) :
+                this(folder, folderParent, model, part)
             {
                 setTextureOffset(texOffX, texOffY);
             }

@@ -1,6 +1,7 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
-	<DateCreated />
+	<Identifier>geometry.armor_stand</Identifier>
+	<DisplayName>Armor Stand</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

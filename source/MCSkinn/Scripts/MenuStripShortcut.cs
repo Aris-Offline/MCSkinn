@@ -19,7 +19,6 @@
 using System;
 using System.Windows.Forms;
 using MCSkinn.Scripts.Paril.Components.Shortcuts;
-using MCSkinn.Scripts.Paril.Components.Shortcuts;
 
 namespace MCSkinn.Scripts
 {

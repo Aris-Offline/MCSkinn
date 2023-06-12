@@ -38,29 +38,11 @@ namespace MCSkinn.Scripts.Setting
 
         [Savable]
         [DefaultValue(false)]
-        public static bool UseNativeWindow { get; set; }
-        [Savable]
-        [DefaultValue(false)]
         public static bool Ghost { get; set; }
 
         [Savable]
         [DefaultValue("")]
         public static string LastSkin { get; set; }
-
-        [Savable]
-        public static bool RememberMe { get; set; }
-
-        [Savable]
-        public static bool AutoLogin { get; set; }
-
-        [Savable]
-        [DefaultValue("")]
-        public static string LastUsername { get; set; }
-
-        [Savable]
-        [DefaultValue("")]
-        [TypeSerializer(typeof(PasswordSerializer<AesManaged>), false)]
-        public static string LastPassword { get; set; }
 
         [Savable]
         [DefaultValue(TransparencyMode.Helmet)]
@@ -177,7 +159,7 @@ namespace MCSkinn.Scripts.Setting
 
         public static string GetDataURI(string fileOrFolder)
         {
-            return Directory.GetCurrentDirectory() + '\\' + fileOrFolder;
+            return Path.Combine(Directory.GetCurrentDirectory(), fileOrFolder);
         }
 
         public static void Load()
