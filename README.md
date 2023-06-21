@@ -108,7 +108,7 @@
 
 # 🎊 Community
 
-- This project is made and maintained by [**NotYoojun**](https://github.com/NotYoojun) from     [**Inkore Studios**](https://github.com/InkoreStudios)
+- This project is made and maintained by [**NotYoojun**](https://github.com/NotYoojun) from     [**iNKORE!**](https://github.com/InkoreStudios)
 
    | Site  | Link  | Type  |
    | ------------ | ------------ | ------------ |
