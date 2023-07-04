@@ -1,7 +1,7 @@
 
 <p align="center">
   <a href="http://www.animasterstudios.com/products/apps/mcskinn" target="_blank" rel="noopener noreferrer">
-    <img width="128" src="https://github.com/InkoreStudios/MCSkinn/blob/main/logos/MCSkinn.png?raw=true" alt="MCSkinn Logo">
+    <img width="128" src="https://github.com/InkoreStudios/MCSkinn/blob/main/materials/icons/MCSkinn.png?raw=true" alt="MCSkinn Logo">
   </a>
 </p>
 
@@ -12,7 +12,9 @@
 </h1>
 
 <p align="center">Offical Website: <a href="http://www.animasterstudios.com/en-us/products/apps/mcskinn/">http://www.animasterstudios.com/en-us/products/apps/mcskinn/</p>
+
 <p align="center">Give us a star if you like this!</p>
+
 <p align="center">
   <a href="https://github.com/InkoreStudios/MCSkinn/releases"><img src="https://img.shields.io/github/downloads/InkoreStudios/MCSkinn/total?color=%239F7AEA" alt="Release Downloads"></a>
   <a href="#"><img src="https://img.shields.io/github/repo-size/InkoreStudios/MCSkinn?color=6882C4" alt="GitHub Repo Size"></a>
@@ -34,8 +36,15 @@
 
 <br>
 
-![](https://github.com/InkoreStudios/MCSkinn/blob/main/docs/images/image_product_mcskinn_screenshot_1.png?raw=true)
+# 📸 Screenshots
 
+- Light mode
+
+   ![](https://github.com/InkoreStudios/MCSkinn/blob/main/materials/docs/images/image_product_mcskinn_screenshot_5.png?raw=true)
+
+- Dark mode
+
+   ![](https://github.com/InkoreStudios/MCSkinn/blob/main/materials/docs/images/image_product_mcskinn_screenshot_6.png?raw=true)
 
 # ✨ Features
 
@@ -70,7 +79,7 @@
 
 - **Help with translation**
 
-  Help us translate new languages by editing or adding files to [`languages`](https://github.com/InkoreStudios/MCSkinn/tree/main/languages) folder. Use `en-us.lang` as a template to make your own translation, or you can edit the existing translation file to correct the mistakes.
+  Help us translate new languages by editing or adding files to [`assets/languages`](https://github.com/InkoreStudios/MCSkinn/tree/main/assets/languages) folder. Use `en-us.lang` as a template to make your own translation, or you can edit the existing translation file to correct the mistakes.
   
 - **Report issues or give feedback**
 
@@ -78,25 +87,25 @@
 
 - **Design your skins**
 
-  Create more beautiful skins with MCSkinn Editor and upload thema into [`skins`](https://github.com/InkoreStudios/MCSkinn/tree/main/skins) folder. The copyright of the skin you made is ALL YOURS, we just put it into samples.
+  Create more beautiful skins with MCSkinn Editor and upload thema into [`assets/skins`](https://github.com/InkoreStudios/MCSkinn/tree/main/assets/skins) folder. The copyright of the skin you made is ALL YOURS, we just put it into samples.
 
 # 📝 License Agreement
 
-- ✔️ **Permissions**
+- [x] **Permissions**
 
-   - [x] **Private use** You can use this product for private use with no limitations.
- 
-   - [x]  **Modification** You are allow to modificate this product ONLY WITH THE PUBLIC SOURCE CODE. The versions RELEASED BY US may NOT be everse-engineered, or de-compiled in any manner through current or future available technologies. And modified version can only be privately used.
+    ✔️ **Private use** You can use this product for private use with no limitations.
 
-   - [x]  **Distribution** You can only distribute the original version built by us. Do not distribute ANY modified version.
+    ✔️ **Modification** You are allow to modificate this product ONLY WITH THE PUBLIC SOURCE CODE. The versions RELEASED BY US may NOT be everse-engineered, or de-compiled in any manner through current or future available technologies. And modified version can only be privately used.
 
-   - [x] **References** You can reference code or files those are OPEN to PUBLIC, but you must label the project and its address when your own project goes public and you are NOT allowed to build a product which has the same or similar features and usages of this product.
+    ✔️ **Distribution** You can only distribute the original version built by us. Do not distribute ANY modified version.
 
-- ✖️ **Limitations**
+   ✔️ **References** You can reference code or files those are OPEN to PUBLIC, but you must label the project and its address when your own project goes public and you are NOT allowed to build a product which has the same or similar features and usages of this product.
 
-   - [ ]  **Commercial use** You can to put THE STAFF YOU MADE with or based on this product (such as skins you made) into commercial uses. But you cannot put THIS APP ITSELF into any commercial use.
+- [ ] **Limitations**
 
-   - [ ]  **Liability** We are NOT liable for any damages, loss of data, or any other disadvantage suffered by the Licensee arising out of the use or failure to use this product.
+   ✖️  **Commercial use** You can to put THE STAFF YOU MADE with or based on this product (such as skins you made) into commercial uses. But you cannot put THIS APP ITSELF into any commercial use.
+
+   ✖️  **Liability** We are NOT liable for any damages, loss of data, or any other disadvantage suffered by the Licensee arising out of the use or failure to use this product.
 
 # 🤝 Sponsorship
 
@@ -122,9 +131,3 @@
    | QQ Group |<https://jq.qq.com/?_wv=1027&k=KefGAM42> *(686027177)*  | Public  |
    | Telegram Group | <https://t.me/Inkore_group>  | Public  |
    | Telegram Channel | <https://t.me/Inkore_channel>  | Public  |
-
-
----
-
-![](https://github.com/InkoreStudios/MCSkinn/blob/main/docs/images/image_product_mcskinn_screenshot_2.png?raw=true)
-![](https://github.com/InkoreStudios/MCSkinn/blob/main/docs/images/image_product_mcskinn_screenshot_3.png?raw=true)
