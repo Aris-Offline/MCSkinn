@@ -98,17 +98,22 @@
 
    - [ ]  **Liability** We are NOT liable for any damages, loss of data, or any other disadvantage suffered by the Licensee arising out of the use or failure to use this product.
 
-# 🤝 Cooperation
+# 🤝 Sponsorship
 
-- **Special Thanks to**
-  - @Paril
-  - @Hongshiits
-  - @Hehonge051
+   - Hello! Thank you for using MCSkinn! Do you like it so far?
+   
+     This app makes your Minecraft experience more pleasant, by helping you create bunch of beautiful skins. At the same time it's completely free, and with no ads.
+   
+     or this reason you could support me with a voluntary donation. Even a small amount makes me jumping happy through my apartment.  Just donate as much as you value my work.
+
+   - **WeChat/Alipay**: There's QR in the sponorship page of the program
+   - **PayPal**: My username is [@NotYoojun](https://paypal.me/NotYoojun?country.x=C2&locale.x=en_US), clicking the link also works
+   - **Afdian**: Here is my homepage https://afdian.net/a/NotYoojun
 
 
 # 🎊 Community
 
-- This project is made and maintained by [**NotYoojun**](https://github.com/NotYoojun) from     [**Inkore Studios**](https://github.com/InkoreStudios)
+- This project is made and maintained by [**NotYoojun**](https://github.com/NotYoojun) from     [**iNKORE!**](https://github.com/InkoreStudios)
 
    | Site  | Link  | Type  |
    | ------------ | ------------ | ------------ |
