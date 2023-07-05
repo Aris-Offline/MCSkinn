@@ -1,48 +1,39 @@
 ﻿//
-//    MCSkinn, a 3d skin management studio for Minecraft
-//    Copyright (C) 2013 Altered Softworks & MCSkinn Team
+//    MCSkinn, A modern Minecraft 3D skin manager/editor for Windows by NotYoojun.!
+//    Copyright © iNKORE! 2023
 //
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System.Drawing;
 using System.Windows.Forms;
 using Devcorp.Controls.Design;
 using MCSkinn.Scripts.Paril.OpenGL;
-using MCSkinn.Scripts.Setting;
 
 namespace MCSkinn.Scripts.Tools
 {
     public class DarkenLightenTool : BrushToolBase
     {
+        public bool IsInverted { get; set; } = false;
+
         public override bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y)
         {
-            return MouseMoveOnSkin(pixels, skin, x, y, GlobalSettings.DarkenLightenIncremental);
+            return MouseMoveOnSkin(pixels, skin, x, y, GlobalSettings.Tool_DarkenLighten_Incremental);
         }
 
         public override Color BlendColor(Color l, Color r)
         {
             bool ctrlIng = (Control.ModifierKeys & Keys.Shift) != 0;
-            bool switchTools = !Editor.MainForm.DarkenLightenOptions.Inverted && ctrlIng ||
-                               Editor.MainForm.DarkenLightenOptions.Inverted && !ctrlIng;
+            bool switchTools = !IsInverted && ctrlIng ||
+                               IsInverted && !ctrlIng;
             HSL hsl = ColorSpaceHelper.RGBtoHSL(r);
             float mod = l.A / 255.0f;
 
             if (switchTools)
-                hsl.Luminance -= GlobalSettings.DarkenLightenExposure * mod / 5.0f;
+                hsl.Luminance -= GlobalSettings.Tool_DarkenLighten_Exposure * mod / 5.0f;
             else
-                hsl.Luminance += GlobalSettings.DarkenLightenExposure * mod / 5.0f;
+                hsl.Luminance += GlobalSettings.Tool_DarkenLighten_Exposure * mod / 5.0f;
 
             if (hsl.Luminance < 0)
                 hsl.Luminance = 0;

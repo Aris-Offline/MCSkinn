@@ -1,24 +1,14 @@
 ﻿//
-//    MCSkinn, a 3d skin management studio for Minecraft
-//    Copyright (C) 2013 Altered Softworks & MCSkinn Team
+//    MCSkinn, A modern Minecraft 3D skin manager/editor for Windows by NotYoojun.!
+//    Copyright © iNKORE! 2023
 //
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System;
 using MCSkinn.Forms.Controls.Tools;
-using MCSkinn.Scripts.Setting;
+using MCSkinn.Scripts;
 
 namespace MCSkinn
 {
@@ -33,7 +23,7 @@ namespace MCSkinn
 
         private void DodgeBurnOptions_Load(object sender, EventArgs e)
         {
-            SetThreshold(GlobalSettings.FloodFillThreshold);
+            SetThreshold(GlobalSettings.Tool_FloodFill_Threshold);
         }
 
         private void SetThreshold(float f)
@@ -43,7 +33,7 @@ namespace MCSkinn
             trackBar1.Value = (int)(f * 100.0f);
             _skipSet = false;
 
-            GlobalSettings.FloodFillThreshold = f;
+            GlobalSettings.Tool_FloodFill_Threshold = f;
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)

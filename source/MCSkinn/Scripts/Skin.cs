@@ -1,19 +1,8 @@
 ﻿//
 //    MCSkinn, a 3d skin management studio for Minecraft
-//    Copyright (C) 2013 Altered Softworks & MCSkinn Team
+//    by NotYoojun.! | Copyright (C) 2023 iNKORE! Studios
 //
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//    Repo: https://github.com/InkoreStudios/MCSkinn
 //
 
 using System;
@@ -31,35 +20,49 @@ using Microsoft.VisualBasic.FileIO;
 using OpenTK;
 using MCSkinn.Scripts.Paril.Drawing;
 using Inkore.Common;
+using System.ComponentModel;
+using System.Windows.Media.Imaging;
+using System.Collections.ObjectModel;
+using Inkore.Coreworks.Windows.Helpers;
+using System.Xml.Linq;
 
 namespace MCSkinn.Scripts
 {
     [Serializable]
-    public class Skin : TreeNode, IDisposable
+    public class Skin : LibraryNode, IDisposable, INotifyPropertyChanged
     {
         private readonly Dictionary<int, bool> _transparentParts = new Dictionary<int, bool>();
-        public bool Dirty;
+        private bool _isDirty = false;
         public Texture GLImage;
         public Bitmap Head;
+        public BitmapSource HeadSource;
         public Size Size;
         public UndoBuffer Undo;
         public bool IsLastSkin { get; set; }
 
-        public Skin(string fileName)
+        public Skin(string fileName, FolderNode parent = null)
         {
             Undo = new UndoBuffer(this);
-            Name = Path.GetFileNameWithoutExtension(fileName);
 
-            Program.Log(LogType.Load, string.Format("Loaded skin '{0}'", Path.GetFileName(fileName)), "at MCSkinn.Scripts.Skin(string)");
+            Path = fileName;
 
+            Program.Log(LogType.Load, string.Format("Loaded skin '{0}'", System.IO.Path.GetFileName(fileName)), "at MCSkinn.Scripts.Skin(string)");
+
+            Parent = parent;
         }
 
-        public Skin(FileInfo file) :
-            this(file.FullName)
+        public override string Text
+        {
+            get { return _text; }
+        }
+
+        public Skin(FileInfo file, FolderNode parent) :
+            this(file.FullName, parent)
         {
         }
 
         private Model _model;
+
         public Model Model
         {
             get 
@@ -74,6 +77,19 @@ namespace MCSkinn.Scripts
             get { return Size.Width; }
         }
 
+        public bool IsDirty
+        {
+            get { return _isDirty; }
+            set
+            {
+                _isDirty = value;
+
+                Parent?.Workfolder?.SetDirtySkin(this);
+
+                RaisePropertyChangedEvent(nameof(IsDirty));
+            }
+        }
+
         public int Height
         {
             get { return Size.Height; }
@@ -84,36 +100,61 @@ namespace MCSkinn.Scripts
             get { return _transparentParts; }
         }
 
-        public new string Name
+        private string _name = "";
+        private string _text = "";
+        public override string Name => _name;
+
+        public string Directory => Parent.Path;
+        public DirectoryInfo DirectoryInfo => Parent?.DirectoryInfo;
+
+        private string _path = "";
+        private FileInfo _fileInfo = null;
+        public override string Path
         {
-            get { return base.Name; }
+            get { return _path; }
             set
             {
-                base.Name = value;
-                Text = base.Name = value;
+                _path = value;
+
+                _fileInfo = new FileInfo(Path);
+       
+                _name = System.IO.Path.GetFileName(Path);
+                _text = System.IO.Path.GetFileNameWithoutExtension(Path);
+
+
+                RaisePropertyChangedEvent(nameof(Text));
+                RaisePropertyChangedEvent(nameof(Path));
+                RaisePropertyChangedEvent(nameof(Name));
+                RaisePropertyChangedEvent(nameof(FileInfo));
             }
         }
 
-        public DirectoryInfo Directory
-        {
-            get
-            {
-                if (Level == 0)
-                    return new DirectoryInfo(Editor.RootFolderString);
+        public FileInfo FileInfo => _fileInfo;
 
-                return new DirectoryInfo(Parent != null ? Editor.GetFolderForNode(Parent) : "");
-            }
-        }
+        public override BitmapSource Icon => HeadSource;
 
-        public FileInfo File
+        public override FolderNode Parent { get; set; }
+
+        public override bool IsExpanded
         {
-            get { return new FileInfo(Directory.FullName + '\\' + Name + ".png"); }
+            get { return false; }
+            set { }
         }
 
         #region IDisposable Members
 
-        public void Dispose()
+        public override void Dispose()
         {
+            if (SkinLibrary.SelectedNode == this)
+                SkinLibrary.SelectedNode = null;
+
+            if (Parent != null)
+                Parent.Remove(this);
+
+            Parent = null;
+
+            IsLoaded = false;
+
             if (GLImage != null)
             {
                 GLImage.Dispose();
@@ -125,25 +166,30 @@ namespace MCSkinn.Scripts
                 Head.Dispose();
                 Head = null;
             }
+
+            if (SkinLibrary.NodesByPath.ContainsKey(SkinLibrary.GetAbsolutedPath(Path)))
+                SkinLibrary.NodesByPath.Remove(SkinLibrary.GetAbsolutedPath(Path));
         }
 
         #endregion
 
+        public bool IsLoaded { get; set; } = false;
+
         static void SetImage(Skin skin)
         {
-            Editor.MainForm.Renderer.MakeCurrent();
-            skin.GLImage = new TextureGL(skin.File.FullName);
+            Editor.MainForm.RenderMakeCurrent();
+            skin.GLImage = new TextureGL(skin.Path);
             skin.GLImage.SetMipmapping(false);
             skin.GLImage.SetRepeat(false);
         }
 
-        public bool SetImages(bool updateGL = true)
+        public Exception SetImages(bool updateGL = true)
         {
             Bitmap image = null;
 
             try
             {
-                using (FileStream file = File.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (FileStream file = FileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
                     image = new Bitmap(file);
 
                 Size = image.Size;
@@ -174,7 +220,7 @@ namespace MCSkinn.Scripts
 
                 if (Model == null)
                 {
-                    Dictionary<string, string> metadata = PNGMetadata.ReadMetadata(File.FullName);
+                    Dictionary<string, string> metadata = PNGMetadata.ReadMetadata(FileInfo.FullName);
 
                     if (metadata.ContainsKey("Model"))
                     {
@@ -197,15 +243,27 @@ namespace MCSkinn.Scripts
                             Model = ModelLoader.GetModelByName("geometry.humanoid.custom.minimal");
                     }
                 }
+
+                Program.App_Main.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    HeadSource = Head.ToWpfBitmapSourceB();
+                    RaisePropertyChangedEvent("Icon");
+                }));
+
+                IsLoaded = true;
+                RaisePropertyChangedEvent("IsLoaded");
+
             }
             catch (Exception ex) 
             { 
-                Program.Log(ex, false); 
+                Program.Log(ex, false);
 #if DEBUG
-            throw;
+                //throw;
 #endif
-                //MessageBox.Show(string.Format(Editor.GetLanguageString("E_SKINERROR"), File.FullName));
-                return false;
+                //MessageBox.Show(string.Format(Editor.GetLanguageString("E_SKINERROR"), FileInfo.FullName));
+                IsLoaded = false;
+
+                return ex; ;
             }
             finally
             {
@@ -213,7 +271,7 @@ namespace MCSkinn.Scripts
                     image.Dispose();
             }
 
-            return true;
+            return null ;
         }
 
         public void Create()
@@ -257,7 +315,9 @@ namespace MCSkinn.Scripts
 
         public void Unload()
         {
-            GLImage.Dispose();
+            if (GLImage != null)
+                GLImage.Dispose();
+
             GLImage = null;
         }
 
@@ -296,39 +356,39 @@ namespace MCSkinn.Scripts
                         }
                     }
 
-                    newBitmap.Save(File.FullName);
+                    newBitmap.Save(FileInfo.FullName);
                     newBitmap.Dispose();
 
                     var md = new Dictionary<string, string>();
                     md.Add("Model", Model.Name);
-                    PNGMetadata.WriteMetadata(File.FullName, md);
+                    PNGMetadata.WriteMetadata(FileInfo.FullName, md);
 
                     SetImages(true);
 
-                    Dirty = false;
+                    IsDirty = false;
                 }
             }
+
+
         }
 
-        public bool ChangeName(string newName, bool force = false)
+        public override void Renamed(string newName)
         {
             if (!newName.EndsWith(".png"))
                 newName += ".png";
 
-            if (force)
-            {
-                Name = Path.GetFileNameWithoutExtension(newName);
-                return true;
-            }
+            //if (System.IO.File.Exists(DirectoryInfo.FullName + "\\" + newName))
+            //    return false;
 
-            if (System.IO.File.Exists(Directory.FullName + "\\" + newName))
-                return false;
+            string oldName = Path;
 
-            FileSystem.RenameFile(File.FullName, newName);
+            Path = System.IO.Path.GetFullPath(newName);
+
+            //FileSystem.RenameFile(FileInfo.FullName, newName);
             //File.MoveToParent(newName);
-            Name = Path.GetFileNameWithoutExtension(newName);
 
-            return true;
+            SkinLibrary.RemoveNode(oldName);
+            SkinLibrary.AddNode(this, newName);
         }
 
         public void Resize(int width, int height, ResizeType type = ResizeType.Scale)
@@ -342,7 +402,7 @@ namespace MCSkinn.Scripts
                     g.PixelOffsetMode = PixelOffsetMode.HighQuality;
                     g.Clear(Color.FromArgb(0, 0, 0, 0));
 
-                    using (Image temp = Image.FromFile(File.FullName))
+                    using (Image temp = Image.FromFile(FileInfo.FullName))
                     {
                         if (type == ResizeType.Scale)
                             g.DrawImage(temp, 0, 0, newBitmap.Width, newBitmap.Height);
@@ -351,11 +411,11 @@ namespace MCSkinn.Scripts
                     }
                 }
 
-                newBitmap.Save(File.FullName);
+                newBitmap.Save(FileInfo.FullName);
 
                 var md = new Dictionary<string, string>();
                 md.Add("Model", Model.Name);
-                PNGMetadata.WriteMetadata(File.FullName, md);
+                PNGMetadata.WriteMetadata(FileInfo.FullName, md);
             }
 
             SetImages();
@@ -366,7 +426,7 @@ namespace MCSkinn.Scripts
 
         public void Delete()
         {
-            FileSystem.DeleteFile(File.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+            FileSystem.DeleteFile(FileInfo.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
             //File.Delete();
         }
 
@@ -375,7 +435,7 @@ namespace MCSkinn.Scripts
             while (System.IO.File.Exists(newPath))
                 newPath = newPath.Insert(newPath.Length - 4, " - " + Editor.GetLanguageString("C_MOVED"));
 
-            FileSystem.MoveFile(File.FullName, newPath);
+            FileSystem.MoveFile(FileInfo.FullName, newPath);
             //File.MoveTo(newPath);
         }
 

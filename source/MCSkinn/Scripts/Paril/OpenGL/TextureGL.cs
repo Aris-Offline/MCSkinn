@@ -215,10 +215,14 @@ namespace MCSkinn.Scripts.Paril.OpenGL
 
         private static void DeleteTextureInternal(int GLImage)
         {
-            GL.DeleteTexture(GLImage);
+            try
+            {
+                GL.DeleteTexture(GLImage);
 
-            if (_curTex == GLImage)
-                BindTextureInternal(0);
+                if (_curTex == GLImage)
+                    BindTextureInternal(0);
+            }
+            catch(Exception ex) { Program.Log(ex); }
         }
 
         public static void Unbind()

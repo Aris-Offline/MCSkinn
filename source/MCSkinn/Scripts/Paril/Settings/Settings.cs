@@ -1,33 +1,31 @@
 ﻿//
-//    MCSkinn, a 3d skin management studio for Minecraft
-//    Copyright (C) 2013 Altered Softworks & MCSkinn Team
+//    MCSkinn, A modern Minecraft 3D skin manager/editor for Windows by NotYoojun.!
+//    Copyright © iNKORE! 2023
 //
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using Inkore.Common;
+using Inkore.Coreworks.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace MCSkinn.Scripts.Paril.Settings
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
     public sealed class SavableAttribute : Attribute
     {
+        public string Group { get; set; }
+        public SavableAttribute(string group = "")
+        {
+            Group = group;
+        }
     }
 
     public interface ISavable
@@ -149,138 +147,97 @@ namespace MCSkinn.Scripts.Paril.Settings
     public class Settings
     {
         private readonly StringSerializer _serializer = new StringSerializer();
-        public List<object> Structures = new List<object>();
 
-        public void Save(string fileName)
+        public XElement Save(Type type)
         {
-            var writer = new StreamWriter(fileName);
+            //var writer = new StreamWriter(fileName);
 
-            foreach (object v in Structures)
+            XElement root = new XElement("Settings");
+            Dictionary<string, XElement> groups = new Dictionary<string, XElement>();
+
+            foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Static | BindingFlags.Public))
             {
-                if (!(v is Type))
-                    continue;
-
-                var type = (Type)v;
-
-                writer.WriteLine("[" + type.Name + "]");
-
-                foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Static | BindingFlags.Public))
+                object[] attrs = prop.GetCustomAttributes(typeof(SavableAttribute), false);
+                if (attrs != null && attrs.Length > 0 && attrs[0] is SavableAttribute)
                 {
-                    if (prop.GetCustomAttributes(typeof(SavableAttribute), false).Length != 0)
-                    {
-                        string str = _serializer.Serialize(prop, prop.GetValue(null, null));
-                        writer.WriteLine(prop.Name + "=" + str);
-                    }
-                }
+                    SavableAttribute attr = (SavableAttribute)attrs[0];
+                    string str = _serializer.Serialize(prop, prop.GetValue(null, null));
+                    string group = attr.Group.IsNullOrEmptyOrWhitespace() ? "Global" : attr.Group;
 
-                writer.WriteLine();
+                    if (!groups.ContainsKey(group))
+                    {
+                        XElement ele = new XElement(group);
+                        groups.Add(group, ele);
+                        root.Add(ele);
+                    }
+
+                    groups[group].Add(new XElement(prop.Name, str));
+                    //writer.WriteLine(prop.Name + "=" + str);
+                }
             }
 
-            writer.Close();
+            return root;
         }
 
-        public void LoadDefaults()
+        public void LoadDefaults(Type type)
         {
-            foreach (object str in Structures)
+            foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Static | BindingFlags.Public))
             {
-                if (str is Type)
+                object[] attribs = prop.GetCustomAttributes(typeof(DefaultValueAttribute), false);
+                if (attribs.Length != 0)
                 {
-                    var type = (Type)str;
+                    var dva = (DefaultValueAttribute)attribs[0];
 
-                    foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Static | BindingFlags.Public))
+                    object[] converters = prop.GetCustomAttributes(typeof(TypeSerializerAttribute), false);
+
+                    if (converters.Length != 0)
                     {
-                        object[] attribs = prop.GetCustomAttributes(typeof(DefaultValueAttribute), false);
-                        if (attribs.Length != 0)
-                        {
-                            var dva = (DefaultValueAttribute)attribs[0];
+                        var serialize = (TypeSerializerAttribute)converters[0];
 
-                            object[] converters = prop.GetCustomAttributes(typeof(TypeSerializerAttribute), false);
-
-                            if (converters.Length != 0)
-                            {
-                                var serialize = (TypeSerializerAttribute)converters[0];
-
-                                if (serialize.DeserializeDefault)
-                                    prop.SetValue(null, _serializer.Deserialize(prop, dva.Value.ToString(), prop.PropertyType), null);
-                                else
-                                    prop.SetValue(null, dva.Value, null);
-                            }
-                            else
-                                prop.SetValue(null, dva.Value, null);
-                        }
+                        if (serialize.DeserializeDefault)
+                            prop.SetValue(null, _serializer.Deserialize(prop, dva.Value.ToString(), prop.PropertyType), null);
+                        else
+                            prop.SetValue(null, dva.Value, null);
                     }
+                    else
+                        prop.SetValue(null, dva.Value, null);
                 }
             }
         }
 
-        public void Load(string fileName)
+        public void Load(XElement root, Type type)
         {
-            LoadDefaults();
+            Dictionary<string, PropertyInfo> props = new Dictionary<string, PropertyInfo>();
 
-            if (!File.Exists(fileName))
+            foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Static | BindingFlags.Public))
             {
-                Save(fileName);
-                return;
+                if (prop.GetCustomAttributes(typeof(SavableAttribute), false).Length != 0)
+                {
+                    props.Add(prop.Name, prop);
+                }
             }
 
-            var reader = new StreamReader(fileName);
 
-            object currentObject = null;
-            while (!reader.EndOfStream)
+            foreach (XElement e1 in root.Elements())
             {
-                string line = reader.ReadLine().Trim();
-
-                if (string.IsNullOrEmpty(line))
-                    continue;
-
-                if (line.StartsWith("[") && line.EndsWith("]"))
+                foreach(XElement e2 in e1.Elements())
                 {
-                    string header = line.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries)[0];
-
-                    foreach (object v in Structures)
+                    try
                     {
-                        if (!(v is Type))
-                            continue;
-
-                        if (header == ((Type)v).Name)
+                        if (props.ContainsKey(e2.Name.LocalName))
                         {
-                            currentObject = v;
-                            break;
+                            PropertyInfo prop = props[e2.Name.LocalName];
+                            object val = _serializer.Deserialize(prop, e2.Value, prop.PropertyType);
+                            prop.SetValue(null, val, null);
+
+                            Program.Log(LogType.Load, string.Format("Loaded setting '{0}' ('{1}')", prop.Name, e2.Value), "at MCSkinn.Scripts.Paril.Settings.Settings.Load(string)");
                         }
                     }
+                    catch (Exception ex) { Program.Log(ex, false); }
                 }
-                else if (currentObject != null)
-                {
-                    var pair = new string[2];
-                    int split = line.IndexOf('=');
-                    pair[0] = line.Substring(0, split);
-                    pair[1] = line.Substring(split + 1);
-
-                    if (currentObject is Type)
-                    {
-                        var type = (Type)currentObject;
-
-                        foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Static | BindingFlags.Public))
-                        {
-                            if (prop.GetCustomAttributes(typeof(SavableAttribute), false).Length != 0 &&
-                                prop.Name == pair[0])
-                            {
-                                object val = _serializer.Deserialize(prop, pair[1], prop.PropertyType);
-                                prop.SetValue(null, val, null);
-
-                                try
-                                {
-                                    Program.Log(LogType.Load, string.Format("Loaded setting '{0}' ('{1}')", prop.Name, val), "at MCSkinn.Scripts.Paril.Settings.Settings.Load(string)");
-                                }
-                                catch(Exception ex) { Program.Log(ex, false); }
-                            }
-                        }
-                    }
-                }
-
             }
 
-            reader.Close();
+            props = null;
         }
     }
 }

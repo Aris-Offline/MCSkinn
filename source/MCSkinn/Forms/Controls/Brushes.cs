@@ -1,19 +1,9 @@
 ﻿//
-//    MCSkinn, a 3d skin management studio for Minecraft
-//    Copyright (C) 2013 Altered Softworks & MCSkinn Team
+//    MCSkinn, A modern Minecraft 3D skin manager/editor for Windows by NotYoojun.!
+//    Copyright © iNKORE! 2023
 //
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System;
@@ -23,12 +13,16 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using MCSkinn.Scripts.Paril.Controls;
-using MCSkinn.Scripts.Setting;
 using MCSkinn.Scripts.Paril.Drawing;
+using Inkore.Coreworks.Windows.Helpers;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using Newtonsoft.Json.Linq;
+using MCSkinn.Scripts;
 
 namespace MCSkinn.Forms.Controls
 {
-    public class Brush : IComparable<Brush>
+    public class Brush : IComparable<Brush>, INotifyPropertyChanged
     {
         private static readonly AlphanumComparatorFast logical = new AlphanumComparatorFast();
         public float[,] Luminance;
@@ -54,6 +48,8 @@ namespace MCSkinn.Forms.Controls
                         Luminance[x, y] = fp.GetPixel(x, y).A / 255.0f;
                 }
             }
+
+            BuildImage(false);
         }
 
         public string Name { get; set; }
@@ -68,13 +64,47 @@ namespace MCSkinn.Forms.Controls
             get { return Luminance.GetLength(1); }
         }
 
-        public Bitmap Image { get; private set; }
+
+        private Bitmap _image;
+        private System.Windows.Media.ImageSource _imageSource;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public Bitmap Image
+        {
+            get { return _image; }
+            set 
+            { 
+                _image = value; 
+                
+                if(value != null)
+                    _imageSource = value.ToWpfBitmapSourceB();
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Image"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ImageSource"));
+            }
+        }
+
+        public System.Windows.Media.ImageSource ImageSource
+        {
+            get
+            {
+                if(_imageSource == null && Image != null)
+                {
+                    _imageSource = Image.ToWpfBitmapSourceB();
+                }
+
+                return _imageSource;
+            }
+        }
 
         public float this[int x, int y]
         {
             get { return Luminance[x, y]; }
             set { Luminance[x, y] = value; }
         }
+
+        public string Group { get; set; } = "Built-in";
 
         #region IComparable<Brush> Members
 
@@ -90,9 +120,9 @@ namespace MCSkinn.Forms.Controls
             if (Image != null)
                 Image.Dispose();
 
-            Image = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+            Bitmap bmp = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
 
-            using (var fp = new FastPixel(Image, true))
+            using (var fp = new FastPixel(bmp, true))
             {
                 for (int y = 0; y < Height; ++y)
                 {
@@ -100,6 +130,8 @@ namespace MCSkinn.Forms.Controls
                         fp.SetPixel(x, y, Color.FromArgb((byte)(Luminance[x, y] * 255), 0, 0, 0));
                 }
             }
+
+            Image = bmp;
 
             if (save)
                 Image.Save("Brushes\\" + Editor.GetLanguageString(Name) + " [" + Width + "].png");
@@ -109,10 +141,10 @@ namespace MCSkinn.Forms.Controls
     public static class Brushes
     {
         public static int NumBrushes = 10;
-        public static List<Brush> BrushList = new List<Brush>();
+        public static ObservableCollection<Brush> BrushList = new ObservableCollection<Brush>();
         public static BrushComboBox BrushBox = new BrushComboBox();
 
-        public static Brush SelectedBrush { get; private set; }
+        public static Brush SelectedBrush { get; set; }
 
         private static void BrushBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -124,70 +156,66 @@ namespace MCSkinn.Forms.Controls
 
         public static void LoadBrushes()
         {
+            // make square brushes
+            
+            for(int i = 0;  i <= 1; i++)
+            {
+                for (var s = 1; s <= 16; ++s)
+                {
+                    if (i == 1)
+                    {
+                        if ((s & 1) == 1)
+                        {
+                            var brush = new Brush("Circle (" + s + ")", s, s);
+                            brush.Luminance = new float[s, s];
+
+                            int r = s / 2; // radius
+
+                            int ox = s / 2, oy = s / 2; // origin
+
+                            for (int x = -r; x <= r; x++)
+                            {
+                                int height = (int)Math.Sqrt(r * r - x * x);
+
+                                for (int y = -height; y <= height; y++)
+                                    brush.Luminance[ox + x, oy + y] = 1;
+                            }
+
+                            brush.BuildImage(false);
+                            BrushList.Add(brush);
+
+                        }
+                    }
+                    else
+                    {
+                        var brush = new Brush("Square (" + s + ")", s, s);
+                        brush.Luminance = new float[s, s];
+
+                        for (var x = 0; x < s; ++x)
+                            for (var y = 0; y < s; ++y)
+                                brush.Luminance[x, y] = 1;
+
+                        brush.BuildImage(false);
+                        BrushList.Add(brush);
+                    }
+                }
+            }
+
             if (Directory.Exists("Brushes"))
             {
                 foreach (string file in Directory.EnumerateFiles(GlobalSettings.GetDataURI("Brushes"), "*.png", SearchOption.AllDirectories))
                 {
                     try
                     {
-                        BrushList.Add(new Brush(file));
+                        string dir = Path.GetFileNameWithoutExtension(Path.GetDirectoryName(file));
+                        BrushList.Add(new Brush(file) { Group = dir == "Brushes" ? "Custom" : dir });
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Program.Log(ex, false);
                     }
                 }
             }
-
-            // make square brushes
-            for (var s = 2; s <= 16; ++s)
-            {
-                var brush = new Brush("Square (" + s + ")", s, s);
-                brush.Luminance = new float[s, s];
-
-                for (var x = 0; x < s; ++x)
-                    for (var y = 0; y < s; ++y)
-                        brush.Luminance[x, y] = 1;
-
-                brush.BuildImage(false);
-                BrushList.Add(brush);
-
-                if ((s & 1) == 1)
-                {
-                    brush = new Brush("Circle (" + s + ")", s, s);
-                    brush.Luminance = new float[s, s];
-
-                    int r = s / 2; // radius
-                    int ox = s / 2, oy = s / 2; // origin
-
-                    for (int x = -r; x <= r; x++)
-                    {
-                        int height = (int)Math.Sqrt(r * r - x * x);
-
-                        for (int y = -height; y <= height; y++)
-                            brush.Luminance[ox + x, oy + y] = 1;
-                    }
-
-                    brush.BuildImage(false);
-                    BrushList.Add(brush);
-                }
-            }
-
-            BrushList.Sort();
-
-            var onebyone = new Brush("Pixel", 1, 1);
-            onebyone.Luminance = new float[,] { { 1 } };
-            onebyone.BuildImage(false);
-
-            BrushList.Insert(0, onebyone);
-
-            foreach (Brush b in BrushList)
-                BrushBox.Items.Add(b);
-
-            BrushBox.SelectedIndexChanged += BrushBox_SelectedIndexChanged;
-            BrushBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            BrushBox.SelectedIndex = 0;
-            BrushBox.Width = 44;
         }
     }
 

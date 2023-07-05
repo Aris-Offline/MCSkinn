@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using MCSkinn.Scripts.Setting;
+using MCSkinn.Scripts;
 
 namespace MCSkinn.Scripts.Swatches
 {

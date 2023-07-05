@@ -163,7 +163,7 @@ namespace MCSkinn.Scripts
                 //if (isChanged)
                 //{
                 //    Program.Form_Editor.CalculateMatrices();
-                //    Program.Form_Editor.Renderer.Invalidate();
+                //    Program.Form_Editor.InvalidRenderer();
                 //}
             }
         }

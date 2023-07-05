@@ -1,28 +1,18 @@
 ﻿//
-//    MCSkinn, a 3d skin management studio for Minecraft
-//    Copyright (C) 2013 Altered Softworks & MCSkinn Team
+//    MCSkinn, A modern Minecraft 3D skin manager/editor for Windows by NotYoojun.!
+//    Copyright © iNKORE! 2023
 //
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System;
 using System.Drawing;
-using System.Windows.Forms;
+using WinForms = System.Windows.Forms;
+using WPF = System.Windows;
 using MCSkinn.Forms.Controls;
 using MCSkinn.Scripts.Paril.Drawing;
 using MCSkinn.Scripts.Paril.OpenGL;
-using MCSkinn.Scripts.Setting;
 using Brush = MCSkinn.Forms.Controls.Brush;
 using Brushes = MCSkinn.Forms.Controls.Brushes;
 
@@ -37,7 +27,7 @@ namespace MCSkinn.Scripts.Tools
 
         private bool HoldingShift
         {
-            get { return (Control.ModifierKeys & Keys.Shift) != 0; }
+            get { return (WinForms.Control.ModifierKeys & WinForms.Keys.Shift) != 0; }
         }
 
         public bool IsPreview { get; private set; }
@@ -46,7 +36,7 @@ namespace MCSkinn.Scripts.Tools
 
         public bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y)
         {
-            return MouseMoveOnSkin(pixels, skin, x, y, GlobalSettings.PencilIncremental);
+            return MouseMoveOnSkin(pixels, skin, x, y, GlobalSettings.Tool_Pencil_Incremental);
         }
 
         public void SelectedBrushChanged()
@@ -54,13 +44,13 @@ namespace MCSkinn.Scripts.Tools
             _stampedBrush = null;
         }
 
-        public virtual void BeginClick(Skin skin, Point p, MouseEventArgs e)
+        public virtual void BeginClick(Skin skin, Point p, WPF.Input.MouseButtonEventArgs e)
         {
             _undo = new PixelsChangedUndoable(Editor.GetLanguageString("U_PIXELSCHANGED"),
-                                              Editor.MainForm.SelectedTool.MenuItem.Text);
+                                              Editor.MainForm.SelectedTool.Name);
         }
 
-        public virtual void MouseMove(Skin skin, MouseEventArgs e)
+        public virtual void MouseMove(Skin skin, WPF.Input.MouseEventArgs e)
         {
         }
 
@@ -114,7 +104,7 @@ namespace MCSkinn.Scripts.Tools
             return true;
         }
 
-        public virtual bool EndClick(ColorGrabber pixels, Skin skin, MouseEventArgs e)
+        public virtual bool EndClick(ColorGrabber pixels, Skin skin, WPF.Input.MouseButtonEventArgs e)
         {
             if (_undo.Points.Count != 0)
             {

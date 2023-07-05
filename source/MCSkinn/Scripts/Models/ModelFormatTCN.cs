@@ -337,7 +337,7 @@ namespace MCSkinn.Scripts.Models
                                                     }
                                                     break;
                                                 case "inflate":
-                                                    shape.RenderData.Scale = (float)TypeHelper.ToDouble(((JValue)p_cubeChild.Value).Value);
+                                                    shape.RenderData.Scale = (float)Inkore.Coreworks.Helpers.TypeHelper.ToDouble(((JValue)p_cubeChild.Value).Value);
                                                     break;
                                                 case "mirror":
                                                     if (((JValue)p_cubeChild.Value).Value is bool)
@@ -487,10 +487,10 @@ namespace MCSkinn.Scripts.Models
                                                 tcnModel.Name =  Name = (p_DescriptionChild.Value as JValue)?.Value as string;
                                                 break;
                                             case "texture_width":
-                                                tcnModel.TextureSize.X = TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
+                                                tcnModel.TextureSize.X = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
                                                 break;
                                             case "texture_height":
-                                                tcnModel.TextureSize.Y = TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
+                                                tcnModel.TextureSize.Y = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
                                                 break;
                                             case "visible_bounds_offset":
                                                 break;
@@ -529,10 +529,10 @@ namespace MCSkinn.Scripts.Models
                             switch (p_geometryChild.Name.ToLower())
                             {
                                 case "texturewidth":
-                                    tcnModel.TextureSize.X = TypeHelper.ToInt32((p_geometryChild.Value as JValue)?.Value);
+                                    tcnModel.TextureSize.X = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_geometryChild.Value as JValue)?.Value);
                                     break;
                                 case "textureheight":
-                                    tcnModel.TextureSize.Y = TypeHelper.ToInt32((p_geometryChild.Value as JValue)?.Value);
+                                    tcnModel.TextureSize.Y = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_geometryChild.Value as JValue)?.Value);
                                     break;
                                 case "visible_bounds_height":
                                     break;
@@ -559,10 +559,10 @@ namespace MCSkinn.Scripts.Models
                                                 Name = (p_DescriptionChild.Value as JValue)?.Value as string;
                                                 break;
                                             case "texture_width":
-                                                tcnModel.TextureSize.X = TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
+                                                tcnModel.TextureSize.X = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
                                                 break;
                                             case "texture_height":
-                                                tcnModel.TextureSize.Y = TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
+                                                tcnModel.TextureSize.Y = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
                                                 break;
                                             case "bones":
                                                 tcnModel.Parse(p_DescriptionChild.Value);

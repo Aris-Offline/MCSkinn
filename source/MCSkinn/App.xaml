@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:MCSkinn"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:ui="https://schemas.animasterstudios.com/lib/ui/wpf/modern" Startup="Application_Startup">
+             xmlns:ui="https://schemas.animasterstudios.com/lib/ui/wpf/modern" Startup="Application_Startup" DispatcherUnhandledException="Application_DispatcherUnhandledException">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -62,6 +62,7 @@
                 </ResourceDictionary>-->
                 <ResourceDictionary Source="/Themes/PathIcons.xaml"/>
                 <ResourceDictionary Source="/Themes/InkoreStudios.xaml"/>
+                <ResourceDictionary Source="/Themes/MCSkinnIcon.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
 

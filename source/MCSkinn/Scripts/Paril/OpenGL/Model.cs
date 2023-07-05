@@ -6,7 +6,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Xml;
 using MCSkinn.Forms.Controls;
-using MCSkinn.Scripts.Setting;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 

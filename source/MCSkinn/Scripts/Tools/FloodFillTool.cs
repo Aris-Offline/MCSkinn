@@ -1,29 +1,19 @@
 ﻿//
-//    MCSkinn, a 3d skin management studio for Minecraft
-//    Copyright (C) 2013 Altered Softworks & MCSkinn Team
+//    MCSkinn, A modern Minecraft 3D skin manager/editor for Windows by NotYoojun.!
+//    Copyright © iNKORE! 2023
 //
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System;
 using System.Collections;
 using System.Drawing;
-using System.Windows.Forms;
+using WinForms = System.Windows.Forms;
+using WPF = System.Windows;
 using MCSkinn.Scripts.lemon42.Colors;
 using MCSkinn.Scripts.Paril.Drawing;
 using MCSkinn.Scripts.Paril.OpenGL;
-using MCSkinn.Scripts.Setting;
 using OpenTK;
 using Inkore.Coreworks.Windows.Helpers;
 
@@ -39,7 +29,7 @@ namespace MCSkinn.Scripts.Tools
 
         public float Threshold //[0-1]
         {
-            get { return GlobalSettings.FloodFillThreshold; }
+            get { return GlobalSettings.Tool_FloodFill_Threshold; }
         }
 
         #region ITool Members
@@ -48,19 +38,19 @@ namespace MCSkinn.Scripts.Tools
         {
         }
 
-        public void BeginClick(Skin skin, Point p, MouseEventArgs e)
+        public void BeginClick(Skin skin, Point p, WPF.Input.MouseButtonEventArgs e)
         {
             _undo = new PixelsChangedUndoable(Editor.GetLanguageString("U_PIXELSCHANGED"),
                                               Editor.MainForm.SelectedTool.MenuItem.Text);
             _boundBox = new Rectangle(0, 0, skin.Width, skin.Height);
 
-            if ((Control.ModifierKeys & Keys.Control) != 0)
+            if ((WinForms.Control.ModifierKeys & WinForms.Keys.Control) != 0)
                 _boundBox = Editor.CurrentModel.GetTextureFaceBounds(new Point(p.X, p.Y), skin);
 
             _done = false;
         }
 
-        public void MouseMove(Skin skin, MouseEventArgs e)
+        public void MouseMove(Skin skin, WPF.Input.MouseEventArgs e)
         {
         }
 
@@ -75,7 +65,7 @@ namespace MCSkinn.Scripts.Tools
 
             ColorPixel c = pixels[x, y];
             Color oldColor = Color.FromArgb(c.Alpha, c.Red, c.Green, c.Blue);
-            ColorManager newColor = new ColorManager(new ColorManager.RGBColor((Control.ModifierKeys & Keys.Shift) != 0
+            ColorManager newColor = new ColorManager(new ColorManager.RGBColor((WinForms.Control.ModifierKeys & WinForms.Keys.Shift) != 0
                                         ? Editor.MainForm.ColorPanel.SecondaryColor
                                         : Editor.MainForm.ColorPanel.SelectedColor));
 
@@ -90,7 +80,7 @@ namespace MCSkinn.Scripts.Tools
                 return false;
 
             var highlightPoint = new Point(x, y);
-            bool doHighlight = (Control.ModifierKeys & Keys.Control) != 0;
+            bool doHighlight = (WinForms.Control.ModifierKeys & WinForms.Keys.Control) != 0;
 
             Color newColor;
             if (doHighlight)
@@ -112,14 +102,14 @@ namespace MCSkinn.Scripts.Tools
             }
 
             newColor =
-                ((Control.ModifierKeys & Keys.Shift) != 0
+                ((WinForms.Control.ModifierKeys & WinForms.Keys.Shift) != 0
                      ? Editor.MainForm.ColorPanel.SecondaryColor
                      : Editor.MainForm.ColorPanel.SelectedColor).W2D();
             pixels[x, y] = new ColorPixel(newColor.R | newColor.G << 8 | newColor.B << 16 | newColor.A << 24);
             return true;
         }
 
-        public bool EndClick(ColorGrabber pixels, Skin skin, MouseEventArgs e)
+        public bool EndClick(ColorGrabber pixels, Skin skin, WPF.Input.MouseButtonEventArgs e)
         {
             _done = false;
             if (_undo.Points.Count != 0)

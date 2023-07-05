@@ -1,23 +1,14 @@
 ﻿//
-//    MCSkinn, a 3d skin management studio for Minecraft
-//    Copyright (C) 2013 Altered Softworks & MCSkinn Team
+//    MCSkinn, A modern Minecraft 3D skin manager/editor for Windows by NotYoojun.!
+//    Copyright © iNKORE! 2023
 //
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System.Drawing;
-using System.Windows.Forms;
+using WinForms = System.Windows.Forms;
+using WPF = System.Windows;
 using MCSkinn.Scripts.lemon42.Colors;
 using MCSkinn.Scripts.Paril.OpenGL;
 
@@ -27,11 +18,11 @@ namespace MCSkinn.Scripts.Tools
     {
         #region ITool Members
 
-        public void BeginClick(Skin skin, Point p, MouseEventArgs e)
+        public void BeginClick(Skin skin, Point p, WPF.Input.MouseButtonEventArgs e)
         {
         }
 
-        public void MouseMove(Skin skin, MouseEventArgs e)
+        public void MouseMove(Skin skin, WPF.Input.MouseEventArgs e)
         {
         }
 
@@ -44,7 +35,7 @@ namespace MCSkinn.Scripts.Tools
             ColorPixel c = pixels[x, y];
             ColorManager oldColor = ColorManager.FromRGBA(c.Red, c.Green, c.Blue, c.Alpha);
 
-            if ((Control.ModifierKeys & Keys.Shift) != 0)
+            if ((WinForms.Control.ModifierKeys & WinForms.Keys.Shift) != 0)
                 Editor.MainForm.ColorPanel.SecondaryColor = oldColor.W();
             else
                 Editor.MainForm.ColorPanel.SelectedColor = oldColor.W();
@@ -56,7 +47,7 @@ namespace MCSkinn.Scripts.Tools
             return false;
         }
 
-        public bool EndClick(ColorGrabber pixels, Skin skin, MouseEventArgs e)
+        public bool EndClick(ColorGrabber pixels, Skin skin, WPF.Input.MouseButtonEventArgs e)
         {
             return false;
         }

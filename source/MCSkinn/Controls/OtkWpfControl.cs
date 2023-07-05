@@ -10,6 +10,9 @@ using System.Windows.Media.Imaging;
 
 using OpenTK;
 using OpenTK.Graphics;
+using System.Windows.Threading;
+using Inkore.UI.WPF.Modern.Controls;
+using System.Windows.Input;
 
 namespace OpenTK.WPF
 {
@@ -87,16 +90,77 @@ namespace OpenTK.WPF
 			set { SetValue( VersionMinorProperty , value ); }
 		}
 
-		#endregion VersionMinor
+        #endregion VersionMinor
 
-		#endregion Dependency Properties
+        #region IsRenderingPaused
 
-		#region Events
+        /// <summary>
+        /// specify OpenGL version minor part , default version is 2.0
+        /// </summary>
+        private static readonly DependencyProperty IsRenderingPausedProperty = DependencyProperty.Register
+        (
+            "IsRenderingPaused",
+            typeof(bool),
+            typeof(OtkWpfControl),
+            new PropertyMetadata(false)
+        );
 
-		/// <summary>
-		/// Occurs when OpenGL should be initialised.
-		/// </summary>
-		[Description("Called when OpenGL has been initialized."), Category("SharpGL")]
+        public bool IsRenderingPaused
+        {
+            get { return (bool)GetValue(IsRenderingPausedProperty); }
+            set { SetValue(IsRenderingPausedProperty, value); }
+        }
+
+        #endregion IsRenderingPaused
+
+        #region Framerate
+
+        /// <summary>
+        /// specify OpenGL version minor part , default version is 2.0
+        /// </summary>
+        private static readonly DependencyPropertyKey FrameratePropertyKey = DependencyProperty.RegisterReadOnly
+        (
+            "Framerate",
+            typeof(int),
+            typeof(OtkWpfControl),
+            new PropertyMetadata(0)
+        );
+        public static readonly DependencyProperty FramerateProperty = FrameratePropertyKey.DependencyProperty;
+
+        public int Framerate
+        {
+            get { return (int)GetValue(FramerateProperty); }
+            set { SetValue(FrameratePropertyKey, value); }
+        }
+
+        #endregion Framerate
+
+        #region RenderScale
+
+        private static readonly DependencyProperty RenderScaleProperty = DependencyProperty.Register
+        (
+            "RenderScale",
+            typeof(double),
+            typeof(OtkWpfControl),
+            new PropertyMetadata(1.0)
+        );
+
+        public double RenderScale
+        {
+            get { return (double)GetValue(RenderScaleProperty); }
+            set { SetValue(RenderScaleProperty, value); }
+        }
+
+        #endregion RenderScale
+
+        #endregion Dependency Properties
+
+        #region Events
+
+        /// <summary>
+        /// Occurs when OpenGL should be initialised.
+        /// </summary>
+        [Description("Called when OpenGL has been initialized."), Category("SharpGL")]
 		public event EventHandler OpenGLInitialized;
 
 		/// <summary>
@@ -131,16 +195,60 @@ namespace OpenTK.WPF
 
 		#endregion Events
 
-		/// <summary>
-		/// Initializes a new instance
-		/// </summary>
-		public OtkWpfControl()
+		public bool RenderOnTimer { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance
+        /// </summary>
+        public OtkWpfControl(bool renderOnTimer = false, GraphicsMode gmode = null)
 		{
 			Content = mImage;
+			mImage.Stretch = Stretch.Fill;
+            //RenderOptions.SetBitmapScalingMode(mImage, BitmapScalingMode.HighQuality);
 
-			Unloaded += OpenGLControl_Unloaded;
+			RenderOnTimer = renderOnTimer;
+
+            Unloaded += OpenGLControl_Unloaded;
 			Loaded   += OpenGLControl_Loaded;
+
+            // initialize framebufferhandler for OpeTK
+            mLoaded = false;
+            mSize = Size.Empty;
+            mFramebufferId = -1;
+
+			if (gmode == null)
+				gmode = new GraphicsMode(DisplayDevice.Default.BitsPerPixel, 16, 0, 8, 0, 2, false);
+
+            mTkGlControl = new GLControl(gmode, VersionMajor, VersionMinor, GraphicsContextFlags.Default);
+            mTkGlControl.MakeCurrent();
+
+			if (RenderOnTimer)
+			{
+				renderTimer = new DispatcherTimer();
+				renderTimer.Interval = TimeSpan.FromMilliseconds(5);
+                renderTimer.Tick += RenderTimer_Tick;
+			}
+        }
+
+		public double RenderWidth => ActualWidth * RenderScale;
+        public double RenderHeight => ActualHeight * RenderScale;
+
+		public TimeSpan? RenderTimerInterval
+		{
+			get { return renderTimer?.Interval; }
+			set
+			{
+				if (value != null && renderTimer != null)
+					renderTimer.Interval = value.Value;
+			}
 		}
+
+        private void RenderTimer_Tick(object? sender, EventArgs e)
+        {
+			CompositionTarget_Rendering(sender, e);
+        }
+
+        public GLControl Renderer => mTkGlControl;
 
 		/// <summary>
 		/// When overridden in a derived class, is invoked whenever application code or 
@@ -151,14 +259,7 @@ namespace OpenTK.WPF
 			//  Call the base.
 			base.OnApplyTemplate();
 
-			// initialize framebufferhandler for OpeTK
-			mLoaded = false;
-			mSize = Size.Empty;
-			mFramebufferId = -1;
-
-			var gmode = new GraphicsMode( DisplayDevice.Default.BitsPerPixel , 16 , 0 , 4 , 0 , 2 , false );
-			mTkGlControl = new GLControl( gmode , VersionMajor , VersionMinor , GraphicsContextFlags.Default );
-			mTkGlControl.MakeCurrent();
+		
 
 			//  Fire the OpenGL initialised event.
 			OpenGLInitialized?.Invoke( this , EventArgs.Empty );
@@ -179,9 +280,18 @@ namespace OpenTK.WPF
 
 			UpdateOpenGLControl( RenderSize );
 
-			// start rendering to be on WPF redering timing
-			CompositionTarget.Rendering += CompositionTarget_Rendering;
+            // start rendering to be on WPF redering timing
+            if (!RenderOnTimer)
+            {
+                CompositionTarget.Rendering += CompositionTarget_Rendering;
+            }
+			else
+			{
+				renderTimer.Start();
+			}
 		}
+
+		public DispatcherTimer renderTimer;
 
 		/// <summary>
 		/// Handles the Unloaded event of the OpenGLControl control.
@@ -191,8 +301,15 @@ namespace OpenTK.WPF
 		private void OpenGLControl_Unloaded( object sender , RoutedEventArgs routedEventArgs )
 		{
 			SizeChanged -= OpenGLControl_SizeChanged;
-			CompositionTarget.Rendering -= CompositionTarget_Rendering;
-		}
+            if (!RenderOnTimer)
+			{
+                CompositionTarget.Rendering -= CompositionTarget_Rendering;
+            }
+			else
+			{
+				renderTimer.Stop();
+			}
+        }
 
 		/// <summary>
 		/// Handles the SizeChanged event of the OpenGLControl control.
@@ -201,7 +318,7 @@ namespace OpenTK.WPF
 		/// <param name="e">The <see cref="System.Windows.SizeChangedEventArgs"/> Instance containing the event data.</param>
 		private void OpenGLControl_SizeChanged( object sender , SizeChangedEventArgs e )
 		{
-			UpdateOpenGLControl( e.NewSize );
+			UpdateOpenGLControl( new Size(RenderWidth, RenderHeight) );
 		}
 
 		/// <summary>
@@ -211,93 +328,120 @@ namespace OpenTK.WPF
 		/// <param name="e">cast RenderingEventArgs to know RenderginTime</param>
 		private void CompositionTarget_Rendering( object sender , EventArgs e )
 		{
-			// https://evanl.wordpress.com/2009/12/06/efficient-optimal-per-frame-eventing-in-wpf/
-			var args = (RenderingEventArgs)e;
-			if ( args.RenderingTime == mLast )
+			try
 			{
-				return;
-			}
-			mLast = args.RenderingTime;
-
-			//  Start the stopwatch so that we can time the rendering.
-			mStopwatch.Restart();
-
-			// import from FrameBufferHandler
-			if ( GraphicsContext.CurrentContext != mTkGlControl.Context )
-			{
-				mTkGlControl.MakeCurrent();
-			}
-
-			var framebuffersize = new Size( ActualWidth , ActualHeight );
-			if ( framebuffersize != mSize || mLoaded == false )
-			{
-				mSize = framebuffersize;
-				CreateFramebuffer();
-				GL.Viewport( 0 , 0 , (int)ActualWidth , (int)ActualHeight );
-			}
-
-			// all of drawing commands will be performed onto the FBO
-			GL.BindFramebuffer( FramebufferTarget.Framebuffer , mFramebufferId );
-
-			//	If there is a draw handler, then call it.
-			var handler = OpenGLDraw;
-			if ( handler != null )
-			{
-				var ev = new OpenGLDrawEventArgs() { Redrawn=false , RenderingTime = (e as RenderingEventArgs).RenderingTime };
-				handler( this , ev );
-				if ( !ev.Redrawn )
-				{
-					// handler doesn't draw anything then skip refresh the image
-					mStopwatch.Stop();
+				if (IsRenderingPaused)
 					return;
-				}
-			}
-			else
+
+                // https://evanl.wordpress.com/2009/12/06/efficient-optimal-per-frame-eventing-in-wpf/
+                if(e is RenderingEventArgs)
+				{
+                    var args = (RenderingEventArgs)e;
+                    if (args.RenderingTime == mLast)
+                    {
+                        return;
+                    }
+                    mLast = args.RenderingTime;
+                }
+
+                //  Start the stopwatch so that we can time the rendering.
+                mStopwatch.Restart();
+
+                // import from FrameBufferHandler
+                if (GraphicsContext.CurrentContext != mTkGlControl.Context)
+                {
+                    mTkGlControl.MakeCurrent();
+                }
+
+                var framebuffersize = new Size(RenderWidth, RenderHeight);
+                if (framebuffersize != mSize || mLoaded == false)
+                {
+                    mSize = framebuffersize;
+                    CreateFramebuffer();
+                    GL.Viewport(0, 0, (int)RenderWidth, (int)RenderHeight);
+                }
+
+                // all of drawing commands will be performed onto the FBO
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, mFramebufferId);
+
+                //	If there is a draw handler, then call it.
+                var handler = OpenGLDraw;
+                if (handler != null)
+                {
+                    var ev = new OpenGLDrawEventArgs() { Redrawn = false, RenderingTime = e is RenderingEventArgs ? (e as RenderingEventArgs).RenderingTime :mLast };
+                    handler(this, ev);
+                    if (!ev.Redrawn)
+                    {
+                        // handler doesn't draw anything then skip refresh the image
+                        mStopwatch.Stop();
+                        return;
+                    }
+                }
+                else
+                {
+                    GL.Clear(Graphics.OpenGL.ClearBufferMask.ColorBufferBit);
+                }
+
+                // wait FBO has completed drawing
+                GL.Finish();
+
+                if (mDrawnImage == null || mDrawnImage.Width != mSize.Width || mDrawnImage.Height != mSize.Height)
+                {
+                    // create bitmap for imagesource to be displayed
+                    mDrawnImage = new WriteableBitmap((int)mSize.Width, (int)mSize.Height, 96, 96, PixelFormats.Pbgra32, BitmapPalettes.WebPalette);
+
+                    // (re)assign read buffer
+                    mBackbuffer = new byte[(int)mSize.Width * (int)mSize.Height * 4];
+                }
+
+                // to avoid image upside down, read to another memory
+                GL.ReadPixels(0, 0, (int)mSize.Width, (int)mSize.Height, PixelFormat.Bgra, PixelType.UnsignedByte, mBackbuffer);
+
+                // WriteableBitmap should be locked as short as possible
+                mDrawnImage.Lock();
+
+                // copy pixels upside down
+                var src = new Int32Rect(0, 0, (int)mDrawnImage.Width, 1);
+                for (int y = 0; y < (int)mDrawnImage.Height; y++)
+                {
+                    src.Y = (int)mDrawnImage.Height - y - 1;
+                    mDrawnImage.WritePixels(src, mBackbuffer, mDrawnImage.BackBufferStride, 0, y);
+                }
+                mDrawnImage.AddDirtyRect(new Int32Rect(0, 0, (int)mDrawnImage.Width, (int)mDrawnImage.Height));
+
+                mDrawnImage.Unlock();
+
+                if (mBackbuffer != null)
+                {
+                    // refresh displayed image
+                    mImage.Source = mDrawnImage;
+                }
+
+                //  Stop the stopwatch.
+                mStopwatch.Stop();
+
+                //  Store the frame drawing time.
+                DrawTime = mStopwatch.Elapsed.TotalMilliseconds;
+
+                _frames++;
+
+            }
+			catch
 			{
-				GL.Clear( Graphics.OpenGL.ClearBufferMask.ColorBufferBit );
+				if (Debugger.IsAttached)
+					throw;
 			}
-
-			// wait FBO has completed drawing
-			GL.Finish();
-
-			if ( mDrawnImage == null || mDrawnImage.Width != mSize.Width || mDrawnImage.Height != mSize.Height )
+			finally
 			{
-				// create bitmap for imagesource to be displayed
-				mDrawnImage = new WriteableBitmap( (int)mSize.Width , (int)mSize.Height , 96 , 96 , PixelFormats.Pbgra32 , BitmapPalettes.WebPalette );
+                if (DateTime.Now.Subtract(_lastMeasureTime) > TimeSpan.FromSeconds(1))
+                {
+                    Framerate = _frames;
+                    _frames = 0;
+                    _lastMeasureTime = DateTime.Now;
+                }
+            }
 
-				// (re)assign read buffer
-				mBackbuffer = new byte[(int)mSize.Width * (int)mSize.Height * 4];
-			}
-
-			// to avoid image upside down, read to another memory
-			GL.ReadPixels( 0 , 0 , (int)mSize.Width , (int)mSize.Height , PixelFormat.Bgra , PixelType.UnsignedByte , mBackbuffer );
-
-			// WriteableBitmap should be locked as short as possible
-			mDrawnImage.Lock();
-
-			// copy pixels upside down
-			var src = new Int32Rect( 0 , 0 , (int)mDrawnImage.Width , 1 );
-			for ( int y=0; y<(int)mDrawnImage.Height; y++ )
-			{
-				src.Y = (int)mDrawnImage.Height - y - 1;
-				mDrawnImage.WritePixels( src , mBackbuffer , mDrawnImage.BackBufferStride , 0 , y );
-			}
-			mDrawnImage.AddDirtyRect( new Int32Rect( 0 , 0 , (int)mDrawnImage.Width , (int)mDrawnImage.Height ) );
-
-			mDrawnImage.Unlock();
-
-			if ( mBackbuffer != null )
-			{
-				// refresh displayed image
-				mImage.Source = mDrawnImage;
-			}
-
-			//  Stop the stopwatch.
-			mStopwatch.Stop();
-
-			//  Store the frame drawing time.
-			DrawTime = mStopwatch.Elapsed.TotalMilliseconds;
-		}
+        }
 
 		#endregion Event Handlers
 
@@ -350,10 +494,16 @@ namespace OpenTK.WPF
 			var error = GL.CheckFramebufferStatus( FramebufferTarget.Framebuffer );
 			if ( error != FramebufferErrorCode.FramebufferComplete )
 			{
-				throw new Exception( "Failed to create FrameBuffer for OpenGLControl" );
+				throw new Exception( "Failed to create FrameBuffer for OpenGLControl, "+error.ToString() );
 			}
 
 			mLoaded = true;
+		}
+
+		public Point GetMousePointAtRenderer()
+		{
+			Point p = Mouse.GetPosition(this);
+			return new Point(p.X * RenderScale, p.Y * RenderScale);
 		}
 
 		#endregion Implementation
@@ -368,9 +518,12 @@ namespace OpenTK.WPF
 		protected Stopwatch mStopwatch = new Stopwatch();
 		private TimeSpan mLast = TimeSpan.Zero;
 
-		private GLControl mTkGlControl;			// hidden WinForms control for offscreen rendering
+		private GLControl mTkGlControl;         // hidden WinForms control for offscreen rendering
 
-		private byte[] mBackbuffer;				// FBO pixels read buffer , create statically to avoid GC
+		private int _frames = 0;
+        private DateTime _lastMeasureTime;
+
+        private byte[] mBackbuffer;				// FBO pixels read buffer , create statically to avoid GC
 		private WriteableBitmap mDrawnImage;	// displaying bitmap
 		private int mFramebufferId;				// FBO
 		private int mColorbufferId;				// FBO pixel buffer

@@ -1,21 +1,4 @@
-﻿//
-//    MCSkinn, a 3d skin management studio for Minecraft
-//    Copyright (C) 2013 Altered Softworks & MCSkinn Team
-//
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-//
-
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -41,10 +24,8 @@ using MCSkinn.Scripts.Paril.Drawing;
 using MCSkinn.Scripts.Paril.Extensions;
 using MCSkinn.Scripts.Paril.Imaging;
 using MCSkinn.Scripts.Paril.OpenGL;
-using MCSkinn.Scripts.Setting;
 using MCSkinn.Scripts.Tools;
 using Microsoft.VisualBasic.FileIO;
-using MultiPainter;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -57,6 +38,9 @@ using WPF = System.Windows;
 using WPFC = System.Windows.Controls;
 using Inkore.Common;
 using System.Collections.ObjectModel;
+using System.Collections;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
+using Inkore.Coreworks.Windows.Helpers;
 
 namespace MCSkinn
 {
@@ -94,11 +78,12 @@ namespace MCSkinn
 
         #endregion
 
+        #region Fields
+        private static bool _screenshotMode;
+
         // ===============================================
         // Private/Static variables
         // ===============================================
-
-        private static bool _screenshotMode;
 
         //public static Stopwatch _renderTimer = new Stopwatch();
         //public static Stopwatch _sortTimer = new Stopwatch();
@@ -106,19 +91,14 @@ namespace MCSkinn
         //public static Stopwatch _compileTimer = new Stopwatch();
         private static bool _firstCalc;
         private static ToolStripMenuItem[] _antialiasOpts;
-        private readonly ImportSite _importFromSite = new ImportSite();
         private Rectangle _currentViewport;
         private BackgroundImage _dynamicOverlay;
         private bool _isValidPick;
         private bool _mouseIn3D;
-        private string[] _newSkinDirs;
         private ModelToolStripMenuItem _oldModel;
         private bool _opening = true;
         private Point _pickPosition = new Point(-1, -1);
-        private TreeNode _rightClickedNode;
-        private bool _waitingForRestart;
         private Form _popoutForm;
-        private Skin _uploadedSkin;
 
         public ToolIndex SelectedTool
         {
@@ -141,10 +121,13 @@ namespace MCSkinn
         // Constructor
         // ===============================================
 
-        public GLControl Renderer
+        public GLControl RendererControl
         {
-            get;
-            private set;
+            get { return Renderer.Renderer; }
+        }
+        public OpenTK.WPF.OtkWpfControl Renderer
+        {
+            get; private set;
         }
 
         public MouseButtons CameraRotate
@@ -191,28 +174,230 @@ namespace MCSkinn
 
         public float ToolScale
         {
-            get { return 200.0f / Renderer.Size.Width; }
+            get { return 200.0f / (int)Renderer.RenderWidth; }
         }
 
 
-        public static Vector3 CameraPosition { get; private set; }
+        public static Vector3 CameraPosition;
 
         public static float GrassY { get; private set; }
+        #endregion
 
-        public static string RootFolderString
+        #region Function Methods
+        private void CreatePartList()
         {
-            get
-            {
-                if (HasOneRoot)
-                    return new DirectoryInfo(MacroHandler.ReplaceMacros(GlobalSettings.SkinDirectories[0])).FullName;
+            //_partItems = new[] { null, headToolStripMenuItem, helmetToolStripMenuItem, chestToolStripMenuItem, leftArmToolStripMenuItem, rightArmToolStripMenuItem, leftLegToolStripMenuItem, rightLegToolStripMenuItem, chestArmorToolStripMenuItem, leftArmArmorToolStripMenuItem, rightArmArmorToolStripMenuItem, leftLegArmorToolStripMenuItem, rightLegArmorToolStripMenuItem };
+            //_partButtons = new[] { null, toggleHeadToolStripButton, toggleHelmetToolStripButton, toggleChestToolStripButton, toggleLeftArmToolStripButton, toggleRightArmToolStripButton, toggleLeftLegToolStripButton, toggleRightLegToolStripButton, toggleChestArmorToolStripButton, toggleLeftArmArmorToolStripButton, toggleRightArmArmorToolStripButton, toggleLeftLegArmorToolStripButton, toggleRightLegArmorToolStripButton };
 
-                throw new InvalidOperationException();
-            }
+            //var list = new ImageList();
+            //list.ColorDepth = ColorDepth.Depth32Bit;
+            //list.ImageSize = new Size(16, 16);
+            //list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.UncheckedNormal));
+            //list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.UncheckedHot));
+            //list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.UncheckedPressed));
+            //list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.CheckedNormal));
+            //list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.CheckedHot));
+            //list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.CheckedPressed));
+            //list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.MixedNormal));
+            //list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.MixedHot));
+            //list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.MixedPressed));
+            //list.Images.Add(Resources.radio_unchecked);
+            //list.Images.Add(Resources.radio_checked);
+
+            //treeView2.ImageList = list;
         }
 
-        public static bool HasOneRoot
+        private PartTreeNode CreateNodePath(ObservableCollection<PartTreeNode> collection, Model m, Mesh part, string[] path, List<PartTreeNode> owners, List<PartTreeNode> radios)
         {
-            get { return GlobalSettings.SkinDirectories.Length == 1; }
+            PartTreeNode node = null;
+
+            for (int i = 0; i < path.Length - 1; ++i)
+            {
+                bool isFound = false;
+                foreach (PartTreeNode no in (node == null ? collection : node.Nodes))
+                {
+                    if (no.Name == path[i])
+                    {
+                        node = no;
+                        isFound = true;
+                        break;
+                    }
+                }
+                if (!isFound)
+                {
+                    (i == 0 ? collection : node.Nodes).Add(node = new PartTreeNode(CurrentModel, part, -1, path[i]));
+                    owners.Add(node);
+
+                }
+                //if (node == null)
+                //{
+
+                //    //TreeNode[] nodes = collection.Find(path[i], false);
+
+                //    //if (nodes.Length == 0)
+                //    //{
+                //    //    treeView.Nodes.Add(node = new PartTreeNode(CurrentModel, part, -1, path[i]));
+                //    //    owners.Add(node);
+
+                //    //    if (node.IsRadio)
+                //    //        radios.Add(node);
+                //    //}
+                //    //else
+                //    //    node = (PartTreeNode)nodes[0];
+
+
+                //}
+                //else
+                //{
+                //    TreeNode[] nodes = node.Nodes.Find(path[i], false);
+
+                //    if (nodes.Length == 0)
+                //    {
+                //        PartTreeNode old = node;
+                //        old.Nodes.Add(node = new PartTreeNode(CurrentModel, part, -1, path[i]));
+                //        owners.Add(node);
+
+                //        if (node.IsRadio)
+                //            radios.Add(node);
+                //    }
+                //    else
+                //        node = (PartTreeNode)nodes[0];
+                //}
+            }
+
+            return node;
+        }
+
+        private void FillPartList()
+        {
+            if (Program.Page_Editor == null)
+                return;
+
+
+            if (CurrentModel.IsTCNFile)
+            {
+                var owners = new List<PartTreeNode>();
+                var radios = new List<PartTreeNode>();
+
+                Program.Page_Editor.Parts.Clear();
+
+                int meshIndex = 0;
+                foreach (Mesh part in CurrentModel.Meshes)
+                {
+                    string name = part.Name;
+                    PartTreeNode node;
+
+                    if (name != null && name.Contains('.'))
+                    {
+                        string[] args = name.Split('.');
+                        PartTreeNode owner = CreateNodePath(Program.Page_Editor.Parts, CurrentModel, part, args, owners, radios);
+
+                        owner.Nodes.Add(node = new PartTreeNode(CurrentModel, part, meshIndex, args[args.Length - 1]));
+                    }
+                    else
+                        Program.Page_Editor.Parts.Add(node = new PartTreeNode(CurrentModel, part, meshIndex));
+
+                    if (node.IsRadio)
+                        radios.Add(node);
+
+                    meshIndex++;
+                }
+
+            }
+            else
+            {
+                Program.Page_Editor.Parts.Clear();
+
+                Dictionary<string, List<Mesh>> meshFolders = new Dictionary<string, List<Mesh>>();
+                Dictionary<string, string> folderParents = new Dictionary<string, string>();
+
+                foreach (Mesh part in CurrentModel.Meshes)
+                {
+                    if (!meshFolders.ContainsKey(part.Folder))
+                        meshFolders.Add(part.Folder, new List<Mesh>());
+
+                    meshFolders[part.Folder].Add(part);
+
+                    if (!string.IsNullOrEmpty(part.FolderParent) && !folderParents.ContainsKey(part.Folder))
+                        folderParents.Add(part.Folder, part.FolderParent);
+                }
+
+                Dictionary<string, PartTreeNode> folders = new Dictionary<string, PartTreeNode>();
+
+
+                foreach (string n in meshFolders.Keys)
+                {
+                    PartTreeNode node;
+
+                    node = new PartTreeNode(CurrentModel, meshFolders[n], n);
+
+                    folders.Add(n, node);
+
+                }
+
+                foreach (KeyValuePair<string, PartTreeNode> pair in folders)
+                {
+                    if (folderParents.ContainsKey(pair.Key) && folders.ContainsKey(folderParents[pair.Key]))
+                    {
+                        folders[folderParents[pair.Key]].Nodes.Add(pair.Value);
+                    }
+                    else
+                    {
+                        Program.Page_Editor.Parts.Add(pair.Value);
+                    }
+                }
+
+            }
+            //treeView2.Sort();
+
+            //radios.Reverse();
+
+            ////foreach (PartTreeNode n in owners)
+            ////    n.CheckGroupImage();
+
+            //foreach (var r in radios)
+            //{
+            //    var other = r.IsOtherRadioButtonEnabled();
+
+            //    if (other != null)
+            //    {
+            //        PartTreeNode.RecursiveAssign(r, true, false);
+            //        r.CheckGroupImage();
+            //    }
+            //}
+
+            //for (int i = 1; i <= (int)ModelPart.RightLegArmor; ++i)
+            //    CheckQuickPartState((ModelPart)i);
+
+        }
+
+        void CheckQuickPartState(ModelPart part)
+        {
+            var meshes = new List<Mesh>();
+            var item = _partItems[(int)part];
+            var button = _partButtons[(int)part];
+
+            foreach (var m in CurrentModel.Meshes)
+                if (m.Part == part)
+                    meshes.Add(m);
+
+            if (meshes.Count == 0)
+            {
+                item.Enabled = button.Enabled = false;
+                return;
+            }
+
+            item.Enabled = button.Enabled = true;
+            item.Checked = button.Checked = true;
+
+            foreach (var m in meshes)
+            {
+                if (CurrentModel.PartsEnabled[m])
+                    continue;
+
+                item.Checked = button.Checked = false;
+                break;
+            }
         }
 
         public void PerformResetCamera()
@@ -228,16 +413,218 @@ namespace MCSkinn
             _3DOffset = Vector3.Zero;
 
             CalculateMatrices();
-            Renderer.Invalidate();
+            InvalidRenderer();
+        }
+        public void PerformDecreaseResolution()
+        {
+            Program.Log(LogType.Load, "Performing DecreaseResolution", "at MCSkinn.Editor.PerformDecreaseResolution()");
+
+            if (_lastSkin.Width <= 1 || _lastSkin.Height <= 1)
+                return;
+            if (!ShowDontAskAgain())
+                return;
+
+            _lastSkin.Resize(_lastSkin.Width / 2, _lastSkin.Height / 2);
+
+            Program.Log(LogType.Info, string.Format("Decreased skin '{0}' to resolution '{1}*{2}'", _lastSkin.FileInfo.Name, _lastSkin.Width.ToString(), _lastSkin.Height.ToString()), "at MCSkinn.Editor.PerformDecreaseResolution()");
+
+
+            using (var grabber = new ColorGrabber(_lastSkin.GLImage, _lastSkin.Width, _lastSkin.Height))
+            {
+                grabber.Load();
+                grabber.Texture = GlobalDirtiness.CurrentSkin;
+                grabber.Save();
+                grabber.Texture = _previewPaint;
+                grabber.Save();
+            }
         }
 
-        byte[] _charWidths = new byte[128];
-
-        private void InitGL()
+        public void PerformIncreaseResolution()
         {
-            GL.ClearColor(GlobalSettings.BackgroundColor);
+            Program.Log(LogType.Load, "Performing IncreaseResolution", "at MCSkinn.Editor.PerformIncreaseResolution()");
+
+            if (!treeView1.Enabled)
+                return;
+
+            if (_lastSkin == null)
+                return;
+            if (!ShowDontAskAgain())
+                return;
+
+            _lastSkin.Resize(_lastSkin.Width * 2, _lastSkin.Height * 2);
+
+            using (var grabber = new ColorGrabber(_lastSkin.GLImage, _lastSkin.Width, _lastSkin.Height))
+            {
+                grabber.Load();
+                grabber.Texture = GlobalDirtiness.CurrentSkin;
+                grabber.Save();
+                grabber.Texture = _previewPaint;
+                grabber.Save();
+            }
+
+            Program.Log(LogType.Info, string.Format("Increased skin '{0}' to resolution '{1}*{2}'", _lastSkin.FileInfo.Name, _lastSkin.Width.ToString(), _lastSkin.Height.ToString()), "at MCSkinn.Editor.PerformIncreaseResolution()");
+        }
+
+        public void PerformImportFromSite()
+        {
+            //if (!treeView1.Enabled)
+            //    return;
+
+            //string accountName = _importFromSite.Show();
+
+            //if (string.IsNullOrEmpty(accountName))
+            //    return;
+
+            //string url = "http://s3.amazonaws.com/MinecraftSkins/" + accountName + ".png";
+
+            //string folderLocation;
+            //TreeNodeCollection collection;
+
+            //if (_rightClickedNode == null)
+            //    _rightClickedNode = SelectedNode;
+
+            //GetFolderLocationAndCollectionForNode(treeView1, _rightClickedNode, out folderLocation, out collection);
+
+            //string newSkinName = accountName;
+
+            //while (File.Exists(folderLocation + newSkinName + ".png"))
+            //    newSkinName += " - " + GetLanguageString("C_NEW");
+
+            //try
+            //{
+            //    byte[] pngData = WebHelpers.DownloadFile(url);
+
+            //    using (FileStream file = File.Create(folderLocation + newSkinName + ".png"))
+            //        file.Write(pngData, 0, pngData.Length);
+
+            //    var skin = new Skin(folderLocation + newSkinName + ".png");
+            //    collection.Add(skin);
+            //    skin.SetImages();
+
+            //    treeView1.Invalidate();
+            //}
+            //catch (Exception ex)
+            //{
+            //    Program.Log(ex, true);
+            //    MessageBox.Show(this, GetLanguageString("M_SKINERROR") + "\r\n" + ex);
+            //    return;
+            //}
+        }
+
+
+        public void SetModel(Model Model)
+        {
+            if (_lastSkin == null)
+                return;
+
+            if (_oldModel != null &&
+                _oldModel.Model == Model)
+                return;
+
+            if (_lastSkin.Model != Model)
+            {
+                var oldAspect = (float)_lastSkin.Width / (float)_lastSkin.Height;
+                var newAspect = (float)Model.DefaultWidth / (float)Model.DefaultHeight;
+
+                if (Math.Abs(oldAspect - newAspect) > 0.01f)
+                {
+                    ResizeType resizeType;
+                    if ((resizeType = SkinSizeMismatch.Show(GetLanguageString("M_SKINSIZEMISMATCH"))) == ResizeType.None)
+                        return;
+
+                    _lastSkin.Model = Model;
+                    _lastSkin.Resize((int)Model.DefaultWidth, (int)Model.DefaultHeight, resizeType);
+
+                    using (var grabber = new ColorGrabber(_lastSkin.GLImage, _lastSkin.Width, _lastSkin.Height))
+                    {
+                        grabber.Load();
+                        grabber.Texture = GlobalDirtiness.CurrentSkin;
+                        grabber.Save();
+                        grabber.Texture = _previewPaint;
+                        grabber.Save();
+                    }
+                }
+                else
+                    _lastSkin.Model = Model;
+
+                _lastSkin.IsDirty = true;
+                SetCanSave(true);
+                CheckUndo();
+            }
+
+            if (_oldModel != null)
+            {
+                _oldModel.IsChecked = false;
+
+                //for (WPF.DependencyObject parent = _oldModel.Parent; parent != null; parent = (parent as WPF.FrameworkElement).Parent as WPF.DependencyObject)
+                //    (parent as WPFC.Control).FontWeight = WPF.FontWeights.Light;
+                _oldModel.FontWeight = WPF.FontWeights.Normal;
+
+                if (_oldModel.ParentItem != null)
+                    _oldModel.ParentItem.FontWeight = WPF.FontWeights.Normal;
+            }
+
+            Program.Page_Editor.AppBarButton_Viewport_Model.Label = toolStripDropDownButton1.Text = _lastSkin.Model.DisplayName;
+            _oldModel = _lastSkin.Model.DropDownItem;
+
+            _lastSkin.TransparentParts.Clear();
+            _lastSkin.SetTransparentParts();
+            FillPartList();
+
+            //for (WPF.DependencyObject parent = _oldModel.Parent; parent != null; parent = (parent as WPF.FrameworkElement).Parent as WPF.DependencyObject)
+            //    (parent as WPFC.Control).FontWeight = WPF.FontWeights.Bold;
+
+            if (_oldModel.ParentItem != null)
+                _oldModel.ParentItem.FontWeight = WPF.FontWeights.Bold;
+
+            _oldModel.FontWeight = WPF.FontWeights.Bold;
+            //_oldModel.IsChecked = true;
+
+            treeView1.Invalidate();
+
+            CalculateMatrices();
+            InvalidRenderer();
+
+            Program.Log(LogType.Info, string.Format("Set current model to '{0}'", Model.Name), "at MCSkinn.Editor.treeView1_AfterSelect(object, TreeViewEventArgs)"); ;
+
+        }
+
+
+        public void PerformBrowseTo()
+        {
+            Program.Log(LogType.Load, "Performing BrowseTo", "at MCSkinn.Editor.PerformSaveAll()");
+
+            if (SkinLibrary.SelectedNode == null)
+                return;
+
+            if (SkinLibrary.SelectedNode is Skin)
+                Process.Start("explorer.exe", "/select,\"" + ((Skin)SkinLibrary.SelectedNode).FileInfo.FullName + "\"");
+            else
+                Process.Start("explorer.exe", ((FolderNode)SkinLibrary.SelectedNode).DirectoryInfo.FullName);
+        }
+
+        #endregion
+
+        #region Graphics Renderer
+        public void InvalidRenderer()
+        {
+            refreshNeeded = true;
+            Renderer.InvalidateVisual();
+        }
+        byte[] _charWidths = new byte[128];
+        public static Color BackgrounColor_Light = Color.FromArgb(255, 230, 240, 250);
+        public static Color BackgrounColor_Dark = Color.FromArgb(255, 32, 32, 32);
+        public void InitGL()
+        {
+            GLVendor = GL.GetString(StringName.Vendor);
+            GLVersion = GL.GetString(StringName.Version);
+            GLRenderer = GL.GetString(StringName.Renderer);
+            GLExtensions = GL.GetString(StringName.Extensions);
 
             GL.Enable(EnableCap.Texture2D);
+            //GL.Enable(EnableCap.Lighting);
+            //GL.Enable(EnableCap.Light0);
+            //GL.Light(LightName.Light0, LightParameter.SpotExponent, Color4.Wheat);
             GL.ShadeModel(ShadingModel.Smooth); // Enable Smooth Shading
             GL.Enable(EnableCap.DepthTest); // Enables Depth Testing
             GL.DepthFunc(DepthFunction.Lequal); // The Type Of Depth Testing To Do
@@ -248,6 +635,14 @@ namespace MCSkinn
             _cubeSides = new TextureGL(Resources.cube_sides);
             _cubeSides.SetMipmapping(true);
             _cubeSides.SetRepeat(true);
+
+            GL.Enable(EnableCap.LineSmooth);
+            GL.Hint(HintTarget.LineSmoothHint, HintMode.Nicest);
+            GL.Enable(EnableCap.PointSmooth);
+            GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
+            GL.Enable(EnableCap.PolygonSmooth);
+            GL.Hint(HintTarget.PolygonSmoothHint, HintMode.Nicest);
+
 
             var tinyFont = Resources.tinyfont;
 
@@ -285,18 +680,7 @@ namespace MCSkinn
 
             _charWidths[(byte)' ' - 32] = 4;
 
-            if (!File.Exists(GlobalSettings.GetDataURI("grass.png")))
-            {
-                _grassTop = new TextureGL(Properties.Resources.grass);
-            }
-            else
-            {
-                _grassTop = new TextureGL(GlobalSettings.GetDataURI("grass.png"));
-
-            }
-
-            _grassTop.SetMipmapping(false);
-            _grassTop.SetRepeat(true);
+            InitializeGround();
 
             _dynamicOverlay = new BackgroundImage("Dynamic", "Dynamic", null);
             _dynamicOverlay.Item = mDYNAMICOVERLAYToolStripMenuItem;
@@ -367,15 +751,29 @@ namespace MCSkinn
                 MeshRenderer = new ClientArrayRenderer();
             else
                 MeshRenderer = new ImmediateRenderer();
+
         }
 
-        private void item_Clicked(object sender, EventArgs e)
+        public void InitializeGround()
         {
-            var item = (ToolStripMenuItem)sender;
-            _backgrounds[_selectedBackground].Item.Checked = false;
-            _selectedBackground = (int)item.Tag;
-            GlobalSettings.LastBackground = _backgrounds[_selectedBackground].Path;
-            item.Checked = true;
+            if (_grassTop != null)
+                _grassTop.Dispose(); _grassTop = null;
+
+            GL.ClearColor(GlobalSettings.BackgroundColor.HasValue ? GlobalSettings.BackgroundColor.Value : (Inkore.UI.WPF.Modern.ThemeManager.Current.ActualApplicationTheme == Modern.ApplicationTheme.Light ? BackgrounColor_Light : BackgrounColor_Dark));
+
+            if (!File.Exists(GlobalSettings.GetDataURI("grass.png")))
+            {
+                _grassTop = new TextureGL(Inkore.UI.WPF.Modern.ThemeManager.Current.ActualApplicationTheme == Modern.ApplicationTheme.Light ? Properties.Resources.ground_white : Properties.Resources.ground_dark);
+            }
+            else
+            {
+                _grassTop = new TextureGL(GlobalSettings.GetDataURI("grass.png"));
+
+            }
+
+            _grassTop.SetMipmapping(false);
+            _grassTop.SetRepeat(true);
+
         }
 
         private Texture GetPaintTexture(int width, int height)
@@ -488,7 +886,7 @@ namespace MCSkinn
             TextureGL.Unbind();
         }
 
-        private void DrawPlayer2D(Texture tex, Skin skin)
+        private void DrawPlayer2D(Texture tex, Skin skin, bool drawPlayer = true)
         {
             if (GlobalSettings.AlphaCheckerboard)
             {
@@ -505,6 +903,9 @@ namespace MCSkinn
                 GL.Vertex2(0, _currentViewport.Height);
                 GL.End();
             }
+
+            if (!drawPlayer)
+                return;
 
             if (skin != null)
                 tex.Bind();
@@ -650,11 +1051,18 @@ namespace MCSkinn
             GL.Disable(EnableCap.Blend);
         }
 
-        private void DrawPlayer(Texture tex, Skin skin)
+        public Point GetRenderCursorPos()
+        {
+            return Renderer.GetMousePointAtRenderer().W2D();
+        }
+
+        public const int GrassLength = 1024;
+
+        private void DrawPlayer(Texture tex, Skin skin, bool drawPlayer = true)
         {
             TextureGL.Unbind();
 
-            Point clPt = Renderer.PointToClient(Cursor.Position);
+            Point clPt = GetRenderCursorPos();
             int x = clPt.X - (_currentViewport.Width / 2);
             int y = clPt.Y - (_currentViewport.Height / 2);
 
@@ -666,10 +1074,13 @@ namespace MCSkinn
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Front);
 
-            if (GlobalSettings.Grass)
-                DrawSkinnedRectangle(0, GrassY + 0.25f, 0, 128, 0, 128, 0, 0, 128, 128, _grassTop, 16, 16);
+            if (GlobalSettings.ShowGround)
+                DrawSkinnedRectangle(0, GrassY + 0.25f, 0, GrassLength, 0, GrassLength, 0, 0, GrassLength, GrassLength, _grassTop, 16, 16);
 
             GL.Disable(EnableCap.CullFace);
+
+            if (!drawPlayer)
+                return;
 
             // add meshes
             //if (GlobalSettings.RenderBenchmark && IsRendering)
@@ -1048,7 +1459,7 @@ namespace MCSkinn
         {
             hitPixel = new Point(-1, -1);
 
-            if (x < 0 || y < 0 || x >= Renderer.Width || y >= Renderer.Height)
+            if (x < 0 || y < 0 || x >= (int)Renderer.RenderWidth || y >= (int)Renderer.RenderHeight)
                 return false;
 
             var vp2d = GetViewport2D();
@@ -1190,41 +1601,26 @@ namespace MCSkinn
             return false;
         }
 
-        private void rendererControl_MouseWheel(object sender, MouseEventArgs e)
-        {
-            CheckMouse(e.Y);
-
-            if (_currentViewMode == ViewMode.Perspective || (_currentViewMode == ViewMode.Hybrid && _mouseIn3D))
-                _3DZoom += e.Delta / 50;
-            else
-                _2DZoom += e.Delta / 50;
-
-            if (_2DZoom < 0.25f)
-                _2DZoom = 0.25f;
-
-            CalculateMatrices();
-            Renderer.Invalidate();
-        }
 
         public Rectangle GetViewport3D()
         {
             if (_currentViewMode == ViewMode.Perspective)
-                return new Rectangle(0, 0, Renderer.Width, Renderer.Height);
+                return new Rectangle(0, 0, (int)Renderer.RenderWidth, (int)Renderer.RenderHeight);
             else
             {
-                var halfHeight = (int)Math.Ceiling(Renderer.Height / 2.0f);
-                return new Rectangle(0, halfHeight, Renderer.Width, halfHeight);
+                var halfHeight = (int)Math.Ceiling((int)Renderer.RenderHeight / 2.0f);
+                return new Rectangle(0, halfHeight, (int)Renderer.RenderWidth, halfHeight);
             }
         }
 
         public Rectangle GetViewport2D()
         {
             if (_currentViewMode == ViewMode.Orthographic)
-                return new Rectangle(0, 0, Renderer.Width, Renderer.Height);
+                return new Rectangle(0, 0, (int)Renderer.RenderWidth, (int)Renderer.RenderHeight);
             else
             {
-                var halfHeight = (int)Math.Ceiling(Renderer.Height / 2.0f);
-                return new Rectangle(0, 0, Renderer.Width, halfHeight);
+                var halfHeight = (int)Math.Ceiling((int)Renderer.RenderHeight / 2.0f);
+                return new Rectangle(0, 0, (int)Renderer.RenderWidth, halfHeight);
             }
         }
 
@@ -1314,7 +1710,7 @@ namespace MCSkinn
             TextureGL.Unbind();
         }
 
-        private void rendererControl_Paint(object sender, PaintEventArgs e)
+        public void rendererControl_Paint(object sender, PaintEventArgs e)
         {
             try
             {
@@ -1324,9 +1720,9 @@ namespace MCSkinn
                 //if (GlobalSettings.RenderBenchmark)
                 //    _renderTimer.Start();
 
-                Renderer.MakeCurrent();
+                RenderMakeCurrent();
 
-                _mousePoint = Renderer.PointToClient(MousePosition);
+                _mousePoint = GetRenderCursorPos();
 
                 SetPreview();
 
@@ -1337,15 +1733,17 @@ namespace MCSkinn
                 GL.PushMatrix();
                 if (_currentViewMode == ViewMode.Perspective)
                 {
-                    Setup3D(new Rectangle(0, 0, Renderer.Width, Renderer.Height));
-                    DrawPlayer(_previewPaint, skin);
+                    Setup3D(new Rectangle(0, 0, (int)Renderer.RenderWidth, (int)Renderer.RenderHeight));
 
-                    int sizeOfMiniport = 120;
+                    DrawPlayer(_previewPaint, skin, !Program.Page_Editor.IsViewportError);
+
+                    int sizeOfMiniport = (int)(120 * Renderer.RenderScale);
                     float sizeOfCube = sizeOfMiniport;
+
 
                     GL.Clear(ClearBufferMask.DepthBufferBit);
 
-                    Setup2D(new Rectangle(Renderer.Width - sizeOfMiniport, Renderer.Height - sizeOfMiniport, sizeOfMiniport, sizeOfMiniport));
+                    Setup2D(new Rectangle((int)Renderer.RenderWidth - sizeOfMiniport, (int)Renderer.RenderHeight - sizeOfMiniport, sizeOfMiniport, sizeOfMiniport));
                     GL.Enable(EnableCap.DepthTest);
                     GL.Enable(EnableCap.CullFace);
                     GL.Enable(EnableCap.Blend);
@@ -1370,25 +1768,25 @@ namespace MCSkinn
                 }
                 else if (_currentViewMode == ViewMode.Orthographic)
                 {
-                    Setup2D(new Rectangle(0, 0, Renderer.Width, Renderer.Height));
-                    DrawPlayer2D(_previewPaint, skin);
+                    Setup2D(new Rectangle(0, 0, (int)Renderer.RenderWidth, (int)Renderer.RenderHeight));
+                    DrawPlayer2D(_previewPaint, skin, !Program.Page_Editor.IsViewportError);
                 }
                 else
                 {
-                    var halfHeight = (int)Math.Ceiling(Renderer.Height / 2.0f);
+                    var halfHeight = (int)Math.Ceiling((int)Renderer.RenderHeight / 2.0f);
 
-                    Setup3D(new Rectangle(0, 0, Renderer.Width, halfHeight));
-                    DrawPlayer(_previewPaint, skin);
+                    Setup3D(new Rectangle(0, 0, (int)Renderer.RenderWidth, halfHeight));
+                    DrawPlayer(_previewPaint, skin, !Program.Page_Editor.IsViewportError);
 
-                    Setup2D(new Rectangle(0, halfHeight, Renderer.Width, halfHeight));
-                    DrawPlayer2D(_previewPaint, skin);
+                    Setup2D(new Rectangle(0, halfHeight, (int)Renderer.RenderWidth, halfHeight));
+                    DrawPlayer2D(_previewPaint, skin, !Program.Page_Editor.IsViewportError);
                 }
 
                 GL.PopMatrix();
                 //_renderTimer.Stop();
 
-                if (!_screenshotMode)
-                    Renderer.SwapBuffers();
+                //if (!_screenshotMode)
+                //    Renderer.SwapBuffers();
                 IsRendering = false;
             }
             catch (Exception ex)
@@ -1428,11 +1826,13 @@ namespace MCSkinn
                     {
                         allBounds += mesh.Bounds;
 
-                        if (CurrentModel.PartsEnabled[mesh])
-                        {
-                            vec += mesh.Bounds;
-                            count++;
-                        }
+                        vec += mesh.Bounds;
+                        count++;
+                        //if (CurrentModel.PartsEnabled[mesh])
+                        //{
+                        //    vec += mesh.Bounds;
+                        //    count++;
+                        //}
 
                         meshIndex++;
                     }
@@ -1442,6 +1842,10 @@ namespace MCSkinn
                     vec.Mins = vec.Maxs = allBounds.Mins = allBounds.Maxs = Vector3.Zero;
 
                 GrassY = allBounds.Maxs.Y;
+
+                if (CurrentModel == null)
+                    GrassY = GrassY + 10;
+
                 Vector3 center = vec.Center;
 
                 _viewMatrix3d =
@@ -1455,8 +1859,8 @@ namespace MCSkinn
                 var cameraMatrix = _viewMatrix3d;
                 cameraMatrix.Invert();
 
-                CameraPosition = Vector3.TransformPosition(Vector3.Zero, cameraMatrix);
 
+                CameraPosition = Vector3.TransformPosition(Vector3.Zero, cameraMatrix);
             }
             catch (Exception ex)
             {
@@ -1503,30 +1907,6 @@ namespace MCSkinn
             GL.Disable(EnableCap.DepthTest);
         }
 
-        private void rendererControl_Resize(object sender, EventArgs e)
-        {
-            Renderer.MakeCurrent();
-
-            CalculateMatrices();
-            Renderer.Invalidate();
-        }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            _opening = !_opening;
-
-            if (_opening)
-            {
-                splitContainer4.SplitterDistance = 74;
-                toolStripButton1.Image = Resources.arrow_Up_16xLG;
-            }
-            else
-            {
-                splitContainer4.SplitterDistance = splitContainer4.Panel1MinSize;
-                toolStripButton1.Image = Resources.arrow_Down_16xLG;
-            }
-        }
-
         public void RotateView(Point delta, float factor)
         {
             if (_currentViewMode == ViewMode.Perspective || (_currentViewMode == ViewMode.Hybrid && _mouseIn3D))
@@ -1541,7 +1921,7 @@ namespace MCSkinn
             }
 
             CalculateMatrices();
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
         public void ScaleView(Point delta, float factor)
@@ -1559,7 +1939,7 @@ namespace MCSkinn
             }
 
             CalculateMatrices();
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
         public void TranslateView(Point delta, float factor)
         {
@@ -1575,12 +1955,12 @@ namespace MCSkinn
             }
 
             CalculateMatrices();
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
         private void CheckMouse(int y)
         {
-            if (y > (Renderer.Height / 2))
+            if (y > ((int)Renderer.RenderHeight / 2))
                 _mouseIn3D = true;
             else
                 _mouseIn3D = false;
@@ -1612,133 +1992,328 @@ namespace MCSkinn
             _paintedPixels.Clear();
         }
 
-        private void rendererControl_MouseDown(object sender, MouseEventArgs e)
+        private Bitmap GenerateCheckBoxBitmap(CheckBoxState state)
         {
-            Skin skin = _lastSkin;
+            var uncheckedImage = new Bitmap(16, 16, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            if (skin == null)
-                return;
-
-            CheckMouse(e.Y);
-
-            _mousePoint = e.Location;
-            _mouseIsDown = true;
-
-            //_isValidPick = GetPick(e.X, e.Y, ref _pickPosition);
-
-            using (var backup = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height))
+            using (Graphics g = Graphics.FromImage(uncheckedImage))
             {
-                backup.Load();
+                Size glyphSize = CheckBoxRenderer.GetGlyphSize(g, state);
+                CheckBoxRenderer.DrawCheckBox(g, new Point((16 / 2) - (glyphSize.Width / 2), (16 / 2) - (glyphSize.Height / 2)),
+                                              state);
+            }
 
-                try
+            return uncheckedImage;
+        }
+        private void SkinLibrary_SelectedNodeChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if(SkinLibrary.SelectedNode == null)
                 {
-                    if (e.Button == MouseButtons.Left)
+                    Program.Page_Editor?.SetViewportPopupError("Select a skin to get started", null, Inkore.UI.WPF.Modern.SegoeIcons.People, false);
+                    return;
+                }
+                if (SkinLibrary.SelectedNode is FolderNode)
+                {
+                    Program.Page_Editor?.SetViewportPopupError(SkinLibrary.SelectedNode.Text +"\r\n(" + Directory.GetFiles((SkinLibrary.SelectedNode as FolderNode).Path, "*.png", System.IO.SearchOption.AllDirectories).Length.ToString() + " skins)\r\n\r\n" + Program.GetLanguageString("M_FOLDERSELECTED"), SkinLibrary.SelectedNode.Path, Pages.PageEditor.FontIcon_FolderOpen, false);
+                    return;
+                }
+
+                if (!(SkinLibrary.SelectedNode as Skin).IsLoaded)
+                {
+                    Exception ex = (SkinLibrary.SelectedNode as Skin).SetImages();
+                    if (ex != null)
                     {
-                        if (_isValidPick)
-                            _selectedTool.Tool.BeginClick(_lastSkin, _pickPosition, e);
-                        else
-                            _selectedTool.Tool.BeginClick(_lastSkin, new Point(-1, -1), e);
-                        UseToolOnViewport(e.X, e.Y);
+                        Program.Page_Editor.SetViewportPopupError(Program.GetLanguageString("M_UNABLELOADSKIN") + "\r\n" + ex.Message, SkinLibrary.SelectedNode.Path + "\r\n\r\n" + ex.StackTrace);
+                        return;
                     }
                     else
-                        _tools[(int)Tools.Camera].Tool.BeginClick(_lastSkin, Point.Empty, e);
+                    {
+                        Program.Page_Editor.SetViewportPopupError();
+                    }
                 }
-                catch(Exception ex)
-                {
-                    backup.Save();
-                    saveAllToolStripMenuItem_Click(null, null);
 
-                    Program.Log(ex, true);
+
+                RenderMakeCurrent();
+
+                if (_lastSkin != null) // && SelectedNode != _lastSkin)
+                {
+                    // Copy over the current changes to the tex stored in the skin.
+                    // This allows us to pick up where we left off later, without undoing any work.
+                    _lastSkin.CommitChanges(GlobalDirtiness.CurrentSkin, false);
+
+                    // if we aren't dirty, unload
+                    if (!_lastSkin.IsDirty)
+                        _lastSkin.Unload();
+                }
+
+                //if (_lastSkin != null)
+                //	_lastSkin.Undo.Clear();
+
+                var skin = (Skin)SkinLibrary.SelectedNode;
+                SetCanSave(skin.IsDirty);
+
+
+                if (skin.GLImage == null)
+                    skin.Create();
+
+                if (skin == null)
+                {
+                    _currentUndoBuffer = null;
+                    TextureGL.Unbind();
+
+                    using (var currentSkin = new ColorGrabber(GlobalDirtiness.CurrentSkin, 64, 32))
+                        currentSkin.Save();
+
+                    undoToolStripMenuItem.Enabled = undoToolStripButton.Enabled = false;
+                    redoToolStripMenuItem.Enabled = redoToolStripButton.Enabled = false;
+                    if (Program.Window_Main != null)
+                    {
+                        Program.Page_Editor.SetTrayButtonEnabled(1, undoToolStripMenuItem.Enabled);
+                        Program.Page_Editor.SetTrayButtonEnabled(2, redoToolStripMenuItem.Enabled);
+                    }
+
+                }
+                else
+                {
+                    using (var glImage = new ColorGrabber(skin.GLImage, skin.Width, skin.Height))
+                    {
+                        glImage.Load();
+
+                        glImage.Texture = GlobalDirtiness.CurrentSkin;
+                        glImage.Save();
+                        glImage.Texture = _previewPaint;
+                        glImage.Save();
+                    }
+
+                    _currentUndoBuffer = skin.Undo;
+                    CheckUndo();
+                }
+
+                _lastSkin = (Skin)SkinLibrary.SelectedNode;
+
+                SetModel(skin.Model);
+                InvalidRenderer();
+
+                VerifySelectionButtons();
+                FillPartList();
+
+                Program.Page_Editor.SetViewportPopupError();
+
+
+                Program.Log(LogType.Info, string.Format("Set current skin to '{0}'", _lastSkin.FileInfo.Name), "at MCSkinn.Editor.treeView1_AfterSelect(object, TreeViewEventArgs)");
+
+            }
+            catch (Exception ex)
+            {
+                if (ex != null)
+                {
+                    Program.Page_Editor.SetViewportPopupError(Program.GetLanguageString("M_UNABLELOADSKIN") + "\r\n" + SkinLibrary.SelectedNode.Path + "\r\n\r\n" + ex.Message, ex.StackTrace);
+                    Program.Log(ex);
+                }
+            }
+            finally
+            {
+                refreshNeeded = true;
+            }
+
+        }
+        private void SetSampleMenuItem(int samples)
+        {
+            if (_antialiasOpts == null)
+            {
+                _antialiasOpts = new[]
+                                 {
+                                     xToolStripMenuItem4, xToolStripMenuItem, xToolStripMenuItem1, xToolStripMenuItem2,
+                                     xToolStripMenuItem3
+                                 };
+            }
+
+            int index = 0;
+
+            switch (samples)
+            {
+                case 0:
+                default:
+                    index = 0;
+                    break;
+                case 1:
+                    index = 1;
+                    break;
+                case 2:
+                    index = 2;
+                    break;
+                case 4:
+                    index = 3;
+                    break;
+                case 8:
+                    index = 4;
+                    break;
+            }
+
+            foreach (ToolStripMenuItem item in _antialiasOpts)
+                item.Checked = false;
+
+            GlobalSettings.Multisamples = samples;
+            _antialiasOpts[index].Checked = true;
+        }
+        static void CreateModelDropdownItems(WPFC.ItemCollection mainCollection, bool main, Action<Model> callback, string prefix)
+        {
+            Dictionary<string, WPFC.MenuItem> FolderMenus = new Dictionary<string, WPFC.MenuItem>();
+            foreach (var x in ModelLoader.Models)
+            {
+                WPFC.ItemCollection collection = mainCollection;
+                string path = Path.GetDirectoryName(x.Value.File.ToString()).Substring(Environment.CurrentDirectory.Length + 7);
+
+                WPFC.MenuItem subi = null;
+
+                while (!string.IsNullOrEmpty(path))
+                {
+                    string sub = path.Substring(1, path.IndexOf('\\', 1) == -1 ? (path.Length - 1) : (path.IndexOf('\\', 1) - 1));
+
+                    if (FolderMenus.ContainsKey(ModelToolStripMenuItem.GetName(sub, prefix) + "_FOLDER"))
+                        subi = FolderMenus[ModelToolStripMenuItem.GetName(sub, prefix) + "_FOLDER"];
+                    else
+                        subi = null;
+
+                    if (subi == null)
+                    {
+                        var item = new WPFC.MenuItem();
+                        item.Header = sub;
+                        item.Name = ModelToolStripMenuItem.GetName(sub, prefix) + "_FOLDER";
+                        collection.Add(item);
+                        FolderMenus.Add(item.Name, item);
+                        collection = item.Items;
+                        subi = item;
+
+                    }
+                    else
+                    {
+                        collection = subi.Items;
+                    }
+
+                    path = path.Remove(0, sub.Length + 1);
+                }
+                collection.Add(new ModelToolStripMenuItem(x.Value, main, callback, prefix, subi));
+            }
+        }
+
+        public void FinishedLoadingModels()
+        {
+            CreateModelDropdownItems(Program.Page_Editor.MenuFlyout_Model.Items, true, (model) =>
+            {
+                SetModel(model);
+            }, "model_");
+            //CreateModelDropdownItems(Program.Page_Editor.MenuItem_NewSkin.Items, false, (model) =>
+            //{
+            //    PerformNewSkin(model);
+            //}, "create_");
+
+            toolStripDropDownButton1.Enabled = true;
+            toolStripDropDownButton1.Text = "None";
+
+            RenderMakeCurrent();
+
+            // Compile model userdata
+            foreach (var model in ModelLoader.Models)
+            {
+                foreach (var m in model.Value.Meshes)
+                {
+                    m.UserData = MeshRenderer.CreateUserData(m);
+                    MeshRenderer.UpdateUserData(m);
                 }
             }
         }
 
-        private void rendererControl_MouseMove(object sender, MouseEventArgs e)
+        #endregion
+
+        #region UI Events
+        private void bROWSEIDToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Skin skin = _lastSkin;
+            PerformBrowseTo();
+        }
 
-            if (skin == null)
-                return;
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+            bROWSEIDToolStripMenuItem.Text = string.Format(GetLanguageString("M_BROWSE"),
+                                                           (SkinLibrary.SelectedNode is Skin)
+                                                               ? GetLanguageString("M_SKIN")
+                                                               : GetLanguageString("M_FOLDER"));
+        }
 
-            _isValidPick = GetPick(e.X, e.Y, out _pickPosition);
+        private void mRENDERSTATSToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mRENDERSTATSToolStripMenuItem.Checked = !mRENDERSTATSToolStripMenuItem.Checked;
+            GlobalSettings.RenderBenchmark = mRENDERSTATSToolStripMenuItem.Checked;
+        }
 
-            using (var backup = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height))
+        private void toolStripButton7_Click(object sender, EventArgs e)
+        {
+            splitContainer1.Panel2Collapsed = !splitContainer1.Panel2Collapsed;
+
+            if (_popoutForm == null)
             {
-                backup.Load();
+                int oldWidth = Width;
+                Width = helpToolStripMenuItem.Bounds.X + helpToolStripMenuItem.Bounds.Width + 18;
 
-                try
-                {
-                    if (_mouseIsDown)
-                    {
-                        if (e.Button == MouseButtons.Left)
-                        {
-                            _selectedTool.Tool.MouseMove(_lastSkin, e);
-                            UseToolOnViewport(e.X, e.Y);
-                        }
-                        else
-                            _tools[(int)Tools.Camera].Tool.MouseMove(_lastSkin, e);
-                    }
+                // Move the items to a new form
+                _popoutForm = new Form();
+                _popoutForm.Height = Height;
+                _popoutForm.Width = (oldWidth - Width) + 4;
+                _popoutForm.Text = "Render Window";
+                _popoutForm.Icon = Icon;
+                _popoutForm.ControlBox = false;
+                _popoutForm.Show();
+                _popoutForm.Location = new Point(Location.X + Width, Location.Y);
+                _popoutForm.KeyDown += popoutForm_KeyDown;
+                _popoutForm.KeyPreview = true;
+                _popoutForm.FormClosing += new FormClosingEventHandler(_popoutForm_FormClosing);
 
-                    _mousePoint = e.Location;
-                    Renderer.Invalidate();
-                }
-                catch(Exception ex)
-                {
-                    backup.Save();
-                    saveAllToolStripMenuItem_Click(null, null);
-                    
-                    Program.Log(ex, true);
-                }
+                splitContainer1.Panel2.Controls.Remove(panel4);
+                _popoutForm.Controls.Add(panel4);
+            }
+            else
+            {
+                _popoutForm.Controls.Remove(panel4);
+                splitContainer1.Panel2.Controls.Add(panel4);
+
+                Width += _popoutForm.Width - 4;
+
+                _popoutForm.Close();
+                _popoutForm.Dispose();
+                _popoutForm = null;
             }
         }
 
-        private void rendererControl_MouseUp(object sender, MouseEventArgs e)
+        void _popoutForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Skin skin = _lastSkin;
+            e.Cancel = true;
+        }
+        private void item_Clicked(object sender, EventArgs e)
+        {
+            var item = (ToolStripMenuItem)sender;
+            _backgrounds[_selectedBackground].Item.Checked = false;
+            _selectedBackground = (int)item.Tag;
+            GlobalSettings.LastBackground = _backgrounds[_selectedBackground].Path;
+            item.Checked = true;
+        }
 
-            if (skin == null)
-                return;
 
-            using (var backup = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height))
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            _opening = !_opening;
+
+            if (_opening)
             {
-                backup.Load();
-
-                try
-                {
-                    if (_mouseIsDown)
-                    {
-                        var currentSkin = new ColorGrabber();
-
-                        if (e.Button == MouseButtons.Left)
-                        {
-                            currentSkin = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height);
-                            currentSkin.Load();
-
-                            if (_selectedTool.Tool.EndClick(currentSkin, skin, e))
-                            {
-                                SetCanSave(true);
-                                skin.Dirty = true;
-                                treeView1.Invalidate();
-                                currentSkin.Save();
-                            }
-
-                            SetPartTransparencies();
-                        }
-                        else
-                            _tools[(int)Tools.Camera].Tool.EndClick(currentSkin, _lastSkin, e);
-                    }
-                }
-                catch(Exception ex)
-                {
-                    backup.Save();
-                    saveAllToolStripMenuItem_Click(null, null);
-
-                    Program.Log(ex, true);
-                }
+                splitContainer4.SplitterDistance = 74;
+                toolStripButton1.Image = Resources.arrow_Up_16xLG;
             }
-
-            _mouseIsDown = false;
-            treeView1.Invalidate();
+            else
+            {
+                splitContainer4.SplitterDistance = splitContainer4.Panel1MinSize;
+                toolStripButton1.Image = Resources.arrow_Down_16xLG;
+            }
         }
 
         public void CheckUndo()
@@ -1756,58 +2331,53 @@ namespace MCSkinn
 
             if (Program.Window_Main != null)
             {
-                Program.Page_Editor.Button_Undo.IsEnabled = Program.Page_Editor.DropDownButton_Undo.IsEnabled = Program.Page_Editor.MenuItem_Edit_Undo.IsEnabled = undoToolStripMenuItem.Enabled;
-                Program.Page_Editor.Button_Redo.IsEnabled = Program.Page_Editor.DropDownButton_Redo.IsEnabled = Program.Page_Editor.MenuItem_Edit_Redo.IsEnabled = redoToolStripMenuItem.Enabled;
+                Program.Page_Editor.SetTrayButtonEnabled(1, undoToolStripMenuItem.Enabled);
+                Program.Page_Editor.SetTrayButtonEnabled(2, redoToolStripMenuItem.Enabled);
             }
 
         }
 
-        private void rendererControl_MouseLeave(object sender, EventArgs e)
-        {
-            _mousePoint = new Point(-1, -1);
-        }
-
         private void VerifySelectionButtons()
         {
-            changeNameToolStripMenuItem.Enabled =
-                deleteToolStripMenuItem.Enabled = cloneToolStripMenuItem.Enabled = toolStrip2.CloneToolStripButton.Enabled = true;
+            //changeNameToolStripMenuItem.Enabled =
+            //    deleteToolStripMenuItem.Enabled = cloneToolStripMenuItem.Enabled = toolStrip2.CloneToolStripButton.Enabled = true;
             mDECRESToolStripMenuItem.Enabled = mINCRESToolStripMenuItem.Enabled = true;
-            bROWSEIDToolStripMenuItem.Enabled = treeView1.SelectedNode != null;
+            bROWSEIDToolStripMenuItem.Enabled = SkinLibrary.SelectedNode != null;
 
-            string folderLocation = GetFolderLocationForNode(treeView1.SelectedNode);
+            string folderLocation = GetFolderLocationForNode(SkinLibrary.SelectedNode);
             bool canDoOperation = string.IsNullOrEmpty(folderLocation);
 
-            toolStrip2.ImportToolStripButton.Enabled = !canDoOperation;
-            toolStrip2.NewSkinToolStripButton.Enabled = !canDoOperation;
-            toolStrip2.NewFolderToolStripButton.Enabled = !canDoOperation;
-            toolStrip2.FetchToolStripButton.Enabled = !canDoOperation;
+            //toolStrip2.ImportToolStripButton.Enabled = !canDoOperation;
+            //toolStrip2.NewSkinToolStripButton.Enabled = !canDoOperation;
+            //toolStrip2.NewFolderToolStripButton.Enabled = !canDoOperation;
+            //toolStrip2.FetchToolStripButton.Enabled = !canDoOperation;
 
             importHereToolStripMenuItem.Enabled = !canDoOperation;
             newSkinToolStripMenuItem.Enabled = !canDoOperation;
             newFolderToolStripMenuItem.Enabled = !canDoOperation;
             mFETCHNAMEToolStripMenuItem.Enabled = !canDoOperation;
 
-            bool itemSelected = treeView1.SelectedNode == null || (!HasOneRoot && treeView1.SelectedNode.Parent == null);
+            //bool itemSelected = SelectedNode == null || (!HasOneRoot && SelectedNode.Parent == null);
 
-            toolStrip2.RenameToolStripButton.Enabled = !itemSelected;
-            toolStrip2.DeleteToolStripButton.Enabled = !itemSelected;
-            toolStrip2.DecResToolStripButton.Enabled = !itemSelected;
-            toolStrip2.IncResToolStripButton.Enabled = !itemSelected;
+            //toolStrip2.RenameToolStripButton.Enabled = !itemSelected;
+            //toolStrip2.DeleteToolStripButton.Enabled = !itemSelected;
+            //toolStrip2.DecResToolStripButton.Enabled = !itemSelected;
+            //toolStrip2.IncResToolStripButton.Enabled = !itemSelected;
 
-            changeNameToolStripMenuItem.Enabled = !itemSelected;
-            deleteToolStripMenuItem.Enabled = !itemSelected;
-            mDECRESToolStripMenuItem.Enabled = !itemSelected;
-            mINCRESToolStripMenuItem.Enabled = !itemSelected;
+            //changeNameToolStripMenuItem.Enabled = !itemSelected;
+            //deleteToolStripMenuItem.Enabled = !itemSelected;
+            //mDECRESToolStripMenuItem.Enabled = !itemSelected;
+            //mINCRESToolStripMenuItem.Enabled = !itemSelected;
 
-            if (treeView1.SelectedNode == null ||
-                !(treeView1.SelectedNode is Skin))
+            if (SkinLibrary.SelectedNode == null ||
+                !(SkinLibrary.SelectedNode is Skin))
             {
-                cloneToolStripMenuItem.Enabled =
-                toolStrip2.CloneToolStripButton.Enabled = false;
+                //cloneToolStripMenuItem.Enabled =
+                //toolStrip2.CloneToolStripButton.Enabled = false;
             }
-            else if (treeView1.SelectedNode is Skin)
+            else if (SkinLibrary.SelectedNode is Skin)
             {
-                var skin = treeView1.SelectedNode as Skin;
+                var skin = SkinLibrary.SelectedNode as Skin;
 
                 if (skin.Width <= 1 || skin.Height <= 1)
                     mDECRESToolStripMenuItem.Enabled = false;
@@ -1816,92 +2386,7 @@ namespace MCSkinn
             }
         }
 
-        private Bitmap GenerateCheckBoxBitmap(CheckBoxState state)
-        {
-            var uncheckedImage = new Bitmap(16, 16, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            using (Graphics g = Graphics.FromImage(uncheckedImage))
-            {
-                Size glyphSize = CheckBoxRenderer.GetGlyphSize(g, state);
-                CheckBoxRenderer.DrawCheckBox(g, new Point((16 / 2) - (glyphSize.Width / 2), (16 / 2) - (glyphSize.Height / 2)),
-                                              state);
-            }
-
-            return uncheckedImage;
-        }
-
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            if ( //treeView1.SelectedNode == _lastSkin ||
-                !(e.Node is Skin))
-                return;
-
-            Renderer.MakeCurrent();
-
-            if (_lastSkin != null) // && treeView1.SelectedNode != _lastSkin)
-            {
-                // Copy over the current changes to the tex stored in the skin.
-                // This allows us to pick up where we left off later, without undoing any work.
-                _lastSkin.CommitChanges(GlobalDirtiness.CurrentSkin, false);
-
-                // if we aren't dirty, unload
-                if (!_lastSkin.Dirty)
-                    _lastSkin.Unload();
-            }
-
-            //if (_lastSkin != null)
-            //	_lastSkin.Undo.Clear();
-
-            var skin = (Skin)treeView1.SelectedNode;
-            SetCanSave(skin.Dirty);
-
-            if (skin.GLImage == null)
-                skin.Create();
-
-            if (skin == null)
-            {
-                _currentUndoBuffer = null;
-                TextureGL.Unbind();
-
-                using (var currentSkin = new ColorGrabber(GlobalDirtiness.CurrentSkin, 64, 32))
-                    currentSkin.Save();
-
-                undoToolStripMenuItem.Enabled = undoToolStripButton.Enabled = false;
-                redoToolStripMenuItem.Enabled = redoToolStripButton.Enabled = false;
-                if (Program.Window_Main != null)
-                {
-                    Program.Page_Editor.DropDownButton_Undo.IsEnabled = Program.Page_Editor.MenuItem_Edit_Undo.IsEnabled = undoToolStripMenuItem.Enabled;
-                    Program.Page_Editor.DropDownButton_Undo.IsEnabled = Program.Page_Editor.MenuItem_Edit_Redo.IsEnabled = redoToolStripMenuItem.Enabled;
-                }
-
-            }
-            else
-            {
-                using (var glImage = new ColorGrabber(skin.GLImage, skin.Width, skin.Height))
-                {
-                    glImage.Load();
-
-                    glImage.Texture = GlobalDirtiness.CurrentSkin;
-                    glImage.Save();
-                    glImage.Texture = _previewPaint;
-                    glImage.Save();
-                }
-
-                _currentUndoBuffer = skin.Undo;
-                CheckUndo();
-            }
-
-            _lastSkin = (Skin)treeView1.SelectedNode;
-
-            SetModel(skin.Model);
-            Renderer.Invalidate();
-
-            VerifySelectionButtons();
-            FillPartList();
-
-            Program.Log(LogType.Info, string.Format("Set current skin to '{0}'", _lastSkin.File.Name), "at MCSkinn.Editor.treeView1_AfterSelect(object, TreeViewEventArgs)");
-
-        }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1922,7 +2407,6 @@ namespace MCSkinn
 
         private void treeView1_MouseDown(object sender, MouseEventArgs e)
         {
-            _rightClickedNode = treeView1.GetSelectedNodeAt(e.Location);
             VerifySelectionButtons();
         }
 
@@ -2129,17 +2613,17 @@ namespace MCSkinn
 
         private void backgroundColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var picker = new MultiPainter.ColorPicker())
-            {
-                picker.CurrentColor = GlobalSettings.BackgroundColor;
+            //using (var picker = new MultiPainter.ColorPicker())
+            //{
+            //    picker.CurrentColor = GlobalSettings.BackgroundColor;
 
-                if (picker.ShowDialog() == DialogResult.OK)
-                {
-                    GlobalSettings.BackgroundColor = picker.CurrentColor;
+            //    if (picker.ShowDialog() == DialogResult.OK)
+            //    {
+            //        GlobalSettings.BackgroundColor = picker.CurrentColor;
 
-                    Renderer.Invalidate();
-                }
-            }
+            //        InvalidRenderer();
+            //    }
+            //}
         }
 
         private void screenshotToolStripButton_Click(object sender, EventArgs e)
@@ -2190,15 +2674,9 @@ namespace MCSkinn
             PerformCloneSkin();
         }
 
-        private void automaticallyCheckForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            GlobalSettings.AutoUpdate =
-                automaticallyCheckForUpdatesToolStripMenuItem.Checked = !automaticallyCheckForUpdatesToolStripMenuItem.Checked;
-        }
-
         private void labelEditTextBox_Leave(object sender, EventArgs e)
         {
-            DoneEditingNode(labelEditTextBox.Text, _currentlyEditing);
+            //DoneEditingNode(labelEditTextBox.Text, _currentlyEditing);
         }
 
         private void labelEditTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -2237,46 +2715,6 @@ namespace MCSkinn
             ToggleGhosting();
         }
 
-        private void SetSampleMenuItem(int samples)
-        {
-            if (_antialiasOpts == null)
-            {
-                _antialiasOpts = new[]
-                                 {
-                                     xToolStripMenuItem4, xToolStripMenuItem, xToolStripMenuItem1, xToolStripMenuItem2,
-                                     xToolStripMenuItem3
-                                 };
-            }
-
-            int index = 0;
-
-            switch (samples)
-            {
-                case 0:
-                default:
-                    index = 0;
-                    break;
-                case 1:
-                    index = 1;
-                    break;
-                case 2:
-                    index = 2;
-                    break;
-                case 4:
-                    index = 3;
-                    break;
-                case 8:
-                    index = 4;
-                    break;
-            }
-
-            foreach (ToolStripMenuItem item in _antialiasOpts)
-                item.Checked = false;
-
-            GlobalSettings.Multisamples = samples;
-            _antialiasOpts[index].Checked = true;
-        }
-
         private void xToolStripMenuItem4_Click(object sender, EventArgs e)
         {
             SetSampleMenuItem(0);
@@ -2313,99 +2751,35 @@ namespace MCSkinn
         }
 
 
-        static void CreateModelDropdownItems(WPFC.ItemCollection mainCollection, bool main, Action<Model> callback, string prefix)
-        {
-            Dictionary<string, WPFC.MenuItem> FolderMenus = new Dictionary<string, WPFC.MenuItem>();
-            foreach (var x in ModelLoader.Models)
-            {
-                WPFC.ItemCollection collection = mainCollection;
-                string path = Path.GetDirectoryName(x.Value.File.ToString()).Substring(Environment.CurrentDirectory.Length + 7);
 
-                WPFC.MenuItem subi = null;
+        //public void BeginFinishedLoadingSkins(List<TreeNode> rootNodes)
+        //{
+        //    treeView1.BeginUpdate();
 
-                while (!string.IsNullOrEmpty(path))
-                {
-                    string sub = path.Substring(1, path.IndexOf('\\', 1) == -1 ? (path.Length - 1) : (path.IndexOf('\\', 1) - 1));
+        //    treeView1.Nodes.Clear();
 
-                    subi = FolderMenus.GetValueOrDefault(ModelToolStripMenuItem.GetName(sub, prefix) + "_FOLDER", null);
+        //    foreach (var root in rootNodes)
+        //        treeView1.Nodes.Add(root);
+        //}
 
-                    if (subi == null)
-                    {
-                        var item = new WPFC.MenuItem();
-                        item.Header = sub;
-                        item.Name = ModelToolStripMenuItem.GetName(sub, prefix) + "_FOLDER";
-                        collection.Add(item);
-                        FolderMenus.Add(item.Name, item);
-                        collection = item.Items;
-                        subi = item;
+        //public void FinishedLoadingSkins(List<Skin> skins, TreeNode selected)
+        //{
+        //    treeView1.EndUpdate();
+        //    SelectedNode = selected;
 
-                    }
-                    else
-                    {
-                        collection = subi.Items;
-                    }
+        //    toolStrip2.Enabled = true;
+        //    treeView1.Enabled = true;
 
-                    path = path.Remove(0, sub.Length + 1);
-                }
-                collection.Add(new ModelToolStripMenuItem(x.Value, main, callback, prefix, subi));
-            }
-        }
-
-        public void FinishedLoadingModels()
-        {
-            CreateModelDropdownItems(Program.Page_Editor.MenuFlyout_Model.Items, true, (model) =>
-            {
-                SetModel(model);
-            }, "model_");
-            CreateModelDropdownItems(Program.Page_Editor.MenuItem_NewSkin.Items, false, (model) =>
-            {
-                PerformNewSkin(model);
-            }, "create_");
-
-            toolStripDropDownButton1.Enabled = true;
-            toolStripDropDownButton1.Text = "None";
-
-            Renderer.MakeCurrent();
-
-            // Compile model userdata
-            foreach (var model in ModelLoader.Models)
-            {
-                foreach (var m in model.Value.Meshes)
-                {
-                    m.UserData = MeshRenderer.CreateUserData(m);
-                    MeshRenderer.UpdateUserData(m);
-                }
-            }
-        }
-
-        public void BeginFinishedLoadingSkins(List<TreeNode> rootNodes)
-        {
-            treeView1.BeginUpdate();
-
-            treeView1.Nodes.Clear();
-
-            foreach (var root in rootNodes)
-                treeView1.Nodes.Add(root);
-        }
-
-        public void FinishedLoadingSkins(List<Skin> skins, TreeNode selected)
-        {
-            treeView1.EndUpdate();
-            treeView1.SelectedNode = selected;
-
-            toolStrip2.Enabled = true;
-            treeView1.Enabled = true;
-
-            foreach (var s in skins)
-            {
-                if (s.File.ToString() == GlobalSettings.LastSkin)
-                {
-                    s.IsLastSkin = true;
-                    _uploadedSkin = s;
-                    break;
-                }
-            }
-        }
+        //    foreach (var s in skins)
+        //    {
+        //        if (s.FileInfo.FullName == GlobalSettings.LastSkin)
+        //        {
+        //            s.IsLastSkin = true;
+        //            _uploadedSkin = s;
+        //            break;
+        //        }
+        //    }
+        //}
 
         private void languageToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2414,7 +2788,7 @@ namespace MCSkinn
 
         private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
         {
-            treeView1.ScrollPosition = new Point(hScrollBar1.Value, treeView1.ScrollPosition.Y);
+            //treeView1.ScrollPosition = new Point(hScrollBar1.Value, treeView1.ScrollPosition.Y);
         }
 
         private bool ShowDontAskAgain()
@@ -2425,108 +2799,6 @@ namespace MCSkinn
 
             return ret;
         }
-
-        public void PerformDecreaseResolution()
-        {
-            Program.Log(LogType.Load, "Performing DecreaseResolution", "at MCSkinn.Editor.PerformDecreaseResolution()");
-           
-            if (!treeView1.Enabled)
-                return;
-
-            if (_lastSkin == null)
-                return;
-            if (_lastSkin.Width <= 1 || _lastSkin.Height <= 1)
-                return;
-            if (!ShowDontAskAgain())
-                return;
-
-            _lastSkin.Resize(_lastSkin.Width / 2, _lastSkin.Height / 2);
-
-            Program.Log(LogType.Info, string.Format("Decreased skin '{0}' to resolution '{1}*{2}'", _lastSkin.File.Name, _lastSkin.Width.ToString(), _lastSkin.Height.ToString()), "at MCSkinn.Editor.PerformDecreaseResolution()");
-
-
-            using (var grabber = new ColorGrabber(_lastSkin.GLImage, _lastSkin.Width, _lastSkin.Height))
-            {
-                grabber.Load();
-                grabber.Texture = GlobalDirtiness.CurrentSkin;
-                grabber.Save();
-                grabber.Texture = _previewPaint;
-                grabber.Save();
-            }
-        }
-
-        public void PerformIncreaseResolution()
-        {
-            Program.Log(LogType.Load, "Performing IncreaseResolution", "at MCSkinn.Editor.PerformIncreaseResolution()");
-
-            if (!treeView1.Enabled)
-                return;
-
-            if (_lastSkin == null)
-                return;
-            if (!ShowDontAskAgain())
-                return;
-
-            _lastSkin.Resize(_lastSkin.Width * 2, _lastSkin.Height * 2);
-
-            using (var grabber = new ColorGrabber(_lastSkin.GLImage, _lastSkin.Width, _lastSkin.Height))
-            {
-                grabber.Load();
-                grabber.Texture = GlobalDirtiness.CurrentSkin;
-                grabber.Save();
-                grabber.Texture = _previewPaint;
-                grabber.Save();
-            }
-
-            Program.Log(LogType.Info, string.Format("Increased skin '{0}' to resolution '{1}*{2}'", _lastSkin.File.Name, _lastSkin.Width.ToString(), _lastSkin.Height.ToString()), "at MCSkinn.Editor.PerformIncreaseResolution()");
-        }
-
-        public void PerformImportFromSite()
-        {
-            //if (!treeView1.Enabled)
-            //    return;
-
-            //string accountName = _importFromSite.Show();
-
-            //if (string.IsNullOrEmpty(accountName))
-            //    return;
-
-            //string url = "http://s3.amazonaws.com/MinecraftSkins/" + accountName + ".png";
-
-            //string folderLocation;
-            //TreeNodeCollection collection;
-
-            //if (_rightClickedNode == null)
-            //    _rightClickedNode = treeView1.SelectedNode;
-
-            //GetFolderLocationAndCollectionForNode(treeView1, _rightClickedNode, out folderLocation, out collection);
-
-            //string newSkinName = accountName;
-
-            //while (File.Exists(folderLocation + newSkinName + ".png"))
-            //    newSkinName += " - " + GetLanguageString("C_NEW");
-
-            //try
-            //{
-            //    byte[] pngData = WebHelpers.DownloadFile(url);
-
-            //    using (FileStream file = File.Create(folderLocation + newSkinName + ".png"))
-            //        file.Write(pngData, 0, pngData.Length);
-
-            //    var skin = new Skin(folderLocation + newSkinName + ".png");
-            //    collection.Add(skin);
-            //    skin.SetImages();
-
-            //    treeView1.Invalidate();
-            //}
-            //catch (Exception ex)
-            //{
-            //    Program.Log(ex, true);
-            //    MessageBox.Show(this, GetLanguageString("M_SKINERROR") + "\r\n" + ex);
-            //    return;
-            //}
-        }
-
         private void mDECRESToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PerformDecreaseResolution();
@@ -2544,43 +2816,43 @@ namespace MCSkinn
 
         private void toolStripMenuItem4_Click(object sender, EventArgs e)
         {
-            PerformNewSkin();
+            //PerformNewSkin();
         }
 
         private void mSKINDIRSToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_waitingForRestart)
-            {
-                MessageBox.Show(GetLanguageString("C_RESTART"), GetLanguageString("C_RESTART_CAPTION"), MessageBoxButtons.OK);
-                return;
-            }
+            //if (_waitingForRestart)
+            //{
+            //    MessageBox.Show(GetLanguageString("C_RESTART"), GetLanguageString("C_RESTART_CAPTION"), MessageBoxButtons.OK);
+            //    return;
+            //}
 
-            using (var dl = new DirectoryList())
-            {
-                dl.StartPosition = FormStartPosition.CenterParent;
-                foreach (string dir in GlobalSettings.SkinDirectories.OrderBy(x => x))
-                    dl.Directories.Add(dir);
+            //using (var dl = new DirectoryList())
+            //{
+            //    dl.StartPosition = FormStartPosition.CenterParent;
+            //    foreach (string dir in GlobalSettings.SkinDirectories.OrderBy(x => x))
+            //        dl.Directories.Add(dir);
 
-                if (dl.ShowDialog() == DialogResult.OK)
-                {
-                    if (RecursiveNodeIsDirty(treeView1.Nodes))
-                    {
-                        DialogResult mb = MessageBox.Show(GetLanguageString("D_UNSAVED"), GetLanguageString("D_UNSAVED_CAPTION"),
-                                                          MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        switch (mb)
-                        {
-                            case DialogResult.No:
-                                _waitingForRestart = true;
-                                _newSkinDirs = dl.Directories.ToArray();
-                                return;
-                            case DialogResult.Cancel:
-                                return;
-                        }
-                    }
+            //    if (dl.ShowDialog() == DialogResult.OK)
+            //    {
+            //        if (RecursiveNodeIsDirty(treeView1.Nodes))
+            //        {
+            //            DialogResult mb = MessageBox.Show(GetLanguageString("D_UNSAVED"), GetLanguageString("D_UNSAVED_CAPTION"),
+            //                                              MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //            switch (mb)
+            //            {
+            //                case DialogResult.No:
+            //                    _waitingForRestart = true;
+            //                    _newSkinDirs = dl.Directories.ToArray();
+            //                    return;
+            //                case DialogResult.Cancel:
+            //                    return;
+            //            }
+            //        }
 
-                    GlobalSettings.SkinDirectories = dl.Directories.ToArray();
-                }
-            }
+            //        GlobalSettings.SkinDirectories = dl.Directories.ToArray();
+            //    }
+            //}
         }
 
         private void mLINESIZEToolStripMenuItem_NumericBox_ValueChanged(object sender, EventArgs e)
@@ -2588,7 +2860,7 @@ namespace MCSkinn
             GlobalSettings.DynamicOverlayLineSize = (int)mLINESIZEToolStripMenuItem.NumericBox.Value;
 
             CalculateMatrices();
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
         private void mOVERLAYTEXTSIZEToolStripMenuItem_NumericBox_ValueChanged(object sender, EventArgs e)
@@ -2596,7 +2868,7 @@ namespace MCSkinn
             GlobalSettings.DynamicOverlayTextSize = (int)mOVERLAYTEXTSIZEToolStripMenuItem.NumericBox.Value;
 
             CalculateMatrices();
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
         private void mGRIDOPACITYToolStripMenuItem_NumericBox_ValueChanged(object sender, EventArgs e)
@@ -2604,84 +2876,7 @@ namespace MCSkinn
             GlobalSettings.DynamicOverlayGridColor = Color.FromArgb((int)mGRIDOPACITYToolStripMenuItem.NumericBox.Value,
                                                                     GlobalSettings.DynamicOverlayGridColor);
 
-            Renderer.Invalidate();
-        }
-
-        public void SetModel(Model Model)
-        {
-            if (_lastSkin == null)
-                return;
-
-            if (_oldModel != null &&
-                _oldModel.Model == Model)
-                return;
-
-            if (_lastSkin.Model != Model)
-            {
-                var oldAspect = (float)_lastSkin.Width / (float)_lastSkin.Height;
-                var newAspect = (float)Model.DefaultWidth / (float)Model.DefaultHeight;
-
-                if (Math.Abs(oldAspect - newAspect) > 0.01f)
-                {
-                    ResizeType resizeType;
-                    if ((resizeType = SkinSizeMismatch.Show(GetLanguageString("M_SKINSIZEMISMATCH"))) == ResizeType.None)
-                        return;
-
-                    _lastSkin.Model = Model;
-                    _lastSkin.Resize((int)Model.DefaultWidth, (int)Model.DefaultHeight, resizeType);
-
-                    using (var grabber = new ColorGrabber(_lastSkin.GLImage, _lastSkin.Width, _lastSkin.Height))
-                    {
-                        grabber.Load();
-                        grabber.Texture = GlobalDirtiness.CurrentSkin;
-                        grabber.Save();
-                        grabber.Texture = _previewPaint;
-                        grabber.Save();
-                    }
-                }
-                else
-                    _lastSkin.Model = Model;
-
-                _lastSkin.Dirty = true;
-                SetCanSave(true);
-                CheckUndo();
-            }
-
-            if (_oldModel != null)
-            {
-                _oldModel.IsChecked = false;
-
-                //for (WPF.DependencyObject parent = _oldModel.Parent; parent != null; parent = (parent as WPF.FrameworkElement).Parent as WPF.DependencyObject)
-                //    (parent as WPFC.Control).FontWeight = WPF.FontWeights.Light;
-                _oldModel.FontWeight = WPF.FontWeights.Normal;
-
-                if (_oldModel.ParentItem != null)
-                    _oldModel.ParentItem.FontWeight = WPF.FontWeights.Normal;
-            }
-
-            Program.Page_Editor.AppBarButton_Viewport_Model.Label = toolStripDropDownButton1.Text = _lastSkin.Model.DisplayName;
-            _oldModel = _lastSkin.Model.DropDownItem;
-
-            _lastSkin.TransparentParts.Clear();
-            _lastSkin.SetTransparentParts();
-            FillPartList();
-
-            //for (WPF.DependencyObject parent = _oldModel.Parent; parent != null; parent = (parent as WPF.FrameworkElement).Parent as WPF.DependencyObject)
-            //    (parent as WPFC.Control).FontWeight = WPF.FontWeights.Bold;
-
-            if (_oldModel.ParentItem != null)
-                _oldModel.ParentItem.FontWeight = WPF.FontWeights.Bold;
-
-            _oldModel.FontWeight = WPF.FontWeights.Bold;
-            //_oldModel.IsChecked = true;
-
-            treeView1.Invalidate();
-
-            CalculateMatrices();
-            Renderer.Invalidate();
-
-            Program.Log(LogType.Info, string.Format("Set current model to '{0}'", Model.Name), "at MCSkinn.Editor.treeView1_AfterSelect(object, TreeViewEventArgs)"); ;
-
+            InvalidRenderer();
         }
 
         private void resetCameraToolStripButton_Click(object sender, EventArgs e)
@@ -2691,54 +2886,17 @@ namespace MCSkinn
 
         private void mLINECOLORToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var picker = new MultiPainter.ColorPicker())
-            {
-                picker.CurrentColor = GlobalSettings.DynamicOverlayLineColor;
 
-                if (picker.ShowDialog() == DialogResult.OK)
-                {
-                    GlobalSettings.DynamicOverlayLineColor = picker.CurrentColor;
-
-                    mLINECOLORToolStripMenuItem.BackColor = GlobalSettings.DynamicOverlayLineColor;
-
-                    CalculateMatrices();
-                    Renderer.Invalidate();
-                }
-            }
         }
 
         private void mTEXTCOLORToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var picker = new MultiPainter.ColorPicker())
-            {
-                picker.CurrentColor = GlobalSettings.DynamicOverlayTextColor;
 
-                if (picker.ShowDialog() == DialogResult.OK)
-                {
-                    GlobalSettings.DynamicOverlayTextColor = picker.CurrentColor;
-
-                    mTEXTCOLORToolStripMenuItem.BackColor = GlobalSettings.DynamicOverlayTextColor;
-
-                    CalculateMatrices();
-                    Renderer.Invalidate();
-                }
-            }
         }
 
         private void mGRIDCOLORToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var picker = new MultiPainter.ColorPicker())
-            {
-                picker.CurrentColor = GlobalSettings.DynamicOverlayGridColor;
 
-                if (picker.ShowDialog() == DialogResult.OK)
-                {
-                    GlobalSettings.DynamicOverlayGridColor = picker.CurrentColor;
-                    mGRIDCOLORToolStripMenuItem.BackColor = Color.FromArgb(255, GlobalSettings.DynamicOverlayGridColor);
-
-                    Renderer.Invalidate();
-                }
-            }
         }
 
         private void mINFINITEMOUSEToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2746,320 +2904,118 @@ namespace MCSkinn
             mINFINITEMOUSEToolStripMenuItem.Checked = !mINFINITEMOUSEToolStripMenuItem.Checked;
             GlobalSettings.InfiniteMouse = mINFINITEMOUSEToolStripMenuItem.Checked;
         }
-
-        private void PerformBrowseTo()
+        private void gridEnabledToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Program.Log(LogType.Load, "Performing BrowseTo", "at MCSkinn.Editor.PerformSaveAll()");
+            GlobalSettings.GridEnabled = !GlobalSettings.GridEnabled;
+            gridEnabledToolStripMenuItem.Checked = GlobalSettings.GridEnabled;
 
-            if (treeView1.SelectedNode == null)
-                return;
-
-            if (treeView1.SelectedNode is Skin)
-                Process.Start("explorer.exe", "/select,\"" + ((Skin)treeView1.SelectedNode).File.FullName + "\"");
-            else
-                Process.Start("explorer.exe", ((FolderNode)treeView1.SelectedNode).Directory.FullName);
+            InvalidRenderer();
         }
 
-        private void bROWSEIDToolStripMenuItem_Click(object sender, EventArgs e)
+        private void useTextureBasesMenuItem_Click(object sender, EventArgs e)
         {
-            PerformBrowseTo();
+            GlobalSettings.UseTextureBases = !GlobalSettings.UseTextureBases;
+            useTextureBasesMenuItem.Checked = GlobalSettings.UseTextureBases;
         }
 
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        private void officialMinecraftForumsThreadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bROWSEIDToolStripMenuItem.Text = string.Format(GetLanguageString("M_BROWSE"),
-                                                           (treeView1.SelectedNode is Skin)
-                                                               ? GetLanguageString("M_SKIN")
-                                                               : GetLanguageString("M_FOLDER"));
+            Process.Start("http://www.minecraftforum.net/topic/746941-mcskinn-new-skinning-program/");
         }
 
-        private void mRENDERSTATSToolStripMenuItem_Click(object sender, EventArgs e)
+        private void planetMinecraftSubmissionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mRENDERSTATSToolStripMenuItem.Checked = !mRENDERSTATSToolStripMenuItem.Checked;
-            GlobalSettings.RenderBenchmark = mRENDERSTATSToolStripMenuItem.Checked;
+            Process.Start("http://www.planetminecraft.com/mod/mcskinn/");
         }
 
-        private void toolStripButton7_Click(object sender, EventArgs e)
+        private void toolStripMenuItem4_Click_1(object sender, EventArgs e)
         {
-            splitContainer1.Panel2Collapsed = !splitContainer1.Panel2Collapsed;
-
-            if (_popoutForm == null)
-            {
-                int oldWidth = Width;
-                Width = helpToolStripMenuItem.Bounds.X + helpToolStripMenuItem.Bounds.Width + 18;
-
-                // Move the items to a new form
-                _popoutForm = new Form();
-                _popoutForm.Height = Height;
-                _popoutForm.Width = (oldWidth - Width) + 4;
-                _popoutForm.Text = "Render Window";
-                _popoutForm.Icon = Icon;
-                _popoutForm.ControlBox = false;
-                _popoutForm.Show();
-                _popoutForm.Location = new Point(Location.X + Width, Location.Y);
-                _popoutForm.KeyDown += popoutForm_KeyDown;
-                _popoutForm.KeyPreview = true;
-                _popoutForm.FormClosing += new FormClosingEventHandler(_popoutForm_FormClosing);
-
-                splitContainer1.Panel2.Controls.Remove(panel4);
-                _popoutForm.Controls.Add(panel4);
-            }
-            else
-            {
-                _popoutForm.Controls.Remove(panel4);
-                splitContainer1.Panel2.Controls.Add(panel4);
-
-                Width += _popoutForm.Width - 4;
-
-                _popoutForm.Close();
-                _popoutForm.Dispose();
-                _popoutForm = null;
-            }
-        }
-
-        void _popoutForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-        }
-        private void CreatePartList()
-        {
-            _partItems = new[] { null, headToolStripMenuItem, helmetToolStripMenuItem, chestToolStripMenuItem, leftArmToolStripMenuItem, rightArmToolStripMenuItem, leftLegToolStripMenuItem, rightLegToolStripMenuItem, chestArmorToolStripMenuItem, leftArmArmorToolStripMenuItem, rightArmArmorToolStripMenuItem, leftLegArmorToolStripMenuItem, rightLegArmorToolStripMenuItem };
-            _partButtons = new[] { null, toggleHeadToolStripButton, toggleHelmetToolStripButton, toggleChestToolStripButton, toggleLeftArmToolStripButton, toggleRightArmToolStripButton, toggleLeftLegToolStripButton, toggleRightLegToolStripButton, toggleChestArmorToolStripButton, toggleLeftArmArmorToolStripButton, toggleRightArmArmorToolStripButton, toggleLeftLegArmorToolStripButton, toggleRightLegArmorToolStripButton };
-
-            var list = new ImageList();
-            list.ColorDepth = ColorDepth.Depth32Bit;
-            list.ImageSize = new Size(16, 16);
-            list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.UncheckedNormal));
-            list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.UncheckedHot));
-            list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.UncheckedPressed));
-            list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.CheckedNormal));
-            list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.CheckedHot));
-            list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.CheckedPressed));
-            list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.MixedNormal));
-            list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.MixedHot));
-            list.Images.Add(GenerateCheckBoxBitmap(CheckBoxState.MixedPressed));
-            list.Images.Add(Resources.radio_unchecked);
-            list.Images.Add(Resources.radio_checked);
-
-            treeView2.ImageList = list;
-        }
-
-        private PartTreeNode CreateNodePath(ObservableCollection<PartTreeNode> collection, Model m, Mesh part, string[] path, List<PartTreeNode> owners, List<PartTreeNode> radios)
-        {
-            PartTreeNode node = null;
-
-            for (int i = 0; i < path.Length - 1; ++i)
-            {
-                bool isFound = false;
-                foreach(PartTreeNode no in (node == null ? collection : node.Nodes))
-                {
-                    if(no.Name == path[i])
-                    {
-                        node = no;
-                        isFound = true;
-                        break;
-                    }
-                }
-                if (!isFound)
-                {
-                    (i == 0 ? collection : node.Nodes).Add(node = new PartTreeNode(CurrentModel, part, -1, path[i]));
-                    owners.Add(node);
-
-                }
-                //if (node == null)
-                //{
-                    
-                //    //TreeNode[] nodes = collection.Find(path[i], false);
-
-                //    //if (nodes.Length == 0)
-                //    //{
-                //    //    treeView.Nodes.Add(node = new PartTreeNode(CurrentModel, part, -1, path[i]));
-                //    //    owners.Add(node);
-
-                //    //    if (node.IsRadio)
-                //    //        radios.Add(node);
-                //    //}
-                //    //else
-                //    //    node = (PartTreeNode)nodes[0];
-
-
-                //}
-                //else
-                //{
-                //    TreeNode[] nodes = node.Nodes.Find(path[i], false);
-
-                //    if (nodes.Length == 0)
-                //    {
-                //        PartTreeNode old = node;
-                //        old.Nodes.Add(node = new PartTreeNode(CurrentModel, part, -1, path[i]));
-                //        owners.Add(node);
-
-                //        if (node.IsRadio)
-                //            radios.Add(node);
-                //    }
-                //    else
-                //        node = (PartTreeNode)nodes[0];
-                //}
-            }
-
-            return node;
-        }
-
-        private void FillPartList()
-        {
-            if (Program.Page_Editor == null)
-                return;
-
-
-            if (CurrentModel.IsTCNFile)
-            {
-                var owners = new List<PartTreeNode>();
-                var radios = new List<PartTreeNode>();
-
-                Program.Page_Editor.Parts.Clear();
-
-                int meshIndex = 0;
-                foreach (Mesh part in CurrentModel.Meshes)
-                {
-                    string name = part.Name;
-                    PartTreeNode node;
-
-                    if (name != null && name.Contains('.'))
-                    {
-                        string[] args = name.Split('.');
-                        PartTreeNode owner = CreateNodePath(Program.Page_Editor.Parts, CurrentModel, part, args, owners, radios);
-
-                        owner.Nodes.Add(node = new PartTreeNode(CurrentModel, part, meshIndex, args[args.Length - 1]));
-                    }
-                    else
-                        Program.Page_Editor.Parts.Add(node = new PartTreeNode(CurrentModel, part, meshIndex));
-
-                    if (node.IsRadio)
-                        radios.Add(node);
-
-                    meshIndex++;
-                }
-
-            }
-            else
-            {
-                Program.Page_Editor.Parts.Clear();
-
-                Dictionary<string, List<Mesh>> meshFolders = new Dictionary<string, List<Mesh>>();
-                Dictionary<string, string> folderParents = new Dictionary<string, string>();
-
-                foreach (Mesh part in CurrentModel.Meshes)
-                {
-                    if (!meshFolders.ContainsKey(part.Folder))
-                        meshFolders.Add(part.Folder, new List<Mesh>());
-
-                    meshFolders[part.Folder].Add(part);
-
-                    if (!string.IsNullOrEmpty(part.FolderParent) && !folderParents.ContainsKey(part.Folder))
-                        folderParents.Add(part.Folder, part.FolderParent);
-                }
-
-                Dictionary<string, PartTreeNode> folders = new Dictionary<string, PartTreeNode>();
-
-
-                foreach (string n in meshFolders.Keys)
-                {
-                    PartTreeNode node;
-
-                    node = new PartTreeNode(CurrentModel, meshFolders[n], n);
-
-                    folders.Add(n, node);
-
-                }
-
-                foreach (KeyValuePair<string, PartTreeNode> pair in folders)
-                {
-                    if (folderParents.ContainsKey(pair.Key) && folders.ContainsKey(folderParents[pair.Key]))
-                    {
-                        folders[folderParents[pair.Key]].Nodes.Add(pair.Value);
-                    }
-                    else
-                    {
-                        Program.Page_Editor.Parts.Add(pair.Value);
-                    }
-                }
-
-            }
-            //treeView2.Sort();
-
-            //radios.Reverse();
-
-            ////foreach (PartTreeNode n in owners)
-            ////    n.CheckGroupImage();
-
-            //foreach (var r in radios)
-            //{
-            //    var other = r.IsOtherRadioButtonEnabled();
-
-            //    if (other != null)
-            //    {
-            //        PartTreeNode.RecursiveAssign(r, true, false);
-            //        r.CheckGroupImage();
-            //    }
-            //}
-
-            //for (int i = 1; i <= (int)ModelPart.RightLegArmor; ++i)
-            //    CheckQuickPartState((ModelPart)i);
-
-        }
-
-        void CheckQuickPartState(ModelPart part)
-        {
-            var meshes = new List<Mesh>();
-            var item = _partItems[(int)part];
-            var button = _partButtons[(int)part];
+            Dictionary<Vector3, int> vertDict = new Dictionary<Vector3, int>();
+            Dictionary<Vector2, int> texCoordDict = new Dictionary<Vector2, int>();
 
             foreach (var m in CurrentModel.Meshes)
-                if (m.Part == part)
-                    meshes.Add(m);
-
-            if (meshes.Count == 0)
             {
-                item.Enabled = button.Enabled = false;
-                return;
+                foreach (var f in m.Faces)
+                {
+                    if (f.Indices.Length != 4)
+                    {
+                        Debugger.Break();
+                        continue;
+                    }
+
+                    for (var i = 0; i < 4; ++i)
+                    {
+                        var fv = Vector3.Transform(f.Vertices[i], m.Matrix);
+                        var ft = f.TexCoords[i];
+
+                        if (!vertDict.ContainsKey(fv))
+                            vertDict.Add(fv, vertDict.Count);
+                        if (!texCoordDict.ContainsKey(ft))
+                            texCoordDict.Add(ft, texCoordDict.Count);
+                    }
+                }
             }
 
-            item.Enabled = button.Enabled = true;
-            item.Checked = button.Checked = true;
+            string s = "";
 
-            foreach (var m in meshes)
+            foreach (var v in vertDict)
+                s += String.Format("v {0} {1} {2}\r\n", v.Key.X, -v.Key.Y, v.Key.Z);
+
+            foreach (var v in texCoordDict)
+                s += String.Format("vt {0} {1}\r\n", v.Key.X, 1 - v.Key.Y);
+
+            foreach (var m in CurrentModel.Meshes)
             {
-                if (CurrentModel.PartsEnabled[m])
-                    continue;
+                s += String.Format("g {0}\r\n", m.Name);
+                s += "s 1\r\n";
 
-                item.Checked = button.Checked = false;
-                break;
+                foreach (var f in m.Faces)
+                {
+                    if (f.Indices.Length != 4)
+                    {
+                        Debugger.Break();
+                        continue;
+                    }
+
+                    int[] vi = new int[4];
+                    int[] vt = new int[4];
+
+                    for (var i = 0; i < 4; ++i)
+                    {
+                        vi[i] = vertDict[Vector3.Transform(f.Vertices[i], m.Matrix)] + 1;
+                        vt[i] = texCoordDict[f.TexCoords[i]] + 1;
+                    }
+
+                    s += String.Format("f {0}/{1} {2}/{3} {4}/{5} {6}/{7}\r\n", vi[0], vt[0], vi[1], vt[1], vi[2], vt[2], vi[3], vt[3]);
+                }
             }
+
+            Clipboard.SetText(s);
         }
 
-        private void treeView2_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void toolStrip2_ItemClicked(global::System.Object sender, global::System.Windows.Forms.ToolStripItemClickedEventArgs e)
         {
-            //var nodeBounds = e.Node.Bounds;
-            //var pos = e.Location;
-            //var node = (PartTreeNode)e.Node;
 
-            //if (pos.X > nodeBounds.X - 18 && pos.X < nodeBounds.X - 4)
-            //{
-            //    node.TogglePart();
-
-            //    for (int i = 1; i <= (int)ModelPart.RightLegArmor; ++i)
-            //        CheckQuickPartState((ModelPart)i);
-
-            //    CalculateMatrices();
-            //    Renderer.Invalidate();
-            //}
         }
 
-        #region Update
-
-        public new void Invoke(Action action)
+        private void splitContainer3_Panel1_Paint(global::System.Object sender, global::System.Windows.Forms.PaintEventArgs e)
         {
-            Invoke((Delegate)action);
+
+        }
+
+        private void tabControl1_KeyDown(global::System.Object sender, global::System.Windows.Forms.KeyEventArgs e)
+        {
+            CheckKeyShortcut(e);
+        }
+
+        private void mDYNAMICOVERLAYToolStripMenuItem_Click(global::System.Object sender, global::System.EventArgs e)
+        {
+
+        }
+
+        private void Editor_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+
         }
 
         #endregion
@@ -3220,8 +3176,8 @@ namespace MCSkinn
             InitUnlinkedShortcut("S_DELETE", Keys.Delete, PerformDeleteSkin);
             InitUnlinkedShortcut("S_CLONE", Keys.Control | Keys.C, PerformCloneSkin);
             InitUnlinkedShortcut("S_RENAME", Keys.Control | Keys.R, PerformNameChange);
-            InitUnlinkedShortcut("T_TREE_IMPORTHERE", Keys.Control | Keys.I, PerformImportSkin);
-            InitUnlinkedShortcut("T_TREE_NEWFOLDER", Keys.Control | Keys.Shift | Keys.N, PerformNewFolder);
+            //InitUnlinkedShortcut("T_TREE_IMPORTHERE", Keys.Control | Keys.I, PerformImportSkin);
+            //InitUnlinkedShortcut("T_TREE_NEWFOLDER", Keys.Control | Keys.Shift | Keys.N, PerformNewFolder);
             InitUnlinkedShortcut("M_NEWSKIN_HERE", Keys.Control | Keys.Shift | Keys.M, () => PerformNewSkin(null));
             InitUnlinkedShortcut("S_COLORSWAP", Keys.S, PerformSwitchColor);
             //InitControlShortcut("S_SWATCH_ZOOMIN", ColorPanel.SwatchContainer.SwatchDisplayer, Keys.Oemplus, PerformSwatchZoomIn);
@@ -3261,23 +3217,25 @@ namespace MCSkinn
             if (_selectedTool.OptionsPanel != null)
                 _selectedTool.OptionsPanel.BoxShown();
 
-            if (_selectedTool.OptionsPanel != null)
-            {
-                _selectedTool.OptionsPanel.Dock = DockStyle.Fill;
-                ToolsPanel.Controls.Add(_selectedTool.OptionsPanel);
-            }
-            else
-            {
-                Label la = new Label();
-                la.Text = index.Tool.GetStatusLabelText();
-                la.AutoSize = false;
-                la.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-                la.ForeColor = Color.Gray;
-                la.Font = new Font(la.Font.FontFamily.Name, 10);
-                la.Dock = DockStyle.Fill;
-                ToolsPanel.Controls.Add(la);
+            //if (_selectedTool.OptionsPanel != null)
+            //{
+            //    _selectedTool.OptionsPanel.Dock = DockStyle.Fill;
+            //    ToolsPanel.Controls.Add(_selectedTool.OptionsPanel);
+            //}
+            //else
+            //{
+            //    Label la = new Label();
+            //    la.Text = index.Tool.GetStatusLabelText();
+            //    la.AutoSize = false;
+            //    la.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            //    la.ForeColor = Color.Gray;
+            //    la.Font = new Font(la.Font.FontFamily.Name, 10);
+            //    la.Dock = DockStyle.Fill;
+            //    ToolsPanel.Controls.Add(la);
 
-            }
+            //}
+
+            SelectedToolChanged?.Invoke(this, EventArgs.Empty);
 
             //toolStripStatusLabel1.Text = index.Tool.GetStatusLabelText();
 
@@ -3287,6 +3245,8 @@ namespace MCSkinn
             Program.Log(LogType.Info, string.Format("Set current tool to '{0}'", index.Name), "at MCSkinn.Editor.SetSelectedTool(ToolIndex)");
 
         }
+
+        public event EventHandler SelectedToolChanged;
 
         private void ToolMenuItemClicked(object sender, EventArgs e)
         {
@@ -3299,7 +3259,7 @@ namespace MCSkinn
             if (!treeView1.Enabled)
                 return;
 
-            treeView1.ZoomIn();
+            //treeView1.ZoomIn();
         }
 
         public void PerformTreeViewZoomOut()
@@ -3307,7 +3267,7 @@ namespace MCSkinn
             if (!treeView1.Enabled)
                 return;
 
-            treeView1.ZoomOut();
+            //treeView1.ZoomOut();
         }
 
         private void PerformSwatchZoomOut()
@@ -3322,7 +3282,7 @@ namespace MCSkinn
 
         public static bool PerformShortcut(Keys key, Keys modifiers)
         {
-            Program.Log(LogType.Info, string.Format("Shortcut key down '{0}' ({1})",key.ToString(), modifiers.ToString()), "at MCSkinn.Editor.PerformShortcut()");
+            Program.Log(LogType.Info, string.Format("Shortcut key down '{0}' ({1})", key.ToString(), modifiers.ToString()), "at MCSkinn.Editor.PerformShortcut()");
 
             foreach (IShortcutImplementor shortcut in _shortcutEditor.Shortcuts)
             {
@@ -3369,7 +3329,7 @@ namespace MCSkinn
 
         public new bool FormClosing()
         {
-            if (RecursiveNodeIsDirty(treeView1.Nodes))
+            if (RecursiveNodeIsDirty(SkinLibrary.RootFolders))
             {
                 if (
                     MessageBox.Show(this, GetLanguageString("C_UNSAVED"), GetLanguageString("C_UNSAVED_CAPTION"),
@@ -3383,10 +3343,19 @@ namespace MCSkinn
 
             colorPanel.SwatchContainer.SaveSwatches();
 
-            if (_newSkinDirs != null)
-                GlobalSettings.SkinDirectories = _newSkinDirs;
+            if (GlobalSettings.RememberPrefers && _lastSkin != null)
+                GlobalSettings.LastSkin = SkinLibrary.GetAbsolutedPath(_lastSkin.FileInfo.FullName);
+            else
+                GlobalSettings.LastSkin = "";
+
+            GlobalSettings.Save();
 
             return true;
+        }
+
+        public void RenderMakeCurrent()
+        {
+            //RendererControl.MakeCurrent();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -3396,7 +3365,7 @@ namespace MCSkinn
             SetTransparencyMode(GlobalSettings.Transparency);
             SetViewMode(_currentViewMode);
 
-            Renderer.MakeCurrent();
+            RenderMakeCurrent();
 
             toolToolStripMenuItem.DropDown.Closing += DontCloseMe;
             modeToolStripMenuItem.DropDown.Closing += DontCloseMe;
@@ -3457,13 +3426,13 @@ namespace MCSkinn
                     if (_selectedTool.Tool.MouseMoveOnSkin(currentSkin, skin, _pickPosition.X, _pickPosition.Y))
                     {
                         SetCanSave(true);
-                        skin.Dirty = true;
+                        skin.IsDirty = true;
                         currentSkin.Save();
                     }
                 }
             }
 
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
         public void ToggleGrass()
@@ -3472,9 +3441,9 @@ namespace MCSkinn
             //GlobalSettings.Grass = grassToolStripMenuItem.Checked;
 
             //Program.Page_Editor.MenuItem_View_3D_Grass.IsChecked = !Program.Page_Editor.MenuItem_View_3D_Grass.IsChecked;
-            GlobalSettings.Grass = Program.Page_Editor.MenuItem_View_3D_Grass.IsChecked;
+            GlobalSettings.ShowGround = Program.Page_Editor.MenuItem_View_3D_Grass.IsChecked;
 
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
         public void ToggleGhosting()
@@ -3483,34 +3452,34 @@ namespace MCSkinn
             //GlobalSettings.Ghost = ghostHiddenPartsToolStripMenuItem.Checked;
             GlobalSettings.Ghost = Program.Page_Editor.MenuItem_View_3D_Ghost.IsChecked;
 
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
-        public void DoneEditingNode(string newName, TreeNode _currentlyEditing)
+        public void DoneEditingNode(string newName, LibraryNode _currentlyEditing)
         {
-            labelEditTextBox.Hide();
+            //labelEditTextBox.Hide();
 
-            if (_currentlyEditing is Skin)
-            {
-                var skin = (Skin)_currentlyEditing;
+            //if (_currentlyEditing is Skin)
+            //{
+            //    var skin = (Skin)_currentlyEditing;
 
-                if (skin.Name == newName)
-                    return;
+            //    if (skin.Name == newName)
+            //        return;
 
-                if (skin.ChangeName(newName) == false)
-                    SystemSounds.Beep.Play();
-            }
-            else
-            {
-                var folder = (FolderNode)_currentlyEditing;
+            //    if (skin.ChangeName(newName) == false)
+            //        SystemSounds.Beep.Play();
+            //}
+            //else
+            //{
+            //    var folder = (FolderNode)_currentlyEditing;
 
-                folder.MoveTo(GetFolderForNode(_currentlyEditing.Parent) + newName);
-            }
+            //    folder.MoveTo(GetFolderForNode(_currentlyEditing.Parent) + newName);
+            //}
         }
 
         public void BeginUndo()
         {
-            Renderer.MakeCurrent();
+            RenderMakeCurrent();
         }
 
         public void DoUndo()
@@ -3531,13 +3500,13 @@ namespace MCSkinn
 
             if (Program.Window_Main != null)
             {
-                Program.Page_Editor.DropDownButton_Undo.IsEnabled = Program.Page_Editor.MenuItem_Edit_Undo.IsEnabled = undoToolStripMenuItem.Enabled;
-                Program.Page_Editor.DropDownButton_Redo.IsEnabled = Program.Page_Editor.MenuItem_Edit_Redo.IsEnabled = redoToolStripMenuItem.Enabled;
+                Program.Page_Editor.SetTrayButtonEnabled(1, undoToolStripMenuItem.Enabled);
+                Program.Page_Editor.SetTrayButtonEnabled(2, redoToolStripMenuItem.Enabled);
             }
 
-            SetCanSave(_lastSkin.Dirty = true);
+            SetCanSave(_lastSkin.IsDirty = true);
 
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
         public void PerformUndo()
@@ -3585,7 +3554,7 @@ namespace MCSkinn
 
         public void BeginRedo()
         {
-            Renderer.MakeCurrent();
+            RenderMakeCurrent();
         }
 
         public void DoRedo()
@@ -3601,9 +3570,9 @@ namespace MCSkinn
 
         public void EndRedo()
         {
-            SetCanSave(_lastSkin.Dirty = true);
+            SetCanSave(_lastSkin.IsDirty = true);
 
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
         public void PerformRedo()
@@ -3683,7 +3652,7 @@ namespace MCSkinn
             }
 
             CalculateMatrices();
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
         public void SetTransparencyMode(TransparencyMode trans)
@@ -3719,7 +3688,7 @@ namespace MCSkinn
 
 
 
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
         public void ToggleVisiblePart(ModelPart part)
@@ -3741,14 +3710,14 @@ namespace MCSkinn
             }
 
             CalculateMatrices();
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
         public void ToggleAlphaCheckerboard()
         {
             GlobalSettings.AlphaCheckerboard = !GlobalSettings.AlphaCheckerboard;
             alphaCheckerboardToolStripMenuItem.Checked = GlobalSettings.AlphaCheckerboard;
-            Renderer.Invalidate();
+            InvalidRenderer();
 
             if (Program.Window_Main != null)
                 Program.Page_Editor.MenuItem_View_2D_Checkerboard.IsChecked = GlobalSettings.AlphaCheckerboard;
@@ -3758,7 +3727,7 @@ namespace MCSkinn
         {
             GlobalSettings.TextureOverlay = !GlobalSettings.TextureOverlay;
             textureOverlayToolStripMenuItem.Checked = GlobalSettings.TextureOverlay;
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
         private void ToggleTransparencyMode()
@@ -3797,15 +3766,15 @@ namespace MCSkinn
 
         private Bitmap CopyScreenToBitmap()
         {
-            Renderer.MakeCurrent();
+            RenderMakeCurrent();
             _screenshotMode = true;
             rendererControl_Paint(null, null);
             _screenshotMode = false;
 
-            var b = new Bitmap(Renderer.Width, Renderer.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var b = new Bitmap((int)Renderer.RenderWidth, (int)Renderer.RenderHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            var pixels = new int[Renderer.Width * Renderer.Height];
-            GL.ReadPixels(0, 0, Renderer.Width, Renderer.Height, PixelFormat.Rgba,
+            var pixels = new int[(int)Renderer.RenderWidth * (int)Renderer.RenderHeight];
+            GL.ReadPixels(0, 0, (int)Renderer.RenderWidth, (int)Renderer.RenderHeight, PixelFormat.Rgba,
                           PixelType.UnsignedByte, pixels);
 
             BitmapData locked = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite,
@@ -3870,14 +3839,17 @@ namespace MCSkinn
             saveToolStripButton.Enabled = saveToolStripMenuItem.Enabled = value;
 
             if (Program.Window_Main != null)
-                Program.Page_Editor.Button_Save.IsEnabled = Program.Page_Editor.MenuItem_File_Save.IsEnabled = saveToolStripButton.Enabled;
+            {
+                Program.Page_Editor.SetTrayButtonEnabled(0, saveToolStripButton.Enabled);
+
+            }
 
             CheckUndo();
 
             //treeView1.Invalidate();
         }
 
-        private void PerformSaveAs()
+        public void PerformSaveAs()
         {
             Skin skin = _lastSkin;
 
@@ -3929,45 +3901,45 @@ namespace MCSkinn
 
         private void PerformSaveSkin(Skin s)
         {
-            Renderer.MakeCurrent();
+            RenderMakeCurrent();
 
             s.CommitChanges((s == _lastSkin) ? GlobalDirtiness.CurrentSkin : s.GLImage, true);
 
-            Program.Log(LogType.Info, string.Format("Saved skin '{0}'", s.File.Name), "at MCSkinn.Editor.PerformSaveSkin(Skin)");
+            Program.Log(LogType.Info, string.Format("Saved skin '{0}'", s.FileInfo.Name), "at MCSkinn.Editor.PerformSaveSkin(Skin)");
 
         }
 
-        public bool RecursiveNodeIsDirty(TreeNodeCollection nodes)
+        public bool RecursiveNodeIsDirty(IEnumerable<LibraryNode> nodes)
         {
-            foreach (TreeNode node in nodes)
+            foreach (LibraryNode node in nodes)
             {
                 if (node is Skin)
                 {
                     var skin = (Skin)node;
 
-                    if (skin.Dirty)
+                    if (skin.IsDirty)
                         return true;
                 }
-                else if (RecursiveNodeIsDirty(node.Nodes))
+                else if (RecursiveNodeIsDirty((node as FolderNode)?.Nodes))
                     return true;
             }
 
             return false;
         }
 
-        private void RecursiveNodeSave(TreeNodeCollection nodes)
+        private void RecursiveNodeSave(IEnumerable<LibraryNode> nodes)
         {
-            foreach (TreeNode node in nodes)
+            foreach (LibraryNode node in nodes)
             {
                 if (node is Skin)
                 {
                     var skin = (Skin)node;
 
-                    if (skin.Dirty)
+                    if (skin.IsDirty)
                         PerformSaveSkin(skin);
                 }
                 else
-                    RecursiveNodeSave(node.Nodes);
+                    RecursiveNodeSave((node as FolderNode).Nodes);
             }
         }
 
@@ -3975,7 +3947,7 @@ namespace MCSkinn
         {
             Program.Log(LogType.Load, "Performing Save all", "at MCSkinn.Editor.PerformSaveAll()");
 
-            RecursiveNodeSave(treeView1.Nodes);
+            RecursiveNodeSave(SkinLibrary.RootFolders);
             treeView1.Invalidate();
         }
 
@@ -3985,7 +3957,7 @@ namespace MCSkinn
 
             Skin skin = _lastSkin;
 
-            if (skin == null || !skin.Dirty)
+            if (skin == null || !skin.IsDirty)
                 return;
 
             SetCanSave(false);
@@ -3997,9 +3969,7 @@ namespace MCSkinn
 
         #region Skin Management
 
-        private TreeNode _currentlyEditing;
-
-        private void ImportSkin(string fileName, string folderLocation, TreeNode parentNode)
+        private void ImportSkin(string fileName, string folderLocation, LibraryNode parentNode)
         {
             string name = Path.GetFileNameWithoutExtension(fileName);
 
@@ -4012,88 +3982,64 @@ namespace MCSkinn
 
             if (parentNode != null)
             {
-                if (!(parentNode is Skin))
-                    parentNode.Nodes.Add(skin);
+                if (parentNode is FolderNode)
+                    (parentNode as FolderNode).Add(skin);
                 else
-                    parentNode.GetParentCollection().Add(skin);
+                    (parentNode as Skin).Parent.Add(skin);
             }
             else
-                treeView1.Nodes.Add(skin);
+            {
+                SkinLibrary.RootFolders[0]?.Add(skin);
+            }
 
             skin.SetImages();
-            treeView1.SelectedNode = skin;
+            SkinLibrary.SelectedNode = skin;
         }
 
-        public static string GetFolderForNode(TreeNode node)
+        public static string GetFolderForNode(LibraryNode node)
         {
-            if (node == null)
-                return RootFolderString;
-            else if (node is Skin)
-            {
-                if (node.Parent == null)
-                {
-                    if (HasOneRoot)
-                        return RootFolderString;
-
-                    throw new Exception();
-                }
-                else
-                    return GetFolderForNode(node.Parent);
-            }
-            else if (node is FolderNode)
-            {
-                var folder = (FolderNode)node;
-                return folder.Directory.FullName;
-            }
-
-            throw new Exception();
+            return node.Path;
         }
 
-        public static string GetFolderLocationForNode(TreeNode node)
+        public static string GetFolderLocationForNode(LibraryNode node)
         {
-            string folderLocation = "";
 
             if (node != null)
             {
-                if (!(node is Skin))
-                    folderLocation = GetFolderForNode(node);
-                else if (node.Parent != null)
-                    folderLocation = GetFolderForNode(node.Parent);
-                else if (HasOneRoot)
-                    folderLocation = RootFolderString;
+                if (node is FolderNode)
+                {
+                    return (node as FolderNode).Path;
+                }
+                else if (node is Skin)
+                {
+                    return (node as Skin).Parent.Path;
+                }
             }
-            else if (HasOneRoot)
-                folderLocation = RootFolderString;
-
-            return folderLocation;
+            return "";
         }
 
-        public static void GetFolderLocationAndCollectionForNode(TreeView treeView, TreeNode _rightClickedNode,
-                                                                 out string folderLocation, out TreeNodeCollection collection)
+        public static void GetFolderLocationAndCollectionForNode(LibraryNode _rightClickedNode,
+                                                                 out string folderLocation, out IEnumerable<LibraryNode> collection)
         {
             folderLocation = "";
-            collection = treeView.Nodes;
+            collection = SkinLibrary.RootFolders;
 
             if (_rightClickedNode != null)
             {
-                if (!(_rightClickedNode is Skin))
+                if (_rightClickedNode is FolderNode)
                 {
                     folderLocation = GetFolderForNode(_rightClickedNode);
-                    collection = _rightClickedNode.Nodes;
+                    collection = ((FolderNode)_rightClickedNode).Nodes;
                 }
                 else if (_rightClickedNode.Parent != null)
                 {
                     folderLocation = GetFolderForNode(_rightClickedNode.Parent);
                     collection = _rightClickedNode.Parent.Nodes;
                 }
-                else if (HasOneRoot)
-                    folderLocation = RootFolderString;
             }
-            else if (HasOneRoot)
-                folderLocation = RootFolderString;
         }
 
-        private void ImportSkins(string[] fileName, TreeNode parentNode)
+        private void ImportSkins(string[] fileName, LibraryNode parentNode)
         {
             string folderLocation = GetFolderLocationForNode(parentNode);
 
@@ -4101,7 +4047,7 @@ namespace MCSkinn
                 ImportSkin(f, folderLocation, parentNode);
         }
 
-        public void PerformImportSkin()
+        public void PerformImportSkin(LibraryNode _rightClickedNode = null)
         {
             Program.Log(LogType.Load, "Performing ImportSkin", "at MCSkinn.Editor.PerformImportSkin()");
 
@@ -4109,7 +4055,7 @@ namespace MCSkinn
                 return;
 
             if (_rightClickedNode == null)
-                _rightClickedNode = treeView1.SelectedNode;
+                _rightClickedNode = SkinLibrary.SelectedNode;
 
             string folderLocation = GetFolderLocationForNode(_rightClickedNode);
 
@@ -4127,41 +4073,41 @@ namespace MCSkinn
             }
         }
 
-        public void PerformNewFolder()
+        public void PerformNewFolder(LibraryNode _rightClickedNode = null)
         {
-            if (!treeView1.Enabled)
-                return;
+            //if (!treeView1.Enabled)
+            //    return;
 
-            Program.Log(LogType.Load, "Performing NewFolder", "at MCSkinn.Editor.PerformNewFolder()");
+            //Program.Log(LogType.Load, "Performing NewFolder", "at MCSkinn.Editor.PerformNewFolder()");
 
-            string folderLocation;
-            TreeNodeCollection collection;
+            //string folderLocation;
+            //IEnumerable<LibraryNode> collection;
 
-            if (_rightClickedNode == null || _rightClickedNode.Parent == null)
-                _rightClickedNode = treeView1.SelectedNode;
+            //if (_rightClickedNode == null || _rightClickedNode.Parent == null)
+            //    _rightClickedNode = SkinLibrary.SelectedNode;
 
-            GetFolderLocationAndCollectionForNode(treeView1, _rightClickedNode, out folderLocation, out collection);
+            //GetFolderLocationAndCollectionForNode(_rightClickedNode, out folderLocation, out collection);
 
-            if (collection == null || string.IsNullOrEmpty(folderLocation))
-                return;
+            //if (collection == null || string.IsNullOrEmpty(folderLocation))
+            //    return;
 
-            string newFolderName = GetLanguageString("M_NEWFOLDER");
+            //string newFolderName = GetLanguageString("M_NEWFOLDER");
 
-            while (Directory.Exists(folderLocation + newFolderName))
-                newFolderName = newFolderName.Insert(0, GetLanguageString("C_NEW") + " ");
+            //while (Directory.Exists(folderLocation + newFolderName))
+            //    newFolderName = newFolderName.Insert(0, GetLanguageString("C_NEW") + " ");
 
-            Directory.CreateDirectory(folderLocation + newFolderName);
+            //Directory.CreateDirectory(folderLocation + newFolderName);
 
-            var newNode = new FolderNode(newFolderName);
-            collection.Add(newNode);
+            //var newNode = new FolderNode(folderLocation + newFolderName, (_rightClickedNode is FolderNode ? (_rightClickedNode as FolderNode) : (_rightClickedNode.Parent)), false);
+            //(collection as IList).Add(newNode);
 
-            newNode.EnsureVisible();
-            treeView1.SelectedNode = newNode;
-            treeView1.Invalidate();
+            ////newNode.EnsureVisible();
+            ////SelectedNode = newNode;
+            //treeView1.Invalidate();
 
-            Program.Log(LogType.Info, string.Format("New folder '{0}'", newFolderName), "at MCSkinn.Editor.PerformNewFolder()");
+            //Program.Log(LogType.Info, string.Format("New folder '{0}'", newFolderName), "at MCSkinn.Editor.PerformNewFolder()");
 
-            PerformNameChange();
+            //PerformNameChange();
         }
 
         void FillRectangleAlternating(Bitmap b, int x, int y, int w, int h)
@@ -4180,105 +4126,101 @@ namespace MCSkinn
                 }
         }
 
-        public void PerformNewSkin(Model specificModel = null)
+        public void PerformNewSkin(Model specificModel = null, LibraryNode _rightClickedNode = null)
         {
-            if (!treeView1.Enabled)
-                return;
+            //if (!treeView1.Enabled)
+            //    return;
 
-            Program.Log(LogType.Load, "Performing NewSkin", "at MCSkinn.Editor.PerformNewSkin()");
+            //Program.Log(LogType.Load, "Performing NewSkin", "at MCSkinn.Editor.PerformNewSkin()");
 
-            string folderLocation;
-            TreeNodeCollection collection;
+            //string folderLocation;
+            //TreeNodeCollection collection;
 
-            if (_rightClickedNode == null)
-                _rightClickedNode = treeView1.SelectedNode;
+            //if (_rightClickedNode == null)
+            //    _rightClickedNode = SkinLibrary.SelectedNode;
 
-            GetFolderLocationAndCollectionForNode(treeView1, _rightClickedNode, out folderLocation, out collection);
+            //GetFolderLocationAndCollectionForNode(_rightClickedNode, out folderLocation, out collection);
 
-            if (collection == null || string.IsNullOrEmpty(folderLocation))
-                return;
-            if (specificModel == null)
-                specificModel = CurrentModel;
+            //if (collection == null || string.IsNullOrEmpty(folderLocation))
+            //    return;
+            //if (specificModel == null)
+            //    specificModel = CurrentModel;
 
-            if (specificModel == null)
-                specificModel = ModelLoader.Models["Players/Steve"];
+            ////if (specificModel == null)
+            ////    specificModel = ModelLoader.Models["Players/Steve"];
 
-            string newSkinName = GetLanguageString("M_NEWSKIN") + " " + specificModel.Name;
+            //string newSkinName = GetLanguageString("M_NEWSKIN") + " " + specificModel.Name;
 
-            while (File.Exists(folderLocation + newSkinName + ".png"))
-                newSkinName = newSkinName.Insert(0, GetLanguageString("C_NEW") + " ");
+            //while (File.Exists(folderLocation + newSkinName + ".png"))
+            //    newSkinName = newSkinName.Insert(0, GetLanguageString("C_NEW") + " ");
 
-            using (var bmp = new Bitmap((int)specificModel.DefaultWidth, (int)specificModel.DefaultHeight))
-            {
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    g.Clear(Color.FromArgb(0, 255, 255, 255));
+            //using (var bmp = new Bitmap((int)specificModel.DefaultWidth, (int)specificModel.DefaultHeight))
+            //{
+            //    using (Graphics g = Graphics.FromImage(bmp))
+            //    {
+            //        g.Clear(Color.FromArgb(0, 255, 255, 255));
 
-                    if (GlobalSettings.UseTextureBases && !string.IsNullOrEmpty(specificModel.DefaultTexture))
-                    {
-                        using (var mp = new MemoryStream(Convert.FromBase64String(specificModel.DefaultTexture)))
-                        using (var bitmap = Bitmap.FromStream(mp))
-                            g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                    }
-                    else
-                    {
-                        foreach (var mesh in specificModel.Meshes)
-                        {
-                            foreach (var face in mesh.Faces)
-                            {
-                                var color = new ConvertableColor(ColorRepresentation.RGB, (face.Normal.X / 2) + 0.5f, (face.Normal.Y / 2) + 0.5f, (face.Normal.Z / 2) + 0.5f, !mesh.IsArmor ? 1.0f : 0.5f);
+            //        if (GlobalSettings.UseTextureBases && !string.IsNullOrEmpty(specificModel.DefaultTexture))
+            //        {
+            //            using (var mp = new MemoryStream(Convert.FromBase64String(specificModel.DefaultTexture)))
+            //            using (var bitmap = Bitmap.FromStream(mp))
+            //                g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+            //        }
+            //        else
+            //        {
+            //            foreach (var mesh in specificModel.Meshes)
+            //            {
+            //                foreach (var face in mesh.Faces)
+            //                {
+            //                    var color = new ConvertableColor(ColorRepresentation.RGB, (face.Normal.X / 2) + 0.5f, (face.Normal.Y / 2) + 0.5f, (face.Normal.Z / 2) + 0.5f, !mesh.IsArmor ? 1.0f : 0.5f);
 
-                                var baseColor = color.ToColor();
-                                color.L += 0.1f;
-                                var lightColor = color.ToColor();
+            //                    var baseColor = color.ToColor();
+            //                    color.L += 0.1f;
+            //                    var lightColor = color.ToColor();
 
-                                if (mesh.IsArmor)
-                                    lightColor = baseColor;
+            //                    if (mesh.IsArmor)
+            //                        lightColor = baseColor;
 
-                                Rectangle coords = face.TexCoordsToInteger(bmp.Width, bmp.Height);
+            //                    Rectangle coords = face.TexCoordsToInteger(bmp.Width, bmp.Height);
 
-                                for (var y = coords.Top; y < coords.Bottom; ++y)
-                                {
-                                    for (var x = coords.Left; x < coords.Right; ++x)
-                                        bmp.SetPixel(x, y, ((x + y) % 2) == 0 ? baseColor : lightColor);
-                                }
-                            }
-                        }
-                    }
-                }
+            //                    for (var y = coords.Top; y < coords.Bottom; ++y)
+            //                    {
+            //                        for (var x = coords.Left; x < coords.Right; ++x)
+            //                            bmp.SetPixel(x, y, ((x + y) % 2) == 0 ? baseColor : lightColor);
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
 
-                bmp.SaveSafe(folderLocation + newSkinName + ".png");
+            //    bmp.SaveSafe(folderLocation + newSkinName + ".png");
 
-                var md = new Dictionary<string, string>();
-                md.Add("Model", specificModel.Path);
-                PNGMetadata.WriteMetadata(folderLocation + newSkinName + ".png", md);
-            }
+            //    var md = new Dictionary<string, string>();
+            //    md.Add("Model", specificModel.Name);
+            //    PNGMetadata.WriteMetadata(folderLocation + newSkinName + ".png", md);
+            //}
 
-            var newSkin = new Skin(folderLocation + newSkinName + ".png");
-            collection.Add(newSkin);
-            newSkin.SetImages();
+            //var newSkin = new Skin(folderLocation + newSkinName + ".png");
+            //collection.Add(newSkin);
+            //newSkin.SetImages();
 
-            newSkin.EnsureVisible();
-            treeView1.SelectedNode = newSkin;
-            treeView1.Invalidate();
+            //SkinLibrary.SelectedNode = newSkin;
+            //treeView1.Invalidate();
 
-            Program.Log(LogType.Info, string.Format("New skin '{0}' from model '{1}'", newSkin.File.Name, specificModel.Name), "at MCSkinn.Editor.PerformNewSkin()");
+            //Program.Log(LogType.Info, string.Format("New skin '{0}' from model '{1}'", newSkin.File.Name, specificModel.Name), "at MCSkinn.Editor.PerformNewSkin()");
 
-            PerformNameChange();
+            //PerformNameChange();
         }
 
-        private void RecursiveDeleteSkins(TreeNode node)
+        private void RecursiveDeleteSkins(FolderNode node)
         {
-            foreach (TreeNode sub in node.Nodes)
+            foreach (LibraryNode sub in node.Nodes)
             {
                 if (!(sub is Skin))
-                    RecursiveDeleteSkins(sub);
+                    RecursiveDeleteSkins(sub as FolderNode);
                 else
                 {
                     var skin = (Skin)sub;
-
-                    if (_rightClickedNode == skin)
-                        _rightClickedNode = null;
 
                     if (_lastSkin == skin)
                         _lastSkin = null;
@@ -4295,52 +4237,40 @@ namespace MCSkinn
         {
             Program.Log(LogType.Load, "Performing DeleteSkin", "at MCSkinn.Editor.PerformDeleteSkin()");
 
-            if (!treeView1.Enabled)
-                return;
-
-            if (treeView1.SelectedNode is Skin)
-            {
-                if (
-                    MessageBox.Show(this, GetLanguageString("B_MSG_DELETESKIN"), GetLanguageString("B_CAP_QUESTION"),
+            if (MessageBox.Show(this, GetLanguageString("B_MSG_DELETESKIN"), GetLanguageString("B_CAP_QUESTION"),
                                     MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            {
+                if (SkinLibrary.SelectedNode is Skin)
                 {
-                    var skin = (Skin)treeView1.SelectedNode;
+                    //var skin = (Skin)SkinLibrary.SelectedNode;
 
-                    skin.Delete();
-                    skin.Remove();
+                    //skin.Delete();
+                    //skin.Parent?.Nodes.Remove(skin);
 
-                    _lastSkin = null;
+                    //_lastSkin = null;
 
-                    if (_rightClickedNode == skin)
-                        _rightClickedNode = null;
+                    //if (_lastSkin == skin)
+                    //    _lastSkin = null;
 
-                    if (_lastSkin == skin)
-                        _lastSkin = null;
+                    //skin.Dispose();
 
-                    skin.Dispose();
+                    //SkinLibrary_SelectedNodeChanged(null, EventArgs.Empty);
 
-                    treeView1_AfterSelect(treeView1, new TreeViewEventArgs(treeView1.SelectedNode));
+                    //Invalidate();
+
+
+                    (SkinLibrary.SelectedNode as Skin).Dispose();
+                }
+                else
+                {
+                    var folder = new DirectoryInfo(GetFolderForNode(SkinLibrary.SelectedNode));
+                    RecursiveDeleteSkins(SkinLibrary.SelectedNode as FolderNode);
+
+                    SkinLibrary.SelectedNode.Parent.Nodes.Remove(SkinLibrary.SelectedNode);
 
                     Invalidate();
                 }
-            }
-            else
-            {
-                if (
-                    MessageBox.Show(this, GetLanguageString("B_MSG_DELETEFOLDER"), GetLanguageString("B_CAP_QUESTION"),
-                                    MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
-                {
-                    var folder = new DirectoryInfo(GetFolderForNode(treeView1.SelectedNode));
 
-                    RecursiveDeleteSkins(treeView1.SelectedNode);
-
-                    if (_lastSkin.GetNodeChain().Contains(treeView1.SelectedNode))
-                        _lastSkin = null;
-
-                    treeView1.SelectedNode.Remove();
-                    treeView1_AfterSelect(treeView1, new TreeViewEventArgs(treeView1.SelectedNode));
-                    Invalidate();
-                }
             }
         }
 
@@ -4348,61 +4278,46 @@ namespace MCSkinn
         {
             Program.Log(LogType.Load, "Performing CloneSkin", "at MCSkinn.Editor.PerformCloneSkin()");
 
-            if (!treeView1.Enabled)
-                return;
-
-            if (treeView1.SelectedNode == null ||
-                !(treeView1.SelectedNode is Skin))
-                return;
-
-            var skin = (Skin)treeView1.SelectedNode;
+            var skin = (Skin)SkinLibrary.SelectedNode;
             string newName = skin.Name;
             string newFileName;
 
             do
             {
                 newName += " - " + GetLanguageString("C_COPY");
-                newFileName = skin.Directory.FullName + newName + ".png";
+                newFileName = skin.DirectoryInfo.FullName + newName + ".png";
             } while (File.Exists(newFileName));
 
-            File.Copy(skin.File.FullName, newFileName);
-            var newSkin = new Skin(newFileName);
-
-            Program.Log(LogType.Info, string.Format("Cloned skin '{0}'", Path.GetFileName(newFileName)), "at MCSkinn.Editor.PerformCloneSkin()");
-
-
-            skin.GetParentCollection().Add(newSkin);
-
-            newSkin.SetImages();
+            File.Copy(skin.FileInfo.FullName, newFileName);
         }
 
         public void PerformNameChange()
         {
 
-            if (!treeView1.Enabled)
-                return;
+            //if (!treeView1.Enabled)
+            //    return;
 
-            Program.Log(LogType.Load, "Performing NameChange", "at MCSkinn.Editor.PerformNameChange()");
+            //Program.Log(LogType.Load, "Performing NameChange", "at MCSkinn.Editor.PerformNameChange()");
 
-            if (treeView1.SelectedNode != null)
-            {
-                _currentlyEditing = treeView1.SelectedNode;
+            //if (SelectedNode != null)
+            //{
+            //    _currentlyEditing = SelectedNode;
 
-                if (_currentlyEditing is Skin)
-                    labelEditTextBox.Text = ((Skin)_currentlyEditing).Name;
-                else
-                    labelEditTextBox.Text = _currentlyEditing.Text;
+            //    if (_currentlyEditing is Skin)
+            //        labelEditTextBox.Text = ((Skin)_currentlyEditing).Name;
+            //    else
+            //        labelEditTextBox.Text = _currentlyEditing.Text;
 
-                labelEditTextBox.Show();
-                labelEditTextBox.Location =
-                    PointToClient(
-                        treeView1.PointToScreen(new Point(
-                                                    treeView1.SelectedNode.Bounds.Location.X + 22 + (treeView1.SelectedNode.Level * 1),
-                                                    treeView1.SelectedNode.Bounds.Location.Y + 2)));
-                labelEditTextBox.Size = new Size(treeView1.Width - labelEditTextBox.Location.X - 20, labelEditTextBox.Height);
-                labelEditTextBox.BringToFront();
-                labelEditTextBox.Focus();
-            }
+            //    labelEditTextBox.Show();
+            //    labelEditTextBox.Location =
+            //        PointToClient(
+            //            treeView1.PointToScreen(new Point(
+            //                                        SelectedNode.Bounds.Location.X + 22 + (SelectedNode.Level * 1),
+            //                                        SelectedNode.Bounds.Location.Y + 2)));
+            //    labelEditTextBox.Size = new Size(treeView1.Width - labelEditTextBox.Location.X - 20, labelEditTextBox.Height);
+            //    labelEditTextBox.BringToFront();
+            //    labelEditTextBox.Focus();
+            //}
         }
 
         #endregion
@@ -4468,7 +4383,6 @@ namespace MCSkinn
 
             alphaCheckerboardToolStripMenuItem.Checked = GlobalSettings.AlphaCheckerboard;
             textureOverlayToolStripMenuItem.Checked = GlobalSettings.TextureOverlay;
-            automaticallyCheckForUpdatesToolStripMenuItem.Checked = GlobalSettings.AutoUpdate;
 
             SetSampleMenuItem(GlobalSettings.Multisamples);
 
@@ -4483,12 +4397,14 @@ namespace MCSkinn
             treeView1.Scrollable = true;
             //splitContainer4.SplitterDistance = 74;
 
-            treeView1.Dock = treeView2.Dock = DockStyle.Fill;
-            treeView1.Visible = true;
-            treeView2.Visible = false;
+            //treeView1.Dock = treeView2.Dock = DockStyle.Fill;
+            //treeView1.Visible = true;
+            //treeView2.Visible = false;
 
-            treeView1.ItemHeight = SkinTreeView.DefaultTreeViewHeight * DeviceDpi / 96;
-            treeView2.ItemHeight = 28 * DeviceDpi / 96;
+            //treeView1.ItemHeight = SkinTreeView.DefaultTreeViewHeight * DeviceDpi / 96;
+            //treeView2.ItemHeight = 28 * DeviceDpi / 96;
+
+            SkinLibrary.SelectedNodeChanged += SkinLibrary_SelectedNodeChanged;
         }
 
         public static string GLExtensions { get; private set; }
@@ -4502,18 +4418,18 @@ namespace MCSkinn
             Program.Page_Editor.InitializeHosts();
             this.Hide();
 
-            
+
         }
 
-        public ToolIndex ToolCamera;
-        public ToolIndex ToolPencil;
-        public ToolIndex ToolEraser;
-        public ToolIndex ToolDropper;
-        public ToolIndex ToolDodge;
-        public ToolIndex ToolDarken;
-        public ToolIndex ToolFill;
-        public ToolIndex ToolNoise;
-        public ToolIndex ToolStamp;
+        public ToolIndex Tool_Camera;
+        public ToolIndex Tool_Pencil;
+        public ToolIndex Tool_Eraser;
+        public ToolIndex Tool_Dropper;
+        public ToolIndex Tool_Dodge;
+        public ToolIndex Tool_Darken;
+        public ToolIndex Tool_Fill;
+        public ToolIndex Tool_Noise;
+        public ToolIndex Tool_Stamp;
 
         public void Initialize(Language language)
         {
@@ -4527,33 +4443,33 @@ namespace MCSkinn
             StampOptions = new StampOptions();
 
 
-            ToolCamera = new ToolIndex(new CameraTool(), null, "T_TOOL_CAMERA", Resources.eye__1_, Keys.C);
-            _tools.Add(ToolCamera);
+            Tool_Camera = new ToolIndex(new CameraTool(), null, "T_TOOL_CAMERA", Resources.eye__1_, Keys.C);
+            _tools.Add(Tool_Camera);
 
-            ToolPencil = new ToolIndex(new PencilTool(), PencilOptions, "T_TOOL_PENCIL", Resources.pen, Keys.P);
-            _tools.Add(ToolPencil);
+            Tool_Pencil = new ToolIndex(new PencilTool(), PencilOptions, "T_TOOL_PENCIL", Resources.pen, Keys.P);
+            _tools.Add(Tool_Pencil);
 
 
-            ToolEraser = new ToolIndex(new EraserTool(), EraserOptions, "T_TOOL_ERASER", Resources.erase, Keys.E);
-            _tools.Add(ToolEraser);
+            Tool_Eraser = new ToolIndex(new EraserTool(), EraserOptions, "T_TOOL_ERASER", Resources.erase, Keys.E);
+            _tools.Add(Tool_Eraser);
 
-            ToolDropper = new ToolIndex(new DropperTool(), null, "T_TOOL_DROPPER", Resources.pipette, Keys.D);
-            _tools.Add(ToolDropper);
+            Tool_Dropper = new ToolIndex(new DropperTool(), null, "T_TOOL_DROPPER", Resources.pipette, Keys.D);
+            _tools.Add(Tool_Dropper);
 
-            ToolDodge = new ToolIndex(new DodgeBurnTool(), DodgeBurnOptions, "T_TOOL_DODGEBURN", Resources.dodge, Keys.B);
-            _tools.Add(ToolDodge);
+            Tool_Dodge = new ToolIndex(new DodgeBurnTool(), DodgeBurnOptions, "T_TOOL_DODGEBURN", Resources.dodge, Keys.B);
+            _tools.Add(Tool_Dodge);
 
-            ToolDarken = new ToolIndex(new DarkenLightenTool(), DarkenLightenOptions, "T_TOOL_DARKENLIGHTEN", Resources.darkenlighten, Keys.L);
-            _tools.Add(ToolDarken);
+            Tool_Darken = new ToolIndex(new DarkenLightenTool(), DarkenLightenOptions, "T_TOOL_DARKENLIGHTEN", Resources.darkenlighten, Keys.L);
+            _tools.Add(Tool_Darken);
 
-            ToolFill = new ToolIndex(new FloodFillTool(), FloodFillOptions, "T_TOOL_BUCKET", Resources.fill_bucket, Keys.F);
-            _tools.Add(ToolFill);
+            Tool_Fill = new ToolIndex(new FloodFillTool(), FloodFillOptions, "T_TOOL_BUCKET", Resources.fill_bucket, Keys.F);
+            _tools.Add(Tool_Fill);
 
-            ToolNoise = new ToolIndex(new NoiseTool(), NoiseOptions, "T_TOOL_NOISE", Resources.noise, Keys.N);
-            _tools.Add(ToolNoise);
+            Tool_Noise = new ToolIndex(new NoiseTool(), NoiseOptions, "T_TOOL_NOISE", Resources.noise, Keys.N);
+            _tools.Add(Tool_Noise);
 
-            ToolStamp = new ToolIndex(new StampTool(), StampOptions, "T_TOOL_STAMP", Resources.stamp_pattern, Keys.M);
-            _tools.Add(ToolStamp);
+            Tool_Stamp = new ToolIndex(new StampTool(), StampOptions, "T_TOOL_STAMP", Resources.stamp_pattern, Keys.M);
+            _tools.Add(Tool_Stamp);
 
 
             //_tools.Add(new ToolIndex(new PencilTool(), PencilOptions, "T_TOOL_PENCIL", Resources.pen, Keys.P));
@@ -4586,49 +4502,54 @@ namespace MCSkinn
 
             Brushes.LoadBrushes();
 
-            foreach (string x in GlobalSettings.SkinDirectories)
-                Directory.CreateDirectory(MacroHandler.ReplaceMacros(x));
+            //foreach (string x in GlobalSettings.SkinDirectories)
+            //    Directory.CreateDirectory(MacroHandler.ReplaceMacros(x));
 
             // set up the GL control
-            var mode = new GraphicsMode();
+            //var mode = new GraphicsMode();
 
-        reset:
+            //reset:
 
-            Renderer =
-                new GLControl(new GraphicsMode(mode.ColorFormat, mode.Depth, mode.Stencil, GlobalSettings.Multisamples));
+            Renderer = new OpenTK.WPF.OtkWpfControl(true);
+            Renderer.RenderScale = 1;
+            Renderer.OpenGLDraw += Renderer_OpenGLDraw;
+            Renderer.MouseDown += Renderer_MouseDown;
+            Renderer.MouseMove += Renderer_MouseMove;
+            Renderer.MouseUp += Renderer_MouseUp;
+            Renderer.MouseLeave += Renderer_MouseLeave;
+            Renderer.SizeChanged += Renderer_SizeChanged;
+            Renderer.MouseWheel += Renderer_MouseWheel;
+            Renderer.MouseEnter += Renderer_MouseEnter;
 
-            if (Renderer.Context == null)
-            {
-                mode = new GraphicsMode();
-                goto reset;
-            }
+            //Renderer =
+            //    new GLControl(new GraphicsMode(mode.ColorFormat, mode.Depth, mode.Stencil, GlobalSettings.Multisamples));
+            //if (Renderer.Context == null)
+            //{
+            //    mode = new GraphicsMode();
+            //    goto reset;
+            //}
 
-            Renderer.BackColor = Color.Black;
-            Renderer.Dock = DockStyle.Fill;
-            Renderer.Location = new Point(0, 25);
-            Renderer.Name = "rendererControl";
-            Renderer.Size = new Size(641, 580);
-            Renderer.TabIndex = 4;
-            Renderer.KeyDown += tabControl1_KeyDown;
+            //Renderer.BackColor = Color.Black;
+            //Renderer.Dock = DockStyle.Fill;
+            //Renderer.Location = new Point(0, 25);
+            //Renderer.Name = "rendererControl";
+            //Renderer.Size = new Size(641, 580);
+            //Renderer.TabIndex = 4;
+            //Renderer.KeyDown += tabControl1_KeyDown;
 
-            ViewportPanel.Controls.Add(Renderer);
-            Renderer.BringToFront();
-
-            GLVendor = GL.GetString(StringName.Vendor);
-            GLVersion = GL.GetString(StringName.Version);
-            GLRenderer = GL.GetString(StringName.Renderer);
-            GLExtensions = GL.GetString(StringName.Extensions);
+            //ViewportPanel.Controls.Add(RendererControl);
+            //Renderer.BringToFront();
 
             InitGL();
 
-            Renderer.Paint += rendererControl_Paint;
-            Renderer.MouseDown += rendererControl_MouseDown;
-            Renderer.MouseMove += rendererControl_MouseMove;
-            Renderer.MouseUp += rendererControl_MouseUp;
-            Renderer.MouseLeave += rendererControl_MouseLeave;
-            Renderer.Resize += rendererControl_Resize;
-            Renderer.MouseWheel += rendererControl_MouseWheel;
-            Renderer.MouseEnter += rendererControl_MouseEnter;
+            //RendererControl.Paint += rendererControl_Paint;
+            //RendererControl.MouseDown += rendererControl_MouseDown;
+            //RendererControl.MouseMove += rendererControl_MouseMove;
+            //RendererControl.MouseUp += rendererControl_MouseUp;
+            //RendererControl.MouseLeave += rendererControl_MouseLeave;
+            //RendererControl.Resize += rendererControl_Resize;
+            //RendererControl.MouseWheel += rendererControl_MouseWheel;
+            //RendererControl.MouseEnter += rendererControl_MouseEnter;
 
 #if NO
 			if (!GlobalSettings.Loaded)
@@ -4656,13 +4577,209 @@ namespace MCSkinn
             undoToolStripButton.DropDown.AutoClose = redoToolStripButton.DropDown.AutoClose = true;
 
             CreatePartList();
-            Renderer.Invalidate();
+            InvalidRenderer();
         }
 
-        private void rendererControl_MouseEnter(object sender, EventArgs e)
+        private void Renderer_MouseEnter(object sender, WPF.Input.MouseEventArgs e)
         {
-            Renderer.Focus();
+
         }
+
+        private void Renderer_MouseLeave(object sender, WPF.Input.MouseEventArgs e)
+        {
+            _mousePoint = new Point(-1, -1);
+
+            if (_mouseIsDown)
+                Renderer_MouseUp(sender, new WPF.Input.MouseButtonEventArgs(e.MouseDevice, e.Timestamp, WPF.Input.MouseButton.Left));
+        }
+
+        #region Renderer Events
+        private void Renderer_MouseWheel(object sender, WPF.Input.MouseWheelEventArgs e)
+        {
+            CheckMouse((int)Renderer.GetMousePointAtRenderer().Y);
+
+            if (_currentViewMode == ViewMode.Perspective || (_currentViewMode == ViewMode.Hybrid && _mouseIn3D))
+                _3DZoom += e.Delta / 50;
+            else
+                _2DZoom += e.Delta / 50;
+
+            if (_2DZoom < 0.25f)
+                _2DZoom = 0.25f;
+
+            CalculateMatrices();
+            InvalidRenderer();
+
+        }
+
+        private void Renderer_SizeChanged(object sender, WPF.SizeChangedEventArgs e)
+        {
+            RenderMakeCurrent();
+
+            CalculateMatrices();
+            InvalidRenderer();
+        }
+
+        private void Renderer_MouseUp(object sender, WPF.Input.MouseButtonEventArgs e)
+        {
+            Skin skin = _lastSkin;
+
+            if (skin == null)
+                return;
+
+            using (var backup = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height))
+            {
+                backup.Load();
+
+                try
+                {
+                    if (_mouseIsDown)
+                    {
+                        var currentSkin = new ColorGrabber();
+
+                        if (e.ChangedButton == WPF.Input.MouseButton.Left)
+                        {
+                            currentSkin = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height);
+                            currentSkin.Load();
+
+                            if (_selectedTool.Tool.EndClick(currentSkin, skin, e))
+                            {
+                                SetCanSave(true);
+                                skin.IsDirty = true;
+                                //treeView1.Invalidate();
+                                currentSkin.Save();
+                            }
+
+                            SetPartTransparencies();
+                        }
+                        else
+                            _tools[(int)Tools.Camera].Tool.EndClick(currentSkin, _lastSkin, e);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    backup.Save();
+                    saveAllToolStripMenuItem_Click(null, null);
+
+                    Program.Log(ex, true);
+                }
+            }
+
+            _mouseIsDown = false;
+            //treeView1.Invalidate();
+            refreshNeeded = true;
+        }
+
+        private void Renderer_MouseMove(object sender, WPF.Input.MouseEventArgs e)
+        {
+            Skin skin = _lastSkin;
+
+            if (skin == null)
+                return;
+
+            _isValidPick = GetPick((int)Renderer.GetMousePointAtRenderer().X, (int)Renderer.GetMousePointAtRenderer().Y, out _pickPosition);
+
+            using (var backup = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height))
+            {
+                backup.Load();
+
+                try
+                {
+                    if (_mouseIsDown)
+                    {
+                        if (e.LeftButton == WPF.Input.MouseButtonState.Pressed)
+                        {
+                            _selectedTool.Tool.MouseMove(_lastSkin, e);
+                            UseToolOnViewport((int)Renderer.GetMousePointAtRenderer().X, (int)Renderer.GetMousePointAtRenderer().Y);
+                        }
+                        else
+                            _tools[(int)Tools.Camera].Tool.MouseMove(_lastSkin, e);
+                    }
+
+                    _mousePoint = Renderer.GetMousePointAtRenderer().W2D();
+                    InvalidRenderer();
+                }
+                catch (Exception ex)
+                {
+                    backup.Save();
+                    saveAllToolStripMenuItem_Click(null, null);
+
+                    Program.Log(ex, true);
+                }
+            }
+
+            refreshNeeded = true;
+        }
+
+        private void Renderer_MouseDown(object sender, WPF.Input.MouseButtonEventArgs e)
+        {
+            Skin skin = _lastSkin;
+
+            if (skin == null)
+                return;
+
+            CheckMouse((int)Renderer.GetMousePointAtRenderer().Y);
+
+            _mousePoint = Renderer.GetMousePointAtRenderer().W2D();
+            _mouseIsDown = true;
+
+            //_isValidPick = GetPick(e.X, e.Y, ref _pickPosition);
+
+            using (var backup = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height))
+            {
+                backup.Load();
+
+                try
+                {
+                    if (e.ChangedButton == WPF.Input.MouseButton.Left)
+                    {
+                        if (_isValidPick)
+                            _selectedTool.Tool.BeginClick(_lastSkin, _pickPosition, e);
+                        else
+                            _selectedTool.Tool.BeginClick(_lastSkin, new Point(-1, -1), e);
+                        UseToolOnViewport((int)Renderer.GetMousePointAtRenderer().X, (int)Renderer.GetMousePointAtRenderer().Y);
+                    }
+                    else
+                        _tools[(int)Tools.Camera].Tool.BeginClick(_lastSkin, Point.Empty, e);
+                }
+                catch (Exception ex)
+                {
+                    backup.Save();
+                    saveAllToolStripMenuItem_Click(null, null);
+
+                    Program.Log(ex, true);
+                }
+            }
+
+            refreshNeeded = true;
+        }
+
+        bool _refreshNeeded = true;
+        public bool refreshNeeded
+        {
+            get { return _refreshNeeded; }
+            set 
+            {
+                _refreshNeeded = value; 
+                Renderer.IsRenderingPaused = !value;
+            }
+        }
+
+        private void Renderer_OpenGLDraw(object? sender, OpenTK.WPF.OtkWpfControl.OpenGLDrawEventArgs e)
+        {
+            if (refreshNeeded)
+            {
+                rendererControl_Paint(null, null);
+
+                e.Redrawn = true;
+                refreshNeeded = false;
+            }
+            else
+            {
+                e.Redrawn = false;
+            }
+        }
+
+        #endregion
 
         private void _shortcutEditor_ShortcutExists(object sender, ShortcutExistsEventArgs e)
         {
@@ -4671,119 +4788,5 @@ namespace MCSkinn
 
         #endregion
 
-        private void gridEnabledToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            GlobalSettings.GridEnabled = !GlobalSettings.GridEnabled;
-            gridEnabledToolStripMenuItem.Checked = GlobalSettings.GridEnabled;
-
-            Renderer.Invalidate();
-        }
-
-        private void useTextureBasesMenuItem_Click(object sender, EventArgs e)
-        {
-            GlobalSettings.UseTextureBases = !GlobalSettings.UseTextureBases;
-            useTextureBasesMenuItem.Checked = GlobalSettings.UseTextureBases;
-        }
-
-        private void officialMinecraftForumsThreadToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://www.minecraftforum.net/topic/746941-mcskinn-new-skinning-program/");
-        }
-
-        private void planetMinecraftSubmissionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://www.planetminecraft.com/mod/mcskinn/");
-        }
-
-        private void toolStripMenuItem4_Click_1(object sender, EventArgs e)
-        {
-            Dictionary<Vector3, int> vertDict = new Dictionary<Vector3, int>();
-            Dictionary<Vector2, int> texCoordDict = new Dictionary<Vector2, int>();
-
-            foreach (var m in CurrentModel.Meshes)
-            {
-                foreach (var f in m.Faces)
-                {
-                    if (f.Indices.Length != 4)
-                    {
-                        Debugger.Break();
-                        continue;
-                    }
-
-                    for (var i = 0; i < 4; ++i)
-                    {
-                        var fv = Vector3.Transform(f.Vertices[i], m.Matrix);
-                        var ft = f.TexCoords[i];
-
-                        if (!vertDict.ContainsKey(fv))
-                            vertDict.Add(fv, vertDict.Count);
-                        if (!texCoordDict.ContainsKey(ft))
-                            texCoordDict.Add(ft, texCoordDict.Count);
-                    }
-                }
-            }
-
-            string s = "";
-
-            foreach (var v in vertDict)
-                s += String.Format("v {0} {1} {2}\r\n", v.Key.X, -v.Key.Y, v.Key.Z);
-
-            foreach (var v in texCoordDict)
-                s += String.Format("vt {0} {1}\r\n", v.Key.X, 1 - v.Key.Y);
-
-            foreach (var m in CurrentModel.Meshes)
-            {
-                s += String.Format("g {0}\r\n", m.Name);
-                s += "s 1\r\n";
-
-                foreach (var f in m.Faces)
-                {
-                    if (f.Indices.Length != 4)
-                    {
-                        Debugger.Break();
-                        continue;
-                    }
-
-                    int[] vi = new int[4];
-                    int[] vt = new int[4];
-
-                    for (var i = 0; i < 4; ++i)
-                    {
-                        vi[i] = vertDict[Vector3.Transform(f.Vertices[i], m.Matrix)] + 1;
-                        vt[i] = texCoordDict[f.TexCoords[i]] + 1;
-                    }
-
-                    s += String.Format("f {0}/{1} {2}/{3} {4}/{5} {6}/{7}\r\n", vi[0], vt[0], vi[1], vt[1], vi[2], vt[2], vi[3], vt[3]);
-                }
-            }
-
-            Clipboard.SetText(s);
-        }
-
-        private void toolStrip2_ItemClicked(global::System.Object sender, global::System.Windows.Forms.ToolStripItemClickedEventArgs e)
-        {
-
-        }
-
-        private void splitContainer3_Panel1_Paint(global::System.Object sender, global::System.Windows.Forms.PaintEventArgs e)
-        {
-
-        }
-
-        private void tabControl1_KeyDown(global::System.Object sender, global::System.Windows.Forms.KeyEventArgs e)
-        {
-            CheckKeyShortcut(e);
-        }
-
-        private void mDYNAMICOVERLAYToolStripMenuItem_Click(global::System.Object sender, global::System.EventArgs e)
-        {
-
-        }
-
-        private void Editor_DpiChanged(object sender, DpiChangedEventArgs e)
-        {
-            treeView1.ItemHeight = SkinTreeView.DefaultTreeViewHeight * e.DeviceDpiNew / 96;
-            treeView2.ItemHeight = 28 * e.DeviceDpiNew / 96;
-        }
     }
 }

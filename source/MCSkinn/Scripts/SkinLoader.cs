@@ -1,77 +1,126 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using MCSkinn.Scripts.Macros;
-using MCSkinn.Scripts.Setting;
 
 namespace MCSkinn.Scripts
 {
     public static class SkinLoader
     {
-        static TreeNode _tempToSelect;
-
-        static void RecurseAddDirectories(string path, IList nodes, List<Skin> skins)
-        {
-            var di = new DirectoryInfo(path);
-
-            foreach (FileInfo file in di.EnumerateFiles("*.png", SearchOption.TopDirectoryOnly))
-            {
-                var skin = new Skin(file);
-                nodes.Add(skin);
-
-                if (_tempToSelect == null)
-                    _tempToSelect = skin;
-                else if (GlobalSettings.LastSkin == skin.File.ToString())
-                    _tempToSelect = skin;
-
-                skins.Add(skin);
-            }
-
-            foreach (DirectoryInfo dir in di.EnumerateDirectories())
-            {
-                if ((dir.Attributes & FileAttributes.Hidden) != 0)
-                    continue;
-
-                var leadingName = dir.FullName + '\\';
-                var folderNode = new FolderNode(new DirectoryInfo(leadingName).Name);
-                RecurseAddDirectories(leadingName, folderNode.Nodes, skins);
-                nodes.Add(folderNode);
-            }
-        }
 
         public static void LoadSkins()
         {
-            var skins = new List<Skin>();
-            var rootNodes = new List<TreeNode>();
+            List<Skin> skins = new List<Skin>();
 
-            if (Editor.HasOneRoot)
-                RecurseAddDirectories(Editor.RootFolderString, rootNodes, skins);
+            foreach (Workfolder f in GlobalSettings.SkinDirectories)
+            {
+                f.Initialize();
+
+                SkinLibrary.RootFolders.Add(f.Root);
+            }
+
+            //Program.Page_Splash.Dispatcher.Invoke((Action<List<TreeNode>>)Editor.MainForm.BeginFinishedLoadingSkins, rootNodes);
+
+            //var invalidSkins = new List<Skin>();
+
+            //foreach (Skin s in skins)
+            //{
+            //    if (s.SetImages() != null)
+            //        invalidSkins.Add(s);
+            //}
+
+            //skins.RemoveAll((s) => invalidSkins.Contains(s));
+
+            //Program.Page_Splash.Dispatcher.Invoke((Action<List<Skin>, TreeNode>)Editor.MainForm.FinishedLoadingSkins, skins, _tempToSelect);
+        }
+
+
+    }
+
+    public static class SkinLibrary
+    {
+        public static ObservableCollection<FolderNode> RootFolders = new ObservableCollection<FolderNode>();
+
+        public static Dictionary<string, LibraryNode> NodesByPath = new Dictionary<string, LibraryNode>();
+
+        public static event EventHandler SelectedNodeChanged;
+
+        private static LibraryNode _selectedNode = null;
+
+        public static LibraryNode SelectedNode
+        {
+            get
+            {
+                return _selectedNode;
+            }
+            set
+            {
+                _selectedNode = value;
+
+                SelectedNodeChanged?.Invoke(null, EventArgs.Empty);
+            }
+        }
+
+        public static LibraryNode FindNode(string path)
+        {
+            string s = GetAbsolutedPath(path);
+
+            if (NodesByPath.ContainsKey(s))
+            {
+                return NodesByPath[s];
+            }
             else
             {
-                foreach (string x in GlobalSettings.SkinDirectories)
+                return null;
+            }
+        }
+
+        public static bool AddNode(LibraryNode node, string path)
+        {
+            string s = GetAbsolutedPath(path);
+
+            if (!NodesByPath.ContainsKey(s) && s != null)
+            {
+                try
                 {
-                    var expanded = MacroHandler.ReplaceMacros(x);
-                    var folder = new FolderNode(new DirectoryInfo(expanded).Name) { RootDir = expanded };
-                    RecurseAddDirectories(expanded, folder.Nodes, skins);
-                    rootNodes.Add(folder);
+                    NodesByPath.Add(s, node);
+                    return true;
+                }
+                catch(Exception ex)
+                {
+                    Program.Log(ex);
+                    return false;                
                 }
             }
-
-            Program.Page_Splash.Dispatcher.Invoke((Action<List<TreeNode>>)Editor.MainForm.BeginFinishedLoadingSkins, rootNodes);
-
-            var invalidSkins = new List<Skin>();
-
-            foreach (Skin s in skins)
+            else
             {
-                if (!s.SetImages())
-                    invalidSkins.Add(s);
+                return false;
             }
 
-            skins.RemoveAll((s) => invalidSkins.Contains(s));
-
-            Program.Page_Splash.Dispatcher.Invoke((Action<List<Skin>, TreeNode>)Editor.MainForm.FinishedLoadingSkins, skins, _tempToSelect);
         }
+
+        public static bool RemoveNode(string path)
+        {
+            string s = GetAbsolutedPath(path);
+
+            return NodesByPath.Remove(s);
+        }
+
+        public static string GetAbsolutedPath(string p)
+        {
+            string s = Path.GetFullPath(p).ToLower().Replace("/", @"\").Replace(@"\\", @"\").Replace(@"\\\", @"\");
+
+            if (s.EndsWith(@"\"))
+                return s.Substring(0, s.Length - 1);
+            else
+                return s;
+        }
+
+        public static string NewItemToSelect { get; set; }
     }
+
 }
