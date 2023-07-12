@@ -6,7 +6,7 @@ Author: [NotYoojun.!](https://github.com/NotYoojun)
 
    -  **Private use** You can use this product for private use with no limitations.
  
-   -  **Modification** You are allow to modificate this product ONLY WITH THE PUBLIC SOURCE CODE. The versions RELEASED BY US may NOT be everse-engineered, or de-compiled in any manner through current or future available technologies. And modified version can only be privately used.
+   -  **Modification** You are allowed to modify this product ONLY WITH THE PUBLIC SOURCE CODE. The versions RELEASED BY US may NOT be reverse-engineered, or de-compiled in any manner through current or future available technologies. And modified version can only be privately used.
 
    -  **Distribution** You can only distribute the original version built by us. Do not distribute ANY modified version.
 
@@ -14,6 +14,6 @@ Author: [NotYoojun.!](https://github.com/NotYoojun)
 
 - ✖️ **Limitations**
 
-   -  **Commercial use** You can to put THE STAFF YOU MADE with or based on this product (such as skins you made) into commercial uses. But you cannot put THIS APP ITSELF into any commercial use.
+   -  **Commercial use** You can put THE STAFF YOU MADE with or based on this product (such as skins you made) into commercial uses. But you cannot put THIS APP ITSELF into any commercial use.
 
    -  **Liability** We are NOT liable for any damages, loss of data, or any other disadvantage suffered by the Licensee arising out of the use or failure to use this product.
