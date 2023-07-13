@@ -63,13 +63,21 @@
 
 # 📥 Downloads
 
-- Click the links below to see and get the latest releases.
+- Get on Microsoft Store (Recommended)
 
-   | Site  | Link  | Password  |
-   | ------------ | ------------ | ------------ |
-   | Github  | <https://github.com/InkoreStudios/MCSkinn/releases>  | *(None)*  |
-   | Lanzou  | <https://wwyo.lanzouy.com/b04dw34tg>  | bynotyoojun  |
+  https://apps.microsoft.com/store/detail/9N8SJT329HH1
 
+  <a href="https://apps.microsoft.com/store/detail/9N8SJT329HH1?launch=true&mode=mini">
+	  <img src="https://get.microsoft.com/images/en-US%20dark.svg"/>
+  </a>
+
+- Get on GitHub
+
+   https://github.com/InkoreStudios/MCSkinn/releases
+
+- Get on Lanzou (蓝奏云)
+
+   https://wwyo.lanzouy.com/b04dw34tg (PS: `bynotyoojun`)
 
 # 🙋🏻‍♂️ Contribution
 
