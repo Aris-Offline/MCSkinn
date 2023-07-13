@@ -130,12 +130,25 @@
 
 # 🎊 Community
 
-- This project is made and maintained by [**NotYoojun**](https://github.com/NotYoojun) from     [**iNKORE!**](https://github.com/InkoreStudios)
+- Discord Server (Recommended)
 
-   | Site  | Link  | Type  |
-   | ------------ | ------------ | ------------ |
-   | Discord Server | <https://discord.gg/m6NPNVk4bs>  | Public  |
-   | QQ Channel  | <https://pd.qq.com/s/g3o1pmidm> *(1nkoreStudios)*  | Public  |
-   | QQ Group |<https://jq.qq.com/?_wv=1027&k=KefGAM42> *(686027177)*  | Public  |
-   | Telegram Group | <https://t.me/Inkore_group>  | Public  |
-   | Telegram Channel | <https://t.me/Inkore_channel>  | Public  |
+  https://discord.gg/m6NPNVk4bs
+  
+  <iframe src="https://discord.com/widget?id=1092738458805608561&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+
+- QQ Channel
+
+  https://pd.qq.com/s/g3o1pmidm *(1nkoreStudios)*
+
+- QQ Group
+
+  https://jq.qq.com/?_wv=1027&k=KefGAM42 *(686027177)*
+
+
+- Telegram Group
+
+  https://t.me/Inkore_group
+
+- Telegram
+
+  https://t.me/Inkore_channel
