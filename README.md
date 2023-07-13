@@ -40,11 +40,11 @@
 
 - Light mode
 
-   ![](https://github.com/InkoreStudios/MCSkinn/blob/main/materials/docs/images/image_product_mcskinn_screenshot_5.png?raw=true)
+   ![](https://github.com/InkoreStudios/MCSkinn/blob/main/materials/docs/images/image_product_mcskinn_screenshot_8.png?raw=true)
 
 - Dark mode
 
-   ![](https://github.com/InkoreStudios/MCSkinn/blob/main/materials/docs/images/image_product_mcskinn_screenshot_6.png?raw=true)
+   ![](https://github.com/InkoreStudios/MCSkinn/blob/main/materials/docs/images/image_product_mcskinn_screenshot_10.png?raw=true)
 
 # ✨ Features
 
