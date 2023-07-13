@@ -71,13 +71,13 @@
 	  <img src="https://get.microsoft.com/images/en-US%20dark.svg"/>
   </a>
 
-- Get on GitHub
+- **Lanzou (蓝奏云):** https://wwyo.lanzouy.com/b04dw34tg 
 
-   https://github.com/InkoreStudios/MCSkinn/releases
+    If there is a password required, it should be `bynotyoojun`.
+    
+- **GitHub:** https://github.com/InkoreStudios/MCSkinn/releases
 
-- Get on Lanzou (蓝奏云)
-
-   https://wwyo.lanzouy.com/b04dw34tg (PS: `bynotyoojun`)
+    Check out the latest release!
 
 # 🙋🏻‍♂️ Contribution
 
@@ -117,36 +117,25 @@
 
 # 🤝 Sponsorship
 
-   - Hello! Thank you for using MCSkinn! Do you like it so far?
-   
+- Hello! Thank you for using MCSkinn! Do you like it so far?
+
      This app makes your Minecraft experience more pleasant, by helping you create bunch of beautiful skins. At the same time it's completely free, and with no ads.
-   
+
      or this reason you could support me with a voluntary donation. Even a small amount makes me jumping happy through my apartment.  Just donate as much as you value my work.
 
-   - **WeChat/Alipay**: There's QR in the sponorship page of the program
-   - **PayPal**: My username is [@NotYoojun](https://paypal.me/NotYoojun?country.x=C2&locale.x=en_US), clicking the link also works
-   - **Afdian**: Here is my homepage https://afdian.net/a/NotYoojun
+- **WeChat/Alipay**: There's QR in the sponorship page of the program
+- **PayPal**: My username is [@NotYoojun](https://paypal.me/NotYoojun?country.x=C2&locale.x=en_US), clicking the link also works
+- **Afdian**: Here is my homepage https://afdian.net/a/NotYoojun
 
 
 # 🎊 Community
 
-- Discord Server (Recommended)
+- **Discord Server:** https://discord.gg/m6NPNVk4bs
 
-  https://discord.gg/m6NPNVk4bs
+- **QQ Channel:** *(1nkoreStudios)* https://pd.qq.com/s/g3o1pmidm 
 
-- QQ Channel
+- **QQ Group:** *(686027177)* https://jq.qq.com/?_wv=1027&k=KefGAM42
 
-  https://pd.qq.com/s/g3o1pmidm *(1nkoreStudios)*
+- **Telegram Group:** https://t.me/Inkore_group
 
-- QQ Group
-
-  https://jq.qq.com/?_wv=1027&k=KefGAM42 *(686027177)*
-
-
-- Telegram Group
-
-  https://t.me/Inkore_group
-
-- Telegram
-
-  https://t.me/Inkore_channel
+- **Telegram Channel:** https://t.me/Inkore_channel
