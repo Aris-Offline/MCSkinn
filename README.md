@@ -121,7 +121,7 @@
 
      This app makes your Minecraft experience more pleasant, by helping you create bunch of beautiful skins. At the same time it's completely free, and with no ads.
 
-     or this reason you could support me with a voluntary donation. Even a small amount makes me jumping happy through my apartment.  Just donate as much as you value my work.
+     For this reason you could support me with a voluntary donation. Even a small amount makes me jumping happy through my apartment.  Just donate as much as you value my work.
 
 - **WeChat/Alipay**: There's QR in the sponorship page of the program
 - **PayPal**: My username is [@NotYoojun](https://paypal.me/NotYoojun?country.x=C2&locale.x=en_US), clicking the link also works
