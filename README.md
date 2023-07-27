@@ -63,7 +63,11 @@
 
 # 📥 Downloads
 
-- Get on Microsoft Store (Recommended)
+- **GitHub:** https://github.com/InkoreStudios/MCSkinn/releases
+
+    Check out the latest release!
+
+- **Get on Microsoft Store**
 
   https://apps.microsoft.com/store/detail/9N8SJT329HH1
 
@@ -75,9 +79,6 @@
 
     If there is a password required, it should be `bynotyoojun`.
     
-- **GitHub:** https://github.com/InkoreStudios/MCSkinn/releases
-
-    Check out the latest release!
 
 # 🙋🏻‍♂️ Contribution
 
