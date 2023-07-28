@@ -40,11 +40,11 @@
 
 - Light mode
 
-   ![](https://github.com/InkoreStudios/MCSkinn/blob/main/materials/docs/images/image_product_mcskinn_screenshot_8.png?raw=true)
+   ![](https://github.com/InkoreStudios/MCSkinn/blob/main/materials/images/screenshotwrapper_1_en.png?raw=true)
 
 - Dark mode
 
-   ![](https://github.com/InkoreStudios/MCSkinn/blob/main/materials/docs/images/image_product_mcskinn_screenshot_10.png?raw=true)
+   ![](https://github.com/InkoreStudios/MCSkinn/blob/main/materials/images/screenshotwrapper_4_en.png?raw=true)
 
 # ✨ Features
 
@@ -63,7 +63,11 @@
 
 # 📥 Downloads
 
-- Get on Microsoft Store (Recommended)
+- **GitHub:** https://github.com/InkoreStudios/MCSkinn/releases
+
+    Check out the latest release!
+
+- **Get on Microsoft Store**
 
   https://apps.microsoft.com/store/detail/9N8SJT329HH1
 
@@ -75,9 +79,6 @@
 
     If there is a password required, it should be `bynotyoojun`.
     
-- **GitHub:** https://github.com/InkoreStudios/MCSkinn/releases
-
-    Check out the latest release!
 
 # 🙋🏻‍♂️ Contribution
 
@@ -121,7 +122,7 @@
 
      This app makes your Minecraft experience more pleasant, by helping you create bunch of beautiful skins. At the same time it's completely free, and with no ads.
 
-     or this reason you could support me with a voluntary donation. Even a small amount makes me jumping happy through my apartment.  Just donate as much as you value my work.
+     For this reason you could support me with a voluntary donation. Even a small amount makes me jumping happy through my apartment.  Just donate as much as you value my work.
 
 - **WeChat/Alipay**: There's QR in the sponorship page of the program
 - **PayPal**: My username is [@NotYoojun](https://paypal.me/NotYoojun?country.x=C2&locale.x=en_US), clicking the link also works
