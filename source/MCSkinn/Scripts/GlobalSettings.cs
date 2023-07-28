@@ -14,7 +14,6 @@ using System.Drawing;
 using System.IO;
 using System.Security.Cryptography;
 using System.Xml.Linq;
-using MCSkinn.Scripts.Macros;
 using MCSkinn.Scripts.Paril.Settings;
 using MCSkinn.Scripts.Paril.Settings.Serializers;
 using Modern = Inkore.UI.WPF.Modern;
@@ -27,7 +26,7 @@ namespace MCSkinn.Scripts
     public static class GlobalSettings
     {
         private static Settings Settings;
-        public static bool Loaded;
+        public static bool? Loaded;
 
         [Savable("Render")]
         [DefaultValue(true)]
@@ -61,10 +60,28 @@ namespace MCSkinn.Scripts
         [DefaultValue("")]
         public static string ShortcutKeys { get; set; }
 
+        [Savable("Advanced")]
+        [DefaultValue(false)]
+        public static bool StylusToDraw { get; set; }
+
+        [Savable("Advanced")]
+        [DefaultValue(true)]
+        public static bool IsManipulationEnabled { get; set; }
+
         [Savable("Render")]
         [DefaultValue("null")]
         [TypeSerializer(typeof(ColorSerializer), true)]
         public static Color? BackgroundColor { get; set; }
+
+        [Savable("Render")]
+        [DefaultValue("0 0 0 255")]
+        [TypeSerializer(typeof(ColorSerializer), true)]
+        public static Color LastPalettePrimaryColor { get; set; }
+
+        [Savable("Render")]
+        [DefaultValue("255 255 255 255")]
+        [TypeSerializer(typeof(ColorSerializer), true)]
+        public static Color LastPaletteSecondaryColor { get; set; }
 
         [Savable("Render")]
         [DefaultValue(0)]
@@ -134,10 +151,6 @@ namespace MCSkinn.Scripts
         [DefaultValue(true)]
         public static bool InfiniteMouse { get; set; }
 
-        [Savable]
-        [DefaultValue(false)]
-        public static bool RenderBenchmark { get; set; }
-
         [Savable("Render")]
         [DefaultValue(false)]
         public static bool GridEnabled { get; set; }
@@ -178,15 +191,21 @@ namespace MCSkinn.Scripts
         {
             PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(prop));
         }
-        public static string GetDataURI(string fileOrFolder)
 
-        {
-            return Path.Combine(Directory.GetCurrentDirectory(), fileOrFolder);
-        }
+        public static string FullPath_Config = null;
+        public static string FullPath_Languages = null;
+        public static string FullPath_Models = null;
+        public static string FullPath_Brushes = null;
+        public static string FullPath_Templates = null;
 
-        public static void Load()
+        public static bool? Load()
         {
-            MacroHandler.RegisterMacro("DataLocation", ".\\");
+            FullPath_Config = Program.GetDataPath(ConfigFilename, false);
+
+            FullPath_Languages = Program.GetDataPath("Languages", true);
+            FullPath_Models = Program.GetDataPath("Models", true);
+            FullPath_Brushes = Program.GetDataPath("Brushes", true);
+            FullPath_Templates = Program.GetDataPath("Templates", true);
 
             try
             {
@@ -194,8 +213,17 @@ namespace MCSkinn.Scripts
                 Settings.LoadDefaults(typeof(GlobalSettings));
 
                 SkinDirectories = new ObservableCollection<Workfolder>();
+         
+                if (string.IsNullOrEmpty(FullPath_Config))
+                {
+                    Loaded = null;
+                    return Loaded;
+                }
 
-                XElement root = XElement.Load(GetDataURI(ConfigFilename));
+
+                Program.Log(Inkore.Coreworks.LogType.Info, "Loading config from file: " + FullPath_Config, "GlobalSettings.Load()");
+
+                XElement root = XElement.Load(FullPath_Config);
 
                 foreach (XElement e1 in root.Elements())
                 {
@@ -232,24 +260,26 @@ namespace MCSkinn.Scripts
                 }
 
                 Loaded = true;
+                return true;
             }
             catch (Exception ex)
             {
                 Program.Log(ex, false);
 
                 Loaded = false;
+
             }
 
-            if (SkinDirectories.Count == 0 && Directory.Exists(MacroHandler.ReplaceMacros(".\\Skins\\")))
-            {
-                SkinDirectories.Add(new Workfolder(MacroHandler.ReplaceMacros(".\\Skins\\")) { Name = "Skins", Color = WPFM.Colors.CornflowerBlue });
-            }
+            return Loaded;
 
             //MacroHandler.RegisterMacro("DefaultSkinFolder", MacroHandler.ReplaceMacros(".\\Skins\\"));
         }
 
-        public static void Save()
+        public static bool Save()
         {
+            if (string.IsNullOrEmpty(FullPath_Config))
+                return false;
+
             XElement root = new XElement("MCSkinn.Config");
 
             root.Add(Settings.Save(typeof(GlobalSettings)));
@@ -269,8 +299,9 @@ namespace MCSkinn.Scripts
             }
             root.Add(elementWorkfolders);
 
-            root.Save(GetDataURI(ConfigFilename));
+            root.Save(FullPath_Config);
 
+            return true;
         }
 
         public const string ConfigFilename = "MCSkinn.userconfig.xml";

@@ -30,6 +30,8 @@ namespace MCSkinn.Forms.Controls
             ParentItem = parent;         
             IsCheckable = false;
 
+            Tag = model;
+
             FontWeight = FontWeights.Normal;
 
             try

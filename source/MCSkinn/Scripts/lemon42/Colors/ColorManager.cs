@@ -313,7 +313,7 @@ namespace MCSkinn.Scripts.lemon42.Colors
                 B = c.B;
                 A = c.A;
             }
-            public RGBColor(ColorPicker.Models.NotifyableColor c)
+            public RGBColor(Inkore.UI.WPF.ColorPicker.Models.NotifyableColor c)
             {
                 R = (byte)Math.Min(255, Math.Max(0, c.RGB_R));
                 G = (byte)Math.Min(255, Math.Max(0, c.RGB_G));

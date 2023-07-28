@@ -15,11 +15,11 @@ namespace MCSkinn.Scripts.Tools
 {
     public interface ITool
     {
-        void BeginClick(Skin skin, Point p, WPF.Input.MouseButtonEventArgs e);
-        void MouseMove(Skin skin, WPF.Input.MouseEventArgs e);
+        void BeginClick(Skin skin, Point p, WPF.Input.MouseButton button);
+        void MouseMove(Skin skin, Point p);
         bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y);
         bool RequestPreview(ColorGrabber pixels, Skin skin, int x, int y);
-        bool EndClick(ColorGrabber pixels, Skin skin, WPF.Input.MouseButtonEventArgs e);
+        bool EndClick(ColorGrabber pixels, Skin skin, Point p, WPF.Input.MouseButton button);
         string GetStatusLabelText();
         void SelectedBrushChanged();
     }

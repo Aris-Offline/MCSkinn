@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WPF = System.Windows;
 using IO = System.IO;
-using MCSkinn.Scripts.Macros;
+using Inkore.Coreworks;
 
 namespace MCSkinn.Scripts
 {
@@ -102,20 +102,43 @@ namespace MCSkinn.Scripts
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public bool IsInitialized { get; private set; } = false;
+
         public void Initialize()
         {
-            string x = Path;
+            try
+            {
+                string x = Path;
 
-            var expanded = IO.Path.GetFullPath(MacroHandler.ReplaceMacros(x));
-            var folder = new FolderNode(expanded, null, true, this) { RootDir = expanded };
-            //RecurseAddDirectories(expanded, folder, skins);
+                if (!IO.Directory.Exists(x))
+                {
+                    Program.Log(LogType.Error, "Unable to load workfolder, the directory cannot be found", "Directory: " + x + "\r\nat Workfolder.Initialize()");
+                    IsInitialized = false;
 
-            folder.Recurse();
+                    return;
+                }
 
-            SkinLibrary.AddNode(folder, expanded);
-            Program.Log(Inkore.Common.LogType.Load, "Loaded folder: " + expanded, expanded);
+                Program.Log(Inkore.Coreworks.LogType.Load, "Initializing workfolder: " + x, "Workfolder.Initialize()");
 
-            Root = folder;
+                var expanded = IO.Path.GetFullPath(x);
+                var folder = new FolderNode(expanded, null, true, this) { RootDir = expanded };
+                //RecurseAddDirectories(expanded, folder, skins);
+
+                folder.Recurse();
+
+                SkinLibrary.AddNode(folder, expanded);
+                Program.Log(LogType.Load, "Initialized workfolder " + expanded, expanded);
+
+                Root = folder;
+
+                IsInitialized = true;
+            }
+            catch(Exception ex)
+            {
+                Program.Log(ex, "Workfolder.Initialize()");
+
+                IsInitialized = false;
+            }
         }
 
         public Inkore.UI.WPF.Modern.Controls.NavigationViewItem NavigationItem { get; set; }

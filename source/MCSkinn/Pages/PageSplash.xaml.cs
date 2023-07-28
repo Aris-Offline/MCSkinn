@@ -18,8 +18,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MCSkinn.Scripts.Macros;
 using System.IO;
+using System.Windows.Media.Animation;
 
 namespace MCSkinn.Pages
 {
@@ -49,23 +49,21 @@ namespace MCSkinn.Pages
 
         Language LoadLanguages()
         {
-            LanguageLoader.LoadLanguages(GlobalSettings.GetDataURI("Languages"));
+            LanguageLoader.LoadLanguages(GlobalSettings.FullPath_Languages);
 
             Language useLanguage = null;
             try
             {
+                useLanguage = LanguageLoader.FindLanguage(GlobalSettings.LanguageFile);
+
                 // stage 1 (prelim): if no language, see if our languages contain it
                 if (string.IsNullOrEmpty(GlobalSettings.LanguageFile))
                 {
-                    useLanguage =
-                        LanguageLoader.FindLanguage((CultureInfo.CurrentUICulture.IsNeutralCulture == false)
-                                                        ? CultureInfo.CurrentUICulture.Parent.Name
-                                                        : CultureInfo.CurrentUICulture.Name);
-                }
+                    useLanguage = LanguageLoader.FindLanguage(CultureInfo.CurrentUICulture.Name);
 
-                // stage 2: load from last used language
-                if (useLanguage == null)
-                    useLanguage = LanguageLoader.FindLanguage(GlobalSettings.LanguageFile);
+                    if(useLanguage == null && !CultureInfo.CurrentUICulture.IsNeutralCulture)
+                        useLanguage = LanguageLoader.FindLanguage(CultureInfo.CurrentUICulture.Parent?.Name);
+                }
 
                 // stage 3: use English file, if it exists
                 if (useLanguage == null)
@@ -89,18 +87,13 @@ namespace MCSkinn.Pages
         }
         public static Language LoadDefault()
         {
-            Directory.CreateDirectory(GlobalSettings.GetDataURI("Languages"));
-            using (var writer = new FileStream(MacroHandler.ReplaceMacros(GlobalSettings.GetDataURI("Languages\\en-us.lang")), FileMode.Create))
-                writer.Write(Properties.Resources.English, 0, Properties.Resources.English.Length);
-
             using (var reader = new StreamReader(new MemoryStream(Properties.Resources.English), Encoding.Unicode))
             {
-                Language lang = Inkore.Coreworks.Localization.Language.Parse(reader, "en-US.lang");
-                Inkore.Coreworks.Localization.LanguageLoader.Languages.Add(lang);
+                Language lang = Inkore.Coreworks.Localization.Language.Parse(reader, "en-us.lang");
+                LanguageLoader.Languages.Add(lang);
                 return lang;
             }
         }
-        object _lockObj = new object();
 
         Action ErrorHandlerWrap(Action a)
         {
@@ -123,6 +116,8 @@ namespace MCSkinn.Pages
         void PerformLoading()
         {
             SetLoadingString("Loading Languages...");
+
+            Program.Log(Inkore.Coreworks.LogType.Info, "Loading languages from directory: " + GlobalSettings.FullPath_Languages, "PageSplash.PerformLoading()");
 
             var language = LoadLanguages();
 
@@ -147,6 +142,8 @@ namespace MCSkinn.Pages
 
             SetLoadingString("Loading models...");
 
+            Program.Log(Inkore.Coreworks.LogType.Info, "Loading languages from directory: " + GlobalSettings.FullPath_Models, "PageSplash.PerformLoading()");
+
             ModelLoader.LoadModels();
             Program.Page_Splash.Dispatcher.Invoke(ErrorHandlerWrap(Editor.MainForm.FinishedLoadingModels));
 
@@ -154,7 +151,7 @@ namespace MCSkinn.Pages
 
             SkinLoader.LoadSkins();
 
-            Program.Page_Splash.Dispatcher.Invoke(ErrorHandlerWrap(Program.Context.DoneLoadingSplash));
+            Program.Page_Splash.Dispatcher.Invoke(ErrorHandlerWrap(GlobalSettings.Loaded == true ? Program.Context.DoneLoadingSplash : this.ShowFirstTimeWelcome));
 
             Program.Context.Form.Invoke(ErrorHandlerWrap(() =>
             {
@@ -169,6 +166,14 @@ namespace MCSkinn.Pages
             _loaderThread.Start();
         }
 
+        Controls.UserControls.FirstTimeWelcome welcome;
+        public void ShowFirstTimeWelcome()
+        {
+            (this.Resources["Storyboard_FirstTimeWelcome"] as Storyboard).Begin();
+
+            welcome = new Controls.UserControls.FirstTimeWelcome();
+            ContentPresenter_FirstTimeWelcome.Content = welcome;
+        }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {

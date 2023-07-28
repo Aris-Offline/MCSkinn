@@ -68,6 +68,10 @@ namespace MCSkinn.Pages
             LanguageWpf.Register(this, TextBlock_PixelGrid_Color, TextBlock.TextProperty);
             LanguageWpf.Register(this, TextBlock_RememberPrefers, TextBlock.TextProperty);
             LanguageWpf.Register(this, TextBlock_RememberPrefers_Description, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_IsManipulationEnabled, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_IsManipulationEnabled_Description, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_StylusToDraw, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_StylusToDraw_Description, TextBlock.TextProperty);
 
             LanguageWpf.Register(this, TextBlock_Section_General, TextBlock.TextProperty);
             LanguageWpf.Register(this, TextBlock_Section_Appearance, TextBlock.TextProperty);
@@ -115,6 +119,10 @@ namespace MCSkinn.Pages
             NumberBox_TextureOverlay_TextSize.Value = GlobalSettings.DynamicOverlayTextSize;
 
             ToggleSwitch_RememberPrefers_Enabled.IsOn = GlobalSettings.RememberPrefers;
+
+            ToggleSwitch_IsManipulationEnabled_Enabled.IsOn=GlobalSettings.IsManipulationEnabled;
+            ToggleSwitch_StylusToDraw_Enabled.IsOn = GlobalSettings.StylusToDraw;
+
 
             isLoading = false;
 
@@ -355,5 +363,38 @@ namespace MCSkinn.Pages
 
         #endregion
 
+        private void ToggleSwitch_IsManipulationEnabled_Enabled_Toggled(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!isLoading)
+                {
+                    GlobalSettings.IsManipulationEnabled = ToggleSwitch_IsManipulationEnabled_Enabled.IsOn;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
+                Program.Log(ex);
+            }
+
+        }
+
+        private void ToggleSwitch_StylusToDraw_Enabled_Toggled(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!isLoading)
+                {
+                    GlobalSettings.StylusToDraw = ToggleSwitch_StylusToDraw_Enabled.IsOn;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
+                Program.Log(ex);
+            }
+
+        }
     }
 }

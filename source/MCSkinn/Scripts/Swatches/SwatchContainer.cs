@@ -34,7 +34,7 @@ namespace MCSkinn
 
         private static readonly string[] _swatchFormatNames = new[] { "ACO", "ACT", "GPL", "SWTCH" };
         private readonly SwatchDisplayer _swatchDisplayer;
-        private bool _creatingSwatch;
+        //private bool _creatingSwatch;
 
         public SwatchContainer()
         {
@@ -243,7 +243,7 @@ namespace MCSkinn
         {
             textBox1.Text = "";
             BeginRename();
-            _creatingSwatch = true;
+            //_creatingSwatch = true;
         }
 
         private void renameSwatchToolStripButton3_Click(object sender, EventArgs e)
@@ -253,7 +253,7 @@ namespace MCSkinn
 
             textBox1.Text = SwatchDisplayer.Swatch.Name;
             BeginRename();
-            _creatingSwatch = false;
+            //_creatingSwatch = false;
         }
 
         private void textBox1_Leave(object sender, EventArgs e)
@@ -264,24 +264,24 @@ namespace MCSkinn
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == '\r')
-            {
-                if (!_creatingSwatch)
-                    SwatchDisplayer.Swatch.Name = textBox1.Text;
-                else
-                {
-                    var newSwatch = new MCSwatch(GlobalSettings.GetDataURI("Swatches\\" + textBox1.Text + ".swtch"));
-                    newSwatch.Save();
+            //if (e.KeyChar == '\r')
+            //{
+            //    if (!_creatingSwatch)
+            //        SwatchDisplayer.Swatch.Name = textBox1.Text;
+            //    else
+            //    {
+            //        var newSwatch = new MCSwatch(GlobalSettings.GetDataURI("Swatches\\" + textBox1.Text + ".swtch"));
+            //        newSwatch.Save();
 
-                    comboBox1.Items.Add(newSwatch);
-                    comboBox1.SelectedItem = newSwatch;
-                }
+            //        comboBox1.Items.Add(newSwatch);
+            //        comboBox1.SelectedItem = newSwatch;
+            //    }
 
-                e.Handled = true;
-                textBox1.Visible = false;
+            //    e.Handled = true;
+            //    textBox1.Visible = false;
 
-                comboBox1.Refresh();
-            }
+            //    comboBox1.Refresh();
+            //}
         }
 
         private void comboBox1_DrawItem(object sender, DrawItemEventArgs e)

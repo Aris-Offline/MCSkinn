@@ -39,6 +39,9 @@ namespace MCSkinn
 		{
 			Form.Show();
 			Form.Visible = false;
+
+			Program.Page_Editor.EnsureNavItemSelection(null);
+
             Program.Window_Main.DoNavigate(Program.Page_Editor);
         }
     }

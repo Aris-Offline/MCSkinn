@@ -407,6 +407,8 @@ namespace MCSkinn.Scripts.Models
                 return;
 
             IsTCNFile = true;
+            string defaultTexture = null;
+
 
             foreach (XmlAttribute a in node.Attributes)
             {
@@ -435,6 +437,9 @@ namespace MCSkinn.Scripts.Models
                             var model = new TCNModel();
                             model.Parse(modelChild);
                             Models.Add(model);
+
+                            if (model.DefaultTexture == null && !string.IsNullOrEmpty(defaultTexture))
+                                model.DefaultTexture = defaultTexture;
                         }
                     }
                 }
@@ -446,6 +451,19 @@ namespace MCSkinn.Scripts.Models
                     ProjectType = child.InnerText;
                 else if (name == "displayname")
                     DisplayName = child.InnerText;
+                else if (name == "defaulttexture")
+                {
+                    defaultTexture = child.InnerText;
+
+                    foreach(TCNModel m in Models)
+                    {
+                        if (string.IsNullOrEmpty(m.DefaultTexture))
+                        {
+                            m.DefaultTexture = defaultTexture;
+                        }
+                    }
+                }
+
             }
         }
 

@@ -11,14 +11,14 @@ namespace MCSkinn.Scripts
 {
     public static class TypeHelper
     {
-        public static void Set(this ColorPicker.Models.NotifyableColor c , WPF.Media.Color v)
+        public static void Set(this Inkore.UI.WPF.ColorPicker.Models.NotifyableColor c , WPF.Media.Color v)
         {
             c.RGB_R = v.R;
             c.RGB_G = v.G;
             c.RGB_B = v.B;
             c.A = v.A;
         }
-        public static void Set(this ColorPicker.Models.NotifyableColor c, Drawing.Color v)
+        public static void Set(this Inkore.UI.WPF.ColorPicker.Models.NotifyableColor c, Drawing.Color v)
         {
             c.RGB_R = v.R;
             c.RGB_G = v.G;

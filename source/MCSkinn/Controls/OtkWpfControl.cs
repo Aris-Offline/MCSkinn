@@ -13,6 +13,7 @@ using OpenTK.Graphics;
 using System.Windows.Threading;
 using Inkore.UI.WPF.Modern.Controls;
 using System.Windows.Input;
+using MCSkinn.Scripts.Paril.OpenGL;
 
 namespace OpenTK.WPF
 {
@@ -217,7 +218,10 @@ namespace OpenTK.WPF
             mFramebufferId = -1;
 
 			if (gmode == null)
-				gmode = new GraphicsMode(DisplayDevice.Default.BitsPerPixel, 16, 0, 8, 0, 2, false);
+			{
+                gmode = new GraphicsMode();
+				gmode = new GraphicsMode(gmode.ColorFormat, gmode.Depth, gmode.Stencil, 4, gmode.ColorFormat, 2, false);
+            }
 
             mTkGlControl = new GLControl(gmode, VersionMajor, VersionMinor, GraphicsContextFlags.Default);
             mTkGlControl.MakeCurrent();
@@ -498,6 +502,11 @@ namespace OpenTK.WPF
 			}
 
 			mLoaded = true;
+		}
+
+		public WriteableBitmap BufferImage
+		{
+			get { return mImage.Source as WriteableBitmap; }
 		}
 
 		public Point GetMousePointAtRenderer()

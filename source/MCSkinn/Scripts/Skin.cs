@@ -19,7 +19,7 @@ using MCSkinn.Scripts.Paril.OpenGL;
 using Microsoft.VisualBasic.FileIO;
 using OpenTK;
 using MCSkinn.Scripts.Paril.Drawing;
-using Inkore.Common;
+using Inkore.Coreworks;
 using System.ComponentModel;
 using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
@@ -89,6 +89,9 @@ namespace MCSkinn.Scripts
                 RaisePropertyChangedEvent(nameof(IsDirty));
             }
         }
+
+        public override ObservableCollection<LibraryNode> Nodes { get { return null; } set { } }
+        public override bool UseChessBackground => true;
 
         public int Height
         {
@@ -220,28 +223,7 @@ namespace MCSkinn.Scripts
 
                 if (Model == null)
                 {
-                    Dictionary<string, string> metadata = PNGMetadata.ReadMetadata(FileInfo.FullName);
-
-                    if (metadata.ContainsKey("Model"))
-                    {
-                        Model = ModelLoader.GetModelByName(metadata["Model"]);
-
-                        if (Model == null)
-                        {
-                            if (image.Height == 64)
-                                Model = ModelLoader.GetModelByName("geometry.humanoid.custom");
-                            else
-                                Model = ModelLoader.GetModelByName("geometry.humanoid.custom.minimal");
-                        }
-                    }
-                    
-                    if (Model == null)
-                    {
-                        if (image.Height == 64)
-                            Model = ModelLoader.GetModelByName("geometry.humanoid.custom");
-                        else
-                            Model = ModelLoader.GetModelByName("geometry.humanoid.custom.minimal");
-                    }
+                    Model = TryGetModel(FileInfo.FullName, image);
                 }
 
                 Program.App_Main.Dispatcher.BeginInvoke(new Action(() =>
@@ -256,7 +238,7 @@ namespace MCSkinn.Scripts
             }
             catch (Exception ex) 
             { 
-                Program.Log(ex, false);
+                Program.Log(ex, true);
 #if DEBUG
                 //throw;
 #endif
@@ -272,6 +254,55 @@ namespace MCSkinn.Scripts
             }
 
             return null ;
+        }
+
+        public static Model TryGetModel(string fullName, Bitmap image, bool forceModel = true)
+        {
+            Model model = null;
+
+            Dictionary<string, string> metadata = PNGMetadata.ReadMetadata(fullName);
+
+            if (metadata.ContainsKey("Model"))
+            {
+                model = ModelLoader.GetModelByName(metadata["Model"]);
+            }
+
+            if (model == null)
+            {
+                int modelScale = image.Size.Width / 64;
+                if (modelScale == 0) modelScale = 1;
+
+                if (image.Height == image.Width && image.Height % 64 == 0)
+                {
+                    if (image.GetPixel(50 * modelScale, 16 * modelScale).A == 0 || image.GetPixel(55 * modelScale, 20 * modelScale).A == 0)
+                    {
+                        model = ModelLoader.GetModelByName("geometry.humanoid.customSlim");
+                    }
+                    else
+                    {
+                        model = ModelLoader.GetModelByName("geometry.humanoid.custom");
+                    }
+                }
+                else if (image.Height * 2 == image.Width && image.Height % 32 == 0)
+                {
+                    if (image.GetPixel(50 * modelScale, 16 * modelScale).A == 0 || image.GetPixel(55 * modelScale, 20 * modelScale).A == 0)
+                    {
+                        model = ModelLoader.GetModelByName("geometry.humanoid.customSlim.minimal");
+                    }
+                    else
+                    {
+                        model = ModelLoader.GetModelByName("geometry.humanoid.custom.minimal");
+                    }
+
+                }
+            }
+
+            if (model == null && forceModel)
+            {
+                model = ModelLoader.GetModelByName("geometry.humanoid.custom");
+            }
+
+            return model;
         }
 
         public void Create()

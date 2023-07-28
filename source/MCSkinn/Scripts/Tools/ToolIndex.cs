@@ -8,8 +8,7 @@
 
 using System.Drawing;
 using System.Windows.Forms;
-using Inkore.Common;
-using MCSkinn.Forms.Controls.Tools;
+using Inkore.Coreworks;
 using MCSkinn.Scripts.Paril.OpenGL;
 
 namespace MCSkinn.Scripts.Tools
@@ -20,15 +19,14 @@ namespace MCSkinn.Scripts.Tools
         public Keys DefaultKeys;
         public ToolStripMenuItem MenuItem;
         public string Name;
-        public ToolOptionBase OptionsPanel;
         public ITool Tool;
+        public string Identifer;
 
-        public ToolIndex(ITool tool, ToolOptionBase options, string name, Image image, Keys defaultKey)
+        public ToolIndex(ITool tool, string identifier, string name, Image image, Keys defaultKey)
         {
             Name = name;
             DefaultKeys = defaultKey;
-
-            OptionsPanel = options;
+            Identifer = identifier;
             Tool = tool;
             MenuItem = new ToolStripMenuItem(Name, image);
             MenuItem.Text = name;

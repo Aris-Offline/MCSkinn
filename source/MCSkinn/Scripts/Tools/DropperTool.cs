@@ -18,11 +18,11 @@ namespace MCSkinn.Scripts.Tools
     {
         #region ITool Members
 
-        public void BeginClick(Skin skin, Point p, WPF.Input.MouseButtonEventArgs e)
+        public void BeginClick(Skin skin, Point p, WPF.Input.MouseButton e)
         {
         }
 
-        public void MouseMove(Skin skin, WPF.Input.MouseEventArgs e)
+        public void MouseMove(Skin skin, Point p)
         {
         }
 
@@ -47,7 +47,7 @@ namespace MCSkinn.Scripts.Tools
             return false;
         }
 
-        public bool EndClick(ColorGrabber pixels, Skin skin, WPF.Input.MouseButtonEventArgs e)
+        public bool EndClick(ColorGrabber pixels, Skin skin, Point p, WPF.Input.MouseButton button)
         {
             return false;
         }

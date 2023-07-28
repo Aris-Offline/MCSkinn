@@ -2,6 +2,7 @@
 using System.Drawing;
 using OpenTK.Graphics.OpenGL4;
 using MCSkinn.Scripts.Paril.Drawing;
+using Inkore.Coreworks;
 
 namespace MCSkinn.Scripts.Paril.OpenGL
 {
@@ -109,7 +110,7 @@ namespace MCSkinn.Scripts.Paril.OpenGL
                 Dispose();
                 //throw new Exception(err.ToString());
 
-                Program.Log(Inkore.Common.LogType.Error, string.Format("Unable to load texture. Error: ", err.ToString()), "at MCSkinn.Scripts.Paril.OpenGL.TextureGL.Upload<T>(T[], int, int)");
+                Program.Log(LogType.Error, string.Format("Unable to load texture. Error: ", err.ToString()), "at MCSkinn.Scripts.Paril.OpenGL.TextureGL.Upload<T>(T[], int, int)");
             }
             else
             {
@@ -138,7 +139,7 @@ namespace MCSkinn.Scripts.Paril.OpenGL
             {
                 Dispose();
 
-                Program.Log(Inkore.Common.LogType.Error, string.Format("Unable to load texture. Error: {0}", err.ToString()), "at MCSkinn.Scripts.Paril.OpenGL.TextureGL.Upload(IntPtr, int, int)");
+                Program.Log(LogType.Error, string.Format("Unable to load texture. Error: {0}", err.ToString()), "at MCSkinn.Scripts.Paril.OpenGL.TextureGL.Upload(IntPtr, int, int)");
             }
             else
             {

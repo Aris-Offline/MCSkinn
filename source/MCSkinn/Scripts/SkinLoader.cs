@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using MCSkinn.Scripts.Macros;
 
 namespace MCSkinn.Scripts
 {
@@ -14,28 +13,12 @@ namespace MCSkinn.Scripts
 
         public static void LoadSkins()
         {
-            List<Skin> skins = new List<Skin>();
-
             foreach (Workfolder f in GlobalSettings.SkinDirectories)
             {
                 f.Initialize();
 
                 SkinLibrary.RootFolders.Add(f.Root);
             }
-
-            //Program.Page_Splash.Dispatcher.Invoke((Action<List<TreeNode>>)Editor.MainForm.BeginFinishedLoadingSkins, rootNodes);
-
-            //var invalidSkins = new List<Skin>();
-
-            //foreach (Skin s in skins)
-            //{
-            //    if (s.SetImages() != null)
-            //        invalidSkins.Add(s);
-            //}
-
-            //skins.RemoveAll((s) => invalidSkins.Contains(s));
-
-            //Program.Page_Splash.Dispatcher.Invoke((Action<List<Skin>, TreeNode>)Editor.MainForm.FinishedLoadingSkins, skins, _tempToSelect);
         }
 
 

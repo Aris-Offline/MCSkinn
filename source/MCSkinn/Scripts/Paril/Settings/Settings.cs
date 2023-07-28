@@ -6,7 +6,7 @@
 //    https://github.com/InkoreStudios/MCSkinn
 //
 
-using Inkore.Common;
+using Inkore.Coreworks;
 using Inkore.Coreworks.Helpers;
 using System;
 using System.Collections.Generic;

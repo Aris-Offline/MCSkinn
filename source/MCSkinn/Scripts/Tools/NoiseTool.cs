@@ -41,10 +41,10 @@ namespace MCSkinn.Scripts.Tools
             return Color.FromArgb(r.A, ColorSpaceHelper.HSBtoColor(hsv));
         }
 
-        public override void BeginClick(Skin skin, Point p, WPF.Input.MouseButtonEventArgs e)
+        public override void BeginClick(Skin skin, Point p, WPF.Input.MouseButton button)
         {
             _noise2 = new Random(_seed);
-            base.BeginClick(skin, p, e);
+            base.BeginClick(skin, p, button);
         }
 
         public override Color GetLeftColor()
@@ -68,9 +68,9 @@ namespace MCSkinn.Scripts.Tools
             return base.RequestPreview(pixels, skin, x, y);
         }
 
-        public override bool EndClick(ColorGrabber pixels, Skin skin, WPF.Input.MouseButtonEventArgs e)
+        public override bool EndClick(ColorGrabber pixels, Skin skin, Point p, WPF.Input.MouseButton button)
         {
-            base.EndClick(pixels, skin, e);
+            base.EndClick(pixels, skin, p, button);
             _seed = _noise.Next();
             _noise = _noise2 = new Random(_seed);
 

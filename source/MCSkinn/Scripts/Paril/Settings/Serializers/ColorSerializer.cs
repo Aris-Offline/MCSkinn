@@ -6,6 +6,7 @@
 //    https://github.com/InkoreStudios/MCSkinn
 //
 
+using Inkore.Coreworks.Windows.Helpers;
 using System.Drawing;
 
 namespace MCSkinn.Scripts.Paril.Settings.Serializers
@@ -23,16 +24,23 @@ namespace MCSkinn.Scripts.Paril.Settings.Serializers
 
             var c = (Color)obj;
 
-            return c.R.ToString() + " " + c.G.ToString() + " " + c.B.ToString() + " " + c.A.ToString();
+            return c.ColorToHex();
         }
 
         public object Deserialize(string str)
         {
-            if (str == "null") return null;
+            try
+            {
+                return Inkore.Coreworks.Windows.Helpers.TypeHelper.HexToDrawingColor(str);
+            }
+            catch
+            {
+                if (str == "null") return null;
 
-            string[] split = str.Split();
+                string[] split = str.Split();
 
-            return Color.FromArgb(byte.Parse(split[3]), byte.Parse(split[0]), byte.Parse(split[1]), byte.Parse(split[2]));
+                return Color.FromArgb(byte.Parse(split[3]), byte.Parse(split[0]), byte.Parse(split[1]), byte.Parse(split[2]));
+            }
         }
 
         #endregion

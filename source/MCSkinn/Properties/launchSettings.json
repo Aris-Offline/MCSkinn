@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MCSkinn": {
+      "commandName": "Project",
+      "commandLineArgs": "-debug"
+    }
+  }
+}

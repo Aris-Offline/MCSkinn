@@ -6,6 +6,7 @@
 //    https://github.com/InkoreStudios/MCSkinn
 //
 
+using System;
 using System.Collections.Generic;
 
 namespace MCSkinn.Scripts.Paril.Components.Undo
@@ -89,14 +90,29 @@ namespace MCSkinn.Scripts.Paril.Components.Undo
 
         public void Undo()
         {
-            CurrentIndex--;
-            Undos[CurrentIndex].Undo(Object);
+            try
+            {
+                Undos[CurrentIndex - 1].Undo(Object);
+                CurrentIndex--;
+            }
+            catch(Exception ex)
+            {
+                Program.Log(ex, "UndoBuffer.Undo()");
+            }
         }
 
         public void Redo()
         {
-            Undos[CurrentIndex].Redo(Object);
-            CurrentIndex++;
+            try
+            {
+                Undos[CurrentIndex].Redo(Object);
+                CurrentIndex++;
+            }
+            catch (Exception ex)
+            {
+                Program.Log(ex, "UndoBuffer.Undo()");
+            }
+
         }
 
         public void Clear()

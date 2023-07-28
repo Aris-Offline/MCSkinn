@@ -12,7 +12,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
-using Inkore.Common;
+using Inkore.Coreworks;
 using Inkore.Coreworks.Helpers;
 using MCSkinn.Scripts.Models;
 using MCSkinn.Scripts.Paril.OpenGL;
@@ -27,7 +27,7 @@ namespace MCSkinn.Scripts.Models
 
         public static void LoadModels()
         {
-            if (!Directory.Exists(GlobalSettings.GetDataURI("Models")))
+            if (!Directory.Exists(GlobalSettings.FullPath_Models))
                 return;
 
             if (Models == null)
@@ -35,20 +35,27 @@ namespace MCSkinn.Scripts.Models
 
             var tcnParser = new ModelFormatTCN();
 
-            foreach (string m in Directory.EnumerateFiles(GlobalSettings.GetDataURI("Models"), "*.*", SearchOption.AllDirectories))
+            foreach (string m in Directory.EnumerateFiles(GlobalSettings.FullPath_Models, "*.*", SearchOption.AllDirectories))
             {
                 if (m.IsNullOrEmptyOrWhitespace())
                     continue;
 
-                Model model = tcnParser.Load(m);
-
-                if (model != null)
+                try
                 {
+                    Model model = tcnParser.Load(m);
 
-                    model.File = new FileInfo(m);
-                    Models.Add(model.Name, model);
+                    if (model != null)
+                    {
 
-                    Program.Log(LogType.Load, string.Format("Loaded model '{0}' with {1} meshes", model.File.Name, model.Meshes == null ? "0" : model.Meshes?.Count.ToString()), "at MCSkinn.Scripts.Models.ModelLoader.LoadModels()");
+                        model.File = new FileInfo(m);
+                        Models.Add(model.Name, model);
+
+                        Program.Log(LogType.Load, string.Format("Loaded model '{0}' with {1} meshes", model.File.Name, model.Meshes == null ? "0" : model.Meshes?.Count.ToString()), "at MCSkinn.Scripts.Models.ModelLoader.LoadModels()");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Program.Log(ex, "ModelLoader.LoadModels");
                 }
 
             }

@@ -136,8 +136,8 @@ namespace MCSkinn.Controls.UserControls
                 _brushSize = true;
                 _exposure = true;
                 _twoRadioSelection = true;
-                _radioOption1Text = "O_DARKEN";
-                _radioOption2Text = "O_LIGHTEN";
+                _radioOption1Text = "O_LIGHTEN";
+                _radioOption2Text = "O_DARKEN";
                 _incremental = true;
                 _tooltip = false;
 
@@ -184,11 +184,11 @@ namespace MCSkinn.Controls.UserControls
             RowDefinition_Option1.Height = GetGridLength(_exposure);
             RowDefinition_Option3.Height = GetGridLength(_tooltip);
 
-            TextBlock_Exposure.Text = LanguageLoader.GET(_exposureText);
-            RadioButton_Option0.Content = LanguageLoader.GET(_radioOption1Text); ;
-            RadioButton_Option1.Content = LanguageLoader.GET(_radioOption2Text); ;
+            TextBlock_Exposure.Text = Program.GetLanguageString(_exposureText);
+            RadioButton_Option0.Content = Program.GetLanguageString(_radioOption1Text); ;
+            RadioButton_Option1.Content = Program.GetLanguageString(_radioOption2Text); ;
 
-            TextBlock_Exposure.Text = LanguageLoader.GET(_exposureText);
+            TextBlock_Exposure.Text = Program.GetLanguageString(_exposureText);
             RadioButton_Option0.Visibility = RadioButton_Option1.Visibility = _twoRadioSelection ? Visibility.Visible : Visibility.Collapsed;
             CheckBox_Incremental.Visibility = _incremental ? Visibility.Visible : Visibility.Collapsed;
 

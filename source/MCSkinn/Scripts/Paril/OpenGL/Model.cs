@@ -29,7 +29,7 @@ namespace MCSkinn.Scripts.Paril.OpenGL
         {
             get
             {
-                var dl = GlobalSettings.GetDataURI("Models");
+                var dl = GlobalSettings.FullPath_Models;
 
                 if (File.Directory.FullName.Length < dl.Length + 1)
                     return Name;

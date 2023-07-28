@@ -201,9 +201,9 @@ namespace MCSkinn.Forms.Controls
                 }
             }
 
-            if (Directory.Exists("Brushes"))
+            if (Directory.Exists(GlobalSettings.FullPath_Brushes))
             {
-                foreach (string file in Directory.EnumerateFiles(GlobalSettings.GetDataURI("Brushes"), "*.png", SearchOption.AllDirectories))
+                foreach (string file in Directory.EnumerateFiles(GlobalSettings.FullPath_Brushes, "*.png", SearchOption.AllDirectories))
                 {
                     try
                     {

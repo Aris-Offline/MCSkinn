@@ -38,7 +38,7 @@ namespace MCSkinn.Scripts.Tools
         {
         }
 
-        public void BeginClick(Skin skin, Point p, WPF.Input.MouseButtonEventArgs e)
+        public void BeginClick(Skin skin, Point p, WPF.Input.MouseButton e)
         {
             _undo = new PixelsChangedUndoable(Editor.GetLanguageString("U_PIXELSCHANGED"),
                                               Editor.MainForm.SelectedTool.MenuItem.Text);
@@ -50,7 +50,7 @@ namespace MCSkinn.Scripts.Tools
             _done = false;
         }
 
-        public void MouseMove(Skin skin, WPF.Input.MouseEventArgs e)
+        public void MouseMove(Skin skin, Point p)
         {
         }
 
@@ -109,10 +109,13 @@ namespace MCSkinn.Scripts.Tools
             return true;
         }
 
-        public bool EndClick(ColorGrabber pixels, Skin skin, WPF.Input.MouseButtonEventArgs e)
+        public bool EndClick(ColorGrabber pixels, Skin skin, Point p, WPF.Input.MouseButton button)
         {
+            if (_undo == null)
+                return false;
+
             _done = false;
-            if (_undo.Points.Count != 0)
+            if (_undo?.Points.Count > 0)
                 skin.Undo.AddBuffer(_undo);
             _undo = null;
 
