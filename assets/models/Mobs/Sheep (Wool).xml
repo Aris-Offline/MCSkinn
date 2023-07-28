@@ -1,6 +1,8 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
 	<Identifier>geometry.sheep</Identifier>
+	<DefaultTexture>entity\sheep\sheep_wool.png</DefaultTexture>
+	<DefaultTexture>sheep_wool</DefaultTexture>
 	<DisplayName>Sheep</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>

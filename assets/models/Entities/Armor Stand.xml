@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.armor_stand</Identifier>
 	<DisplayName>Armor Stand</DisplayName>
+	<DefaultTexture>entity\armor_stand.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

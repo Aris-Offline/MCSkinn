@@ -1,5 +1,6 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
+	<DefaultTexture>entity\bat.png</DefaultTexture>
 	<Identifier>geometry.bat</Identifier>
 	<DisplayName>Bat</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>

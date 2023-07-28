@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.skeleton</Identifier>
 	<DisplayName>Skeleton</DisplayName>
+	<DefaultTexture>entity\skeleton\skeleton.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

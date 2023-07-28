@@ -2,6 +2,7 @@
 	<Author />
 	<Identifier>geometry.zombie.minimal</Identifier>
 	<DisplayName>Zombie (Minimal)</DisplayName>
+	<DefaultTexture>entity\zombie\zombie.png</DefaultTexture>
 	<Models>
 		<Model texture="none.png">
 			<BaseClass>ModelBase</BaseClass>

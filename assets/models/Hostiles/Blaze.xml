@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.blaze</Identifier>
 	<DisplayName>Blaze</DisplayName>
+	<DefaultTexture>entity\blaze.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

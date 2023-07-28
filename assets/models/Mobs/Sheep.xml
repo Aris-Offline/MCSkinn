@@ -1,6 +1,7 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
 	<Identifier>geometry.sheep.sheared</Identifier>
+	<DefaultTexture>entity\sheep\sheep.png</DefaultTexture>
 	<DisplayName>Sheared Sheep</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>

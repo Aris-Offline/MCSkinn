@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.chest</Identifier>
 	<DisplayName>Chest</DisplayName>
+	<DefaultTexture>entity\chest\normal.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

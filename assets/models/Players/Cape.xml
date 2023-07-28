@@ -1,5 +1,6 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
+	<DefaultTexture>entity\cape_mojang.png</DefaultTexture>
 	<Identifier>geometry.cape</Identifier>
 	<DisplayName>Cape</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>

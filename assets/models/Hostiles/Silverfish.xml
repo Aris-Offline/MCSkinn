@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.silverfish</Identifier>
 	<DisplayName>Silverfish</DisplayName>
+	<DefaultTexture>entity\silverfish.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

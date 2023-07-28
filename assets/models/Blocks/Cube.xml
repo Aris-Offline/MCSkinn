@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.Cube</Identifier>
 	<DisplayName>Cube</DisplayName>
+	<DefaultTexture>blocks\stone.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

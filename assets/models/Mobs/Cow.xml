@@ -1,5 +1,6 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
+	<DefaultTexture>entity\cow\cow.png</DefaultTexture>
 	<Identifier>geometry.cow</Identifier>
 	<DisplayName>Cow</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>

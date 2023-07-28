@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.guardian</Identifier>
 	<DisplayName>Guardian</DisplayName>
+	<DefaultTexture>entity\guardian.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

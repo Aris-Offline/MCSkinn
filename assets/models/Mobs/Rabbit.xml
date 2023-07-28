@@ -1,6 +1,8 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
 	<Identifier>geometry.rabbit</Identifier>
+	<DefaultTexture>entity\rabbit\white.png</DefaultTexture>
+	<DefaultTexture>blackrabbit;brown;gold;salt;toast;white;white_splotched</DefaultTexture>
 	<DisplayName>Rabbit</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>

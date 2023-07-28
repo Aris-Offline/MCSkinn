@@ -1,6 +1,7 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
 	<Identifier>geometry.ocelot</Identifier>
+	<DefaultTexture>entity\cat\red.png</DefaultTexture>
 	<DisplayName>Ocelot</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>

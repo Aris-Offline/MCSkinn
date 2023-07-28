@@ -1,5 +1,6 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
+	<DefaultTexture>entity\alex.png</DefaultTexture>
 	<Identifier>geometry.humanoid.customSlim</Identifier>
 	<DisplayName>Alex</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>

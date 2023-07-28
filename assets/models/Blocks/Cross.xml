@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.cross</Identifier>
 	<DisplayName>Cross</DisplayName>
+	<DefaultTexture>blocks\sapling_oak.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.zombie.villager</Identifier>
 	<DisplayName>Zombie Villager</DisplayName>
+	<DefaultTexture>entity\zombie_villager\zombie_villager.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

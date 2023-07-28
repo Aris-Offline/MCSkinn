@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.chest_large</Identifier>
 	<DisplayName>Large Chest</DisplayName>
+	<DefaultTexture>entity\chest\double_normal.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

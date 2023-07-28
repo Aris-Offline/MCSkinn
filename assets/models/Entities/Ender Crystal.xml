@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.ender_crystal</Identifier>
 	<DisplayName>Ender Crystal</DisplayName>
+	<DefaultTexture>entity\endercrystal\endercrystal.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

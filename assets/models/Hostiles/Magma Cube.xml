@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.magma_cube</Identifier>
 	<DisplayName>Magma Cube</DisplayName>
+	<DefaultTexture>entity\slime\magmacube.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

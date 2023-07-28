@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.banner</Identifier>
 	<DisplayName>Banner</DisplayName>
+	<DefaultTexture>entity\banner\banner.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

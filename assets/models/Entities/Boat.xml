@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.boat</Identifier>
 	<DisplayName>Boat</DisplayName>
+	<DefaultTexture>entity\boat\boat_oak.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

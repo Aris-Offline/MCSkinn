@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.shulker</Identifier>
 	<DisplayName>Shulker</DisplayName>
+	<DefaultTexture>entity\shulker\shulker_undyed.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

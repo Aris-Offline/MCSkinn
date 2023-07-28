@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.ghast</Identifier>
 	<DisplayName>Ghast</DisplayName>
+	<DefaultTexture>entity\ghast\ghast.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

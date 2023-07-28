@@ -2,6 +2,8 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.villager</Identifier>
 	<DisplayName>Villager</DisplayName>
+	<DefaultTexture>entity\villager\villager.png</DefaultTexture>
+	<DefaultTexture>butcher;farmer;librarian;priest;smith;villager;villager_origin;vindicator;wandering_trader</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

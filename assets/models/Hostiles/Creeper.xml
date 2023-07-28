@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.creeper</Identifier>
 	<DisplayName>Creeper</DisplayName>
+	<DefaultTexture>entity\creeper\creeper.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

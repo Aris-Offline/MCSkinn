@@ -1,5 +1,6 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
+	<DefaultTexture>entity\steve.png</DefaultTexture>
 	<Identifier>geometry.humanoid.custom</Identifier>
 	<DisplayName>Steve</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>

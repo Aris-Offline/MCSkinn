@@ -1,6 +1,7 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
 	<Identifier>geometry.horse</Identifier>
+	<DefaultTexture>entity\horse\horse_chestnut.png</DefaultTexture>
 	<DisplayName>Horse</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>

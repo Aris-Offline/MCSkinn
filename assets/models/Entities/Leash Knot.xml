@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.leash_knot</Identifier>
 	<DisplayName>Leash Knot</DisplayName>
+	<DefaultTexture>entity\lead_knot.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

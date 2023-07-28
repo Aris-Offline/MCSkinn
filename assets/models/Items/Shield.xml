@@ -2,6 +2,7 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.shield</Identifier>
 	<DisplayName>Shield</DisplayName>
+	<DefaultTexture>entity\shield.png</DefaultTexture>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>
 		<Model Texture="none.png">

@@ -1,5 +1,6 @@
 ﻿<Techne Version="2.2">
 	<Author>Mojang</Author>
+	<DefaultTexture>entity\chicken.png</DefaultTexture>
 	<Identifier>geometry.chicken</Identifier>
 	<DisplayName>Chicken</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
