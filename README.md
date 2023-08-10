@@ -11,7 +11,7 @@
   MCSkinn Editor
 </h1>
 
-<p align="center">Offical Website: <a href="http://www.animasterstudios.com/en-us/products/apps/mcskinn/">http://www.animasterstudios.com/en-us/products/apps/mcskinn/</p>
+<p align="center">Offical Website: <a href="https://inkore.net/en-us/products/mcskinn/">inkore.net/en-us/products/mcskinn</p>
 
 <p align="center">Give us a star if you like this!</p>
 
