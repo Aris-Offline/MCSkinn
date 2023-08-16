@@ -2,8 +2,8 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"  xmlns:ikw="https://schemas.animasterstudios.com/lib/ui/wpf"
-      xmlns:local="clr-namespace:MCSkinn.Pages" xmlns:ui="https://schemas.animasterstudios.com/lib/ui/wpf/modern" xmlns:s="clr-namespace:System;assembly=netstandard"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"  xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
+      xmlns:local="clr-namespace:MCSkinn.Pages" xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern" xmlns:s="clr-namespace:System;assembly=netstandard"
       mc:Ignorable="d" 
       d:DesignWidth="800"
       Title="" Loaded="Page_Loaded" Unloaded="Page_Unloaded">
@@ -328,6 +328,25 @@
                     </Grid>
                 </Border>
 
+                <!--<Border Style="{StaticResource Style_SectionBorderStyle}">
+                    <Grid VerticalAlignment="Center" Margin="0,10,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.ComposeMode}" Grid.RowSpan="2" Margin="5,15,20,15"/>
+                        <TextBlock x:Name="TextBlock_CompatibilityMode" Text="M_COMPATIBILITYMODE" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+                        <TextBlock x:Name="TextBlock_CompatibilityMode_Description" Text="M_COMPATIBILITYMODE_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
+
+                        <ui:ToggleSwitch x:Name="ToggleSwitch_CompatibilityMode_Enabled" Grid.Column="2" Grid.RowSpan="2" MinWidth="0" Toggled="ToggleSwitch_StylusToDraw_Enabled_Toggled"/>
+                    </Grid>
+                </Border>-->
+
                 <Border Style="{StaticResource Style_SectionBorderStyle}" Visibility="Collapsed">
                     <Grid VerticalAlignment="Center" Margin="0,10,0,10">
                         <Grid.RowDefinitions>
@@ -351,9 +370,122 @@
             </ui:SimpleStackPanel>
         </TabItem>
         <TabItem x:Name="TabItem_Hotkeys" Header="M_HOTKEYS">
-            <Grid>
-                <Button x:Name="Button_OpenKeyEditor" Content="T_OPENKEYEDITOR" HorizontalAlignment="Center" Margin="20" VerticalAlignment="Top" Click="Button_OpenKeyEditor_Click"/>
-            </Grid>
+            <Border Style="{StaticResource Style_SectionBorderStyle}" Margin="0,40,0,40">
+                <Grid HorizontalAlignment="Center" Margin="40">
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Margin" Value="20,5,20,5"/>
+                            <Style.Triggers>
+                                <Trigger Property="Grid.Column" Value="0">
+                                    <Setter Property="Opacity" Value="0.55"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_0" Text="M_NEWSKIN" Grid.Row="0" Grid.Column="0"/>
+                    <TextBlock Text="Ctrl + N" Grid.Row="0" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_1" Text="M_UNDO" Grid.Row="1" Grid.Column="0"/>
+                    <TextBlock Text="Ctrl + Z" Grid.Row="1" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_2" Text="M_REDO" Grid.Row="2" Grid.Column="0"/>
+                    <TextBlock Text="Ctrl + Y" Grid.Row="2" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_3" Text="M_SAVE" Grid.Row="3" Grid.Column="0"/>
+                    <TextBlock Text="Ctrl + S" Grid.Row="3" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_4" Text="M_SAVEAS" Grid.Row="4" Grid.Column="0"/>
+                    <TextBlock Text="Ctrl + Shift + S" Grid.Row="4" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_5" Text="M_SAVEALL" Grid.Row="5" Grid.Column="0"/>
+                    <TextBlock Text="Ctrl + Alt + S" Grid.Row="5" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_6" Text="M_DELETE" Grid.Row="6" Grid.Column="0"/>
+                    <TextBlock Text="Ctrl + D; Delete" Grid.Row="6" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_7" Text="M_PERSPECTIVE" Grid.Row="7" Grid.Column="0"/>
+                    <TextBlock Text="Numpad 1" Grid.Row="7" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_8" Text="M_TEXTURE" Grid.Row="8" Grid.Column="0"/>
+                    <TextBlock Text="Numpad 2" Grid.Row="8" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_9" Text="M_HYBRID" Grid.Row="9" Grid.Column="0"/>
+                    <TextBlock Text="Numpad 3" Grid.Row="9" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_10" Text="M_SWITCHVIEWMODE" Grid.Row="10" Grid.Column="0"/>
+                    <TextBlock Text="Tab" Grid.Row="10" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_11" Text="M_TOGGLEGROUND" Grid.Row="11" Grid.Column="0"/>
+                    <TextBlock Text="Ctrl + G" Grid.Row="11" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_12" Text="M_TOGGLEGHOSTPARTS" Grid.Row="12" Grid.Column="0"/>
+                    <TextBlock Text="Ctrl + Shift + G" Grid.Row="12" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_13" Text="T_TOOL_CAMERA" Grid.Row="13" Grid.Column="0"/>
+                    <TextBlock Text="H" Grid.Row="13" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_14" Text="T_TOOL_PENCIL" Grid.Row="14" Grid.Column="0"/>
+                    <TextBlock Text="P, B" Grid.Row="14" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_15" Text="T_TOOL_ERASER" Grid.Row="15" Grid.Column="0"/>
+                    <TextBlock Text="E" Grid.Row="15" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_16" Text="T_TOOL_DROPPER" Grid.Row="16" Grid.Column="0"/>
+                    <TextBlock Text="I" Grid.Row="16" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_17" Text="T_TOOL_DODGEBURN" Grid.Row="17" Grid.Column="0"/>
+                    <TextBlock Text="O" Grid.Row="17" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_18" Text="T_TOOL_DARKENLIGHTEN" Grid.Row="18" Grid.Column="0"/>
+                    <TextBlock Text="D" Grid.Row="18" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_19" Text="T_TOOL_BUCKET" Grid.Row="19" Grid.Column="0"/>
+                    <TextBlock Text="G" Grid.Row="19" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_20" Text="T_TOOL_NOISE" Grid.Row="20" Grid.Column="0"/>
+                    <TextBlock Text="N" Grid.Row="20" Grid.Column="1"/>
+
+                    <TextBlock x:Name="TextBlock_HotkeyCommand_21" Text="T_TOOL_STAMP" Grid.Row="21" Grid.Column="0"/>
+                    <TextBlock Text="S" Grid.Row="21" Grid.Column="1"/>
+
+                </Grid>
+            </Border>
         </TabItem>
     </TabControl>
 </Page>

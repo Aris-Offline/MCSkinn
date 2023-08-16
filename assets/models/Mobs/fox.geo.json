@@ -1,6 +1,7 @@
 {
   "format_version": "1.8.0",
   "display_name" : "Fox",
+  "default_texture" : "entity\\fox\\fox.png",
   "geometry.fox": {
     "texturewidth": 64,
     "textureheight": 32,

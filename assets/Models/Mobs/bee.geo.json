@@ -1,6 +1,7 @@
 {
 	"format_version": "1.10.0",
 	"display_name" : "Bee",
+	"default_texture" : "entity\\bee\\bee.png",
 	"geometry.bee": {
 		"texturewidth": 64,
 		"textureheight": 64,

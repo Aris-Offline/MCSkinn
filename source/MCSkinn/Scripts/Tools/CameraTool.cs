@@ -43,7 +43,7 @@ namespace MCSkinn.Scripts.Tools
             {
                 Rectangle screenBounds = _clickedScreen.Bounds;
                 bool wasWrapped = false;
-                Point oldMouseOnScreen = Editor.MainForm.Renderer.PointToScreen(_oldMouse.D2W()).W2D();
+                Point oldMouseOnScreen = Program.Editor.Renderer.PointToScreen(_oldMouse.D2W()).W2D();
 
                 if (position.X <= screenBounds.X && oldMouseOnScreen.X > screenBounds.X)
                 {
@@ -70,19 +70,19 @@ namespace MCSkinn.Scripts.Tools
                 }
 
                 if (wasWrapped)
-                    _oldMouse = Editor.MainForm.GetRenderCursorPos();
+                    _oldMouse = Program.Editor.GetRenderCursorPos();
                 else
                     _oldMouse = p;
             }
             else
                 _oldMouse = p;
 
-            if (GetChangedButton() == Editor.MainForm.CameraZoom)
-                Editor.MainForm.ScaleView(delta, 1);
-            else if (GetChangedButton() == Editor.MainForm.CameraTranslate)
-                Editor.MainForm.TranslateView(delta, 1);
+            if (GetChangedButton() == Program.Editor.CameraZoom)
+                Program.Editor.ScaleView(delta, 1);
+            else if (GetChangedButton() == Program.Editor.CameraTranslate)
+                Program.Editor.TranslateView(delta, 1);
             else
-                Editor.MainForm.RotateView(delta, 1);
+                Program.Editor.RotateView(delta, 1);
 
         }
 

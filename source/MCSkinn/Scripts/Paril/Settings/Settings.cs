@@ -83,36 +83,44 @@ namespace MCSkinn.Scripts.Paril.Settings
             catch (Exception ex)
             {
                 if (field == null)
-                    throw new Exception("Wat, field is null");
+                {
+                    Program.Log(ex, "Wat, field is null");
+                }
                 else
                 {
-                    throw new Exception(
-                        "Failed to serialize member " + ((MemberInfo)field).Name + " [" + ((MemberInfo)field).MemberType.ToString() +
-                        "]", ex);
+                    Program.Log(ex, "Failed to serialize member " + ((MemberInfo)field).Name + " [" + ((MemberInfo)field).MemberType.ToString() + "]");
                 }
+                return null;
             }
         }
 
         public virtual object Deserialize(object field, string str, Type t)
         {
-            if (field is PropertyInfo)
+            try
             {
-                var info = (PropertyInfo)field;
-
-                if (info.GetCustomAttributes(typeof(TypeSerializerAttribute), false).Length != 0)
+                if (field is PropertyInfo)
                 {
-                    var converter = (TypeSerializerAttribute)info.GetCustomAttributes(typeof(TypeSerializerAttribute), false)[0];
-                    Type type = Type.GetType(converter.TypeName);
+                    var info = (PropertyInfo)field;
 
-                    if (type != null)
+                    if (info.GetCustomAttributes(typeof(TypeSerializerAttribute), false).Length != 0)
                     {
-                        var conv = (ITypeSerializer)type.GetConstructors()[0].Invoke(null);
-                        return conv.Deserialize(str);
+                        var converter = (TypeSerializerAttribute)info.GetCustomAttributes(typeof(TypeSerializerAttribute), false)[0];
+                        Type type = Type.GetType(converter.TypeName);
+
+                        if (type != null)
+                        {
+                            var conv = (ITypeSerializer)type.GetConstructors()[0].Invoke(null);
+                            return conv.Deserialize(str);
+                        }
                     }
                 }
-            }
 
-            return TypeDescriptor.GetConverter(t).ConvertFromString(str);
+                return TypeDescriptor.GetConverter(t).ConvertFromString(str);
+            }
+            catch(Exception ex)
+            {
+                Program.Log(ex); return null;
+            }
         }
     }
 
@@ -157,22 +165,29 @@ namespace MCSkinn.Scripts.Paril.Settings
 
             foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Static | BindingFlags.Public))
             {
-                object[] attrs = prop.GetCustomAttributes(typeof(SavableAttribute), false);
-                if (attrs != null && attrs.Length > 0 && attrs[0] is SavableAttribute)
+                try
                 {
-                    SavableAttribute attr = (SavableAttribute)attrs[0];
-                    string str = _serializer.Serialize(prop, prop.GetValue(null, null));
-                    string group = attr.Group.IsNullOrEmptyOrWhitespace() ? "Global" : attr.Group;
-
-                    if (!groups.ContainsKey(group))
+                    object[] attrs = prop.GetCustomAttributes(typeof(SavableAttribute), false);
+                    if (attrs != null && attrs.Length > 0 && attrs[0] is SavableAttribute)
                     {
-                        XElement ele = new XElement(group);
-                        groups.Add(group, ele);
-                        root.Add(ele);
-                    }
+                        SavableAttribute attr = (SavableAttribute)attrs[0];
+                        string str = _serializer.Serialize(prop, prop.GetValue(null, null));
+                        string group = attr.Group.IsNullOrEmptyOrWhitespace() ? "Global" : attr.Group;
 
-                    groups[group].Add(new XElement(prop.Name, str));
-                    //writer.WriteLine(prop.Name + "=" + str);
+                        if (!groups.ContainsKey(group))
+                        {
+                            XElement ele = new XElement(group);
+                            groups.Add(group, ele);
+                            root.Add(ele);
+                        }
+
+                        groups[group].Add(new XElement(prop.Name, str));
+                        //writer.WriteLine(prop.Name + "=" + str);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Program.Log(ex);
                 }
             }
 
@@ -183,24 +198,31 @@ namespace MCSkinn.Scripts.Paril.Settings
         {
             foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Static | BindingFlags.Public))
             {
-                object[] attribs = prop.GetCustomAttributes(typeof(DefaultValueAttribute), false);
-                if (attribs.Length != 0)
+                try
                 {
-                    var dva = (DefaultValueAttribute)attribs[0];
-
-                    object[] converters = prop.GetCustomAttributes(typeof(TypeSerializerAttribute), false);
-
-                    if (converters.Length != 0)
+                    object[] attribs = prop.GetCustomAttributes(typeof(DefaultValueAttribute), false);
+                    if (attribs.Length != 0)
                     {
-                        var serialize = (TypeSerializerAttribute)converters[0];
+                        var dva = (DefaultValueAttribute)attribs[0];
 
-                        if (serialize.DeserializeDefault)
-                            prop.SetValue(null, _serializer.Deserialize(prop, dva.Value.ToString(), prop.PropertyType), null);
+                        object[] converters = prop.GetCustomAttributes(typeof(TypeSerializerAttribute), false);
+
+                        if (converters.Length != 0)
+                        {
+                            var serialize = (TypeSerializerAttribute)converters[0];
+
+                            if (serialize.DeserializeDefault)
+                                prop.SetValue(null, _serializer.Deserialize(prop, dva.Value.ToString(), prop.PropertyType), null);
+                            else
+                                prop.SetValue(null, dva.Value, null);
+                        }
                         else
                             prop.SetValue(null, dva.Value, null);
                     }
-                    else
-                        prop.SetValue(null, dva.Value, null);
+                }
+                catch(Exception ex)
+                {
+                    Program.Log(ex);
                 }
             }
         }
@@ -233,7 +255,7 @@ namespace MCSkinn.Scripts.Paril.Settings
                             Program.Log(LogType.Load, string.Format("Loaded setting '{0}' ('{1}')", prop.Name, e2.Value), "at MCSkinn.Scripts.Paril.Settings.Settings.Load(string)");
                         }
                     }
-                    catch (Exception ex) { Program.Log(ex, false); }
+                    catch (Exception ex) { Program.Log(ex); }
                 }
             }
 

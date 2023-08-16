@@ -151,6 +151,9 @@ namespace MCSkinn.Scripts
             if (SkinLibrary.SelectedNode == this)
                 SkinLibrary.SelectedNode = null;
 
+            IsDirty = false;
+            Parent?.Workfolder?.SetDirtySkin(this);
+
             if (Parent != null)
                 Parent.Remove(this);
 
@@ -180,7 +183,7 @@ namespace MCSkinn.Scripts
 
         static void SetImage(Skin skin)
         {
-            Editor.MainForm.RenderMakeCurrent();
+            Program.Editor.RenderMakeCurrent();
             skin.GLImage = new TextureGL(skin.Path);
             skin.GLImage.SetMipmapping(false);
             skin.GLImage.SetRepeat(false);
@@ -307,41 +310,9 @@ namespace MCSkinn.Scripts
 
         public void Create()
         {
-            if (Editor.MainForm.IsHandleCreated)
-            {
-                Form f = Editor.MainForm;
+            SetImage(this);
 
-                if (f.InvokeRequired)
-                    f.Invoke(SetImage, this);
-                else
-                    SetImage(this);
-
-                if (f.InvokeRequired)
-                    f.Invoke(SetTransparentParts);
-                else
-                    SetTransparentParts();
-
-            }
-            else
-            {
-                var f =Program.Page_Splash.Dispatcher;
-
-                f.Invoke(SetImage, this);
-
-                f.Invoke(SetTransparentParts);
-
-            }
-            //Form f = Editor.MainForm.IsHandleCreated ? Editor.MainForm : (Form)Program.Context.SplashForm;
-
-            //if (f.InvokeRequired)
-            //    f.Invoke(SetImage, this);
-            //else
-            //    SetImage(this);
-
-            //if (f.InvokeRequired)
-            //    f.Invoke(SetTransparentParts);
-            //else
-            //    SetTransparentParts();
+            SetTransparentParts();
         }
 
         public void Unload()
@@ -422,7 +393,7 @@ namespace MCSkinn.Scripts
             SkinLibrary.AddNode(this, newName);
         }
 
-        public void Resize(int width, int height, ResizeType type = ResizeType.Scale)
+        public void Resize(int width, int height, Dialogs.ResizeType type = Dialogs.ResizeType.Scale)
         {
             using (var newBitmap = new Bitmap(width, height))
             {
@@ -435,7 +406,7 @@ namespace MCSkinn.Scripts
 
                     using (Image temp = Image.FromFile(FileInfo.FullName))
                     {
-                        if (type == ResizeType.Scale)
+                        if (type == Dialogs.ResizeType.Scale)
                             g.DrawImage(temp, 0, 0, newBitmap.Width, newBitmap.Height);
                         else
                             g.DrawImage(temp, 0, 0, temp.Width, temp.Height);
@@ -452,7 +423,7 @@ namespace MCSkinn.Scripts
             SetImages();
 
             Undo.Clear();
-            Editor.MainForm.CheckUndo();
+            Program.Editor.CheckUndo();
         }
 
         public void Delete()

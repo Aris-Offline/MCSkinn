@@ -7,7 +7,6 @@
 //
 
 using System.Collections.Generic;
-using MCSkinn.Scripts;
 using OpenTK.Graphics.OpenGL4;
 
 namespace MCSkinn.Scripts.Paril.OpenGL

@@ -41,9 +41,9 @@ namespace MCSkinn.Scripts.Swatches
 
         public static void FinishedLoadingSwatches()
         {
-            //Editor.MainForm.ColorPanel.SwatchContainer.AddSwatches(Swatches);
-            //Editor.MainForm.ColorPanel.SwatchContainer.Enabled = true;
-            //Editor.MainForm.ColorPanel.SetLoading(false);
+            //Program.Editor.ColorPanel.SwatchContainer.AddSwatches(Swatches);
+            //Program.Editor.ColorPanel.SwatchContainer.Enabled = true;
+            //Program.Editor.ColorPanel.SetLoading(false);
         }
     }
 }

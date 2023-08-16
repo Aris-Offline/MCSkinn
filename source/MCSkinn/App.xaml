@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:MCSkinn"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:ui="https://schemas.animasterstudios.com/lib/ui/wpf/modern" Startup="Application_Startup" DispatcherUnhandledException="Application_DispatcherUnhandledException">
+             xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern" Startup="Application_Startup" DispatcherUnhandledException="Application_DispatcherUnhandledException">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -66,21 +66,16 @@
 
             </ResourceDictionary.MergedDictionaries>
 
-
-            <Style x:Key="OptionsPanelStyle" TargetType="ui:SimpleStackPanel">
-                <Setter Property="Spacing" Value="12" />
-                <Style.Resources>
-                    <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="ComboBox">
-                        <Setter Property="MinWidth" Value="200" />
-                    </Style>
-                    <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
-                        <Setter Property="MinWidth" Value="200" />
-                    </Style>
-                    <Style BasedOn="{StaticResource {x:Type DatePicker}}" TargetType="DatePicker">
-                        <Setter Property="MinWidth" Value="200" />
-                    </Style>
-                </Style.Resources>
+            <Style x:Key="Style_ContentBorder" TargetType="Border">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static ui:ThemeKeys.CardStrokeColorDefaultBrushKey}}"/>
+                <Setter Property="Background" Value="{DynamicResource {x:Static ui:ThemeKeys.LayerFillColorDefaultBrushKey}}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="8"/>
             </Style>
+
+            <FontFamily x:Key="FontFamily_PoppinsRegular">/MCSkinn;component/Resources/Fonts/#Poppins Regular</FontFamily>
+            <FontFamily x:Key="FontFamily_PoppinsLight">/MCSkinn;component/Resources/Fonts/#Poppins Light</FontFamily>
+            <FontFamily x:Key="FontFamily_PoppinsExtraLight">/MCSkinn;component/Resources/Fonts/#Poppins ExtraLight</FontFamily>
 
             <Thickness x:Key="ControlPageContentMargin">24,0,24,20</Thickness>
 

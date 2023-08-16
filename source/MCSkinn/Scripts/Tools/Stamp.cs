@@ -47,7 +47,7 @@ namespace MCSkinn.Scripts.Tools
         public virtual void BeginClick(Skin skin, Point p, WPF.Input.MouseButton button)
         {
             _undo = new PixelsChangedUndoable(Editor.GetLanguageString("U_PIXELSCHANGED"),
-                                              Editor.MainForm.SelectedTool.Name);
+                                              Program.Editor.SelectedTool.Name);
         }
 
         public virtual void MouseMove(Skin skin, Point p)
@@ -109,7 +109,7 @@ namespace MCSkinn.Scripts.Tools
             if (_undo?.Points.Count > 0)
             {
                 skin.Undo.AddBuffer(_undo);
-                Editor.MainForm.CheckUndo();
+                Program.Editor.CheckUndo();
                 _oldPixel = new Point(-1, -1);
             }
 
@@ -179,7 +179,7 @@ namespace MCSkinn.Scripts.Tools
                     byte maxAlpha = color.A;
                     var alphaToAdd =
                         (float)
-                        (byte)(brush[rx, ry] * 255 * (Editor.MainForm.ColorPanel.SelectedColor.A / 255.0f * (color.A / 255.0f)));
+                        (byte)(brush[rx, ry] * 255 * (Program.Editor.ColorPanel.SelectedColor.A / 255.0f * (color.A / 255.0f)));
 
                     if (!incremental && _undo.Points.ContainsKey(new Point(xx, yy)) &&
                         _undo.Points[new Point(xx, yy)].Item2.TotalAlpha >= maxAlpha)

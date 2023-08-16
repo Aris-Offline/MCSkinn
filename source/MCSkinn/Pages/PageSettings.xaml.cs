@@ -78,7 +78,29 @@ namespace MCSkinn.Pages
             LanguageWpf.Register(this, TextBlock_Section_Rendering, TextBlock.TextProperty);
             LanguageWpf.Register(this, TextBlock_Section_Advanced, TextBlock.TextProperty);
 
-            LanguageWpf.Register(this, Button_OpenKeyEditor, ContentProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_0, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_1, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_2, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_3, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_4, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_5, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_6, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_7, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_8, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_9, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_10, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_11, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_12, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_13, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_14, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_15, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_16, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_17, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_18, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_19, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_20, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_HotkeyCommand_21, TextBlock.TextProperty);
+
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -205,7 +227,7 @@ namespace MCSkinn.Pages
                 if (!isLoading)
                 {
                     GlobalSettings.RenderScale = Slider_RenderScale.Value;
-                    Program.Form_Editor.Renderer.RenderScale = GlobalSettings.RenderScale;
+                    Program.Editor.Renderer.RenderScale = GlobalSettings.RenderScale;
                 }
             }
             catch (Exception ex)

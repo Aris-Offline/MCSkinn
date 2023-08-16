@@ -9,8 +9,6 @@ namespace MCSkinn
 {
 	class MCSkinnAppContext : ApplicationContext
 	{
-		public Form Form => Program.Form_Editor;
-
 		//public MCSkinnAppContext()
 		//{
 		//	Program.Context = this;
@@ -37,9 +35,6 @@ namespace MCSkinn
 
 		public void DoneLoadingSplash()
 		{
-			Form.Show();
-			Form.Visible = false;
-
 			Program.Page_Editor.EnsureNavItemSelection(null);
 
             Program.Window_Main.DoNavigate(Program.Page_Editor);

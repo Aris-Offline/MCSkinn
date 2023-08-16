@@ -2,7 +2,6 @@
 	<Author>Mojang</Author>
 	<Identifier>geometry.pig</Identifier>
 	<DefaultTexture>entity\pig\pig.png</DefaultTexture>
-	<DefaultTexture>pig;pig_saddle</DefaultTexture>
 	<DisplayName>Pig</DisplayName>
 	<Description>Compiled from Minecraft source. Mojang pls don't sue :(</Description>
 	<Models>

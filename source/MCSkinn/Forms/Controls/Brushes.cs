@@ -12,13 +12,13 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
-using MCSkinn.Scripts.Paril.Controls;
 using MCSkinn.Scripts.Paril.Drawing;
 using Inkore.Coreworks.Windows.Helpers;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Newtonsoft.Json.Linq;
 using MCSkinn.Scripts;
+using System.Collections;
 
 namespace MCSkinn.Forms.Controls
 {
@@ -138,21 +138,15 @@ namespace MCSkinn.Forms.Controls
         }
     }
 
+
+
     public static class Brushes
     {
         public static int NumBrushes = 10;
         public static ObservableCollection<Brush> BrushList = new ObservableCollection<Brush>();
-        public static BrushComboBox BrushBox = new BrushComboBox();
 
         public static Brush SelectedBrush { get; set; }
 
-        private static void BrushBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SelectedBrush = (Brush)BrushBox.SelectedItem;
-
-            if (Editor.MainForm.SelectedTool != null)
-                Editor.MainForm.SelectedTool.Tool.SelectedBrushChanged();
-        }
 
         public static void LoadBrushes()
         {
@@ -219,42 +213,98 @@ namespace MCSkinn.Forms.Controls
         }
     }
 
-    public class BrushComboBox : ComboBox
+    public class AlphanumComparatorFast : IComparer, IComparer<string>
     {
-        public BrushComboBox()
+        #region IComparer Members
+
+        public int Compare(object o1, object o2)
         {
-            DrawMode = DrawMode.OwnerDrawFixed;
-            ItemHeight = 20;
-            DropDownWidth = 35;
+            string s1, s2;
+
+            if (o1 is string)
+                s1 = (string)o1;
+            else
+                s1 = o1.ToString();
+
+            if (o2 is string)
+                s2 = (string)o2;
+            else
+                s2 = o2.ToString();
+
+            return Compare(s1, s2);
         }
 
-        protected override void OnDrawItem(DrawItemEventArgs e)
+        #endregion
+
+        #region IComparer<string> Members
+
+        public int Compare(string s1, string s2)
         {
-            base.OnDrawItem(e);
+            int len1 = s1.Length;
+            int len2 = s2.Length;
+            int marker1 = 0;
+            int marker2 = 0;
 
-            e.DrawBackground();
-
-            if (e.Index != -1)
+            // Walk through two the strings with two markers.
+            while (marker1 < len1 && marker2 < len2)
             {
-                var brush = (Brush)Items[e.Index];
+                char ch1 = s1[marker1];
+                char ch2 = s2[marker2];
 
-                if (brush.Width <= e.Bounds.Height)
+                // Some buffers we can build up characters in for each chunk.
+                var space1 = new char[len1];
+                int loc1 = 0;
+                var space2 = new char[len2];
+                int loc2 = 0;
+
+                // Walk through all following characters that are digits or
+                // characters in BOTH strings starting at the appropriate marker.
+                // Collect char arrays.
+                do
                 {
-                    e.Graphics.DrawImage(brush.Image, e.Bounds.X + e.Bounds.Height / 2 - brush.Width / 2,
-                                         e.Bounds.Y + e.Bounds.Height / 2 - brush.Height / 2, brush.Width, brush.Height);
+                    space1[loc1++] = ch1;
+                    marker1++;
+
+                    if (marker1 < len1)
+                        ch1 = s1[marker1];
+                    else
+                        break;
+                } while (char.IsDigit(ch1) == char.IsDigit(space1[0]));
+
+                do
+                {
+                    space2[loc2++] = ch2;
+                    marker2++;
+
+                    if (marker2 < len2)
+                        ch2 = s2[marker2];
+                    else
+                        break;
+                } while (char.IsDigit(ch2) == char.IsDigit(space2[0]));
+
+                // If we have collected numbers, compare them numerically.
+                // Otherwise, if we have strings, compare them alphabetically.
+                var str1 = new string(space1);
+                var str2 = new string(space2);
+
+                int result;
+
+                if (char.IsDigit(space1[0]) && char.IsDigit(space2[0]))
+                {
+                    int thisNumericChunk = int.Parse(str1);
+                    int thatNumericChunk = int.Parse(str2);
+                    result = thisNumericChunk.CompareTo(thatNumericChunk);
                 }
                 else
-                    e.Graphics.DrawImage(brush.Image, e.Bounds.X, e.Bounds.Y, e.Bounds.Height, e.Bounds.Height);
+                    result = str1.CompareTo(str2);
 
-                //e.Graphics.DrawRectangle(Pens.Black, new Rectangle(e.Bounds.X, e.Bounds.Y, e.Bounds.Height, e.Bounds.Height));
-
-                TextRenderer.DrawText(e.Graphics, brush.Name, Font,
-                                      new Rectangle(e.Bounds.X + e.Bounds.Height + 4, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height),
-                                      (e.State & DrawItemState.Selected) != 0 ? SystemColors.HighlightText : SystemColors.WindowText,
-                                      TextFormatFlags.VerticalCenter);
+                if (result != 0)
+                    return result;
             }
 
-            e.DrawFocusRectangle();
+            return len1 - len2;
         }
+
+        #endregion
     }
 }

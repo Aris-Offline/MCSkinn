@@ -4,7 +4,8 @@
   "geometry.tripod_camera": {
     "texturewidth": 64,
     "textureheight": 32,
-    "bones": [
+    "default_texture" : "entity\\camera_tripod.png",
+        "bones": [
       {
         "name": "body",
         "pivot": [ 0.0, 0.0, 0.0],

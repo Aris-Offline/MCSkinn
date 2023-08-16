@@ -138,7 +138,7 @@ namespace MCSkinn.Scripts
             set
             {
                 //bool isChanged = false;
-                //if (PartEnabled != value && Program.Form_Editor != null && Program.Form_Editor.MeshRenderer != null)
+                //if (PartEnabled != value && Program.Editor != null && Program.Editor.MeshRenderer != null)
                 //    isChanged = true;
 
                 if(PartIndex == -2)
@@ -162,8 +162,8 @@ namespace MCSkinn.Scripts
 
                 //if (isChanged)
                 //{
-                //    Program.Form_Editor.CalculateMatrices();
-                //    Program.Form_Editor.InvalidRenderer();
+                //    Program.Editor.CalculateMatrices();
+                //    Program.Editor.InvalidRenderer();
                 //}
             }
         }

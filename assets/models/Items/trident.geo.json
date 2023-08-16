@@ -1,6 +1,7 @@
 {
   "format_version": "1.16.0",
   "display_name" : "Trident",
+  "default_texture" : "entity\\trident.png",
   "minecraft:geometry": [
     {
       "description": {

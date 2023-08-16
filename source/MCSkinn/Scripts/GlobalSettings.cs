@@ -68,6 +68,11 @@ namespace MCSkinn.Scripts
         [DefaultValue(true)]
         public static bool IsManipulationEnabled { get; set; }
 
+        [Savable("Advanced")]
+        [DefaultValue(false)]
+        public static bool CompatibilityMode { get; set; }
+
+
         [Savable("Render")]
         [DefaultValue("null")]
         [TypeSerializer(typeof(ColorSerializer), true)]

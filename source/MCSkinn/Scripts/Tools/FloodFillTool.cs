@@ -41,7 +41,7 @@ namespace MCSkinn.Scripts.Tools
         public void BeginClick(Skin skin, Point p, WPF.Input.MouseButton e)
         {
             _undo = new PixelsChangedUndoable(Editor.GetLanguageString("U_PIXELSCHANGED"),
-                                              Editor.MainForm.SelectedTool.MenuItem.Text);
+                                              Program.Editor.SelectedTool.MenuItem.Text);
             _boundBox = new Rectangle(0, 0, skin.Width, skin.Height);
 
             if ((WinForms.Control.ModifierKeys & WinForms.Keys.Control) != 0)
@@ -66,8 +66,8 @@ namespace MCSkinn.Scripts.Tools
             ColorPixel c = pixels[x, y];
             Color oldColor = Color.FromArgb(c.Alpha, c.Red, c.Green, c.Blue);
             ColorManager newColor = new ColorManager(new ColorManager.RGBColor((WinForms.Control.ModifierKeys & WinForms.Keys.Shift) != 0
-                                        ? Editor.MainForm.ColorPanel.SecondaryColor
-                                        : Editor.MainForm.ColorPanel.SelectedColor));
+                                        ? Program.Editor.ColorPanel.SecondaryColor
+                                        : Program.Editor.ColorPanel.SelectedColor));
 
             FloodFill(x, y, oldColor, newColor, pixels);
             _done = true;
@@ -103,8 +103,8 @@ namespace MCSkinn.Scripts.Tools
 
             newColor =
                 ((WinForms.Control.ModifierKeys & WinForms.Keys.Shift) != 0
-                     ? Editor.MainForm.ColorPanel.SecondaryColor
-                     : Editor.MainForm.ColorPanel.SelectedColor).W2D();
+                     ? Program.Editor.ColorPanel.SecondaryColor
+                     : Program.Editor.ColorPanel.SelectedColor).W2D();
             pixels[x, y] = new ColorPixel(newColor.R | newColor.G << 8 | newColor.B << 16 | newColor.A << 24);
             return true;
         }
@@ -119,7 +119,7 @@ namespace MCSkinn.Scripts.Tools
                 skin.Undo.AddBuffer(_undo);
             _undo = null;
 
-            Editor.MainForm.CheckUndo();
+            Program.Editor.CheckUndo();
             return false;
         }
 

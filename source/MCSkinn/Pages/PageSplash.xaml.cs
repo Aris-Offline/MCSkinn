@@ -127,8 +127,7 @@ namespace MCSkinn.Pages
             {
                 Program.CurrentLanguage = language;
 
-                Editor.MainForm.FinishedLoadingLanguages();
-                Editor.MainForm.Initialize(language);
+                Program.Editor.Initialize(language);
                 Program.Page_Editor.RegisterLanguage();
                 //LanguageWpf.Refresh();
 
@@ -145,7 +144,7 @@ namespace MCSkinn.Pages
             Program.Log(Inkore.Coreworks.LogType.Info, "Loading languages from directory: " + GlobalSettings.FullPath_Models, "PageSplash.PerformLoading()");
 
             ModelLoader.LoadModels();
-            Program.Page_Splash.Dispatcher.Invoke(ErrorHandlerWrap(Editor.MainForm.FinishedLoadingModels));
+            Program.Page_Splash.Dispatcher.Invoke(ErrorHandlerWrap(Program.Editor.FinishedLoadingModels));
 
             SetLoadingString("Loading skins...");
 
@@ -153,7 +152,7 @@ namespace MCSkinn.Pages
 
             Program.Page_Splash.Dispatcher.Invoke(ErrorHandlerWrap(GlobalSettings.Loaded == true ? Program.Context.DoneLoadingSplash : this.ShowFirstTimeWelcome));
 
-            Program.Context.Form.Invoke(ErrorHandlerWrap(() =>
+            this.Dispatcher.Invoke(ErrorHandlerWrap(() =>
             {
                 //Program.Context.SplashForm.Close();
                 GC.Collect();

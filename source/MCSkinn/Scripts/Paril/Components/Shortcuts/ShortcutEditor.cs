@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using MCSkinn;
 using MCSkinn.Scripts.Paril.Components.Shortcuts;
 
 namespace MCSkinn.Scripts.Paril.Components.Shortcuts
@@ -66,7 +65,6 @@ namespace MCSkinn.Scripts.Paril.Components.Shortcuts
             }
 
             _shortcuts.Add(shortcut);
-            Editor.MainForm.languageProvider1.SetPropertyNames(shortcut, "Name");
         }
 
         public IShortcutImplementor ShortcutAt(int index)

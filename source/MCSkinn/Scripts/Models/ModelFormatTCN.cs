@@ -470,6 +470,7 @@ namespace MCSkinn.Scripts.Models
         public void Parse(JObject jroot)
         {
             IsTCNFile = false;
+            string defaultTexture = null;
 
             foreach (KeyValuePair<string, JToken> pairRoot in jroot)
             {
@@ -477,7 +478,19 @@ namespace MCSkinn.Scripts.Models
                 {
                     Version= pairRoot.Value.ToString();
                 }
-                if (pairRoot.Key.ToLower() == "display_name")
+                else if(pairRoot.Key.ToLower() == "default_texture")
+                {
+                    defaultTexture = pairRoot.Value.ToString();
+
+                    foreach(TCNModel m in Models)
+                    {
+                        if (string.IsNullOrEmpty(m.DefaultTexture))
+                        {
+                            m.DefaultTexture = defaultTexture;
+                        }
+                    }
+                }
+                else if (pairRoot.Key.ToLower() == "display_name")
                 {
                     DisplayName = pairRoot.Value.ToString();
                 }
@@ -510,6 +523,9 @@ namespace MCSkinn.Scripts.Models
                                             case "texture_height":
                                                 tcnModel.TextureSize.Y = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
                                                 break;
+                                            case "default_texture":
+                                                tcnModel.DefaultTexture = (p_DescriptionChild.Value as JValue)?.Value as string;
+                                                break;
                                             case "visible_bounds_offset":
                                                 break;
                                             case "visible_bounds_width":
@@ -524,6 +540,11 @@ namespace MCSkinn.Scripts.Models
                                 tcnModel.Parse(p_geometryChild);
                             }
                         }
+                    }
+
+                    if(string.IsNullOrEmpty(tcnModel.DefaultTexture) && defaultTexture != null)
+                    {
+                        tcnModel.DefaultTexture = defaultTexture;
                     }
 
                     Models.Add(tcnModel);
@@ -551,6 +572,9 @@ namespace MCSkinn.Scripts.Models
                                     break;
                                 case "textureheight":
                                     tcnModel.TextureSize.Y = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_geometryChild.Value as JValue)?.Value);
+                                    break;
+                                case "default_texture":
+                                    tcnModel.DefaultTexture = (p_geometryChild.Value as JValue)?.Value as string;
                                     break;
                                 case "visible_bounds_height":
                                     break;
@@ -582,6 +606,9 @@ namespace MCSkinn.Scripts.Models
                                             case "texture_height":
                                                 tcnModel.TextureSize.Y = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
                                                 break;
+                                            case "default_texture":
+                                                tcnModel.DefaultTexture = (p_DescriptionChild.Value as JValue)?.Value as string;
+                                                break;
                                             case "bones":
                                                 tcnModel.Parse(p_DescriptionChild.Value);
                                                 break;
@@ -597,6 +624,11 @@ namespace MCSkinn.Scripts.Models
                                 tcnModel.Parse(p_geometryChild);
                             }
                         }
+                    }
+
+                    if (string.IsNullOrEmpty(tcnModel.DefaultTexture) && defaultTexture != null)
+                    {
+                        tcnModel.DefaultTexture = defaultTexture;
                     }
 
                     Models.Add(tcnModel);

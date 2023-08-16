@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MCSkinn.Dialogs" xmlns:ui="https://schemas.animasterstudios.com/lib/ui/wpf/modern" xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:MCSkinn.Dialogs" xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern" xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title=" " Height="450" Width="800" FontSize="12" UseLayoutRounding="True" ui:ThemeManager.RequestedTheme="Light" Closing="Window_Closing">
     <Window.Resources>

@@ -33,7 +33,7 @@ namespace MCSkinn.Scripts.Swatches
 
         public string Format
         {
-            get { return SwatchContainer.GetSwatchFormatName(GetType()); }
+            get { return "";/* return SwatchContainer.GetSwatchFormatName(GetType()); */}
         }
 
         public bool Dirty { get; protected set; }
@@ -69,9 +69,9 @@ namespace MCSkinn.Scripts.Swatches
 
         #endregion
 
-        public override string ToString()
-        {
-            return Name + " [" + SwatchContainer.GetSwatchFormatName(GetType()) + "]";
-        }
+        //public override string ToString()
+        //{
+        //    return Name + " [" + SwatchContainer.GetSwatchFormatName(GetType()) + "]";
+        //}
     }
 }

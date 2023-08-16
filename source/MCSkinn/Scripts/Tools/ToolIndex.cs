@@ -41,7 +41,7 @@ namespace MCSkinn.Scripts.Tools
 
         public void SetMeAsTool()
         {
-            Editor.MainForm.SetSelectedTool(this);
+            Program.Editor.SetSelectedTool(this);
         }
     }
 }

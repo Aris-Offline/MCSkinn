@@ -8,7 +8,7 @@
 
 namespace MCSkinn.Scripts.Tools
 {
-    public enum Tools
+    public enum ViewportTool
     {
         Camera,
         Pencil,

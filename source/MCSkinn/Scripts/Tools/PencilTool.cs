@@ -30,8 +30,8 @@ namespace MCSkinn.Scripts.Tools
         {
             return
                 ((Control.ModifierKeys & Keys.Shift) != 0
-                     ? Editor.MainForm.ColorPanel.SecondaryColor
-                     : Editor.MainForm.ColorPanel.SelectedColor).W2D();
+                     ? Program.Editor.ColorPanel.SecondaryColor
+                     : Program.Editor.ColorPanel.SelectedColor).W2D();
         }
 
         public override string GetStatusLabelText()

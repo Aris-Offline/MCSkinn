@@ -55,7 +55,7 @@ namespace MCSkinn.Scripts
             }
         }
 
-        private List<Skin> DirtySkins = new List<Skin>();
+        public List<Skin> DirtySkins = new List<Skin>();
         public bool IsDirty
         {
             get { return DirtyCount != 0; }
