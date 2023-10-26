@@ -1,5 +1,5 @@
-﻿using Inkore.Coreworks.Localization;
-using Inkore.Coreworks.Windows.Helpers;
+﻿using iNKORE.Coreworks.Localization;
+using iNKORE.Coreworks.Windows.Helpers;
 using MCSkinn.Dialogs;
 using MCSkinn.Scripts;
 using System;
@@ -16,13 +16,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using iNKORE.Hub.Shared;
+using iNKORE.UI.WPF.Modern.Controls;
 
 namespace MCSkinn.Pages
 {
     /// <summary>
     /// PageSettings.xaml 的交互逻辑
     /// </summary>
-    public partial class PageSettings : Page
+    public partial class PageSettings : System.Windows.Controls.Page
     {
         #region Initialization
         public PageSettings()
@@ -37,14 +39,9 @@ namespace MCSkinn.Pages
             LanguageWpf.Register(this, TabItem_Options, TabItem.HeaderProperty);
             LanguageWpf.Register(this, TabItem_Hotkeys, TabItem.HeaderProperty);
 
-            LanguageWpf.Register(this, ComboBoxItem_ThemeMode_Light, ContentProperty);
-            LanguageWpf.Register(this, ComboBoxItem_ThemeMode_Dark, ContentProperty);
-            LanguageWpf.Register(this, ComboBoxItem_ThemeMode_Default, ContentProperty);
-            LanguageWpf.Register(this, ComboBoxItem_Backdrop_None, ContentProperty);
-            LanguageWpf.Register(this, ComboBoxItem_Backdrop_Acrylic, ContentProperty);
-            LanguageWpf.Register(this, ComboBoxItem_Backdrop_Mica, ContentProperty);
-            LanguageWpf.Register(this, ComboBoxItem_Backdrop_Tabbed, ContentProperty);
-            LanguageWpf.Register(this, Button_UIScale_Apply, ContentProperty);
+            LanguageWpf.Register(this, Button_Reset_Enabled, ContentProperty);
+            LanguageWpf.Register(this, HyperlinkButton_ChangeSettings_Language, HyperlinkButton.ContentProperty);
+            
             LanguageWpf.Register(this, TextBlock_Language, TextBlock.TextProperty);
             LanguageWpf.Register(this, TextBlock_Language_Description, TextBlock.TextProperty);
             LanguageWpf.Register(this, TextBlock_Language_Author, TextBlock.TextProperty);
@@ -72,6 +69,12 @@ namespace MCSkinn.Pages
             LanguageWpf.Register(this, TextBlock_IsManipulationEnabled_Description, TextBlock.TextProperty);
             LanguageWpf.Register(this, TextBlock_StylusToDraw, TextBlock.TextProperty);
             LanguageWpf.Register(this, TextBlock_StylusToDraw_Description, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_CompatibilityMode_RestartWarning, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_Backdrop_UnavailableInCompatibilityMode, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_CompatibilityMode, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_CompatibilityMode_Description, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_Reset, TextBlock.TextProperty);
+            LanguageWpf.Register(this, TextBlock_Reset_Description, TextBlock.TextProperty);
 
             LanguageWpf.Register(this, TextBlock_Section_General, TextBlock.TextProperty);
             LanguageWpf.Register(this, TextBlock_Section_Appearance, TextBlock.TextProperty);
@@ -100,7 +103,7 @@ namespace MCSkinn.Pages
             LanguageWpf.Register(this, TextBlock_HotkeyCommand_19, TextBlock.TextProperty);
             LanguageWpf.Register(this, TextBlock_HotkeyCommand_20, TextBlock.TextProperty);
             LanguageWpf.Register(this, TextBlock_HotkeyCommand_21, TextBlock.TextProperty);
-
+            
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -119,15 +122,8 @@ namespace MCSkinn.Pages
         {
             isLoading = true;
 
-
-            ComboBox_Language.ItemsSource = LanguageLoader.Languages;
-            ComboBox_Language.SelectedItem = LanguageLoader.Current;
             TextBlock_Language_Author_Value.Text = LanguageLoader.Current.Author;
             TextBlock_Language_Version_Value.Text = LanguageLoader.Current.LangVersion;
-
-            ComboBox_ThemeMode.SelectedIndex = (int)GlobalSettings.RequestedTheme;
-            ComboBox_Backdrop.SelectedIndex = (int)GlobalSettings.BackdropType;
-            Slider_UIScale.Value = GlobalSettings.UIScale;
 
             Slider_RenderScale.Value = GlobalSettings.RenderScale;
          
@@ -145,6 +141,7 @@ namespace MCSkinn.Pages
             ToggleSwitch_IsManipulationEnabled_Enabled.IsOn=GlobalSettings.IsManipulationEnabled;
             ToggleSwitch_StylusToDraw_Enabled.IsOn = GlobalSettings.StylusToDraw;
 
+            ToggleSwitch_CompatibilityMode_Enabled.IsOn = GlobalSettings.CompatibilityMode;
 
             isLoading = false;
 
@@ -157,66 +154,23 @@ namespace MCSkinn.Pages
         #region UI Events
         private void ComboBox_Language_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!isLoading && ComboBox_Language.SelectedItem != null && ComboBox_Language.SelectedItem != Program.CurrentLanguage && ComboBox_Language.SelectedItem is Language)
-            {
-                Program.CurrentLanguage = ComboBox_Language.SelectedItem as Language;
-                GlobalSettings.LanguageFile = System.IO.Path.GetFileName(Program.CurrentLanguage.FileName);
-
-                TextBlock_Language_Author_Value.Text = LanguageLoader.Current.Author;
-                TextBlock_Language_Version_Value.Text = LanguageLoader.Current.LangVersion;
-            }
 
         }
 
         private void ComboBox_ThemeMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try
-            {
-                if (!isLoading)
-                {
-                    GlobalSettings.RequestedTheme = (Inkore.UI.WPF.Modern.ElementTheme)ComboBox_ThemeMode.SelectedIndex;
-                    Program.RefreshApperanceSettings();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
-            }
+
         }
 
         private void ComboBox_Backdrop_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try
-            {
-                if (!isLoading)
-                {
-                    GlobalSettings.BackdropType = (Inkore.UI.WPF.Modern.Controls.Primitives.BackdropType)ComboBox_Backdrop.SelectedIndex;
-                    Program.RefreshApperanceSettings();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
-            }
+
 
         }
 
         private void Slider_UIScale_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            try
-            {
-                if (!isLoading)
-                {
-                    GlobalSettings.UIScale = Slider_UIScale.Value;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
-            }
+
 
         }
 
@@ -227,13 +181,14 @@ namespace MCSkinn.Pages
                 if (!isLoading)
                 {
                     GlobalSettings.RenderScale = Slider_RenderScale.Value;
-                    Program.Editor.Renderer.RenderScale = GlobalSettings.RenderScale;
+
+                    if (Program.Editor?.Renderer != null)
+                        Program.Editor.Renderer.RenderScale = GlobalSettings.RenderScale;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
+                Program.RaiseException(ex);
             }
 
         }
@@ -249,8 +204,7 @@ namespace MCSkinn.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
+                Program.RaiseException(ex);
             }
 
         }
@@ -266,13 +220,12 @@ namespace MCSkinn.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
+                Program.RaiseException(ex);
             }
 
         }
 
-        private void NumberBox_TextureOverlay_LineSize_ValueChanged(Inkore.UI.WPF.Modern.Controls.NumberBox sender, Inkore.UI.WPF.Modern.Controls.NumberBoxValueChangedEventArgs args)
+        private void NumberBox_TextureOverlay_LineSize_ValueChanged(iNKORE.UI.WPF.Modern.Controls.NumberBox sender, iNKORE.UI.WPF.Modern.Controls.NumberBoxValueChangedEventArgs args)
         {
             try
             {
@@ -283,8 +236,7 @@ namespace MCSkinn.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
+                Program.RaiseException(ex);
             }
 
         }
@@ -300,13 +252,12 @@ namespace MCSkinn.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
+                Program.RaiseException(ex);
             }
 
         }
 
-        private void NumberBox_TextureOverlay_TextSize_ValueChanged(Inkore.UI.WPF.Modern.Controls.NumberBox sender, Inkore.UI.WPF.Modern.Controls.NumberBoxValueChangedEventArgs args)
+        private void NumberBox_TextureOverlay_TextSize_ValueChanged(iNKORE.UI.WPF.Modern.Controls.NumberBox sender, iNKORE.UI.WPF.Modern.Controls.NumberBoxValueChangedEventArgs args)
         {
             try
             {
@@ -317,8 +268,7 @@ namespace MCSkinn.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
+                Program.RaiseException(ex);
             }
 
         }
@@ -334,8 +284,7 @@ namespace MCSkinn.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
+                Program.RaiseException(ex);
             }
 
         }
@@ -351,8 +300,7 @@ namespace MCSkinn.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
+                Program.RaiseException(ex);
             }
 
         }
@@ -368,14 +316,13 @@ namespace MCSkinn.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
+                Program.RaiseException(ex);
             }
 
         }
         private void Button_UIScale_Apply_Click(object sender, RoutedEventArgs e)
         {
-            Program.RefreshApperanceSettings();
+
         }
 
         private void Button_OpenKeyEditor_Click(object sender, RoutedEventArgs e)
@@ -396,8 +343,7 @@ namespace MCSkinn.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
+                Program.RaiseException(ex);
             }
 
         }
@@ -413,10 +359,92 @@ namespace MCSkinn.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButton.OK, MessageBoxImage.Error);
-                Program.Log(ex);
+                Program.RaiseException(ex);
             }
 
+        }
+
+        private void ToggleSwitch_CompatibilityMode_Enabled_Toggled(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!isLoading)
+                {
+                    GlobalSettings.CompatibilityMode = ToggleSwitch_CompatibilityMode_Enabled.IsOn;
+                }
+
+                if (Program.Editor?.IsCompatibilityModeOn != GlobalSettings.CompatibilityMode)
+                    Grid_CompatibilityMode_RestartWarning.Visibility = Visibility.Visible;
+                else
+                    Grid_CompatibilityMode_RestartWarning.Visibility = Visibility.Collapsed;
+
+                //if (GlobalSettings.CompatibilityMode)
+                //{
+                //    Grid_Backdrop_UnavailableInCompatibilityMode.Visibility = Visibility.Visible;
+                //}
+                //else
+                //{
+                //    Grid_Backdrop_UnavailableInCompatibilityMode.Visibility = Visibility.Collapsed;
+
+                //}
+            }
+            catch (Exception ex)
+            {
+                Program.RaiseException(ex);
+            }
+
+
+        }
+
+        private async void Button_Reset_Enabled_Click(object sender, RoutedEventArgs e)
+        {
+            GeneralQuestionDialog dialog = new GeneralQuestionDialog()
+            {
+                Title = Program.GetLanguageString("M_RESET"),
+                Content = Program.GetLanguageString("M_RESETALLSETTINGS_DESCRIPTION"),
+                PrimaryButtonText = Program.GetLanguageString("M_RESET"),
+                CloseButtonText = Program.GetLanguageString("C_CANCEL"),
+                DefaultButton = iNKORE.UI.WPF.Modern.Controls.ContentDialogButton.Close,
+            };
+
+            iNKORE.UI.WPF.Modern.Controls.ContentDialogResult result = await dialog.ShowAsync();
+
+            if (result == iNKORE.UI.WPF.Modern.Controls.ContentDialogResult.Primary)
+            {
+                try
+                {
+                    Program._saveConfig = false;
+
+                    string config1 = System.IO.Path.Combine(Program.Dir_AssemblyParentCurrent, GlobalSettings.ConfigFilename);
+                    string config2 = System.IO.Path.Combine(Program.Dir_AppdataCurrent, GlobalSettings.ConfigFilename);
+                    string config3 = System.IO.Path.Combine(Program.Dir_WorkdirCurrent, GlobalSettings.ConfigFilename);
+
+                    if(System.IO.File.Exists(config1))
+                    {
+                        try { System.IO.File.Delete(config1); }
+                        catch (Exception ex) { Program.RaiseException(ex); }
+                    }
+                    if (System.IO.File.Exists(config2))
+                    {
+                        try { System.IO.File.Delete(config2); }
+                        catch (Exception ex) { Program.RaiseException(ex); }
+                    }
+                    if (System.IO.File.Exists(config3))
+                    {
+                        try { System.IO.File.Delete(config3); }
+                        catch (Exception ex) { Program.RaiseException(ex); }
+                    }
+
+                    Program.Restart();
+                }
+                catch (Exception ex) { Program.RaiseException(ex); }
+
+            }
+        }
+
+        private void HyperlinkButton_ChangeSettings_Language_Click(object sender, RoutedEventArgs e)
+        {
+            HubStarter.NavigateSettings();
         }
     }
 }

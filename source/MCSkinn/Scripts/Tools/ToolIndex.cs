@@ -3,12 +3,12 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/InkoreStudios/MCSkinn
+//    https://github.com/iNKOREStudios/MCSkinn
 //
 
 using System.Drawing;
 using System.Windows.Forms;
-using Inkore.Coreworks;
+using iNKORE.Coreworks;
 using MCSkinn.Scripts.Paril.OpenGL;
 
 namespace MCSkinn.Scripts.Tools

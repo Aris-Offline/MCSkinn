@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/InkoreStudios/MCSkinn
+//    https://github.com/iNKOREStudios/MCSkinn
 //
 
 using System;
@@ -13,7 +13,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using MCSkinn.Scripts.Paril.Drawing;
-using Inkore.Coreworks.Windows.Helpers;
+using iNKORE.Coreworks.Windows.Helpers;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Newtonsoft.Json.Linq;

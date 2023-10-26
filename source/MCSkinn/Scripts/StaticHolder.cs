@@ -1,4 +1,4 @@
-﻿using Inkore.UI.WPF.Modern.Media;
+﻿using iNKORE.UI.WPF.Modern.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;

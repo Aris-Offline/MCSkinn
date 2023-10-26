@@ -1,4 +1,4 @@
-﻿using Inkore.Coreworks.Localization;
+﻿using iNKORE.Coreworks.Localization;
 using MCSkinn.Scripts.Models;
 using MCSkinn.Scripts.Swatches;
 using MCSkinn.Scripts;
@@ -20,6 +20,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Windows.Media.Animation;
+using iNKORE.Hub.Shared;
 
 namespace MCSkinn.Pages
 {
@@ -32,6 +33,9 @@ namespace MCSkinn.Pages
         public PageSplash()
         {
             InitializeComponent();
+
+            if (GlobalSettings.CompatibilityMode)
+                Border_AppTitlebar.Visibility = Visibility.Collapsed;
         }
         public static string LoadingValue = "(nothing?)";
 
@@ -54,10 +58,10 @@ namespace MCSkinn.Pages
             Language useLanguage = null;
             try
             {
-                useLanguage = LanguageLoader.FindLanguage(GlobalSettings.LanguageFile);
+                useLanguage = LanguageLoader.FindLanguage(Program.Settings_Shared.Language);
 
                 // stage 1 (prelim): if no language, see if our languages contain it
-                if (string.IsNullOrEmpty(GlobalSettings.LanguageFile))
+                if (string.IsNullOrEmpty(Program.Settings_Shared.Language))
                 {
                     useLanguage = LanguageLoader.FindLanguage(CultureInfo.CurrentUICulture.Name);
 
@@ -89,7 +93,7 @@ namespace MCSkinn.Pages
         {
             using (var reader = new StreamReader(new MemoryStream(Properties.Resources.English), Encoding.Unicode))
             {
-                Language lang = Inkore.Coreworks.Localization.Language.Parse(reader, "en-us.lang");
+                Language lang = iNKORE.Coreworks.Localization.Language.Parse(reader, "en-us.lang");
                 LanguageLoader.Languages.Add(lang);
                 return lang;
             }
@@ -113,11 +117,17 @@ namespace MCSkinn.Pages
             };
         }
 
-        void PerformLoading()
+        private void PerformLoading()
         {
+            if (!Directory.Exists(InkoreStudios.Path_InkoreBaseDirectory) && !Program.IsDebugVersion)
+            {
+                MessageBox.Show("Invalid iNKORE Hub installation. Please check your installment.\r\n\r\n无效的 iNKORE Hub，请检查你的安装。");
+                Environment.Exit(-5);
+            }
+
             SetLoadingString("Loading Languages...");
 
-            Program.Log(Inkore.Coreworks.LogType.Info, "Loading languages from directory: " + GlobalSettings.FullPath_Languages, "PageSplash.PerformLoading()");
+            Program.Log(iNKORE.Coreworks.LogType.Info, "Loading languages from directory: " + GlobalSettings.FullPath_Languages, "PageSplash.PerformLoading()");
 
             var language = LoadLanguages();
 
@@ -141,7 +151,7 @@ namespace MCSkinn.Pages
 
             SetLoadingString("Loading models...");
 
-            Program.Log(Inkore.Coreworks.LogType.Info, "Loading languages from directory: " + GlobalSettings.FullPath_Models, "PageSplash.PerformLoading()");
+            Program.Log(iNKORE.Coreworks.LogType.Info, "Loading languages from directory: " + GlobalSettings.FullPath_Models, "PageSplash.PerformLoading()");
 
             ModelLoader.LoadModels();
             Program.Page_Splash.Dispatcher.Invoke(ErrorHandlerWrap(Program.Editor.FinishedLoadingModels));
@@ -157,6 +167,16 @@ namespace MCSkinn.Pages
                 //Program.Context.SplashForm.Close();
                 GC.Collect();
             }));
+
+            new Thread(() =>
+            {
+                try
+                {
+                    iNKORE.Hub.Shared.UpdateHelper.CheckUpdate(Program.ProductID, true);
+                }
+                catch { }
+            })
+            { IsBackground = true, Name = "UpdateChecker" }.Start();
         }
 
         public static void BeginLoaderThread()

@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/InkoreStudios/MCSkinn
+//    https://github.com/iNKOREStudios/MCSkinn
 //
 
 using System;
@@ -313,7 +313,7 @@ namespace MCSkinn.Scripts.lemon42.Colors
                 B = c.B;
                 A = c.A;
             }
-            public RGBColor(Inkore.UI.WPF.ColorPicker.Models.NotifyableColor c)
+            public RGBColor(iNKORE.UI.WPF.ColorPicker.Models.NotifyableColor c)
             {
                 R = (byte)Math.Min(255, Math.Max(0, c.RGB_R));
                 G = (byte)Math.Min(255, Math.Max(0, c.RGB_G));

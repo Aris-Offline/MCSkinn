@@ -3,14 +3,14 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/InkoreStudios/MCSkinn
+//    https://github.com/iNKOREStudios/MCSkinn
 //
 
 using System.Drawing;
 using System.Windows.Forms;
 using MCSkinn.Scripts.Paril.Drawing;
 using MCSkinn.Scripts.Paril.OpenGL;
-using Inkore.Coreworks.Windows.Helpers;
+using iNKORE.Coreworks.Windows.Helpers;
 
 namespace MCSkinn.Scripts.Tools
 {
@@ -31,7 +31,7 @@ namespace MCSkinn.Scripts.Tools
             return
                 ((Control.ModifierKeys & Keys.Shift) != 0
                      ? Program.Editor.ColorPanel.SecondaryColor
-                     : Program.Editor.ColorPanel.SelectedColor).W2D();
+                     : Program.Editor.ColorPanel.SelectedColor).ToDrawingColor();
         }
 
         public override string GetStatusLabelText()

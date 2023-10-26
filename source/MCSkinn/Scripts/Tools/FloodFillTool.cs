@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/InkoreStudios/MCSkinn
+//    https://github.com/iNKOREStudios/MCSkinn
 //
 
 using System;
@@ -15,7 +15,7 @@ using MCSkinn.Scripts.lemon42.Colors;
 using MCSkinn.Scripts.Paril.Drawing;
 using MCSkinn.Scripts.Paril.OpenGL;
 using OpenTK;
-using Inkore.Coreworks.Windows.Helpers;
+using iNKORE.Coreworks.Windows.Helpers;
 
 namespace MCSkinn.Scripts.Tools
 {
@@ -104,7 +104,7 @@ namespace MCSkinn.Scripts.Tools
             newColor =
                 ((WinForms.Control.ModifierKeys & WinForms.Keys.Shift) != 0
                      ? Program.Editor.ColorPanel.SecondaryColor
-                     : Program.Editor.ColorPanel.SelectedColor).W2D();
+                     : Program.Editor.ColorPanel.SelectedColor).ToDrawingColor();
             pixels[x, y] = new ColorPixel(newColor.R | newColor.G << 8 | newColor.B << 16 | newColor.A << 24);
             return true;
         }

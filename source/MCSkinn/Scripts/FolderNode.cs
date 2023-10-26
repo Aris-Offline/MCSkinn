@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/InkoreStudios/MCSkinn
+//    https://github.com/iNKOREStudios/MCSkinn
 //
 
 using System;
@@ -15,9 +15,9 @@ using System.IO;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Xml.Linq;
-using Inkore.Coreworks;
-using Inkore.Coreworks.Helpers;
-using Inkore.Coreworks.Windows.Helpers;
+using iNKORE.Coreworks;
+using iNKORE.Coreworks.Helpers;
+using iNKORE.Coreworks.Windows.Helpers;
 using OpenTK.Graphics.OpenGL;
 using Windows.ApplicationModel.Contacts;
 using Windows.Media.Capture;

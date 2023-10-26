@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/InkoreStudios/MCSkinn
+//    https://github.com/iNKOREStudios/MCSkinn
 //
 
 using System;
@@ -12,8 +12,8 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
-using Inkore.Coreworks;
-using Inkore.Coreworks.Helpers;
+using iNKORE.Coreworks;
+using iNKORE.Coreworks.Helpers;
 using MCSkinn.Scripts.Models;
 using MCSkinn.Scripts.Paril.OpenGL;
 using OpenTK;

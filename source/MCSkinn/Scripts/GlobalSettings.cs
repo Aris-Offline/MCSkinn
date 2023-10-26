@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/InkoreStudios/MCSkinn
+//    https://github.com/iNKOREStudios/MCSkinn
 //
 
 using System;
@@ -16,10 +16,10 @@ using System.Security.Cryptography;
 using System.Xml.Linq;
 using MCSkinn.Scripts.Paril.Settings;
 using MCSkinn.Scripts.Paril.Settings.Serializers;
-using Modern = Inkore.UI.WPF.Modern;
+using Modern = iNKORE.UI.WPF.Modern;
 using static MCSkinn.Scripts.StaticHolder;
 using WPFM = System.Windows.Media;
-using Inkore.Coreworks.Helpers;
+using iNKORE.Coreworks.Helpers;
 
 namespace MCSkinn.Scripts
 {
@@ -113,9 +113,6 @@ namespace MCSkinn.Scripts
         [DefaultValue(0.20f)]
         public static float Tool_Noise_Saturation { get; set; }
 
-        [Savable("General")]
-        public static string LanguageFile { get; set; }
-
         //[Savable]
         //[DefaultValue(48)]
         //public static int TreeViewHeight { get; set; }
@@ -176,18 +173,6 @@ namespace MCSkinn.Scripts
         [DefaultValue(1d)]
         public static double RenderScale { get; set; }
 
-        [Savable("Appearance")]
-        [DefaultValue(Modern.ElementTheme.Default)]
-        public static Modern.ElementTheme RequestedTheme { get; set; }
-
-        [Savable("Appearance")]
-        [DefaultValue(1d)]
-        public static double UIScale { get; set; }
-
-        [Savable("Appearance")]
-        [DefaultValue(Modern.Controls.Primitives.BackdropType.Mica)]
-        public static Modern.Controls.Primitives.BackdropType BackdropType { get; set; }
-
 
         #region Functions
         public static event PropertyChangedEventHandler PropertyChanged;
@@ -226,7 +211,7 @@ namespace MCSkinn.Scripts
                 }
 
 
-                Program.Log(Inkore.Coreworks.LogType.Info, "Loading config from file: " + FullPath_Config, "GlobalSettings.Load()");
+                Program.Log(iNKORE.Coreworks.LogType.Info, "Loading config from file: " + FullPath_Config, "GlobalSettings.Load()");
 
                 XElement root = XElement.Load(FullPath_Config);
 
@@ -283,6 +268,9 @@ namespace MCSkinn.Scripts
         public static bool Save()
         {
             if (string.IsNullOrEmpty(FullPath_Config))
+                return false;
+
+            if (!Program._saveConfig)
                 return false;
 
             XElement root = new XElement("MCSkinn.Config");

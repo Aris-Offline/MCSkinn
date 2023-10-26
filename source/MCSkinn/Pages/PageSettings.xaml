@@ -8,9 +8,7 @@
       d:DesignWidth="800"
       Title="" Loaded="Page_Loaded" Unloaded="Page_Unloaded">
     <Page.Resources>
-        <Style TargetType="Expander" BasedOn="{StaticResource {x:Static ui:ThemeKeys.DefaultExpanderStyleKey}}">
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        </Style>
+
         <Style TargetType="ikw:PortableColorPicker">
             <Setter Property="Height" Value="32"/>
             <Setter Property="ui:ThemeManager.RequestedTheme" Value="Light"/>
@@ -32,6 +30,9 @@
             <Setter Property="Padding" Value="15,0,20,0"/>
         </Style>
 
+        <Style TargetType="Expander" BasedOn="{StaticResource {x:Static ui:ThemeKeys.ExpanderCardStyleKey}}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
 
     </Page.Resources>
 
@@ -42,7 +43,7 @@
 
                 <Expander x:Name="Expander_Language" IsExpanded="True">
                     <Expander.Header>
-                        <Grid VerticalAlignment="Center" Margin="0,10,0,10">
+                        <Grid VerticalAlignment="Center" Margin="0,10,-10,10">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -52,12 +53,11 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="200"/>
                             </Grid.ColumnDefinitions>
-                            <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.LocaleLanguage}" Grid.RowSpan="2" Margin="5,15,20,15"/>
+                            <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.LocaleLanguage}" Grid.RowSpan="2" Margin="5,15,20,15" FontSize="20"/>
                             <TextBlock x:Name="TextBlock_Language" Text="M_LANGUAGE" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
                             <TextBlock x:Name="TextBlock_Language_Description" Text="M_LANGUAGE_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
 
-                            <ComboBox x:Name="ComboBox_Language" DisplayMemberPath="Name" Grid.Column="2" Grid.RowSpan="2" SelectionChanged="ComboBox_Language_SelectionChanged">
-                            </ComboBox>
+                            <ui:HyperlinkButton x:Name="HyperlinkButton_ChangeSettings_Language" Content="M_CHANGEVALUE" RaiseHyperlinkClicks="False" Grid.Column="2" HorizontalAlignment="Right" Grid.RowSpan="2" Click="HyperlinkButton_ChangeSettings_Language_Click"/>
                         </Grid>
                     </Expander.Header>
 
@@ -91,17 +91,13 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
-                            <ColumnDefinition Width="{StaticResource GridLength_SettingsContenHeaderControlDefaultWidth}"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Light}" Grid.RowSpan="2" Margin="5,15,20,15"/>
+                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Light}" Grid.RowSpan="2" Margin="5,15,20,15" FontSize="20"/>
                         <TextBlock x:Name="TextBlock_ThemeMode" Text="M_THEMEMODE" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
                         <TextBlock x:Name="TextBlock_ThemeMode_Description" Text="M_THEMEMODE_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
 
-                        <ComboBox x:Name="ComboBox_ThemeMode" Grid.Column="2" Grid.RowSpan="2" SelectionChanged="ComboBox_ThemeMode_SelectionChanged">
-                            <ComboBoxItem x:Name="ComboBoxItem_ThemeMode_Default" Content="M_DEFAULTWITHBRACKETS"/>
-                            <ComboBoxItem x:Name="ComboBoxItem_ThemeMode_Light" Content="M_LIGHT"/>
-                            <ComboBoxItem x:Name="ComboBoxItem_ThemeMode_Dark" Content="M_DARK"/>
-                        </ComboBox>
+                        <ui:HyperlinkButton Content="{Binding ElementName=HyperlinkButton_ChangeSettings_Language, Path=Content}" RaiseHyperlinkClicks="False" Grid.Column="2" HorizontalAlignment="Right" Grid.RowSpan="2" Click="HyperlinkButton_ChangeSettings_Language_Click"/>
                     </Grid>
                 </Border>
 
@@ -110,23 +106,28 @@
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
-                            <ColumnDefinition Width="{StaticResource GridLength_SettingsContenHeaderControlDefaultWidth}"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.SpecialEffectSize}" Grid.RowSpan="2" Margin="5,15,20,15"/>
+                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.SpecialEffectSize}" Grid.RowSpan="2" Margin="5,15,20,15" FontSize="20"/>
                         <TextBlock x:Name="TextBlock_Backdrop" Text="M_BACKDROP" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
                         <TextBlock x:Name="TextBlock_Backdrop_Description" Text="M_BACKDROP_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
 
-                        <ComboBox x:Name="ComboBox_Backdrop" Grid.Column="2" Grid.RowSpan="2" SelectionChanged="ComboBox_Backdrop_SelectionChanged">
-                            <ComboBoxItem Content="(null)" IsEnabled="False" Visibility="Collapsed"/>
-                            <ComboBoxItem x:Name="ComboBoxItem_Backdrop_None" Content="M_NONE"/>
-                            <ComboBoxItem x:Name="ComboBoxItem_Backdrop_Mica" Content="M_MICA"/>
-                            <ComboBoxItem x:Name="ComboBoxItem_Backdrop_Acrylic" Content="M_ACRYLIC"/>
-                            <ComboBoxItem x:Name="ComboBoxItem_Backdrop_Tabbed" Content="M_TABBED"/>
-                        </ComboBox>
+                        <ui:HyperlinkButton Content="{Binding ElementName=HyperlinkButton_ChangeSettings_Language, Path=Content}" RaiseHyperlinkClicks="False" Grid.Column="2" HorizontalAlignment="Right" Grid.RowSpan="2" Click="HyperlinkButton_ChangeSettings_Language_Click"/>
+
+                        <Grid x:Name="Grid_Backdrop_UnavailableInCompatibilityMode" Visibility="Collapsed" Grid.Row="2" Grid.Column="1" TextElement.Foreground="{DynamicResource {x:Static ui:ThemeKeys.InfoBarWarningSeverityIconBackgroundKey}}" Margin="0,5,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Warning}" FontSize="16"/>
+                            <TextBlock x:Name="TextBlock_Backdrop_UnavailableInCompatibilityMode" Text="M_UNAVAILABLEINCOMPATIBILITYMODE" Grid.Column="1" Margin="5,0,0,0" TextWrapping="Wrap"/>
+                        </Grid>
+
                     </Grid>
                 </Border>
 
@@ -135,20 +136,20 @@
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="0"/>
                         </Grid.ColumnDefinitions>
-                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.OpenInNewWindow}" Grid.RowSpan="2" Margin="5,15,20,15"/>
+                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.OpenInNewWindow}" Grid.RowSpan="2" Margin="5,15,20,15" FontSize="20"/>
                         <TextBlock x:Name="TextBlock_UIScale" Text="M_UISCALE" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
                         <TextBlock x:Name="TextBlock_UIScale_Description" Text="M_UISCALE_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
 
-                        <Slider x:Name="Slider_UIScale" Grid.RowSpan="2" VerticalAlignment="Center" Grid.Column="3" TickFrequency="0.1" Maximum="1.5" Minimum="0.5" TickPlacement="BottomRight" IsSnapToTickEnabled="True" LargeChange="0.2" AutoToolTipPrecision="1" ValueChanged="Slider_UIScale_ValueChanged"/>
+                        <ui:HyperlinkButton Content="{Binding ElementName=HyperlinkButton_ChangeSettings_Language, Path=Content}" RaiseHyperlinkClicks="False" Grid.Column="2" HorizontalAlignment="Right" Grid.RowSpan="2" Click="HyperlinkButton_ChangeSettings_Language_Click"/>
 
-                        <Button x:Name="Button_UIScale_Apply" Content="M_APPLY" Grid.RowSpan="2" Grid.Column="2" Margin="10,0,10,0" Click="Button_UIScale_Apply_Click"/>
                     </Grid>
                 </Border>
 
@@ -160,6 +161,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -167,11 +169,21 @@
                             <ColumnDefinition Width="160"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.OpenInNewWindow}" Grid.RowSpan="2" Margin="5,15,20,15"/>
+                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.OpenInNewWindow}" Grid.RowSpan="2" Margin="5,15,20,15" FontSize="20"/>
                         <TextBlock x:Name="TextBlock_RenderScale" Text="M_RENDERSCALE" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
                         <TextBlock x:Name="TextBlock_RenderScale_Description" Text="M_RENDERSCALE_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
 
                         <Slider x:Name="Slider_RenderScale" Grid.RowSpan="2" VerticalAlignment="Center" Grid.Column="2" TickFrequency="0.1" Maximum="1.5" Minimum="0.5" TickPlacement="BottomRight" IsSnapToTickEnabled="True" LargeChange="0.2" AutoToolTipPrecision="1" ValueChanged="Slider_RenderScale_ValueChanged"/>
+
+                        <Grid Visibility="{Binding ElementName=Grid_Backdrop_UnavailableInCompatibilityMode, Path=Visibility}" Grid.Row="2" Grid.Column="1" TextElement.Foreground="{DynamicResource {x:Static ui:ThemeKeys.InfoBarWarningSeverityIconBackgroundKey}}" Margin="0,5,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Warning}" FontSize="16"/>
+                            <TextBlock Text="{Binding ElementName=TextBlock_Backdrop_UnavailableInCompatibilityMode, Path=Text}" Grid.Column="1" Margin="5,0,0,0" TextWrapping="Wrap"/>
+                        </Grid>
+
                     </Grid>
                 </Border>
 
@@ -188,7 +200,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Tiles}" Grid.RowSpan="2" Margin="5,15,20,15"/>
+                            <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Tiles}" Grid.RowSpan="2" Margin="5,15,20,15" FontSize="20"/>
                             <TextBlock x:Name="TextBlock_TextureOverlay" Text="M_TEXTUREOVERLAY" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
                             <TextBlock x:Name="TextBlock_TextureOverlay_Description" Text="M_TEXTUREOVERLAY_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
 
@@ -212,9 +224,9 @@
                         <TextBlock x:Name="TextBlock_TextureOverlay_TextSize" Text="M_TEXTSIZE" Grid.Row="3" Margin="0,15,0,15"/>
 
                         <ikw:PortableColorPicker x:Name="PortableColorPicker_TextureOverlay_LineColor" Grid.Column="1" ColorChanged="PortableColorPicker_TextureOverlay_LineColor_ColorChanged"/>
-                        <ui:NumberBox x:Name="NumberBox_TextureOverlay_LineSize" MaxWidth="250" LargeChange="25" SpinButtonPlacementMode="Inline"  Minimum="1" Maximum="255" SmallChange="5" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" ValueChanged="NumberBox_TextureOverlay_LineSize_ValueChanged"/>
+                        <ui:NumberBox x:Name="NumberBox_TextureOverlay_LineSize" MaxWidth="250" LargeChange="25" SpinButtonPlacementMode="Inline"  Minimum="1" Maximum="255" SmallChange="1" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" ValueChanged="NumberBox_TextureOverlay_LineSize_ValueChanged"/>
                         <ikw:PortableColorPicker x:Name="PortableColorPicker_TextureOverlay_TextColor" Grid.Column="1" Grid.Row="2" ColorChanged="PortableColorPicker_TextureOverlay_TextColor_ColorChanged"/>
-                        <ui:NumberBox x:Name="NumberBox_TextureOverlay_TextSize" MaxWidth="250" LargeChange="25" SpinButtonPlacementMode="Inline"  Minimum="1" Maximum="255" SmallChange="5" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" ValueChanged="NumberBox_TextureOverlay_TextSize_ValueChanged"/>
+                        <ui:NumberBox x:Name="NumberBox_TextureOverlay_TextSize" MaxWidth="250" LargeChange="25" SpinButtonPlacementMode="Inline"  Minimum="1" Maximum="255" SmallChange="1" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" ValueChanged="NumberBox_TextureOverlay_TextSize_ValueChanged" Cursor="Hand"/>
                     </Grid>
                 </Expander>
                 <Expander x:Name="Expander_PixelGrid">
@@ -229,7 +241,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.TiltDown}" Grid.RowSpan="2" Margin="5,15,20,15"/>
+                            <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.TiltDown}" Grid.RowSpan="2" Margin="5,15,20,15" FontSize="20"/>
                             <TextBlock x:Name="TextBlock_PixelGrid" Text="M_PIXELGRID" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
                             <TextBlock x:Name="TextBlock_PixelGrid_Description" Text="M_PIXELGRID_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
 
@@ -264,7 +276,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Walk}" Grid.RowSpan="2" Margin="5,15,20,15"/>
+                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Walk}" Grid.RowSpan="2" Margin="5,15,20,15" FontSize="20"/>
                         <TextBlock x:Name="TextBlock_RememberPrefers" Text="M_RENMEBERPREFERS" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
                         <TextBlock x:Name="TextBlock_RememberPrefers_Description" Text="M_RENMEBERPREFERS_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
 
@@ -295,17 +307,87 @@
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Touch}" Grid.RowSpan="2" Margin="5,15,20,15"/>
+                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Touch}" Grid.RowSpan="2" Margin="5,15,20,15" FontSize="20"/>
                         <TextBlock x:Name="TextBlock_IsManipulationEnabled" Text="M_MANIPULATIONENABLED" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
                         <TextBlock x:Name="TextBlock_IsManipulationEnabled_Description" Text="M_MANIPULATIONENABLED_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
 
                         <ui:ToggleSwitch x:Name="ToggleSwitch_IsManipulationEnabled_Enabled" Grid.Column="2" Grid.RowSpan="2" MinWidth="0" Toggled="ToggleSwitch_IsManipulationEnabled_Enabled_Toggled"/>
+
+                        <Grid Visibility="{Binding ElementName=Grid_Backdrop_UnavailableInCompatibilityMode, Path=Visibility}" Grid.Row="2" Grid.Column="1" TextElement.Foreground="{DynamicResource {x:Static ui:ThemeKeys.InfoBarWarningSeverityIconBackgroundKey}}" Margin="0,5,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Warning}" FontSize="16"/>
+                            <TextBlock Text="{Binding ElementName=TextBlock_Backdrop_UnavailableInCompatibilityMode, Path=Text}" Grid.Column="1" Margin="5,0,0,0" TextWrapping="Wrap"/>
+                        </Grid>
+
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource Style_SectionBorderStyle}">
+                    <Grid VerticalAlignment="Center" Margin="0,10,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Draw}" Grid.RowSpan="2" Margin="5,15,20,15" FontSize="20"/>
+                        <TextBlock x:Name="TextBlock_StylusToDraw" Text="M_STYLUSTODRAW" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+                        <TextBlock x:Name="TextBlock_StylusToDraw_Description" Text="M_STYLUSTODRAW_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
+
+                        <ui:ToggleSwitch x:Name="ToggleSwitch_StylusToDraw_Enabled" Grid.Column="2" Grid.RowSpan="2" MinWidth="0" Toggled="ToggleSwitch_StylusToDraw_Enabled_Toggled"/>
+
+                        <Grid Visibility="{Binding ElementName=Grid_Backdrop_UnavailableInCompatibilityMode, Path=Visibility}" Grid.Row="2" Grid.Column="1" TextElement.Foreground="{DynamicResource {x:Static ui:ThemeKeys.InfoBarWarningSeverityIconBackgroundKey}}" Margin="0,5,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Warning}" FontSize="16"/>
+                            <TextBlock Text="{Binding ElementName=TextBlock_Backdrop_UnavailableInCompatibilityMode, Path=Text}" Grid.Column="1" Margin="5,0,0,0" TextWrapping="Wrap"/>
+                        </Grid>
+
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource Style_SectionBorderStyle}">
+                    <Grid VerticalAlignment="Center" Margin="0,10,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.ComposeMode}" Grid.RowSpan="2" Margin="5,15,20,15" FontSize="20"/>
+                        <TextBlock x:Name="TextBlock_CompatibilityMode" Text="M_COMPATIBILITYMODE" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+                        <TextBlock x:Name="TextBlock_CompatibilityMode_Description" Text="M_COMPATIBILITYMODE_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
+
+                        <ui:ToggleSwitch x:Name="ToggleSwitch_CompatibilityMode_Enabled" Grid.Column="2" Grid.RowSpan="2" MinWidth="0" Toggled="ToggleSwitch_CompatibilityMode_Enabled_Toggled"/>
+
+                        <Grid x:Name="Grid_CompatibilityMode_RestartWarning" Grid.Row="2" Visibility="Collapsed" Grid.Column="1" TextElement.Foreground="{DynamicResource {x:Static ui:ThemeKeys.InfoBarWarningSeverityIconBackgroundKey}}" Margin="0,5,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Warning}" FontSize="16"/>
+                            <TextBlock x:Name="TextBlock_CompatibilityMode_RestartWarning" Text="T_RESTARTBEFOREAPPLY" Grid.Column="1" Margin="5,0,0,0" TextWrapping="Wrap"/>
+                        </Grid>
                     </Grid>
                 </Border>
 
@@ -318,51 +400,13 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.Draw}" Grid.RowSpan="2" Margin="5,15,20,15"/>
-                        <TextBlock x:Name="TextBlock_StylusToDraw" Text="M_STYLUSTODRAW" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
-                        <TextBlock x:Name="TextBlock_StylusToDraw_Description" Text="M_STYLUSTODRAW_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
-
-                        <ui:ToggleSwitch x:Name="ToggleSwitch_StylusToDraw_Enabled" Grid.Column="2" Grid.RowSpan="2" MinWidth="0" Toggled="ToggleSwitch_StylusToDraw_Enabled_Toggled"/>
-                    </Grid>
-                </Border>
-
-                <!--<Border Style="{StaticResource Style_SectionBorderStyle}">
-                    <Grid VerticalAlignment="Center" Margin="0,10,0,10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.ComposeMode}" Grid.RowSpan="2" Margin="5,15,20,15"/>
-                        <TextBlock x:Name="TextBlock_CompatibilityMode" Text="M_COMPATIBILITYMODE" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
-                        <TextBlock x:Name="TextBlock_CompatibilityMode_Description" Text="M_COMPATIBILITYMODE_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
-
-                        <ui:ToggleSwitch x:Name="ToggleSwitch_CompatibilityMode_Enabled" Grid.Column="2" Grid.RowSpan="2" MinWidth="0" Toggled="ToggleSwitch_StylusToDraw_Enabled_Toggled"/>
-                    </Grid>
-                </Border>-->
-
-                <Border Style="{StaticResource Style_SectionBorderStyle}" Visibility="Collapsed">
-                    <Grid VerticalAlignment="Center" Margin="0,10,0,10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
                             <ColumnDefinition Width="{StaticResource GridLength_SettingsContenHeaderControlDefaultWidth}"/>
                         </Grid.ColumnDefinitions>
-                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.ResetDrive}" Grid.RowSpan="2" Margin="5,15,20,15"/>
+                        <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.ResetDrive}" Grid.RowSpan="2" Margin="5,15,20,15" FontSize="20"/>
                         <TextBlock x:Name="TextBlock_Reset" Text="M_RESETALLSETTINGS" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
                         <TextBlock x:Name="TextBlock_Reset_Description" Text="M_RESETALLSETTINGS_DESCRIPTION" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,20,5" Opacity="0.615" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
 
-                        <Button x:Name="Button_Reset_Enabled" Grid.Column="2" Grid.RowSpan="2" MinWidth="0" Content="M_RESET" HorizontalAlignment="Stretch"/>
+                        <Button x:Name="Button_Reset_Enabled" Grid.Column="2" Grid.RowSpan="2" MinWidth="0" Content="M_RESET" HorizontalAlignment="Stretch" Click="Button_Reset_Enabled_Click"/>
                     </Grid>
                 </Border>
 

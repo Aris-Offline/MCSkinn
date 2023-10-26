@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Windows.Forms;
 using MCSkinn.Forms.Controls;
 using MCSkinn.Properties;
-using Inkore.Coreworks.Localization;
+using iNKORE.Coreworks.Localization;
 using MCSkinn.Scripts.Models;
 using MCSkinn.Scripts.Paril.Components.Shortcuts;
 using MCSkinn.Scripts.Paril.Components.Undo;
@@ -21,15 +22,16 @@ using OpenTK.Graphics.OpenGL;
 using KeyPressEventArgs = System.Windows.Forms.KeyPressEventArgs;
 using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
 using Brushes = MCSkinn.Forms.Controls.Brushes;
-using Modern = Inkore.UI.WPF.Modern;
+using Modern = iNKORE.UI.WPF.Modern;
 using WPF = System.Windows;
 using WPFC = System.Windows.Controls;
-using Inkore.Coreworks;
+using iNKORE.Coreworks;
 using System.Collections.ObjectModel;
-using Inkore.Coreworks.Windows.Helpers;
+using iNKORE.Coreworks.Windows.Helpers;
 using WPFI = System.Windows.Input;
 using WPFD = System.Windows.Data;
 using MCSkinn.Scripts.Tools;
+using OpenTK.Graphics;
 
 namespace MCSkinn.Scripts
 {
@@ -96,14 +98,14 @@ namespace MCSkinn.Scripts
         // Constructor
         // ===============================================
 
-        public GLControl RendererControl
-        {
-            get { return Renderer.Renderer; }
-        }
+        public GLControl RendererControl { get; private set; }
+
         public OpenTK.WPF.OtkWpfControl Renderer
         {
             get; private set;
         }
+
+        public bool IsRendererInitialized { get; private set; }
 
         public MouseButtons CameraRotate
         {
@@ -137,7 +139,7 @@ namespace MCSkinn.Scripts
             }
         }
 
-        public Inkore.UI.WPF.ColorPicker.ColorDisplay ColorPanel
+        public iNKORE.UI.WPF.ColorPicker.ColorDisplay ColorPanel
         {
             get { return Program.Page_Editor.ColorDisplay_MainDisplay; }
         }
@@ -149,8 +151,83 @@ namespace MCSkinn.Scripts
 
         public float ToolScale
         {
-            get { return 200.0f / (int)Renderer.ActualWidth; }
+            get { return 200.0f / ViewportWidth; }
         }
+
+        public int ViewportWidth
+        {
+            get
+            {
+                if (IsCompatibilityModeOn)
+                {
+                    return RendererControl.Width;
+                }
+                else
+                {
+                    return (int)Renderer.ActualWidth;
+                }
+            }
+        }
+        public int ViewportHeight
+        {
+            get
+            {
+                if (IsCompatibilityModeOn)
+                {
+                    return RendererControl.Height;
+                }
+                else
+                {
+                    return (int)Renderer.ActualHeight;
+                }
+            }
+        }
+
+        public int RenderWidth
+        {
+            get
+            {
+                if (IsCompatibilityModeOn)
+                {
+                    return RendererControl.Width;
+                }
+                else
+                {
+                    return (int)Renderer.RenderWidth;
+                }
+            }
+        }
+        public int RenderHeight
+        {
+            get
+            {
+                if (IsCompatibilityModeOn)
+                {
+                    return RendererControl.Height;
+                }
+                else
+                {
+                    return (int)Renderer.RenderHeight;
+                }
+            }
+        }
+
+        public double RenderScale
+        {
+            get
+            {
+                if (IsCompatibilityModeOn)
+                {
+                    return 1d;
+                }
+                else
+                {
+                    return Renderer.RenderScale;
+                }
+            }
+        }
+
+
 
 
         public static Vector3 CameraPosition;
@@ -511,8 +588,15 @@ namespace MCSkinn.Scripts
         #region Graphics Renderer
         public void InvalidateRenderer()
         {
-            refreshNeeded = true;
-            Renderer.InvalidateVisual();
+            if (IsCompatibilityModeOn)
+            {
+                RendererControl.Invalidate();
+            }
+            else
+            {
+                refreshNeeded = true;
+                Renderer.InvalidateVisual();
+            }
         }
         byte[] _charWidths = new byte[128];
         public static Color BackgrounColor_Light = Color.FromArgb(255, 230, 240, 250);
@@ -953,9 +1037,18 @@ namespace MCSkinn.Scripts
             GL.Disable(EnableCap.Blend);
         }
 
+        Point mousePos;
+
         public Point GetRenderCursorPos()
         {
-            return Renderer.GetMousePointAtRenderer().W2D();
+            if (IsCompatibilityModeOn)
+            {
+                return mousePos;
+            }
+            else
+            {
+                return Renderer.GetMousePointAtRenderer().ToDrawingRectangle();
+            }
         }
 
         public const int GrassLength = 1024;
@@ -1361,16 +1454,16 @@ namespace MCSkinn.Scripts
         {
             hitPixel = new Point(-1, -1);
 
-            if (x < 0 || y < 0 || x >= (int)Renderer.RenderWidth || y >= (int)Renderer.RenderHeight)
+            if (x < 0 || y < 0 || x >= RenderWidth || y >= RenderHeight)
                 return false;
-            var vp2d = new Rectangle(GetViewport2D().X, (int)Renderer.RenderHeight - GetViewport2D().Bottom, GetViewport2D().Width, GetViewport2D().Height);
+            var vp2d = new Rectangle(GetViewport2D().X, RenderHeight - GetViewport2D().Bottom, GetViewport2D().Width, GetViewport2D().Height);
             var vp3d = GetViewport3D();
             var mousePos = new Vector2(x, y);
             if (_currentViewMode == ViewMode.Orthographic || _currentViewMode == ViewMode.Hybrid && GetViewport2D().Contains(x, y))
             {
                 Vector3 output;
 
-                if (Unproject(ref _orthoCameraMatrix, vp2d, new Vector2(mousePos.X - GetViewport2D().X, mousePos.Y - GetViewport2D().Top * 2 + ((int)Renderer.RenderHeight - GetViewport2D().Bottom)), out output, 0, -1, 1))
+                if (Unproject(ref _orthoCameraMatrix, vp2d, new Vector2(mousePos.X - GetViewport2D().X, mousePos.Y - GetViewport2D().Top * 2 + (RenderHeight - GetViewport2D().Bottom)), out output, 0, -1, 1))
                 {
                     if (output.X < 0 || output.Y < 0 ||
                         output.X >= CurrentModel.DefaultWidth ||
@@ -1610,9 +1703,9 @@ namespace MCSkinn.Scripts
             get
             {
                 if (IsSplitterHorizontal)
-                    return (int)(Renderer.RenderHeight * FirstViewLengthRatio);
+                    return (int)(RenderHeight * FirstViewLengthRatio);
                 else
-                    return (int)(Renderer.RenderWidth * FirstViewLengthRatio);
+                    return (int)(RenderWidth * FirstViewLengthRatio);
             }
         }
         public bool IsSplitViewInvert { get; set; } = false;
@@ -1638,12 +1731,12 @@ namespace MCSkinn.Scripts
         {
             if (_currentViewMode == ViewMode.Perspective)
             {
-                rectangle3D = new Rectangle(0, 0, (int)Renderer.RenderWidth, (int)Renderer.RenderHeight);
+                rectangle3D = new Rectangle(0, 0, RenderWidth, RenderHeight);
                 rectangle2D = null;
             }
             else if (_currentViewMode == ViewMode.Orthographic)
             {
-                rectangle2D = new Rectangle(0, 0, (int)Renderer.RenderWidth, (int)Renderer.RenderHeight);
+                rectangle2D = new Rectangle(0, 0, RenderWidth, RenderHeight);
                 rectangle3D = null;
             }
             else
@@ -1652,13 +1745,13 @@ namespace MCSkinn.Scripts
                 {
                     if (IsSplitViewInvert)
                     {
-                        rectangle2D = new Rectangle(0, 0, (int)Renderer.RenderWidth, FirstViewLength);
-                        rectangle3D = new Rectangle(0, FirstViewLength, (int)Renderer.RenderWidth, (int)Renderer.RenderHeight - FirstViewLength);
+                        rectangle2D = new Rectangle(0, 0, RenderWidth, FirstViewLength);
+                        rectangle3D = new Rectangle(0, FirstViewLength, RenderWidth, RenderHeight - FirstViewLength);
                     }
                     else
                     {
-                        rectangle3D = new Rectangle(0, 0, (int)Renderer.RenderWidth, FirstViewLength);
-                        rectangle2D = new Rectangle(0, FirstViewLength, (int)Renderer.RenderWidth, (int)Renderer.RenderHeight - FirstViewLength);
+                        rectangle3D = new Rectangle(0, 0, RenderWidth, FirstViewLength);
+                        rectangle2D = new Rectangle(0, FirstViewLength, RenderWidth, RenderHeight - FirstViewLength);
 
                         //Console.WriteLine(rectangle3D);
                     }
@@ -1667,13 +1760,13 @@ namespace MCSkinn.Scripts
                 {
                     if (IsSplitViewInvert)
                     {
-                        rectangle2D = new Rectangle(0, 0, FirstViewLength, (int)Renderer.RenderHeight);
-                        rectangle3D = new Rectangle(FirstViewLength, 0, (int)Renderer.RenderWidth - FirstViewLength, (int)Renderer.RenderHeight);
+                        rectangle2D = new Rectangle(0, 0, FirstViewLength, RenderHeight);
+                        rectangle3D = new Rectangle(FirstViewLength, 0, RenderWidth - FirstViewLength, RenderHeight);
                     }
                     else
                     {
-                        rectangle3D = new Rectangle(0, 0, FirstViewLength, (int)Renderer.RenderHeight);
-                        rectangle2D = new Rectangle(FirstViewLength, 0, (int)Renderer.RenderWidth - FirstViewLength, (int)Renderer.RenderHeight);
+                        rectangle3D = new Rectangle(0, 0, FirstViewLength, RenderHeight);
+                        rectangle2D = new Rectangle(FirstViewLength, 0, RenderWidth - FirstViewLength, RenderHeight);
                     }
 
                 }
@@ -1714,7 +1807,7 @@ namespace MCSkinn.Scripts
 
                     DrawPlayer(_previewPaint, skin, !Program.Page_Editor.IsViewportError);
 
-                    int sizeOfMiniport = (int)(120 * Renderer.RenderScale);
+                    int sizeOfMiniport = (int)(120 * RenderScale);
                     float sizeOfCube = sizeOfMiniport;
 
 
@@ -1774,7 +1867,7 @@ namespace MCSkinn.Scripts
                 //_renderTimer.Stop();
 
                 //if (!_screenshotMode)
-                //    Renderer.SwapBuffers();
+                RendererControl?.SwapBuffers();
                 IsRendering = false;
             }
             catch (Exception ex)
@@ -1871,7 +1964,7 @@ namespace MCSkinn.Scripts
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
-            GL.Viewport(new Rectangle(viewport.X, (int)Renderer.RenderHeight - viewport.Bottom, viewport.Width, viewport.Height));
+            GL.Viewport(new Rectangle(viewport.X, RenderHeight - viewport.Bottom, viewport.Width, viewport.Height));
             GL.MultMatrix(ref _projectionMatrix);
 
             GL.MatrixMode(MatrixMode.Modelview);
@@ -1888,7 +1981,7 @@ namespace MCSkinn.Scripts
             GL.LoadIdentity();
 
 
-            GL.Viewport(new Rectangle(viewport.X, (int)Renderer.RenderHeight - viewport.Bottom, viewport.Width, viewport.Height));
+            GL.Viewport(new Rectangle(viewport.X, RenderHeight - viewport.Bottom, viewport.Width, viewport.Height));
             GL.Ortho(0, viewport.Width, viewport.Height, 0, -99, 99);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
@@ -2004,7 +2097,7 @@ namespace MCSkinn.Scripts
         }
         private void CheckMouse(WPF.Point p)
         {
-            CheckMouse(p.W2D());
+            CheckMouse(p.ToDrawingRectangle());
         }
 
         public void SetPartTransparencies()
@@ -2552,7 +2645,10 @@ namespace MCSkinn.Scripts
 
         public void RenderMakeCurrent()
         {
-            //RendererControl.MakeCurrent();
+            if (IsCompatibilityModeOn)
+            {
+                RendererControl.MakeCurrent();
+            }
         }
 
         private void DontCloseMe(object sender, ToolStripDropDownClosingEventArgs e)
@@ -2909,10 +3005,10 @@ namespace MCSkinn.Scripts
             RenderMakeCurrent();
             rendererControl_Paint(null, null);
 
-            var b = new Bitmap((int)Renderer.RenderWidth, (int)Renderer.RenderHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var b = new Bitmap(RenderWidth, RenderHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            var pixels = new int[(int)Renderer.RenderWidth * (int)Renderer.RenderHeight];
-            GL.ReadPixels(0, 0, (int)Renderer.RenderWidth, (int)Renderer.RenderHeight, PixelFormat.Rgba,
+            var pixels = new int[RenderWidth * RenderHeight];
+            GL.ReadPixels(0, 0, RenderWidth, RenderHeight, PixelFormat.Rgba,
                           PixelType.UnsignedByte, pixels);
 
             BitmapData locked = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite,
@@ -3271,6 +3367,7 @@ namespace MCSkinn.Scripts
 
         public void Initialize(Language language)
         {
+            IsCompatibilityModeOn = GlobalSettings.CompatibilityMode;
 
             Tool_Camera = new ToolIndex(new CameraTool(), "camera", "T_TOOL_CAMERA", Resources.eye__1_, Keys.C);
             _tools.Add(Tool_Camera);
@@ -3326,48 +3423,8 @@ namespace MCSkinn.Scripts
             //foreach (string x in GlobalSettings.SkinDirectories)
             //    Directory.CreateDirectory(MacroHandler.ReplaceMacros(x));
 
-            // set up the GL control
-            //var mode = new GraphicsMode();
-
-            //reset:
-
-            Renderer = new OpenTK.WPF.OtkWpfControl(true);
-            Renderer.RenderScale = GlobalSettings.RenderScale;
-            Renderer.OpenGLDraw += Renderer_OpenGLDraw;
-            Renderer.MouseDown += Renderer_MouseDown;
-            Renderer.MouseMove += Renderer_MouseMove;
-            Renderer.MouseUp += Renderer_MouseUp;
-            Renderer.MouseLeave += Renderer_MouseLeave;
-            Renderer.SizeChanged += Renderer_SizeChanged;
-            Renderer.MouseWheel += Renderer_MouseWheel;
-            Renderer.MouseEnter += Renderer_MouseEnter;
-
-            Renderer.IsManipulationEnabled = GlobalSettings.IsManipulationEnabled;
-            Renderer.ManipulationStarting += Renderer_ManipulationStarting;
-            Renderer.ManipulationDelta += Renderer_ManipulationDelta;
-            Renderer.ManipulationCompleted += Renderer_ManipulationCompleted;
-
-            Renderer.TouchDown += Renderer_TouchDown;
-            Renderer.TouchMove += Renderer_TouchMove;
-            Renderer.TouchLeave += Renderer_TouchLeave;
-            Renderer.TouchUp += Renderer_TouchUp;
-
-            Renderer.StylusEnter += Renderer_StylusEnter;
-            Renderer.StylusInAirMove += Renderer_StylusInAirMove;
-            Renderer.StylusLeave += Renderer_StylusLeave;
-            Renderer.StylusDown += Renderer_StylusDown;
-            Renderer.StylusMove += Renderer_StylusMove;
-            Renderer.StylusUp += Renderer_StylusUp;
-
-            Renderer.Focusable = true;
-            Renderer.FocusVisualStyle = null;
-
+            InitializeRenderer();
             InitGL();
-
-
-            Program.Page_Editor.Border_ViewportBox.Child = Program.Editor.Renderer;
-            Program.Page_Editor.Run_Framerate.SetBinding(WPF.Documents.Run.TextProperty, new WPFD.Binding() { Source = Program.Editor.Renderer, Path = new WPF.PropertyPath("Framerate"), Mode = WPFD.BindingMode.OneWay });
-
 
 
             SetTransparencyMode(TransparencyMode.All);
@@ -3376,6 +3433,154 @@ namespace MCSkinn.Scripts
             InvalidateRenderer();
         }
 
+        public bool IsCompatibilityModeOn;
+
+        private void InitializeRenderer()
+        {
+            if (IsCompatibilityModeOn)
+            {
+
+                Program.Log(LogType.Load, "Initializing renderer, compatibility mode is ON", "Editor.InitializeRenderer()");
+             
+                // set up the GL control
+                var mode = new GraphicsMode();
+
+                reset:
+
+                RendererControl =
+                    new GLControl(new GraphicsMode(mode.ColorFormat, mode.Depth, mode.Stencil, 0));
+
+                if (RendererControl.Context == null)
+                {
+                    mode = new GraphicsMode();
+                    goto reset;
+                }
+
+
+                RendererControl.BackColor = Color.Black;
+                RendererControl.Dock = DockStyle.Fill;
+                RendererControl.Location = new Point(0, 25);
+                RendererControl.Name = "rendererControl";
+                RendererControl.Size = new Size(641, 580);
+                RendererControl.TabIndex = 4;
+
+                RendererControl.Paint += RendererControl_Paint;
+                RendererControl.Resize += RendererControl_Resize;
+                RendererControl.MouseMove += RendererControl_MouseMove;
+                RendererControl.MouseDown += RendererControl_MouseDown;
+                RendererControl.MouseUp += RendererControl_MouseUp;
+                RendererControl.MouseWheel += RendererControl_MouseWheel;
+
+                WindowsFormsHost_RenderHost = new System.Windows.Forms.Integration.WindowsFormsHost();
+                WindowsFormsHost_RenderHost.Child = RendererControl;
+
+                Program.Page_Editor.Border_ViewportBox.Child = WindowsFormsHost_RenderHost;
+
+                RenderMakeCurrent();
+                InvalidateRenderer();
+
+
+                Program.Page_Editor.Border_Library.CornerRadius = new WPF.CornerRadius(0);
+                Program.Page_Editor.Border_ViewportBackground.CornerRadius = new WPF.CornerRadius(0);
+                Program.Page_Editor.Border_ViewportBackground.UseLayoutRounding = true;
+                Program.Page_Editor.Border_ViewportBackground.SnapsToDevicePixels = true;
+            }
+            else
+            {
+                Program.Log(LogType.Info, "Initializing renderer, compatibility mode is OFF", "Editor.InitializeRenderer()");
+
+                Renderer = new OpenTK.WPF.OtkWpfControl(true);
+                Renderer.RenderScale = GlobalSettings.RenderScale;
+                Renderer.OpenGLDraw += Renderer_OpenGLDraw;
+                Renderer.MouseDown += Renderer_MouseDown;
+                Renderer.MouseMove += Renderer_MouseMove;
+                Renderer.MouseUp += Renderer_MouseUp;
+                Renderer.MouseLeave += Renderer_MouseLeave;
+                Renderer.SizeChanged += Renderer_SizeChanged;
+                Renderer.MouseWheel += Renderer_MouseWheel;
+                Renderer.MouseEnter += Renderer_MouseEnter;
+
+                Renderer.IsManipulationEnabled = GlobalSettings.IsManipulationEnabled;
+                Renderer.ManipulationStarting += Renderer_ManipulationStarting;
+                Renderer.ManipulationDelta += Renderer_ManipulationDelta;
+                Renderer.ManipulationCompleted += Renderer_ManipulationCompleted;
+
+                Renderer.TouchDown += Renderer_TouchDown;
+                Renderer.TouchMove += Renderer_TouchMove;
+                Renderer.TouchLeave += Renderer_TouchLeave;
+                Renderer.TouchUp += Renderer_TouchUp;
+
+                Renderer.StylusEnter += Renderer_StylusEnter;
+                Renderer.StylusInAirMove += Renderer_StylusInAirMove;
+                Renderer.StylusLeave += Renderer_StylusLeave;
+                Renderer.StylusDown += Renderer_StylusDown;
+                Renderer.StylusMove += Renderer_StylusMove;
+                Renderer.StylusUp += Renderer_StylusUp;
+
+                Renderer.Focusable = true;
+                Renderer.FocusVisualStyle = null;
+
+                Program.Page_Editor.Border_ViewportBox.Child = Program.Editor.Renderer;
+                Program.Page_Editor.Run_Framerate.SetBinding(WPF.Documents.Run.TextProperty, new WPFD.Binding() { Source = Program.Editor.Renderer, Path = new WPF.PropertyPath("Framerate"), Mode = WPFD.BindingMode.OneWay });
+
+            }
+
+            IsRendererInitialized = true;
+        }
+
+        #region Compatibility Mode
+        private void RendererControl_MouseWheel(object? sender, MouseEventArgs e)
+        {
+            if (Program.Page_Editor?.IsViewportError == true)
+                return;
+    
+            Renderer_MouseWheel(sender, new WPFI.MouseWheelEventArgs(WPFI.Mouse.PrimaryDevice, 0, e.Delta));
+        }
+
+        private void RendererControl_MouseUp(object? sender, MouseEventArgs e)
+        {
+            if (Program.Page_Editor?.IsViewportError == true)
+                return;
+
+            mousePos = new Point(e.X, e.Y);
+            Renderer_MouseUp(sender, new WPFI.MouseButtonEventArgs(WPFI.Mouse.PrimaryDevice, 0, e.Button.ToWpf()));
+        }
+
+
+        private void RendererControl_MouseDown(object? sender, MouseEventArgs e)
+        {
+            if (Program.Page_Editor?.IsViewportError == true)
+                return;
+
+            mousePos = new Point(e.X, e.Y);
+            Renderer_MouseDown(sender, new WPFI.MouseButtonEventArgs(WPFI.Mouse.PrimaryDevice, 0, e.Button.ToWpf()));
+        }
+
+        private void RendererControl_Resize(object? sender, EventArgs e)
+        {
+            RenderMakeCurrent();
+
+            CalculateMatrices();
+
+            InvalidateRenderer();
+        }
+
+        private void RendererControl_MouseMove(object? sender, MouseEventArgs e)
+        {
+            if (Program.Page_Editor?.IsViewportError == true)
+                return;
+
+            mousePos = new Point(e.X, e.Y);
+            Renderer_MouseMove(sender, new WPFI.MouseEventArgs(WPFI.Mouse.PrimaryDevice, 0));
+        }
+
+        private void RendererControl_Paint(object? sender, PaintEventArgs e)
+        {
+            rendererControl_Paint(sender, e);
+        }
+        #endregion
+
+        public System.Windows.Forms.Integration.WindowsFormsHost WindowsFormsHost_RenderHost;
 
         private void Renderer_StylusInAirMove(object sender, WPFI.StylusEventArgs e)
         {
@@ -3570,9 +3775,10 @@ namespace MCSkinn.Scripts
 
         private void Renderer_MouseWheel(object sender, WPFI.MouseWheelEventArgs e)
         {
-            WPFI.Keyboard.Focus(Renderer);
+            if (Renderer != null)
+                WPFI.Keyboard.Focus(Renderer);
 
-            CheckMouse(Renderer.GetMousePointAtRenderer());
+            CheckMouse(GetRenderCursorPos());
 
             if (_currentViewMode == ViewMode.Perspective || _currentViewMode == ViewMode.Hybrid && _mouseIn3D)
                 _3DZoom += e.Delta / 50;
@@ -3589,7 +3795,8 @@ namespace MCSkinn.Scripts
 
         private void Renderer_MouseUp(object sender, WPFI.MouseButtonEventArgs e)
         {
-            WPFI.Keyboard.Focus(Renderer);
+            if (Renderer != null)
+                WPFI.Keyboard.Focus(Renderer);
 
             Skin skin = _lastSkin;
 
@@ -3611,7 +3818,7 @@ namespace MCSkinn.Scripts
                             currentSkin = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height);
                             currentSkin.Load();
 
-                            if (_selectedTool.Tool.EndClick(currentSkin, skin, e.GetPosition(Renderer).W2D(), e.ChangedButton))
+                            if (_selectedTool.Tool.EndClick(currentSkin, skin, GetRenderCursorPos(), e.ChangedButton))
                             {
                                 SetCanSave(true);
                                 skin.IsDirty = true;
@@ -3621,7 +3828,7 @@ namespace MCSkinn.Scripts
                             SetPartTransparencies();
                         }
                         else
-                            _tools[(int)ViewportTool.Camera].Tool.EndClick(currentSkin, _lastSkin, e.GetPosition(Renderer).W2D(), e.ChangedButton);
+                            _tools[(int)ViewportTool.Camera].Tool.EndClick(currentSkin, _lastSkin, GetRenderCursorPos(), e.ChangedButton);
                     }
                 }
                 catch (Exception ex)
@@ -3641,6 +3848,8 @@ namespace MCSkinn.Scripts
 
         private void Renderer_MouseMove(object sender, WPFI.MouseEventArgs e)
         {
+            if (Renderer != null)
+                WPFI.Keyboard.Focus(Renderer);
 
 
             Skin skin = _lastSkin;
@@ -3648,7 +3857,7 @@ namespace MCSkinn.Scripts
             if (skin == null)
                 return;
 
-            _isValidPick = GetPick((int)Renderer.GetMousePointAtRenderer().X, (int)Renderer.GetMousePointAtRenderer().Y, out _pickPosition);
+            _isValidPick = GetPick(GetRenderCursorPos().X, GetRenderCursorPos().Y, out _pickPosition);
 
             using (var backup = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height))
             {
@@ -3658,16 +3867,16 @@ namespace MCSkinn.Scripts
                 {
                     if (_mouseIsDown || isTouchDown)
                     {
-                        if (e.LeftButton == WPFI.MouseButtonState.Pressed && (!isTouchDown || !GlobalSettings.StylusToDraw))
+                        if ((e.LeftButton == WPFI.MouseButtonState.Pressed || Control.MouseButtons.HasFlag(MouseButtons.Left)) && (!isTouchDown || !GlobalSettings.StylusToDraw))
                         {
-                            _selectedTool.Tool.MouseMove(_lastSkin, e.GetPosition(Renderer).W2D());
-                            UseToolOnViewport((int)Renderer.GetMousePointAtRenderer().X, (int)Renderer.GetMousePointAtRenderer().Y);
+                            _selectedTool.Tool.MouseMove(_lastSkin, GetRenderCursorPos());
+                            UseToolOnViewport((int)GetRenderCursorPos().X, (int)GetRenderCursorPos().Y);
                         }
                         else
-                            _tools[(int)ViewportTool.Camera].Tool.MouseMove(_lastSkin, e.GetPosition(Renderer).W2D());
+                            _tools[(int)ViewportTool.Camera].Tool.MouseMove(_lastSkin, GetRenderCursorPos());
                     }
 
-                    _mousePoint = Renderer.GetMousePointAtRenderer().W2D();
+                    _mousePoint = GetRenderCursorPos();
 
                     InvalidateRenderer();
                 }
@@ -3685,18 +3894,19 @@ namespace MCSkinn.Scripts
 
         private void Renderer_MouseDown(object sender, WPFI.MouseButtonEventArgs e)
         {
-            WPFI.Keyboard.Focus(Renderer);
+            if(Renderer != null)
+                WPFI.Keyboard.Focus(Renderer);
 
             Skin skin = _lastSkin;
 
             if (skin == null)
                 return;
 
-            CheckMouse(Renderer.GetMousePointAtRenderer());
+            CheckMouse(GetRenderCursorPos());
 
-            _mousePoint = Renderer.GetMousePointAtRenderer().W2D();
+            _mousePoint = GetRenderCursorPos();
 
-            if (e.Device != null && e.OriginalSource != null)
+            if (e.Device != null)
                 _mouseIsDown = true;
 
             //_isValidPick = GetPick(e.X, e.Y, ref _pickPosition);
@@ -3710,13 +3920,13 @@ namespace MCSkinn.Scripts
                     if (e.ChangedButton == WPFI.MouseButton.Left && !isTouchDown)
                     {
                         if (_isValidPick)
-                            _selectedTool.Tool.BeginClick(_lastSkin, e.GetPosition(Renderer).W2D(), e.ChangedButton);
+                            _selectedTool.Tool.BeginClick(_lastSkin, GetRenderCursorPos(), e.ChangedButton);
                         else
-                            _selectedTool.Tool.BeginClick(_lastSkin, e.GetPosition(Renderer).W2D(), e.ChangedButton);
-                        UseToolOnViewport((int)Renderer.GetMousePointAtRenderer().X, (int)Renderer.GetMousePointAtRenderer().Y);
+                            _selectedTool.Tool.BeginClick(_lastSkin, GetRenderCursorPos(), e.ChangedButton);
+                        UseToolOnViewport(GetRenderCursorPos().X, GetRenderCursorPos().Y);
                     }
                     else
-                        _tools[(int)ViewportTool.Camera].Tool.BeginClick(_lastSkin, e.GetPosition(Renderer).W2D(), e.ChangedButton);
+                        _tools[(int)ViewportTool.Camera].Tool.BeginClick(_lastSkin, GetRenderCursorPos(), e.ChangedButton);
                 }
                 catch (Exception ex)
                 {
@@ -3734,10 +3944,18 @@ namespace MCSkinn.Scripts
         bool _refreshNeeded = true;
         public bool refreshNeeded
         {
-            get { return _refreshNeeded; }
+            get 
+            {
+                if (IsCompatibilityModeOn)
+                    return false;
+
+                return _refreshNeeded; 
+            }
             set
             {
                 _refreshNeeded = value;
+
+                if(Renderer != null)
                 Renderer.IsRenderingPaused = !value;
             }
         }

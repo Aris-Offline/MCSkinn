@@ -1,13 +1,13 @@
-﻿using Inkore.Coreworks;
+﻿using iNKORE.Coreworks;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Inkore.Coreworks.Windows.Helpers;
+using iNKORE.Coreworks.Windows.Helpers;
 using System.Diagnostics;
 using MCSkinn.Scripts;
 using System;
-using Inkore.Coreworks.Windows.Presentation;
+using iNKORE.Coreworks.Windows.Presentation;
 
 namespace MCSkinn.Dialogs
 {

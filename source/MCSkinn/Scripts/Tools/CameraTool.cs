@@ -3,13 +3,13 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/InkoreStudios/MCSkinn
+//    https://github.com/iNKOREStudios/MCSkinn
 //
 
 using System.Drawing;
 using WinForms = System.Windows.Forms;
 using WPF = System.Windows;
-using Inkore.Coreworks.Windows.Helpers;
+using iNKORE.Coreworks.Windows.Helpers;
 using MCSkinn.Scripts.Paril.OpenGL;
 
 namespace MCSkinn.Scripts.Tools
@@ -43,7 +43,7 @@ namespace MCSkinn.Scripts.Tools
             {
                 Rectangle screenBounds = _clickedScreen.Bounds;
                 bool wasWrapped = false;
-                Point oldMouseOnScreen = Program.Editor.Renderer.PointToScreen(_oldMouse.D2W()).W2D();
+                Point oldMouseOnScreen = Program.Editor.IsCompatibilityModeOn ? Program.Editor.RendererControl.PointToScreen(_oldMouse) : Program.Editor.Renderer.PointToScreen(_oldMouse.ToWpfRect()).ToDrawingRectangle();
 
                 if (position.X <= screenBounds.X && oldMouseOnScreen.X > screenBounds.X)
                 {
@@ -88,12 +88,14 @@ namespace MCSkinn.Scripts.Tools
 
         public static WinForms.MouseButtons GetChangedButton(WPF.Input.MouseButtonState state = WPF.Input.MouseButtonState.Pressed)
         {
-            if (WPF.Input.Mouse.LeftButton == state)
+            if (WPF.Input.Mouse.LeftButton == state || WinForms.Control.MouseButtons.HasFlag(WinForms.MouseButtons.Left))
                 return WinForms.MouseButtons.Left;
-            else if (WPF.Input.Mouse.MiddleButton == state)
+            else if (WPF.Input.Mouse.MiddleButton == state || WinForms.Control.MouseButtons.HasFlag(WinForms.MouseButtons.Middle))
                 return WinForms.MouseButtons.Middle;
-            else
+            else if (WPF.Input.Mouse.RightButton == state || WinForms.Control.MouseButtons.HasFlag(WinForms.MouseButtons.Right))
                 return WinForms.MouseButtons.Right;
+            else
+                return WinForms.MouseButtons.None;
         }
 
         public bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y)

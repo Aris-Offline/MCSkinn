@@ -1,4 +1,4 @@
-﻿using Inkore.UI.WPF.Modern.Controls;
+﻿using iNKORE.UI.WPF.Modern.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +21,10 @@ namespace MCSkinn.Dialogs
     /// </summary>
     public partial class GeneralQuestionDialog : ContentDialog
     {
+        public GeneralQuestionDialog()
+        {
+            InitializeComponent();
+        }
         public GeneralQuestionDialog(string title, string content, ContentDialogButton defaultButton = ContentDialogButton.Primary, string button1text = "C_YES", string button2text = "C_NO", string buttonCanceltext = null)
         {
             InitializeComponent();

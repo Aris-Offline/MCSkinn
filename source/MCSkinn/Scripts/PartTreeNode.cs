@@ -1,4 +1,4 @@
-﻿using Inkore.Coreworks.Helpers;
+﻿using iNKORE.Coreworks.Helpers;
 using MCSkinn.Scripts.Paril.OpenGL;
 using System;
 using System.Collections.Generic;

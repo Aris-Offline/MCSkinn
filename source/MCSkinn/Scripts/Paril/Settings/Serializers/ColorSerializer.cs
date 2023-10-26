@@ -3,10 +3,10 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/InkoreStudios/MCSkinn
+//    https://github.com/iNKOREStudios/MCSkinn
 //
 
-using Inkore.Coreworks.Windows.Helpers;
+using iNKORE.Coreworks.Windows.Helpers;
 using System.Drawing;
 
 namespace MCSkinn.Scripts.Paril.Settings.Serializers
@@ -31,7 +31,7 @@ namespace MCSkinn.Scripts.Paril.Settings.Serializers
         {
             try
             {
-                return Inkore.Coreworks.Windows.Helpers.TypeHelper.HexToDrawingColor(str);
+                return iNKORE.Coreworks.Windows.Helpers.TypeHelper.HexToDrawingColor(str);
             }
             catch
             {

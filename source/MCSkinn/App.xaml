@@ -61,7 +61,7 @@
                     <StaticResource x:Key="PivotTitleFontFamily" ResourceKey="DefaultFontFamily" />
                 </ResourceDictionary>-->
                 <ResourceDictionary Source="/Themes/PathIcons.xaml"/>
-                <ResourceDictionary Source="/Themes/InkoreStudios.xaml"/>
+                <ResourceDictionary Source="/Themes/iNKOREStudios.xaml"/>
                 <ResourceDictionary Source="/Themes/MCSkinnIcon.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>

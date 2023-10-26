@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using OpenTK;
 using OpenTK.Graphics;
 using System.Windows.Threading;
-using Inkore.UI.WPF.Modern.Controls;
+using iNKORE.UI.WPF.Modern.Controls;
 using System.Windows.Input;
 using MCSkinn.Scripts.Paril.OpenGL;
 

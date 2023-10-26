@@ -2,7 +2,7 @@
 //    MCSkinn, a 3d skin management studio for Minecraft
 //    by NotYoojun.! | Copyright (C) 2023 iNKORE! Studios
 //
-//    Repo: https://github.com/InkoreStudios/MCSkinn
+//    Repo: https://github.com/iNKOREStudios/MCSkinn
 //
 
 using System;
@@ -19,11 +19,11 @@ using MCSkinn.Scripts.Paril.OpenGL;
 using Microsoft.VisualBasic.FileIO;
 using OpenTK;
 using MCSkinn.Scripts.Paril.Drawing;
-using Inkore.Coreworks;
+using iNKORE.Coreworks;
 using System.ComponentModel;
 using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
-using Inkore.Coreworks.Windows.Helpers;
+using iNKORE.Coreworks.Windows.Helpers;
 using System.Xml.Linq;
 
 namespace MCSkinn.Scripts

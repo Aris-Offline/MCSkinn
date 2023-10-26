@@ -2,7 +2,7 @@
 using System.Drawing;
 using OpenTK.Graphics.OpenGL4;
 using MCSkinn.Scripts.Paril.Drawing;
-using Inkore.Coreworks;
+using iNKORE.Coreworks;
 
 namespace MCSkinn.Scripts.Paril.OpenGL
 {

@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Inkore.Coreworks.Windows.Helpers;
+using iNKORE.Coreworks.Windows.Helpers;
 
 namespace MCSkinn.Controls
 {
@@ -50,7 +50,7 @@ namespace MCSkinn.Controls
             System.Windows.Forms.ColorDialog d = new System.Windows.Forms.ColorDialog();
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                this.Color = d.Color.D2W();
+                this.Color = d.Color.ToWpfColor();
                 RaiseEvent(new RoutedEventArgs(ColorPickedEvent));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Color"));
             }

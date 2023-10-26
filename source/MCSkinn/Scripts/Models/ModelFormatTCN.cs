@@ -12,7 +12,7 @@ using System.Reflection.Metadata;
 using System.Xml.Linq;
 using Windows.ApplicationModel.Appointments.DataProvider;
 using System.Windows.Media;
-using Inkore.Coreworks.Helpers;
+using iNKORE.Coreworks.Helpers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
@@ -337,7 +337,7 @@ namespace MCSkinn.Scripts.Models
                                                     }
                                                     break;
                                                 case "inflate":
-                                                    shape.RenderData.Scale = (float)Inkore.Coreworks.Helpers.TypeHelper.ToDouble(((JValue)p_cubeChild.Value).Value);
+                                                    shape.RenderData.Scale = (float)iNKORE.Coreworks.Helpers.TypeHelper.ToDouble(((JValue)p_cubeChild.Value).Value);
                                                     break;
                                                 case "mirror":
                                                     if (((JValue)p_cubeChild.Value).Value is bool)
@@ -518,10 +518,10 @@ namespace MCSkinn.Scripts.Models
                                                 tcnModel.Name =  Name = (p_DescriptionChild.Value as JValue)?.Value as string;
                                                 break;
                                             case "texture_width":
-                                                tcnModel.TextureSize.X = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
+                                                tcnModel.TextureSize.X = iNKORE.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
                                                 break;
                                             case "texture_height":
-                                                tcnModel.TextureSize.Y = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
+                                                tcnModel.TextureSize.Y = iNKORE.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
                                                 break;
                                             case "default_texture":
                                                 tcnModel.DefaultTexture = (p_DescriptionChild.Value as JValue)?.Value as string;
@@ -568,10 +568,10 @@ namespace MCSkinn.Scripts.Models
                             switch (p_geometryChild.Name.ToLower())
                             {
                                 case "texturewidth":
-                                    tcnModel.TextureSize.X = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_geometryChild.Value as JValue)?.Value);
+                                    tcnModel.TextureSize.X = iNKORE.Coreworks.Helpers.TypeHelper.ToInt32((p_geometryChild.Value as JValue)?.Value);
                                     break;
                                 case "textureheight":
-                                    tcnModel.TextureSize.Y = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_geometryChild.Value as JValue)?.Value);
+                                    tcnModel.TextureSize.Y = iNKORE.Coreworks.Helpers.TypeHelper.ToInt32((p_geometryChild.Value as JValue)?.Value);
                                     break;
                                 case "default_texture":
                                     tcnModel.DefaultTexture = (p_geometryChild.Value as JValue)?.Value as string;
@@ -601,10 +601,10 @@ namespace MCSkinn.Scripts.Models
                                                 Name = (p_DescriptionChild.Value as JValue)?.Value as string;
                                                 break;
                                             case "texture_width":
-                                                tcnModel.TextureSize.X = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
+                                                tcnModel.TextureSize.X = iNKORE.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
                                                 break;
                                             case "texture_height":
-                                                tcnModel.TextureSize.Y = Inkore.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
+                                                tcnModel.TextureSize.Y = iNKORE.Coreworks.Helpers.TypeHelper.ToInt32((p_DescriptionChild.Value as JValue)?.Value);
                                                 break;
                                             case "default_texture":
                                                 tcnModel.DefaultTexture = (p_DescriptionChild.Value as JValue)?.Value as string;

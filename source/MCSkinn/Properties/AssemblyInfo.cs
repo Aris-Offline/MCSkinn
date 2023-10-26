@@ -11,7 +11,7 @@ using System.Windows.Markup;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("NotYoojun.! from iNKORE!")]
 [assembly: AssemblyProduct("MCSkinn")]
-[assembly: AssemblyCopyright("NotYoojun | Copyright © iNKORE! 2023")]
+[assembly: AssemblyCopyright("NotYoojun | Copyright © 2023 iNKORE!")]
 [assembly: AssemblyTrademark("MCSkinn | iNKORE!")]
 [assembly: AssemblyCulture("")]
 
@@ -30,5 +30,5 @@ using System.Windows.Markup;
 //      生成号
 //      修订号
 //
-[assembly: AssemblyVersion("1.2.5.0")]
-[assembly: AssemblyFileVersion("1.2.5.0")]
+[assembly: AssemblyVersion("1.2.6.0")]
+[assembly: AssemblyFileVersion("1.2.6.0")]

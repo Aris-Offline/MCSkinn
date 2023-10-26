@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WPF = System.Windows;
 using IO = System.IO;
-using Inkore.Coreworks;
+using iNKORE.Coreworks;
 
 namespace MCSkinn.Scripts
 {
@@ -118,7 +118,7 @@ namespace MCSkinn.Scripts
                     return;
                 }
 
-                Program.Log(Inkore.Coreworks.LogType.Load, "Initializing workfolder: " + x, "Workfolder.Initialize()");
+                Program.Log(iNKORE.Coreworks.LogType.Load, "Initializing workfolder: " + x, "Workfolder.Initialize()");
 
                 var expanded = IO.Path.GetFullPath(x);
                 var folder = new FolderNode(expanded, null, true, this) { RootDir = expanded };
@@ -141,7 +141,7 @@ namespace MCSkinn.Scripts
             }
         }
 
-        public Inkore.UI.WPF.Modern.Controls.NavigationViewItem NavigationItem { get; set; }
+        public iNKORE.UI.WPF.Modern.Controls.NavigationViewItem NavigationItem { get; set; }
 
     }
 }
