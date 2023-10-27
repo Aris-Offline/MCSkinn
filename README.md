@@ -63,22 +63,15 @@
 
 # 📥 Downloads
 
-- **GitHub:** https://github.com/InkoreStudios/MCSkinn/releases
+- Download this app on iNKORE Hub
+- If you don't have iNKORE Hub yet, here is the download link:
 
-    Check out the latest release!
+    https://inkore.net/hub-windows
+  
+- If you have it already, you can download MCSkinn directly from Hub
 
-- **Get on Microsoft Store**
 
-  https://apps.microsoft.com/store/detail/9N8SJT329HH1
 
-  <a href="https://apps.microsoft.com/store/detail/9N8SJT329HH1?launch=true&mode=mini">
-	  <img src="https://get.microsoft.com/images/en-US%20dark.svg"/>
-  </a>
-
-- **Lanzou (蓝奏云):** https://wwyo.lanzouy.com/b04dw34tg 
-
-    If there is a password required, it should be `bynotyoojun`.
-    
 
 # 🙋🏻‍♂️ Contribution
 
