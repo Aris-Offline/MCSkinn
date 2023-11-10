@@ -36,73 +36,73 @@ namespace MCSkinn.Pages
 
         public void RegisterLanguage()
         {
-            LanguageWpf.Register(this, TabItem_Options, TabItem.HeaderProperty);
-            LanguageWpf.Register(this, TabItem_Hotkeys, TabItem.HeaderProperty);
+            LanguageWpf.Instance.Register(this, TabItem_Options, TabItem.HeaderProperty);
+            LanguageWpf.Instance.Register(this, TabItem_Hotkeys, TabItem.HeaderProperty);
 
-            LanguageWpf.Register(this, Button_Reset_Enabled, ContentProperty);
-            LanguageWpf.Register(this, HyperlinkButton_ChangeSettings_Language, HyperlinkButton.ContentProperty);
+            LanguageWpf.Instance.Register(this, Button_Reset_Enabled, ContentProperty);
+            LanguageWpf.Instance.Register(this, HyperlinkButton_ChangeSettings_Language, HyperlinkButton.ContentProperty);
             
-            LanguageWpf.Register(this, TextBlock_Language, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_Language_Description, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_Language_Author, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_Language_Version, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_ThemeMode, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_ThemeMode_Description, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_Backdrop, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_Backdrop_Description, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_RenderScale, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_RenderScale_Description, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_UIScale, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_UIScale_Description, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_TextureOverlay, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_TextureOverlay_Description, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_TextureOverlay_LineColor, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_TextureOverlay_LineSize, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_TextureOverlay_TextColor, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_TextureOverlay_TextSize, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_PixelGrid, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_PixelGrid_Description, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_PixelGrid_Color, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_RememberPrefers, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_RememberPrefers_Description, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_IsManipulationEnabled, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_IsManipulationEnabled_Description, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_StylusToDraw, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_StylusToDraw_Description, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_CompatibilityMode_RestartWarning, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_Backdrop_UnavailableInCompatibilityMode, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_CompatibilityMode, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_CompatibilityMode_Description, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_Reset, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_Reset_Description, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Language, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Language_Description, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Language_Author, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Language_Version, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_ThemeMode, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_ThemeMode_Description, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Backdrop, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Backdrop_Description, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_RenderScale, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_RenderScale_Description, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_UIScale, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_UIScale_Description, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_TextureOverlay, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_TextureOverlay_Description, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_TextureOverlay_LineColor, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_TextureOverlay_LineSize, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_TextureOverlay_TextColor, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_TextureOverlay_TextSize, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_PixelGrid, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_PixelGrid_Description, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_PixelGrid_Color, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_RememberPrefers, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_RememberPrefers_Description, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_IsManipulationEnabled, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_IsManipulationEnabled_Description, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_StylusToDraw, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_StylusToDraw_Description, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_CompatibilityMode_RestartWarning, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Backdrop_UnavailableInCompatibilityMode, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_CompatibilityMode, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_CompatibilityMode_Description, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Reset, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Reset_Description, TextBlock.TextProperty);
 
-            LanguageWpf.Register(this, TextBlock_Section_General, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_Section_Appearance, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_Section_Rendering, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_Section_Advanced, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Section_General, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Section_Appearance, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Section_Rendering, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Section_Advanced, TextBlock.TextProperty);
 
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_0, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_1, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_2, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_3, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_4, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_5, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_6, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_7, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_8, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_9, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_10, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_11, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_12, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_13, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_14, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_15, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_16, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_17, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_18, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_19, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_20, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_HotkeyCommand_21, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_0, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_1, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_2, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_3, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_4, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_5, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_6, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_7, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_8, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_9, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_10, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_11, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_12, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_13, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_14, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_15, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_16, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_17, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_18, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_19, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_20, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_HotkeyCommand_21, TextBlock.TextProperty);
             
         }
 
@@ -115,15 +115,15 @@ namespace MCSkinn.Pages
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
-            LanguageWpf.UnregisterContainer(this);
+            LanguageWpf.Instance.UnregisterContainer(this);
         }
 
         public void LoadSettings()
         {
             isLoading = true;
 
-            TextBlock_Language_Author_Value.Text = LanguageLoader.Current.Author;
-            TextBlock_Language_Version_Value.Text = LanguageLoader.Current.LangVersion;
+            TextBlock_Language_Author_Value.Text = LanguageManager.Instance.Current.Author;
+            TextBlock_Language_Version_Value.Text = LanguageManager.Instance.Current.LangVersion;
 
             Slider_RenderScale.Value = GlobalSettings.RenderScale;
          

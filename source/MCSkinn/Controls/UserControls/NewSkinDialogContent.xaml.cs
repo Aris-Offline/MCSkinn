@@ -1,5 +1,4 @@
-﻿using GongSolutions.Wpf.DragDrop.Utilities;
-using iNKORE.Coreworks.Helpers;
+﻿using iNKORE.Coreworks.Helpers;
 using iNKORE.Coreworks.Localization;
 using iNKORE.Coreworks.Windows.Presentation;
 using MCSkinn.Forms.Controls;
@@ -337,13 +336,13 @@ namespace MCSkinn.Dialogs
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            LanguageWpf.Register(this, TabItem_SourceSelector_Empty, TabItem.HeaderProperty);
-            LanguageWpf.Register(this, TabItem_SourceSelector_Local, TabItem.HeaderProperty);
+            LanguageWpf.Instance.Register(this, TabItem_SourceSelector_Empty, TabItem.HeaderProperty);
+            LanguageWpf.Instance.Register(this, TabItem_SourceSelector_Local, TabItem.HeaderProperty);
          
-            LanguageWpf.Register(this, TextBlock_Dropfile, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_EmptySkin, TextBlock.TextProperty);
-            LanguageWpf.Register(this, TextBlock_SaveTo, TextBlock.TextProperty);
-            LanguageWpf.Register(this, CheckBox_EmptySkin_UseTemplate, ContentProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_Dropfile, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_EmptySkin, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, TextBlock_SaveTo, TextBlock.TextProperty);
+            LanguageWpf.Instance.Register(this, CheckBox_EmptySkin_UseTemplate, ContentProperty);
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
@@ -353,7 +352,7 @@ namespace MCSkinn.Dialogs
 
         public void UnregisterLangauge()
         {
-            LanguageWpf.UnregisterContainer(this);
+            LanguageWpf.Instance.UnregisterContainer(this);
         }
     }
 }

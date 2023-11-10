@@ -474,6 +474,34 @@ namespace MCSkinn.Scripts
 
         }
 
+        public bool? Contains(LibraryNode child)
+        {
+            if (this == child)
+                return null;
+
+            if (this is FolderNode)
+            {
+                foreach (var node in Nodes)
+                {
+                    if (node is FolderNode folder)
+                    {
+                        if (folder.Contains(child) == true)
+                            return true;
+                    }
+                    else
+                    {
+                        if (node == child) return true;
+                    }
+                }
+            }
+            else
+            {
+                return false;
+            }
+
+            return false;
+        }
+
         public void RaisePropertyChangedEvent(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

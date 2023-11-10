@@ -53,25 +53,25 @@ namespace MCSkinn.Pages
 
         Language LoadLanguages()
         {
-            LanguageLoader.LoadLanguages(GlobalSettings.FullPath_Languages);
+            LanguageManager.Instance.LoadLanguages(GlobalSettings.FullPath_Languages);
 
             Language useLanguage = null;
             try
             {
-                useLanguage = LanguageLoader.FindLanguage(Program.Settings_Shared.Language);
+                useLanguage = LanguageManager.Instance.FindLanguage(Program.Settings_Shared.Language);
 
                 // stage 1 (prelim): if no language, see if our languages contain it
                 if (string.IsNullOrEmpty(Program.Settings_Shared.Language))
                 {
-                    useLanguage = LanguageLoader.FindLanguage(CultureInfo.CurrentUICulture.Name);
+                    useLanguage = LanguageManager.Instance.FindLanguage(CultureInfo.CurrentUICulture.Name);
 
                     if(useLanguage == null && !CultureInfo.CurrentUICulture.IsNeutralCulture)
-                        useLanguage = LanguageLoader.FindLanguage(CultureInfo.CurrentUICulture.Parent?.Name);
+                        useLanguage = LanguageManager.Instance.FindLanguage(CultureInfo.CurrentUICulture.Parent?.Name);
                 }
 
                 // stage 3: use English file, if it exists
                 if (useLanguage == null)
-                    useLanguage = LanguageLoader.FindLanguage("en-us");
+                    useLanguage = LanguageManager.Instance.FindLanguage("en-us");
             }
             catch(Exception ex)
             {
@@ -94,7 +94,7 @@ namespace MCSkinn.Pages
             using (var reader = new StreamReader(new MemoryStream(Properties.Resources.English), Encoding.Unicode))
             {
                 Language lang = iNKORE.Coreworks.Localization.Language.Parse(reader, "en-us.lang");
-                LanguageLoader.Languages.Add(lang);
+                LanguageManager.Instance.Languages.Add(lang);
                 return lang;
             }
         }
@@ -139,7 +139,7 @@ namespace MCSkinn.Pages
 
                 Program.Editor.Initialize(language);
                 Program.Page_Editor.RegisterLanguage();
-                //LanguageWpf.Refresh();
+                //LanguageWpf.Instance.Refresh();
 
             }));
 
