@@ -1,0 +1,66 @@
+﻿<Window x:Class="MCSkinn.Dialogs.IncompleteInstallationDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+        xmlns:local="clr-namespace:MCSkinn.Dialogs"
+        mc:Ignorable="d"
+        Title="Incomplete Installation" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    
+    <Grid Margin="40" HorizontalAlignment="Center" VerticalAlignment="Center" Height="321">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TabControl x:Name="TabControl_Infos" Style="{StaticResource {x:Static ui:ThemeKeys.TabControlPivotStyleKey}}">
+            <TabItem x:Name="TabItem_Infos_EN" Header="English">
+                <ui:SimpleStackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20" Width="360" Margin="0,10,20,10">
+                    <TextBlock Text="Install incomplete" FontSize="24"/>
+
+                    <TextBlock TextWrapping="Wrap">
+                       <Run>Sorry, the MCSkinn installation seems to be incomplete.</Run>
+                       <LineBreak/>
+                       <LineBreak/>
+                       <Run>Please check if you have installed iNKORE Hub and MCSkinn properly. Try reinstall this product. If this happens again, please contact our support for help.</Run>
+                       <LineBreak/>
+                       <LineBreak/>
+                       <Run>Contact: </Run>
+                       <Hyperlink NavigateUri="mailto:studios@inkore.net" Click="Hyperlink_Click">studios@inkore.net</Hyperlink>
+                    </TextBlock>
+
+                    <ui:SimpleStackPanel Orientation="Horizontal" Margin="0,20,0,0" Spacing="10">
+                        <Button x:Name="Button_Dismiss" Content="Close" Style="{StaticResource {x:Static ui:ThemeKeys.AccentButtonStyleKey}}" Padding="24,8,24,8" Click="Button_Dismiss_Click"/>
+                        <Button x:Name="Button_MoreInfo" Content="More info" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_MoreInfo_Click"/>
+                    </ui:SimpleStackPanel>
+                </ui:SimpleStackPanel>
+            </TabItem>
+            <TabItem x:Name="TabItem_Infos_ZH" Header="中文">
+                <ui:SimpleStackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20" Width="360" Margin="0,10,20,10">
+                    <TextBlock Text="不完整的安装" FontSize="24"/>
+
+                    <TextBlock TextWrapping="Wrap">
+                       <Run>对不起，MCSkinn 安装似乎不完整。</Run>
+                       <LineBreak/>
+                       <LineBreak/>
+                       <Run>请检查您是否正确安装了 iNKORE Hub 和 MCSkinn 并尝试重新安装此产品。如果再次发生这种情况，请联系我们的支持寻求帮助。</Run>
+                       <LineBreak/>
+                       <LineBreak/>
+                       <Run>联系我们: </Run>
+                       <Hyperlink NavigateUri="mailto:studios@inkore.net" Click="Hyperlink_Click">studios@inkore.net</Hyperlink>
+                    </TextBlock>
+
+                    <ui:SimpleStackPanel Orientation="Horizontal" Margin="0,20,0,0" Spacing="10">
+                        <Button Content="关闭" Style="{StaticResource {x:Static ui:ThemeKeys.AccentButtonStyleKey}}" Padding="24,8,24,8" Click="Button_Dismiss_Click"/>
+                        <Button Content="更多信息" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_MoreInfo_Click"/>
+                    </ui:SimpleStackPanel>
+                </ui:SimpleStackPanel>
+            </TabItem>
+        </TabControl>
+
+        <Border Grid.Column="1" Width="160" Background="{DynamicResource {x:Static ui:ThemeKeys.SystemAccentColorLight3BrushKey}}" TextElement.Foreground="{DynamicResource {x:Static ui:ThemeKeys.SystemAccentColorDark1BrushKey}}" CornerRadius="12" Margin="10,0,0,0">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ui:FontIcon Glyph="{x:Static ui:SegoeIcons.HeartBroken}" FontSize="48"/>
+            </Grid>
+        </Border>
+    </Grid></Window>

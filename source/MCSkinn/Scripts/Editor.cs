@@ -8,7 +8,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using MCSkinn.Forms.Controls;
 using MCSkinn.Properties;
 using iNKORE.Coreworks.Localization;
 using MCSkinn.Scripts.Models;
@@ -21,7 +20,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using KeyPressEventArgs = System.Windows.Forms.KeyPressEventArgs;
 using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
-using Brushes = MCSkinn.Forms.Controls.Brushes;
+using Brushes = MCSkinn.Scripts.Brushes;
 using Modern = iNKORE.UI.WPF.Modern;
 using WPF = System.Windows;
 using WPFC = System.Windows.Controls;
@@ -32,6 +31,7 @@ using WPFI = System.Windows.Input;
 using WPFD = System.Windows.Data;
 using MCSkinn.Scripts.Tools;
 using OpenTK.Graphics;
+using MCSkinn.Controls;
 
 namespace MCSkinn.Scripts
 {
