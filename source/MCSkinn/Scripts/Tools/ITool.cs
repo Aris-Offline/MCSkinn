@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/iNKOREStudios/MCSkinn
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System.Drawing;
@@ -15,11 +15,11 @@ namespace MCSkinn.Scripts.Tools
 {
     public interface ITool
     {
-        void BeginClick(Skin skin, Point p, WPF.Input.MouseButton button);
-        void MouseMove(Skin skin, Point p);
-        bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y);
-        bool RequestPreview(ColorGrabber pixels, Skin skin, int x, int y);
-        bool EndClick(ColorGrabber pixels, Skin skin, Point p, WPF.Input.MouseButton button);
+        void BeginClick(SkinNode skin, Point p, WPF.Input.MouseButton button);
+        void MouseMove(SkinNode skin, Point p);
+        bool MouseMoveOnSkin(ColorGrabber pixels, SkinNode skin, int x, int y);
+        bool RequestPreview(ColorGrabber pixels, SkinNode skin, int x, int y);
+        bool EndClick(ColorGrabber pixels, SkinNode skin, Point p, WPF.Input.MouseButton button);
         string GetStatusLabelText();
         void SelectedBrushChanged();
     }

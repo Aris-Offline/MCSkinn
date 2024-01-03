@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/iNKOREStudios/MCSkinn
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System.Drawing;
@@ -21,7 +21,7 @@ namespace MCSkinn.Scripts.Tools
 
         #region ITool Members
 
-        public void BeginClick(Skin skin, Point p, WPF.Input.MouseButton e)
+        public void BeginClick(SkinNode skin, Point p, WPF.Input.MouseButton e)
         {
             _oldMouse = p;
             _clickedScreen = WinForms.Screen.FromPoint(WinForms.Cursor.Position);
@@ -31,7 +31,7 @@ namespace MCSkinn.Scripts.Tools
         {
         }
 
-        public void MouseMove(Skin skin, Point p)
+        public void MouseMove(SkinNode skin, Point p)
         {
             var delta = new Point(p.X - _oldMouse.X, p.Y - _oldMouse.Y);
             Point position = WinForms.Cursor.Position;
@@ -98,17 +98,17 @@ namespace MCSkinn.Scripts.Tools
                 return WinForms.MouseButtons.None;
         }
 
-        public bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y)
+        public bool MouseMoveOnSkin(ColorGrabber pixels, SkinNode skin, int x, int y)
         {
             return false;
         }
 
-        public bool RequestPreview(ColorGrabber pixels, Skin skin, int x, int y)
+        public bool RequestPreview(ColorGrabber pixels, SkinNode skin, int x, int y)
         {
             return false;
         }
 
-        public bool EndClick(ColorGrabber pixels, Skin skin, Point p, WPF.Input.MouseButton button)
+        public bool EndClick(ColorGrabber pixels, SkinNode skin, Point p, WPF.Input.MouseButton button)
         {
             return false;
         }

@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/iNKOREStudios/MCSkinn
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System.Drawing;
@@ -18,11 +18,11 @@ namespace MCSkinn.Scripts.Tools
     {
         #region ITool Members
 
-        public void BeginClick(Skin skin, Point p, WPF.Input.MouseButton e)
+        public void BeginClick(SkinNode skin, Point p, WPF.Input.MouseButton e)
         {
         }
 
-        public void MouseMove(Skin skin, Point p)
+        public void MouseMove(SkinNode skin, Point p)
         {
         }
 
@@ -30,7 +30,7 @@ namespace MCSkinn.Scripts.Tools
         {
         }
 
-        public bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y)
+        public bool MouseMoveOnSkin(ColorGrabber pixels, SkinNode skin, int x, int y)
         {
             ColorPixel c = pixels[x, y];
             ColorManager oldColor = ColorManager.FromRGBA(c.Red, c.Green, c.Blue, c.Alpha);
@@ -42,12 +42,12 @@ namespace MCSkinn.Scripts.Tools
             return false;
         }
 
-        public bool RequestPreview(ColorGrabber pixels, Skin skin, int x, int y)
+        public bool RequestPreview(ColorGrabber pixels, SkinNode skin, int x, int y)
         {
             return false;
         }
 
-        public bool EndClick(ColorGrabber pixels, Skin skin, Point p, WPF.Input.MouseButton button)
+        public bool EndClick(ColorGrabber pixels, SkinNode skin, Point p, WPF.Input.MouseButton button)
         {
             return false;
         }

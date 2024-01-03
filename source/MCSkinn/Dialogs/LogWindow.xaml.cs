@@ -7,7 +7,7 @@ using iNKORE.Coreworks.Windows.Helpers;
 using System.Diagnostics;
 using MCSkinn.Scripts;
 using System;
-using iNKORE.Coreworks.Windows.Presentation;
+using iNKORE.UI.WPF.Helpers;
 
 namespace MCSkinn.Dialogs
 {

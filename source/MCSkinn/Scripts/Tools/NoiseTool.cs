@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/iNKOREStudios/MCSkinn
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System;
@@ -41,7 +41,7 @@ namespace MCSkinn.Scripts.Tools
             return Color.FromArgb(r.A, ColorSpaceHelper.HSBtoColor(hsv));
         }
 
-        public override void BeginClick(Skin skin, Point p, WPF.Input.MouseButton button)
+        public override void BeginClick(SkinNode skin, Point p, WPF.Input.MouseButton button)
         {
             _noise2 = new Random(_seed);
             base.BeginClick(skin, p, button);
@@ -52,7 +52,7 @@ namespace MCSkinn.Scripts.Tools
             return Color.White;
         }
 
-        public override bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y)
+        public override bool MouseMoveOnSkin(ColorGrabber pixels, SkinNode skin, int x, int y)
         {
             return MouseMoveOnSkin(pixels, skin, x, y, false);
         }
@@ -62,13 +62,13 @@ namespace MCSkinn.Scripts.Tools
             return Editor.GetLanguageString("T_NOISE");
         }
 
-        public override bool RequestPreview(ColorGrabber pixels, Skin skin, int x, int y)
+        public override bool RequestPreview(ColorGrabber pixels, SkinNode skin, int x, int y)
         {
             _noise = new Random(_seed);
             return base.RequestPreview(pixels, skin, x, y);
         }
 
-        public override bool EndClick(ColorGrabber pixels, Skin skin, Point p, WPF.Input.MouseButton button)
+        public override bool EndClick(ColorGrabber pixels, SkinNode skin, Point p, WPF.Input.MouseButton button)
         {
             base.EndClick(pixels, skin, p, button);
             _seed = _noise.Next();

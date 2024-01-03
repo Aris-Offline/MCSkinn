@@ -1,5 +1,4 @@
 ﻿using MCSkinn.Dialogs;
-using MCSkinn.Forms.Controls;
 using MCSkinn.Scripts;
 using iNKORE.Coreworks.Localization;
 using MCSkinn.Scripts.Paril.OpenGL;
@@ -25,6 +24,7 @@ using Windows.Storage;
 using Microsoft.AppCenter.Crashes;
 using System.Windows.Media.Animation;
 using iNKORE.UI.WPF.Modern.Media.Animation;
+using iNKORE.UI.WPF.Modern.Controls.Helpers;
 
 namespace MCSkinn
 {
@@ -36,7 +36,7 @@ namespace MCSkinn
         public MainWindow()
         {
             InitializeComponent();
-            this.Title = "MCSkinn - Version " + Program.VersionFull;
+            this.Title = "MCSkinn - Version " + Program.Version;
 
             //Program.Page_Editor.TextBlock_User.Text = Environment.UserName;
 
@@ -85,14 +85,14 @@ namespace MCSkinn
 
         private void Window_Activated(object sender, EventArgs e)
         {
-            if(!Program.IsNativeMicaSupported)
-                TitlebarOpacityAnimation(1d);
+            //if(!Program.IsNativeMicaSupported)
+            //    TitlebarOpacityAnimation(1d);
         }
 
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            if (!Program.IsNativeMicaSupported)
-                TitlebarOpacityAnimation(0.45d);
+            //if (!Program.IsNativeMicaSupported)
+            //    TitlebarOpacityAnimation(0.45d);
         }
 
         public static Duration TitlebarOpacityAnimationDuration = new Duration(TimeSpan.FromMilliseconds(500));
@@ -133,14 +133,13 @@ namespace MCSkinn
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-
         }
 
         private void Window_Initialized(object sender, EventArgs e)
         {
             if (!GlobalSettings.CompatibilityMode)
             {
-                iNKORE.UI.WPF.Modern.Controls.Primitives.WindowHelper.SetUseModernWindowStyle(this, true);
+                WindowHelper.SetUseModernWindowStyle(this, true);
             }
             else
             {

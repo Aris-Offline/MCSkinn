@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -32,6 +31,10 @@ using WPFD = System.Windows.Data;
 using MCSkinn.Scripts.Tools;
 using OpenTK.Graphics;
 using MCSkinn.Controls;
+using MessageBoxEx = iNKORE.UI.WPF.Modern.Controls.MessageBox;
+using iNKORE.UI.WPF.Modern.Controls;
+using iNKORE.UI.WPF.Modern;
+using iNKORE.UI.WPF.Modern.Common;
 
 namespace MCSkinn.Scripts
 {
@@ -57,7 +60,7 @@ namespace MCSkinn.Scripts
         private ViewMode _currentViewMode = ViewMode.Perspective;
         private Texture _font;
         private Texture _grassTop;
-        private Skin _lastSkin;
+        private SkinNode _lastSkin;
         private bool _mouseIsDown;
         private Point _mousePoint;
         internal Texture _previewPaint;
@@ -467,22 +470,33 @@ namespace MCSkinn.Scripts
             //}
         }
 
-        public async void AskResizeType(Skin sk, Model model)
+        public void AskResizeType(SkinNode sk, Model model)
         {
             try
             {
-                Dialogs.SkinSizeMismatchDialug dialog = new Dialogs.SkinSizeMismatchDialug();
+                //Dialogs.SkinSizeMismatchDialug dialog = new Dialogs.SkinSizeMismatchDialug();
 
-                Modern.Controls.ContentDialogResult result = await dialog.ShowAsync();
-
-                Dialogs.ResizeType resizeType;
-                switch (result)
+                MessageBoxEx msg = new MessageBoxEx()
                 {
-                    case Modern.Controls.ContentDialogResult.Primary:
-                        resizeType = Dialogs.ResizeType.Crop;
+                    Caption = Program.GetLanguageString("M_SKINSIZEMISMATCH"),
+                    Content = Program.GetLanguageString("M_SKINSIZEMISMATCH_MSG"),
+                    YesButtonText = Program.GetLanguageString("C_CROP"),
+                    NoButtonText = Program.GetLanguageString("C_SCALE"),
+                    MessageBoxButtons = WPF.MessageBoxButton.YesNoCancel,
+                    DefaultResult = WPF.MessageBoxResult.Cancel,
+                    Owner = Program.Window_Main,
+                    WindowStartupLocation = WPF.WindowStartupLocation.CenterOwner,
+                    IconSource = new FontIconSource() { Glyph = SegoeIcons.Unknown, FontSize = 32 }
+                };
+
+                SkinSizeMismatchResizeType resizeType;
+                switch (msg.ShowDialog())
+                {
+                    case WPF.MessageBoxResult.Yes:
+                        resizeType = SkinSizeMismatchResizeType.Crop;
                         break;
-                    case Modern.Controls.ContentDialogResult.Secondary:
-                        resizeType = Dialogs.ResizeType.Scale;
+                    case WPF.MessageBoxResult.No:
+                        resizeType = SkinSizeMismatchResizeType.Scale;
                         break;
                     default:
                         return;
@@ -577,8 +591,8 @@ namespace MCSkinn.Scripts
             if (SkinLibrary.SelectedNode == null)
                 return;
 
-            if (SkinLibrary.SelectedNode is Skin)
-                Process.Start("explorer.exe", "/select,\"" + ((Skin)SkinLibrary.SelectedNode).FileInfo.FullName + "\"");
+            if (SkinLibrary.SelectedNode is SkinNode)
+                Process.Start("explorer.exe", "/select,\"" + ((SkinNode)SkinLibrary.SelectedNode).FileInfo.FullName + "\"");
             else
                 Process.Start("explorer.exe", ((FolderNode)SkinLibrary.SelectedNode).DirectoryInfo.FullName);
         }
@@ -620,12 +634,12 @@ namespace MCSkinn.Scripts
             _cubeSides.SetMipmapping(true);
             _cubeSides.SetRepeat(true);
 
-            GL.Enable(EnableCap.LineSmooth);
-            GL.Hint(HintTarget.LineSmoothHint, HintMode.Nicest);
-            GL.Enable(EnableCap.PointSmooth);
-            GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
-            GL.Enable(EnableCap.PolygonSmooth);
-            GL.Hint(HintTarget.PolygonSmoothHint, HintMode.Nicest);
+            //GL.Enable(EnableCap.LineSmooth);
+            //GL.Hint(HintTarget.LineSmoothHint, HintMode.Nicest);
+            //GL.Enable(EnableCap.PointSmooth);
+            //GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
+            //GL.Enable(EnableCap.PolygonSmooth);
+            //GL.Hint(HintTarget.PolygonSmoothHint, HintMode.Nicest);
 
 
             var tinyFont = Resources.tinyfont;
@@ -745,7 +759,8 @@ namespace MCSkinn.Scripts
             if (_grassTop != null)
                 _grassTop.Dispose(); _grassTop = null;
 
-            GL.ClearColor(GlobalSettings.BackgroundColor.HasValue ? GlobalSettings.BackgroundColor.Value : Modern.ThemeManager.Current.ActualApplicationTheme == Modern.ApplicationTheme.Light ? BackgrounColor_Light : BackgrounColor_Dark);
+            var actualBackgroundColor = GlobalSettings.BackgroundColor.HasValue ? GlobalSettings.BackgroundColor.Value : Modern.ThemeManager.Current.ActualApplicationTheme == Modern.ApplicationTheme.Light ? BackgrounColor_Light : BackgrounColor_Dark;
+            GL.ClearColor(actualBackgroundColor);
 
             if (!File.Exists(Program.GetDataPath("grass.png", false)))
             {
@@ -756,6 +771,8 @@ namespace MCSkinn.Scripts
                 _grassTop = new TextureGL(Program.GetDataPath("grass.png", false));
 
             }
+
+            Program.Page_Editor.Border_ViewportBox.Background = actualBackgroundColor.ToWpfColor().ToBrush();
 
             _grassTop.SetMipmapping(false);
             _grassTop.SetRepeat(true);
@@ -872,7 +889,7 @@ namespace MCSkinn.Scripts
             TextureGL.Unbind();
         }
 
-        private void DrawPlayer2D(Texture tex, Skin skin, bool drawPlayer = true)
+        private void DrawPlayer2D(Texture tex, SkinNode skin, bool drawPlayer = true)
         {
             if (GlobalSettings.AlphaCheckerboard)
             {
@@ -1053,7 +1070,7 @@ namespace MCSkinn.Scripts
 
         public const int GrassLength = 1024;
 
-        private void DrawPlayer(Texture tex, Skin skin, bool drawPlayer = true)
+        private void DrawPlayer(Texture tex, SkinNode skin, bool drawPlayer = true)
         {
             TextureGL.Unbind();
 
@@ -1123,7 +1140,7 @@ namespace MCSkinn.Scripts
             }
             else
             {
-                Skin skin = _lastSkin;
+                SkinNode skin = _lastSkin;
 
                 using (var currentSkin = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height))
                 {
@@ -1794,7 +1811,7 @@ namespace MCSkinn.Scripts
 
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-                Skin skin = _lastSkin;
+                SkinNode skin = _lastSkin;
 
                 GL.PushMatrix();
 
@@ -2142,9 +2159,9 @@ namespace MCSkinn.Scripts
                     return;
                 }
 
-                if (!(SkinLibrary.SelectedNode as Skin).IsLoaded)
+                if (!(SkinLibrary.SelectedNode as SkinNode).IsLoaded)
                 {
-                    Exception ex = (SkinLibrary.SelectedNode as Skin).SetImages();
+                    Exception ex = (SkinLibrary.SelectedNode as SkinNode).SetImages();
                     if (ex != null)
                     {
                         Program.Page_Editor.SetViewportPopupError(Program.GetLanguageString("M_UNABLELOADSKIN") + "\r\n" + ex.Message, SkinLibrary.SelectedNode.Path + "\r\n\r\n" + ex.StackTrace);
@@ -2173,7 +2190,7 @@ namespace MCSkinn.Scripts
                 //if (_lastSkin != null)
                 //	_lastSkin.Undo.Clear();
 
-                var skin = (Skin)SkinLibrary.SelectedNode;
+                var skin = (SkinNode)SkinLibrary.SelectedNode;
                 SetCanSave(skin.IsDirty);
 
 
@@ -2211,7 +2228,7 @@ namespace MCSkinn.Scripts
                     CheckUndo();
                 }
 
-                _lastSkin = (Skin)SkinLibrary.SelectedNode;
+                _lastSkin = (SkinNode)SkinLibrary.SelectedNode;
 
                 SetModel(skin.Model);
                 InvalidateRenderer();
@@ -2620,8 +2637,8 @@ namespace MCSkinn.Scripts
             if (isDirty)
             {
                 if (
-                    MessageBox.Show(GetLanguageString("C_UNSAVED"), GetLanguageString("C_UNSAVED_CAPTION"),
-                                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    MessageBoxEx.Show(GetLanguageString("C_UNSAVED"), GetLanguageString("C_UNSAVED_CAPTION"),
+                                    WPF.MessageBoxButton.YesNo, WPF.MessageBoxImage.Question) == WPF.MessageBoxResult.No)
                 {
                     return false;
                 }
@@ -2682,7 +2699,7 @@ namespace MCSkinn.Scripts
 
             if (_isValidPick)
             {
-                Skin skin = _lastSkin;
+                SkinNode skin = _lastSkin;
 
                 using (var currentSkin = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height))
                 {
@@ -3084,7 +3101,7 @@ namespace MCSkinn.Scripts
 
         public void PerformSaveAs()
         {
-            Skin skin = _lastSkin;
+            SkinNode skin = _lastSkin;
 
             using (var grabber = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height))
             {
@@ -3132,7 +3149,7 @@ namespace MCSkinn.Scripts
             }
         }
 
-        private void PerformSaveSkin(Skin s)
+        private void PerformSaveSkin(SkinNode s)
         {
             RenderMakeCurrent();
 
@@ -3146,9 +3163,9 @@ namespace MCSkinn.Scripts
         {
             foreach (LibraryNode node in nodes)
             {
-                if (node is Skin)
+                if (node is SkinNode)
                 {
-                    var skin = (Skin)node;
+                    var skin = (SkinNode)node;
 
                     if (skin.IsDirty)
                         return true;
@@ -3164,11 +3181,11 @@ namespace MCSkinn.Scripts
         {
             foreach (LibraryNode node in nodes)
             {
-                if (node is Skin)
+                if (node is SkinNode)
                 {
                     try
                     {
-                        var skin = (Skin)node;
+                        var skin = (SkinNode)node;
 
                         if (skin.IsDirty)
                             PerformSaveSkin(skin);
@@ -3203,7 +3220,7 @@ namespace MCSkinn.Scripts
             {
                 Program.Log(LogType.Load, "Performing Save", "at MCSkinn.Editor.PerformSave()");
 
-                Skin skin = _lastSkin;
+                SkinNode skin = _lastSkin;
 
                 if (skin == null || !skin.IsDirty)
                     return;
@@ -3215,7 +3232,7 @@ namespace MCSkinn.Scripts
             catch (Exception ex)
             {
                 Program.Log(ex, "Editor.PerformSave()");
-                MessageBox.Show(ex.Message + "\r\n\r\n" + Program.GetLanguageString("M_UNABLESAVESKIN"), "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxEx.Show(ex.Message + "\r\n\r\n" + Program.GetLanguageString("M_UNABLESAVESKIN"), ex.GetType().Name, WPF.MessageBoxButton.OK, WPF.MessageBoxImage.Error);
             }
         }
 
@@ -3232,14 +3249,14 @@ namespace MCSkinn.Scripts
 
             File.Copy(fileName, folderLocation + name + ".png");
 
-            var skin = new Skin(folderLocation + name + ".png");
+            var skin = new SkinNode(folderLocation + name + ".png");
 
             if (parentNode != null)
             {
                 if (parentNode is FolderNode)
                     (parentNode as FolderNode).Add(skin);
                 else
-                    (parentNode as Skin).Parent.Add(skin);
+                    (parentNode as SkinNode).Parent.Add(skin);
             }
             else
             {
@@ -3264,9 +3281,9 @@ namespace MCSkinn.Scripts
                 {
                     return (node as FolderNode).Path;
                 }
-                else if (node is Skin)
+                else if (node is SkinNode)
                 {
-                    return (node as Skin).Parent.Path;
+                    return (node as SkinNode).Parent.Path;
                 }
             }
             return "";
@@ -3317,11 +3334,11 @@ namespace MCSkinn.Scripts
         {
             foreach (LibraryNode sub in node.Nodes)
             {
-                if (!(sub is Skin))
+                if (!(sub is SkinNode))
                     RecursiveDeleteSkins(sub as FolderNode);
                 else
                 {
-                    var skin = (Skin)sub;
+                    var skin = (SkinNode)sub;
 
                     if (_lastSkin == skin)
                         _lastSkin = null;
@@ -3475,6 +3492,7 @@ namespace MCSkinn.Scripts
                 WindowsFormsHost_RenderHost.Child = RendererControl;
 
                 Program.Page_Editor.Border_ViewportBox.Child = WindowsFormsHost_RenderHost;
+                Program.Page_Editor.StackPanel_StatusBar_FPS.Visibility = WPF.Visibility.Collapsed;
 
                 RenderMakeCurrent();
                 InvalidateRenderer();
@@ -3482,8 +3500,9 @@ namespace MCSkinn.Scripts
 
                 Program.Page_Editor.Border_Library.CornerRadius = new WPF.CornerRadius(0);
                 Program.Page_Editor.Border_ViewportBackground.CornerRadius = new WPF.CornerRadius(0);
-                Program.Page_Editor.Border_ViewportBackground.UseLayoutRounding = true;
-                Program.Page_Editor.Border_ViewportBackground.SnapsToDevicePixels = true;
+                Program.Page_Editor.Border_ViewportContainer.CornerRadius = new WPF.CornerRadius(0);
+                //Program.Page_Editor.Border_ViewportBackground.UseLayoutRounding = true;
+                //Program.Page_Editor.Border_ViewportBackground.SnapsToDevicePixels = true;
             }
             else
             {
@@ -3522,6 +3541,7 @@ namespace MCSkinn.Scripts
 
                 Program.Page_Editor.Border_ViewportBox.Child = Program.Editor.Renderer;
                 Program.Page_Editor.Run_Framerate.SetBinding(WPF.Documents.Run.TextProperty, new WPFD.Binding() { Source = Program.Editor.Renderer, Path = new WPF.PropertyPath("Framerate"), Mode = WPFD.BindingMode.OneWay });
+                Program.Page_Editor.StackPanel_StatusBar_FPS.Visibility = WPF.Visibility.Visible;
 
             }
 
@@ -3798,7 +3818,7 @@ namespace MCSkinn.Scripts
             if (Renderer != null)
                 WPFI.Keyboard.Focus(Renderer);
 
-            Skin skin = _lastSkin;
+            SkinNode skin = _lastSkin;
 
             if (skin == null)
                 return;
@@ -3852,7 +3872,7 @@ namespace MCSkinn.Scripts
                 WPFI.Keyboard.Focus(Renderer);
 
 
-            Skin skin = _lastSkin;
+            SkinNode skin = _lastSkin;
 
             if (skin == null)
                 return;
@@ -3897,7 +3917,7 @@ namespace MCSkinn.Scripts
             if(Renderer != null)
                 WPFI.Keyboard.Focus(Renderer);
 
-            Skin skin = _lastSkin;
+            SkinNode skin = _lastSkin;
 
             if (skin == null)
                 return;

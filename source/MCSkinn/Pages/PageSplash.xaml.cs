@@ -160,7 +160,7 @@ namespace MCSkinn.Pages
 
             SkinLoader.LoadSkins();
 
-            Program.Page_Splash.Dispatcher.Invoke(ErrorHandlerWrap(GlobalSettings.Loaded == true ? Program.Context.DoneLoadingSplash : this.ShowFirstTimeWelcome));
+            Program.Page_Splash.Dispatcher.Invoke(ErrorHandlerWrap(Program.Context.DoneLoadingSplash));
 
             this.Dispatcher.Invoke(ErrorHandlerWrap(() =>
             {
@@ -185,18 +185,14 @@ namespace MCSkinn.Pages
             _loaderThread.Start();
         }
 
-        Controls.UserControls.FirstTimeWelcome welcome;
         public void ShowFirstTimeWelcome()
         {
-            (this.Resources["Storyboard_FirstTimeWelcome"] as Storyboard).Begin();
 
-            welcome = new Controls.UserControls.FirstTimeWelcome();
-            ContentPresenter_FirstTimeWelcome.Content = welcome;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            TextBlock_Version.Text = Program.Name + " v" + Program.VersionFull.ToString();
+            TextBlock_Version.Text = Program.Name + " v" + Program.Version.ToString();
             SetLoadingString("Doing nothing yet...");
 
             _loaderThread = new Thread(Program.Page_Splash.PerformLoading);

@@ -55,7 +55,7 @@ namespace MCSkinn.Scripts
             }
         }
 
-        public List<Skin> DirtySkins = new List<Skin>();
+        public List<SkinNode> DirtySkins = new List<SkinNode>();
         public bool IsDirty
         {
             get { return DirtyCount != 0; }
@@ -71,7 +71,7 @@ namespace MCSkinn.Scripts
         }
 
 
-        public void SetDirtySkin(Skin skin)
+        public void SetDirtySkin(SkinNode skin)
         {
             if (skin.IsDirty)
             {
@@ -82,6 +82,13 @@ namespace MCSkinn.Scripts
             {
                 if (DirtySkins.Contains(skin))
                     DirtySkins.Remove(skin);
+            }
+
+            var parent = skin.Parent;
+            while(parent != null)
+            {
+                parent.RaisePropertyChangedEvent(nameof(LibraryNode.IsDirty));
+                parent = parent.Parent;
             }
 
             RaisePropertyChangedEvent(nameof(DirtyCount));

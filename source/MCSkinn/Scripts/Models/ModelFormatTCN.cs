@@ -341,7 +341,7 @@ namespace MCSkinn.Scripts.Models
                                                     break;
                                                 case "mirror":
                                                     if (((JValue)p_cubeChild.Value).Value is bool)
-                                                        shape.RenderData.IsMirrored = (bool)((JValue)p_cubeChild.Value).Value;
+                                                        shape.RenderData.IsMirrored = (bool)((JValue)p_cubeChild.Value)?.Value == true;
                                                     else if(((JValue)p_cubeChild.Value).Value is string)
                                                         shape.RenderData.IsMirrored = Convert.ToBoolean(((JValue)p_cubeChild.Value).Value);
                                                     break;
@@ -472,7 +472,7 @@ namespace MCSkinn.Scripts.Models
             IsTCNFile = false;
             string defaultTexture = null;
 
-            foreach (KeyValuePair<string, JToken> pairRoot in jroot)
+            foreach (KeyValuePair<string, JToken?> pairRoot in jroot)
             {
                 if(pairRoot.Key.ToLower()== "format_version")
                 {

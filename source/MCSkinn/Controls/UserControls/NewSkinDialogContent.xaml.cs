@@ -1,7 +1,7 @@
 ﻿using iNKORE.Coreworks.Helpers;
 using iNKORE.Coreworks.Localization;
-using iNKORE.Coreworks.Windows.Presentation;
-using MCSkinn.Forms.Controls;
+using iNKORE.UI.WPF.Helpers;
+using MCSkinn.Controls;
 using MCSkinn.Scripts;
 using MCSkinn.Scripts.Paril.Imaging;
 using MCSkinn.Scripts.Paril.OpenGL;
@@ -320,7 +320,7 @@ namespace MCSkinn.Dialogs
 
             System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(path);
 
-            Model model = Skin.TryGetModel(path, bmp, TreeView_Models.SelectedItem == null);
+            Model model = SkinNode.TryGetModel(path, bmp, TreeView_Models.SelectedItem == null);
 
             if (model != null)
             {

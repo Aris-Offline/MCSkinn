@@ -2,7 +2,6 @@
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using MCSkinn.Forms;
 using MCSkinn.Scripts;
 
 namespace MCSkinn

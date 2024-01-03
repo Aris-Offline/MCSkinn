@@ -74,7 +74,7 @@ namespace MCSkinn.Scripts
             report.SoftwareData = new Dictionary<string, string>
             {
                 { "Operating System", Environment.OSVersion.ToString() + " " + (iNKORE.Coreworks.Windows.Helpers.SystemHelper.Is64BitOperatingSystem() ? "x64" : "x86") },
-                { "App Version", Program.VersionFull.ToString() },
+                { "App Version", Program.Version.ToString() },
                 { "dotNET Version", Environment.Version.ToString() },
             };
 

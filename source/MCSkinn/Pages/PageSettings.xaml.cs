@@ -18,6 +18,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using iNKORE.Hub.Shared;
 using iNKORE.UI.WPF.Modern.Controls;
+using MessageBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
+
 
 namespace MCSkinn.Pages
 {
@@ -396,20 +398,31 @@ namespace MCSkinn.Pages
 
         }
 
-        private async void Button_Reset_Enabled_Click(object sender, RoutedEventArgs e)
+        private void Button_Reset_Enabled_Click(object sender, RoutedEventArgs e)
         {
-            GeneralQuestionDialog dialog = new GeneralQuestionDialog()
+            //GeneralQuestionDialog dialog = new GeneralQuestionDialog()
+            //{
+            //    Title = Program.GetLanguageString("M_RESET"),
+            //    Content = Program.GetLanguageString("M_RESETALLSETTINGS_DESCRIPTION"),
+            //    PrimaryButtonText = Program.GetLanguageString("M_RESET"),
+            //    CloseButtonText = Program.GetLanguageString("C_CANCEL"),
+            //    DefaultButton = iNKORE.UI.WPF.Modern.Controls.ContentDialogButton.Close,
+            //};
+            //iNKORE.UI.WPF.Modern.Controls.ContentDialogResult result = await dialog.ShowAsync();
+
+            var msgbox = new MessageBox()
             {
-                Title = Program.GetLanguageString("M_RESET"),
+                Caption = Program.GetLanguageString("M_RESET"),
                 Content = Program.GetLanguageString("M_RESETALLSETTINGS_DESCRIPTION"),
-                PrimaryButtonText = Program.GetLanguageString("M_RESET"),
-                CloseButtonText = Program.GetLanguageString("C_CANCEL"),
-                DefaultButton = iNKORE.UI.WPF.Modern.Controls.ContentDialogButton.Close,
+                YesButtonText = Program.GetLanguageString("M_RESET"),
+                NoButtonText = Program.GetLanguageString("C_CANCEL"),
+                DefaultResult = MessageBoxResult.No,
+                MessageBoxButtons = MessageBoxButton.YesNo,
+                Owner = Program.Window_Main,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
 
-            iNKORE.UI.WPF.Modern.Controls.ContentDialogResult result = await dialog.ShowAsync();
-
-            if (result == iNKORE.UI.WPF.Modern.Controls.ContentDialogResult.Primary)
+            if (msgbox.ShowDialog() == MessageBoxResult.Yes)
             {
                 try
                 {

@@ -10,7 +10,7 @@
         ui:TitleBar.ExtendViewIntoTitleBar="True"    
         ui:TitleBar.IsBackButtonVisible="False"
         ui:TitleBar.Height="36"
-        WindowStartupLocation="CenterScreen" UseLayoutRounding="True" 
+        WindowStartupLocation="CenterScreen"
         Closing="Window_Closing" Loaded="Window_Loaded" Activated="Window_Activated" Deactivated="Window_Deactivated" BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.WindowBorderKey}}" BorderThickness="1" Icon="/MCSkinn;component/Resources/Icons/MCSkinn.ico" KeyDown="Window_KeyDown" Initialized="Window_Initialized">
     <!--<WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False"/>

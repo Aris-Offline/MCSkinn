@@ -8,7 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageSplash" FontSize="16" Loaded="Page_Loaded">
     <Page.Resources>
-        <Storyboard x:Key="Storyboard_FirstTimeWelcome">
+        <!--<Storyboard x:Key="Storyboard_FirstTimeWelcome">
             <DoubleAnimation To="0" Duration="0:0:0.5" Storyboard.TargetName="ProgressBar_Loading" Storyboard.TargetProperty="Opacity">
                 <DoubleAnimation.EasingFunction>
                     <PowerEase/>
@@ -38,7 +38,7 @@
                     <BounceEase EasingMode="EaseOut" Bounces="1" Bounciness="0.5"/>
                 </ThicknessAnimation.EasingFunction>
             </ThicknessAnimation>
-        </Storyboard>
+        </Storyboard>-->
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -66,7 +66,7 @@
         <TextBlock x:Name="TextBlock_Status" Text="Loading skins..." Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Center" Opacity="0.8" Grid.Column="1" Grid.RowSpan="2" Margin="0,0,0,45"/>
         <TextBlock x:Name="TextBlock_Version" Text="MCSkinn v1.0.0.0 Debug" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Center" Opacity="0.4" Grid.Column="1" FontSize="9" Grid.RowSpan="2" Margin="0,0,0,30"/>
 
-        <ContentPresenter x:Name="ContentPresenter_FirstTimeWelcome" Grid.Row="5" Opacity="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,20" HorizontalAlignment="Center" Width="200"/>
+        <!--<ContentPresenter x:Name="ContentPresenter_FirstTimeWelcome" Grid.Row="5" Opacity="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,20" HorizontalAlignment="Center" Width="200"/>-->
         <Image Source="{DynamicResource iNKORE_Title_DrawingImage}" Height="48" UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="0,0,0,20" Grid.Row="6" Grid.ColumnSpan="3"/>
     </Grid>
 </Page>

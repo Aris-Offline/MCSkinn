@@ -5,7 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Xml;
-using MCSkinn.Forms.Controls;
+using MCSkinn.Controls;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -40,7 +40,7 @@ namespace MCSkinn.Scripts.Paril.OpenGL
         }
 
         // P: polygon support required? used bounds 'n stuff but, you know...
-        public Rectangle GetTextureFaceBounds(Point p, Skin skin)
+        public Rectangle GetTextureFaceBounds(Point p, SkinNode skin)
         {
             foreach (Mesh m in Meshes)
             {
@@ -62,7 +62,7 @@ namespace MCSkinn.Scripts.Paril.OpenGL
             return new Rectangle();
         }
 
-        public List<int> GetIntersectingParts(Point p, Skin skin)
+        public List<int> GetIntersectingParts(Point p, SkinNode skin)
         {
             int mesh = 0;
             var parts = new List<int>();

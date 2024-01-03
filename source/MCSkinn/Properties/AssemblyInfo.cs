@@ -30,5 +30,5 @@ using System.Windows.Markup;
 //      生成号
 //      修订号
 //
-[assembly: AssemblyVersion("1.2.6.0")]
-[assembly: AssemblyFileVersion("1.2.6.0")]
+[assembly: AssemblyVersion("1.2.8.0")]
+[assembly: AssemblyFileVersion("1.2.8.0")]

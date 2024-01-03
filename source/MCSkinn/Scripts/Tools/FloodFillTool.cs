@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/iNKOREStudios/MCSkinn
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System;
@@ -38,7 +38,7 @@ namespace MCSkinn.Scripts.Tools
         {
         }
 
-        public void BeginClick(Skin skin, Point p, WPF.Input.MouseButton e)
+        public void BeginClick(SkinNode skin, Point p, WPF.Input.MouseButton e)
         {
             _undo = new PixelsChangedUndoable(Editor.GetLanguageString("U_PIXELSCHANGED"),
                                               Program.Editor.SelectedTool.MenuItem.Text);
@@ -50,11 +50,11 @@ namespace MCSkinn.Scripts.Tools
             _done = false;
         }
 
-        public void MouseMove(Skin skin, Point p)
+        public void MouseMove(SkinNode skin, Point p)
         {
         }
 
-        public bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y)
+        public bool MouseMoveOnSkin(ColorGrabber pixels, SkinNode skin, int x, int y)
         {
             if (_done)
                 return false;
@@ -74,7 +74,7 @@ namespace MCSkinn.Scripts.Tools
             return true;
         }
 
-        public bool RequestPreview(ColorGrabber pixels, Skin skin, int x, int y)
+        public bool RequestPreview(ColorGrabber pixels, SkinNode skin, int x, int y)
         {
             if (x == -1)
                 return false;
@@ -109,7 +109,7 @@ namespace MCSkinn.Scripts.Tools
             return true;
         }
 
-        public bool EndClick(ColorGrabber pixels, Skin skin, Point p, WPF.Input.MouseButton button)
+        public bool EndClick(ColorGrabber pixels, SkinNode skin, Point p, WPF.Input.MouseButton button)
         {
             if (_undo == null)
                 return false;

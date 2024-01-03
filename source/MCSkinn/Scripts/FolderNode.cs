@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/iNKOREStudios/MCSkinn
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System;
@@ -12,19 +12,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 using iNKORE.Coreworks;
 using iNKORE.Coreworks.Helpers;
 using iNKORE.Coreworks.Windows.Helpers;
 using OpenTK.Graphics.OpenGL;
-using Windows.ApplicationModel.Contacts;
-using Windows.Media.Capture;
-using Windows.Networking.PushNotifications;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
-using static OpenTK.Graphics.OpenGL.GL;
 using IO = System.IO;
 
 namespace MCSkinn.Scripts
@@ -61,6 +57,8 @@ namespace MCSkinn.Scripts
             }
 
             Workfolder = wf;
+
+            BindingOperations.EnableCollectionSynchronization(Nodes, new object());
         }
 
         #region Properties
@@ -133,9 +131,9 @@ namespace MCSkinn.Scripts
         {
             foreach(LibraryNode n in Nodes)
             {
-                if(n is Skin)
+                if(n is SkinNode)
                 {
-                    Exception ex = ((Skin)n).SetImages();
+                    Exception ex = ((SkinNode)n).SetImages();
 
                     if(ex != null)
                     {
@@ -163,7 +161,7 @@ namespace MCSkinn.Scripts
                 LibraryNode node = SkinLibrary.FindNode(e.OldFullPath);
                 if (node != null)
                 {
-                    node.Renamed(e.FullPath);
+                    node.OnRenamed(e.FullPath);
                 }
             }
             catch (Exception ex)
@@ -224,7 +222,7 @@ namespace MCSkinn.Scripts
                     return;
                 }
 
-                List<Skin> invalidSkins = new List<Skin>();
+                List<SkinNode> invalidSkins = new List<SkinNode>();
 
                 try
                 {
@@ -242,7 +240,7 @@ namespace MCSkinn.Scripts
                     if (IO.Path.GetExtension(path) == ".png")
                     {
 
-                        Skin sk = new Skin(path, parent);
+                        SkinNode sk = new SkinNode(path, parent);
 
                         sk.SetImages();
 
@@ -266,13 +264,25 @@ namespace MCSkinn.Scripts
                             Program.Page_Editor.FilePathToSelect = null;
                         }
                     }
-                    else if (Directory.Exists(path) && !File.Exists(path))
+                    else if (Directory.Exists(path))
                     {
                         //List<Skin> skins = new List<Skin>();
 
                         FolderNode folder = new FolderNode(path, null, true, Workfolder) { RootDir = path };
                         //SkinLoader.RecurseAddDirectories(path, folder, skins);
                         parent.Add(folder);
+
+                        if(folder.Nodes.Count != Directory.GetFiles(path).Length + Directory.GetDirectories(path).Length)
+                        {
+                            foreach(var subpath in Directory.GetFiles(path).Union(Directory.GetDirectories(path)))
+                            {
+                                if(SkinLibrary.FindNode(subpath) == null)
+                                {
+                                    var fil = new FileInfo(subpath);
+                                    Watcher_Created(null, new FileSystemEventArgs(WatcherChangeTypes.Created, fil.DirectoryName, fil.Name));
+                                }
+                            }
+                        }
 
                         if (SkinLibrary.AddNode(folder, path))
                         {
@@ -302,7 +312,7 @@ namespace MCSkinn.Scripts
 
                     if (invalidSkins.Count > 0)
                     {
-                        foreach (Skin s in invalidSkins)
+                        foreach (SkinNode s in invalidSkins)
                         {
                             Program.Log(LogType.Warning, string.Format("Automation failed: Unable to add skin '{0}' into library, because it cannot be loaded.", s.Path), "");
                         }
@@ -326,6 +336,26 @@ namespace MCSkinn.Scripts
         }
 
         public bool IsRecursed { get; private set; } = false;
+        public override bool IsDirty
+        {
+            get
+            {
+                //return false;
+
+                foreach(var item in Nodes.Reverse())
+                {
+                    if(item.IsDirty)
+                        return true;
+                }
+
+                return false;
+            }
+            set { }
+        }
+
+        public override LibraryNodeType NodeType => LibraryNodeType.Folder;
+
+        public override bool IsLoaded => true;
 
         public void Recurse(bool subfolders = true)
         {
@@ -337,6 +367,13 @@ namespace MCSkinn.Scripts
                 {
                     throw new DirectoryNotFoundException(Path + " cannot be found!");
                 }
+
+                foreach(var node in Nodes.ToArray())
+                {
+                    node.Dispose();
+                }
+
+                Nodes.Clear();
 
                 foreach (DirectoryInfo dir in di.EnumerateDirectories())
                 {
@@ -356,7 +393,8 @@ namespace MCSkinn.Scripts
 
                 foreach (FileInfo file in di.EnumerateFiles("*.png", SearchOption.TopDirectoryOnly))
                 {
-                    var skin = new Skin(file.FullName, this);
+                    var skin = new SkinNode(file.FullName, this);
+                    skin.SetImages();
 
                     Add(skin);
 
@@ -377,21 +415,18 @@ namespace MCSkinn.Scripts
 
         public void Add(LibraryNode skin)
         {
-            System.Windows.Application.Current.Dispatcher.Invoke((Action)(() =>
-            {
-                bool needSort = Nodes.Count > 0 ? (Nodes[Nodes.Count - 1].GetType() != skin.GetType()) : (skin is Skin);
+            bool needSort = Nodes.Count > 0 ? (Nodes[Nodes.Count - 1].GetType() != skin.GetType()) : (skin is SkinNode);
 
-                if (!Nodes.Contains(skin))
-                    Nodes.Add(skin);
+            if (!Nodes.Contains(skin))
+                Nodes.Add(skin);
 
-                skin.Parent = this;
+            skin.Parent = this;
 
-                if (needSort)
-                    Sort();
-            }));
+            if (needSort)
+                Sort();
         }
 
-        public override void Renamed(string newName)
+        public override void OnRenamed(string newName)
         {
             string oldName = Path;
 
@@ -402,7 +437,7 @@ namespace MCSkinn.Scripts
 
             foreach(var node in Nodes)
             {
-                node.Renamed(IO.Path.Combine(Path, node.Name));
+                node.OnRenamed(IO.Path.Combine(Path, node.Name));
             }
 
             RaisePropertyChangedEvent(nameof(Text));
@@ -437,6 +472,17 @@ namespace MCSkinn.Scripts
                 Nodes.Remove(skin);
             });
         }
+
+        public override void Reload()
+        {
+            Recurse(true);
+        }
+    }
+
+    public enum LibraryNodeType
+    {
+        Folder,
+        Skin
     }
 
     public abstract class LibraryNode : INotifyPropertyChanged, IDisposable, IComparable<LibraryNode>
@@ -448,13 +494,24 @@ namespace MCSkinn.Scripts
         public abstract System.Windows.Media.Imaging.BitmapSource Icon { get; }
         public abstract FolderNode Parent { get; set; }
 
+        public abstract bool IsDirty { get; set; }
+        public abstract LibraryNodeType NodeType { get; }
+        public abstract bool IsLoaded { get; }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public abstract ObservableCollection<LibraryNode> Nodes { get; set; }
         public abstract void Dispose();
-        public abstract void Renamed(string newName);
+        public abstract void OnRenamed(string newName);
+
+        public abstract void Reload();
 
         public abstract bool UseChessBackground { get; }
+
+        public virtual bool IsFolder
+        {
+            get { return NodeType == LibraryNodeType.Folder; }
+        }
 
         public int CompareTo(LibraryNode? other)
         {
@@ -463,12 +520,12 @@ namespace MCSkinn.Scripts
 
             if (l == null)
                 return 1;
-            else if (l is Skin && !(r is Skin))
+            else if (l is SkinNode && !(r is SkinNode))
                 return -1;
-            else if (!(l is Skin) && r is Skin)
+            else if (!(l is SkinNode) && r is SkinNode)
                 return 1;
-            else if (l is Skin && r is Skin)
-                return -((Skin)l).Name.CompareTo(((Skin)r).Name);
+            else if (l is SkinNode && r is SkinNode)
+                return -((SkinNode)l).Name.CompareTo(((SkinNode)r).Name);
 
             return -l.Text.CompareTo(r.Text);
 

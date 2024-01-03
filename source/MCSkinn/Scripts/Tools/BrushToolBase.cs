@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/iNKOREStudios/MCSkinn
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System;
@@ -12,8 +12,8 @@ using WinForms = System.Windows.Forms;
 using WPF = System.Windows;
 using MCSkinn.Scripts.lemon42.Colors;
 using MCSkinn.Scripts.Paril.OpenGL;
-using Brush = MCSkinn.Forms.Controls.Brush;
-using Brushes = MCSkinn.Forms.Controls.Brushes;
+using Brush = MCSkinn.Scripts.Brush;
+using Brushes = MCSkinn.Scripts.Brushes;
 
 namespace MCSkinn.Scripts.Tools
 {
@@ -28,13 +28,13 @@ namespace MCSkinn.Scripts.Tools
 
         #region ITool Members
 
-        public virtual void BeginClick(Skin skin, Point p, WPF.Input.MouseButton button)
+        public virtual void BeginClick(SkinNode skin, Point p, WPF.Input.MouseButton button)
         {
             _undo = new PixelsChangedUndoable(Editor.GetLanguageString("U_PIXELSCHANGED"),
                                               Program.Editor.SelectedTool.MenuItem.Text);
         }
 
-        public virtual void MouseMove(Skin skin, Point p)
+        public virtual void MouseMove(SkinNode skin, Point p)
         {
         }
 
@@ -42,7 +42,7 @@ namespace MCSkinn.Scripts.Tools
         {
         }
 
-        public virtual bool RequestPreview(ColorGrabber pixels, Skin skin, int x, int y)
+        public virtual bool RequestPreview(ColorGrabber pixels, SkinNode skin, int x, int y)
         {
             if (x == -1)
                 return false;
@@ -79,7 +79,7 @@ namespace MCSkinn.Scripts.Tools
             return true;
         }
 
-        public virtual bool EndClick(ColorGrabber pixels, Skin skin, Point p, WPF.Input.MouseButton button)
+        public virtual bool EndClick(ColorGrabber pixels, SkinNode skin, Point p, WPF.Input.MouseButton button)
         {
             if (_undo?.Points.Count > 0)
             {
@@ -93,12 +93,12 @@ namespace MCSkinn.Scripts.Tools
             return false;
         }
 
-        public abstract bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y);
+        public abstract bool MouseMoveOnSkin(ColorGrabber pixels, SkinNode skin, int x, int y);
         public abstract string GetStatusLabelText();
 
         #endregion
 
-        public bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y, bool incremental)
+        public bool MouseMoveOnSkin(ColorGrabber pixels, SkinNode skin, int x, int y, bool incremental)
         {
             if (x == _oldPixel.X && y == _oldPixel.Y)
                 return false;

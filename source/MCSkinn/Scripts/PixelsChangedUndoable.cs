@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/iNKOREStudios/MCSkinn
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System;
@@ -47,7 +47,7 @@ namespace MCSkinn.Scripts
 
         public void Undo(object obj)
         {
-            var skin = (Skin)obj;
+            var skin = (SkinNode)obj;
 
             using (var grabber = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height))
             {
@@ -72,7 +72,7 @@ namespace MCSkinn.Scripts
 
         public void Redo(object obj)
         {
-            var skin = (Skin)obj;
+            var skin = (SkinNode)obj;
 
             using (var grabber = new ColorGrabber(GlobalDirtiness.CurrentSkin, skin.Width, skin.Height))
             {

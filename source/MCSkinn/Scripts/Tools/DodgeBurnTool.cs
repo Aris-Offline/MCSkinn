@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/iNKOREStudios/MCSkinn
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System.Drawing;
@@ -17,7 +17,7 @@ namespace MCSkinn.Scripts.Tools
     {
         public bool IsInverted { get; set; } = false;
 
-        public override bool MouseMoveOnSkin(ColorGrabber pixels, Skin skin, int x, int y)
+        public override bool MouseMoveOnSkin(ColorGrabber pixels, SkinNode skin, int x, int y)
         {
             return MouseMoveOnSkin(pixels, skin, x, y, GlobalSettings.Tool_DodgeBurn_Incremental);
         }

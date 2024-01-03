@@ -3,7 +3,7 @@
 //    Copyright © iNKORE! 2023
 //
 //    The copy of source (only the public part) can be used anywhere with a credit to MCSkinn page at your own risk
-//    https://github.com/iNKOREStudios/MCSkinn
+//    https://github.com/InkoreStudios/MCSkinn
 //
 
 using System;
@@ -20,6 +20,7 @@ using Modern = iNKORE.UI.WPF.Modern;
 using static MCSkinn.Scripts.StaticHolder;
 using WPFM = System.Windows.Media;
 using iNKORE.Coreworks.Helpers;
+using MCSkinn.Dialogs;
 
 namespace MCSkinn.Scripts
 {
@@ -177,7 +178,7 @@ namespace MCSkinn.Scripts
         #region Functions
         public static event PropertyChangedEventHandler PropertyChanged;
 
-        public static void RaisePropertCHangedEvent(string prop)
+        public static void RaisePropertChangedEvent(string prop)
         {
             PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(prop));
         }
@@ -190,12 +191,18 @@ namespace MCSkinn.Scripts
 
         public static bool? Load()
         {
-            FullPath_Config = Program.GetDataPath(ConfigFilename, false);
+            FullPath_Config = Program.GetDataPath(ConfigFilename, false, true);
 
             FullPath_Languages = Program.GetDataPath("Languages", true);
             FullPath_Models = Program.GetDataPath("Models", true);
             FullPath_Brushes = Program.GetDataPath("Brushes", true);
             FullPath_Templates = Program.GetDataPath("Templates", true);
+
+            if(!Directory.Exists(FullPath_Languages) || !Directory.Exists(FullPath_Models))
+            {
+                new IncompleteInstallationDialog().ShowDialog();
+                return false;
+            }
 
             try
             {
