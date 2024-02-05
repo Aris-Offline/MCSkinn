@@ -1,6 +1,14 @@
-**This project is a part of iNKORE! Studios**
-
 Author: [NotYoojun.!](https://github.com/NotYoojun)
+
+This project is owned by NotYoojun and iNKORE Studios
+
+---
+
+The license of the source code in this repo is GPLv3
+
+https://www.gnu.org/licenses/gpl-3.0.en.html
+
+---
 
 - ✔️ **Permissions**
 
