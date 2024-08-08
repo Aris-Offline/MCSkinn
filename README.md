@@ -54,8 +54,8 @@
 
   One of the keys to Minecraft’s success has to do with the fact that players can customize and modify the environment however they like. Thus, why not do the same with the characters they play with? That’s the function of a program of the likes of MCSkinn, a tool that allows us to create Minecraft skins.
 
-  >[!NOTE]
-  > We also provide various of [tutorials](https://docs.inkore.net/mcskinn/tutorials), [knowledge](https://docs.inkore.net/mcskinn/knowledge) and [tips](https://docs.inkore.net/mcskinn/tips-n-tricks) for you to use in our documentation. Use them flexiblely to create a better authoring environment.
+>[!NOTE]
+> We also provide various of [tutorials](https://docs.inkore.net/mcskinn/tutorials), [knowledge](https://docs.inkore.net/mcskinn/knowledge) and [tips](https://docs.inkore.net/mcskinn/tips-n-tricks) for you to use in our documentation. Use them flexiblely to create a better authoring environment.
 
 - **Paint all just the way you like the best**
 
