@@ -51,8 +51,8 @@
 
   Minecraft 成功的关键之一在于玩家可以随心所欲地自定义和修改环境。那么，为什么不对他们的角色做同样的事情呢？这就是 MCSkinn 的初衷，即允许我们自如地创建 Minecraft 皮肤。
 
-  >[!NOTE]
-  > 我们还在文档中提供了各种[教程](https://docs.inkore.net/mcskinn/tutorials)、[知识](https://docs.inkore.net/mcskinn/knowledge)和[提示](https://docs.inkore.net/mcskinn/tips-n-tricks)。灵活使用它们来创建更好的创作环境。
+>[!NOTE]
+> 我们还在文档中提供了各种[教程](https://docs.inkore.net/mcskinn/tutorials)、[知识](https://docs.inkore.net/mcskinn/knowledge)和[提示](https://docs.inkore.net/mcskinn/tips-n-tricks)。灵活使用它们来创建更好的创作环境。
 
 - **按你最喜欢的方式绘制**
 
