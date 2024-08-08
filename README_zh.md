@@ -4,13 +4,13 @@
   </a>
 </p>
 
-<p align="center">现代的 Minecraft 皮肤编辑器。</p>
+<p align="center">现代的 Minecraft 皮肤编辑器</p>
 
 <h1 align="center">
   MCSkinn
 </h1>
 
-<p align="center">官方网站: <a href="https://inkore.net/en-us/products/mcskinn/">inkore.net/en-us/products/mcskinn</p>
+<p align="center">官方网站: <a href="https://inkore.net/zh-cn/products/mcskinn/">inkore.net/zh-cn/products/mcskinn</p>
 
 <p align="center">如果你喜欢这个软件，请给我们的项目一个 Star！</p>
 
