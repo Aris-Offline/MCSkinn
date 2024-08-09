@@ -15,8 +15,6 @@
 
 <p align="center">Give us a star if you like this!</p>
 
-<p align="center"><a href="README_zh.md" title="中文版">中文版</a>
-
 <p align="center">
   <a href="https://github.com/iNKORE-NET/MCSkinn/releases"><img src="https://img.shields.io/github/downloads/iNKORE-NET/MCSkinn/total?color=%239F7AEA" alt="Release Downloads"></a>
   <a href="#"><img src="https://img.shields.io/github/repo-size/iNKORE-NET/MCSkinn?color=6882C4" alt="GitHub Repo Size"></a>
