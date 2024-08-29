@@ -15,8 +15,6 @@
 
 <p align="center">Give us a star if you like this!</p>
 
-<p align="center"><a href="README_zh.md" title="中文版">中文版</a>
-
 <p align="center">
   <a href="https://github.com/iNKORE-NET/MCSkinn/releases"><img src="https://img.shields.io/github/downloads/iNKORE-NET/MCSkinn/total?color=%239F7AEA" alt="Release Downloads"></a>
   <a href="#"><img src="https://img.shields.io/github/repo-size/iNKORE-NET/MCSkinn?color=6882C4" alt="GitHub Repo Size"></a>
@@ -124,7 +122,7 @@
 
      We have developed MCSkinn for 2 years so far. During the 2-year journey, we spend our time and heart for the project, and at the same time it always completely free, and with no ads.
 
-     For this reason you could support us with a voluntary donation. Even a small amountIt could mean that our work is worth it. Just donate as much as you value my work.
+     For this reason you could support us with a voluntary donation. Even a small amount could mean that our work is worth it. Just donate as much as you value our work.
 
 - **WeChat/Alipay**: There's QR in the sponorship page of the program
 - **PayPal**: My username is [@NotYoojun](https://paypal.me/NotYoojun?country.x=C2&locale.x=en_US), clicking the link also works
