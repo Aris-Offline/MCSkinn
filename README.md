@@ -6,7 +6,7 @@ The new MCSkinn inherits the classic (v1.2.8) version, but we refactored almost 
 
 And the current version of MCSkinn, renamed to 'MCSkinn Legacy', will be maintained for a while, but no new features will be added, and it will finally be deprecated. I'm sorry for the issues you may have encountered while using MCSkinn Legacy, and I hope the new version will be better and meet your expectations. 
 
-The MCSkinn legacy used some GPL-based code. Even if we have finally rewritten all the code, we will consider release the soruce code of the legacy version, but we're not sure yet.
+The MCSkinn legacy used some GPL-based code. Even if we have finally rewritten all the code, we will consider release the soruce code of the legacy version when the new version is ready. We're still discussing this, so it's not a sure thing yet.
 
 In addition, something really unexpected and unpleasant happened to us recently, one of our open-source projects, was humiliated by someone, and that really hurt us and the whole community. Since the new MCSkinn has refactored ALL of the code, and no GPL-based code is used, we're afraid that the same thing will happen again. So, we have nothing to do but to make MCSkinn a closed-source project. I'm sorry for this decision, but I hope you can understand. For more information about the incident, please check here: https://docs.inkore.net/blog/2024/09/17/reflection-interest-in-opensource-community (that really hurt us a lot).
 
