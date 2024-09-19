@@ -11,7 +11,7 @@ The MCSkinn legacy used some GPL-based code. Even if we have finally rewritten a
 In addition, something really unexpected and unpleasant happened to us recently, one of our open-source projects, was humiliated by someone, and that really hurt us and the whole community. Since the new MCSkinn has refactored ALL of the code, and no GPL-based code is used, we're afraid that the same thing will happen again. So, we have nothing to do but to make MCSkinn a closed-source project. I'm sorry for this decision, but I hope you can understand. For more information about the incident, please check here: https://docs.inkore.net/blog/2024/09/17/reflection-interest-in-opensource-community (that really hurt us a lot).
 
 We're still working on the new MCSkinn, and it's not ready yet, so we can't release it to the public now.
-However, we strongly welcome you to our community and let you know when it's ready. Please stay tuned, we really don't want you to miss the brand new MCSkinn.
+However, we strongly welcome you to our community and let you know when the new version's ready. Please stay tuned, we really don't want you to miss the brand new MCSkinn.
 
 
 > Join the MCSkinn community
