@@ -5,10 +5,10 @@
   </a>
 </p>
 
-<p align="center">A modern Minecraft skin editor.</p>
+<p align="center">Skin and texture editor for cube-based game models (like Minecraft).</p>
 
 <h1 align="center">
-  MCSkinn
+  MCSkinn Legacy
 </h1>
 
 <p align="center">Offical Website: <a href="https://inkore.net/en-us/products/mcskinn/">inkore.net/en-us/products/mcskinn</p>
@@ -35,6 +35,9 @@
 </p>
 
 <br>
+
+>[iNOTE]
+>For some reason we decided to stop keeping the current version of MCSkinn open-sourced and renamed it to "MCSkinn Legacy". For more info, please check [here](Announcement.md).
 
 # 📸 Screenshots
 
